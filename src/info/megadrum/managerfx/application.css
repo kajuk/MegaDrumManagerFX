@@ -1,0 +1,24 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/*
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-body-color: yellow;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    // interpolate color between yellow and red based on first color brightness
+    -fx-body-color: ladder(#444, yellow 0%, red 100%);
+}
+
+.spinner .increment-arrow-button:hover:pressed,
+.spinner .decrement-arrow-button:hover:pressed,
+.spinner .increment-arrow-button:pressed,
+.spinner .decrement-arrow-button:pressed {
+    // interpolate color between yellow and red based on first color brightness
+    -fx-body-color: ladder(#AAA, yellow 0%, red 100%);
+}
+*/
+.spinner .text-input {
+	-fx-alignment: center-right;
+}
