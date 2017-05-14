@@ -17,8 +17,9 @@ import javafx.fxml.FXMLLoader;
 public class Main extends Application {
 
 	//MainController mainController;
-	Stage window;
-	Scene scene1;
+	//Stage window;
+	Controller controller;
+	//Scene scene1;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -39,13 +40,10 @@ public class Main extends Application {
 			//mainController.initController();
 			 
 			 */
+			
+			controller = new Controller(primaryStage);
+/*			
 			window = primaryStage;
-
-/*			UICheckBox uiCheckBox1 = new UICheckBox();
-			uiCheckBox1.setTextLabel("UICheckBox1");
-			UICheckBox uiCheckBox2 = new UICheckBox();
-			uiCheckBox2.setTextLabel("UICheckBox Two");
-*/			
 			UIMisc uiMisc = new UIMisc();
 			VBox layout1 = new VBox(30);
 			layout1.getChildren().add(uiMisc.getUI());
@@ -53,8 +51,9 @@ public class Main extends Application {
 			scene1 = new Scene(layout1, 240,400);
 			scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-			window.setScene(scene1);;
+			window.setScene(scene1);
 			window.show();
+*/
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

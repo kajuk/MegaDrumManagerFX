@@ -103,6 +103,9 @@ public interface Constants {
 	public static final int SYNC_STATE_RECEIVED				= 3;
 	public static final Color SYNC_STATE_RECEIVED_COLOR		= Color.ORANGE;
 	
+	public static final int VALUE_TYPE_BOOLEAN				= 0;
+	public static final int VALUE_TYPE_INT					= 1;
+	
 	public static final String [] NOTES_NAMES = {
 		"C ",
 		"C#",

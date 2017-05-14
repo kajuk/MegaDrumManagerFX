@@ -6,12 +6,15 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 public class MainController implements Initializable {
 	
     //@FXML private Label testLabel;
 	//@FXML private UISpinner SpnrNoteOffDelay;
 
+	private Stage windowOptions;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		//testLabel.setText("Label from initialize");

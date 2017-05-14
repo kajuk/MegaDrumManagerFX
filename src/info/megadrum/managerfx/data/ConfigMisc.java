@@ -10,7 +10,7 @@ public class ConfigMisc {
 	
 	public boolean changed; 
 	
-	public int note_off = 20;
+	private int note_off = 20;
 	public int latency = 40;
 	public int pressroll = 0;
 	public int octave_shift = 2;
@@ -62,4 +62,10 @@ public class ConfigMisc {
 		alt_note_choking = prop.getBoolean(prefix+"alt_note_choking", alt_note_choking);
 	}
 
+	public void setNoteOff(int value) {
+		note_off = value;
+	}
+	public int getNoteOff() {
+		return note_off;
+	}
 }

@@ -1,5 +1,9 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.Set;
+
+import com.sun.glass.ui.Size;
+
 import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
@@ -25,10 +29,14 @@ public class UIControl extends Control implements UIControlInterface {
 	}
 
 	private GridPane layout;
-	private Label label;
+	protected Label label;
 	private Pane rootPane;
-	private int intValue = 0;
-	private boolean booleanValue = false;
+	protected int intValue = 0;
+	protected int mdIntValue = 0;
+	protected boolean booleanValue = false;
+	protected boolean mdBooleanValue = false;
+	protected int valueType = Constants.VALUE_TYPE_BOOLEAN;
+	protected Control thisControl;
 
 	public UIControl() {
 		init("Unknown");
@@ -54,10 +62,18 @@ public class UIControl extends Control implements UIControlInterface {
 		label.setText(labelText);
 		GridPane.setConstraints(label, 0, 0);
 		GridPane.setHalignment(label, HPos.RIGHT);
-		layout.getChildren().add(label);		
-		layout.getColumnConstraints().add(new ColumnConstraints(120)); // column 0 is 120 wide
-		layout.getColumnConstraints().add(new ColumnConstraints(120)); // column 1 is 120 wide
+		layout.getChildren().add(label);
+		setColumnsSizes(120.0, 120.0);
+		//layout.getColumnConstraints().add(new ColumnConstraints(120.0)); // column 0 is 120 wide
+		//layout.getColumnConstraints().add(new ColumnConstraints(120.0)); // column 1 is 120 wide
 	}
+	
+	public void setColumnsSizes(Double labelSize, Double controlSize) {
+		layout.getColumnConstraints().clear();
+		layout.getColumnConstraints().add(new ColumnConstraints(labelSize)); // column 0 is 120 wide
+		layout.getColumnConstraints().add(new ColumnConstraints(controlSize)); // column 1 is 120 wide
+	}
+	
 	public Node getUI(){
 		return (Node)layout;
 	}
@@ -66,11 +82,17 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setConstraints(uiControl, 1, 0);
 		GridPane.setHalignment(uiControl, HPos.LEFT);
 		layout.getChildren().add(uiControl);
+		thisControl = uiControl;
+	}
+	
+	public void setControlMinWidth(Double w) {
+		thisControl.setMinWidth(w);
 	}
 	
 	public void setTextLabel(String text) {
 		label.setText(text);
 	}
+	
 	@Override
 	public void setSyncState(int state) {
 		Color color;
@@ -92,13 +114,32 @@ public class UIControl extends Control implements UIControlInterface {
 
 		label.setTextFill(color);
 	}
-
+/*
 	@Override
 	public void setSyncOrNotSync(boolean synced) {
 		if (synced) {
 			setSyncState(Constants.SYNC_STATE_SYNCED);
 		} else {
 			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		}
+	}
+*/
+	public void updateSyncState() {
+		boolean valuesAreEqual = false;
+		switch (valueType) {
+		case Constants.VALUE_TYPE_BOOLEAN:
+			valuesAreEqual = (booleanValue == mdBooleanValue);
+			break;
+		case Constants.VALUE_TYPE_INT:
+			valuesAreEqual = (intValue == mdIntValue);
+			break;
+		default:
+			break;
+		}
+		if (valuesAreEqual) {
+			setSyncState(Constants.SYNC_STATE_SYNCED);
+		} else {
+			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);			
 		}
 	}
 

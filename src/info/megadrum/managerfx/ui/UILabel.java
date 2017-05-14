@@ -12,7 +12,7 @@ public class UILabel extends Control implements UIControlInterface {
 	}
 
 	@Override
-	public void setSyncOrNotSync(boolean synced) {
+	public void updateSyncState() {
 		// TODO Auto-generated method stub
 		
 	}

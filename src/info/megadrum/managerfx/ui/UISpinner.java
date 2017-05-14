@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.MouseButton;
@@ -57,9 +58,10 @@ public class UISpinner extends UIControl {
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
-		spinnerWidth = 60.0; 
-		if (maxValue > 99) spinnerWidth = 67.0; 
-		if (maxValue > 999) spinnerWidth = 80.0; 
+//		spinnerWidth = 60.0; 
+//		if (maxValue > 99) spinnerWidth = 67.0; 
+//		if (maxValue > 999) spinnerWidth = 80.0; 
+		spinnerWidth = 80.0;
 		uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
@@ -76,7 +78,11 @@ public class UISpinner extends UIControl {
 					if (newValue.matches("")) {
 						uispinner.getEditor().setText(currentValue.toString());
 					} else {
-						currentValue = Integer.valueOf(newValue);
+						if (currentValue != Integer.valueOf(newValue)) {
+							System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),currentValue );
+							currentValue = Integer.valueOf(newValue);
+							intValue = currentValue;
+						}
 					}
 	            }
 				
@@ -172,10 +178,18 @@ public class UISpinner extends UIControl {
         }
         public void stop() {
             timer.stop();
-            button.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), false);
-            button = null;
-            spinner = null;
+            if (button != null) {
+            	button.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), false);
+            	button = null;
+            	spinner = null;
+            }
         }
 
     }
+
+    @Override
+	public void setControlMinWidth(Double w) {
+    	// don't change spinner control width so override setControlMinWidth here
+	}
+
 }

@@ -495,7 +495,7 @@ public class Utils {
 			sysex_short[1] = sysex[i++];
 			sysex_short[2] = 0;
 			sysex_short[3] = 0;
-			config.note_off = sysex2short(sysex_short);
+			config.setNoteOff(sysex2short(sysex_short));
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.latency = sysex2byte(sysex_byte);
@@ -541,7 +541,7 @@ public class Utils {
 			sysex_short[1] = sysex[i++];
 			sysex_short[2] = 0;
 			sysex_short[3] = 0;
-			if (config.note_off != sysex2short(sysex_short)) result = 1;
+			if (config.getNoteOff() != sysex2short(sysex_short)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			if (config.latency != sysex2byte(sysex_byte)) result = 1;
@@ -588,7 +588,7 @@ public class Utils {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = (byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_MISC;
-		sysex_byte = byte2sysex((byte)config.note_off);
+		sysex_byte = byte2sysex((byte)config.getNoteOff());
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = byte2sysex((byte)config.latency);
