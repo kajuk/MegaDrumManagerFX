@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -13,6 +14,7 @@ import javafx.scene.control.Skin;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class UIControl extends Control implements UIControlInterface {
 	
@@ -71,14 +73,33 @@ public class UIControl extends Control implements UIControlInterface {
 	}
 	@Override
 	public void setSyncState(int state) {
+		Color color;
 		// TODO Auto-generated method stub
-		
+		switch (state) {
+		case Constants.SYNC_STATE_UNKNOWN:
+			color = Constants.SYNC_STATE_UNKNOWN_COLOR;
+			break;
+		case Constants.SYNC_STATE_SYNCED:
+			color = Constants.SYNC_STATE_SYNCED_COLOR;
+			break;
+		case Constants.SYNC_STATE_NOT_SYNCED:
+			color = Constants.SYNC_STATE_NOT_SYNCED_COLOR;
+			break;
+		default:
+			color = Constants.SYNC_STATE_SYNCED_COLOR;
+			break;
+		}
+
+		label.setTextFill(color);
 	}
 
 	@Override
 	public void setSyncOrNotSync(boolean synced) {
-		// TODO Auto-generated method stub
-		
+		if (synced) {
+			setSyncState(Constants.SYNC_STATE_SYNCED);
+		} else {
+			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		}
 	}
 
 }

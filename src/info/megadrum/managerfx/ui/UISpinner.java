@@ -58,8 +58,8 @@ public class UISpinner extends UIControl {
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
 		spinnerWidth = 60.0; 
-		if (maxValue > 99) spinnerWidth = 70.0; 
-		if (maxValue > 999) spinnerWidth = 90.0; 
+		if (maxValue > 99) spinnerWidth = 67.0; 
+		if (maxValue > 999) spinnerWidth = 80.0; 
 		uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"

@@ -1,0 +1,161 @@
+package info.megadrum.managerfx.data;
+
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
+import info.megadrum.managerfx.utils.Constants;
+import info.megadrum.managerfx.utils.Utils;
+
+public class ConfigPedal {
+	public boolean type;
+	public boolean new_algorithm;
+	public boolean autoLevels;
+	public boolean altIn;
+	public boolean reverseLevels;
+	public int curve;
+	public int chickDelay;
+	public int cc;
+	public int ccRdcLvl;
+	public int lowLevel;
+	public int highLevel;
+	public int openLevel;
+	public int chickThres;
+	public int closedLevel;
+	public int shortThres;
+	public int longThres;
+	public int hhInput = 2;
+	public boolean softChicks;
+	public int semiOpenLevel;
+	public int semiOpenLevel2;
+	public int halfOpenLevel;
+	public int halfOpenLevel2;
+	public int chickCurve;
+	public int chickParam1;
+	public int chickParam2;
+	public int chickParam3;
+	public int bowSemiOpenNote;
+	public int edgeSemiOpenNote;
+	public int bellSemiOpenNote;
+	public int bowSemiOpen2Note;
+	public int edgeSemiOpen2Note;
+	public int bellSemiOpen2Note;
+	public int bowHalfOpenNote;
+	public int edgeHalfOpenNote;
+	public int bellHalfOpenNote;
+	public int bowHalfOpen2Note;
+	public int edgeHalfOpen2Note;
+	public int bellHalfOpen2Note;
+	public int bowSemiClosedNote;
+	public int edgeSemiClosedNote;
+	public int bellSemiClosedNote;
+	public int bowClosedNote;
+	public int edgeClosedNote;
+	public int bellClosedNote;
+	public int chickNote;
+	public int splashNote;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
+	public boolean sysexReceived = false;
+	
+	
+	public ConfigPedal (){
+	}
+	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix) {
+		layout.setComment(prefix+"type", "\n#Pedal settings");
+		prop.setProperty(prefix+"type", type);
+		prop.setProperty(prefix+"new_algorithm", new_algorithm);
+		prop.setProperty(prefix+"autoLevels", autoLevels);
+		prop.setProperty(prefix+"altIn", altIn);
+		prop.setProperty(prefix+"reverseLevels", reverseLevels);
+		prop.setProperty(prefix+"curve", curve);
+		prop.setProperty(prefix+"chickDelay", chickDelay);
+		prop.setProperty(prefix+"cc", cc);
+		prop.setProperty(prefix+"ccRdcLvl", ccRdcLvl);
+		prop.setProperty(prefix+"lowLevel", lowLevel);		
+		prop.setProperty(prefix+"highLevel", highLevel);
+		prop.setProperty(prefix+"openLevel", openLevel);
+		prop.setProperty(prefix+"closedLevel", closedLevel);
+		prop.setProperty(prefix+"shortThres", shortThres);
+		prop.setProperty(prefix+"longThres", longThres);
+		prop.setProperty(prefix+"chickThres", chickThres);
+		prop.setProperty(prefix+"hhInput", hhInput);
+		prop.setProperty(prefix+"softChicks", softChicks);
+		prop.setProperty(prefix+"semiOpenLevel", semiOpenLevel);
+		prop.setProperty(prefix+"halfOpenLevel", halfOpenLevel);
+		prop.setProperty(prefix+"semiOpenLevel2", semiOpenLevel2);
+		prop.setProperty(prefix+"halfOpenLevel2", halfOpenLevel2);
+		prop.setProperty(prefix+"chickCurve", chickCurve);
+		prop.setProperty(prefix+"chickPeriodShort", chickParam1);
+		prop.setProperty(prefix+"chickPeriodLong", chickParam2);	
+		prop.setProperty(prefix+"chickPeriodDead", chickParam3);	
+		prop.setProperty(prefix+"bowSemiOpenNote", bowSemiOpenNote);
+		prop.setProperty(prefix+"edgeSemiOpenNote", edgeSemiOpenNote);
+		prop.setProperty(prefix+"bellSemiOpenNote", bellSemiOpenNote);
+		prop.setProperty(prefix+"bowSemiOpen2Note", bowSemiOpen2Note);
+		prop.setProperty(prefix+"edgeSemiOpen2Note", edgeSemiOpen2Note);
+		prop.setProperty(prefix+"bellSemiOpen2Note", bellSemiOpen2Note);
+		prop.setProperty(prefix+"bowHalfOpenNote", bowHalfOpenNote);
+		prop.setProperty(prefix+"edgeHalfOpenNote", edgeHalfOpenNote);
+		prop.setProperty(prefix+"bellHalfOpenNote", bellHalfOpenNote);
+		prop.setProperty(prefix+"bowHalfOpen2Note", bowHalfOpen2Note);
+		prop.setProperty(prefix+"edgeHalfOpen2Note", edgeHalfOpen2Note);
+		prop.setProperty(prefix+"bellHalfOpen2Note", bellHalfOpen2Note);
+		prop.setProperty(prefix+"bowSemiClosedNote", bowSemiClosedNote);		
+		prop.setProperty(prefix+"edgeSemiClosedNote", edgeSemiClosedNote);
+		prop.setProperty(prefix+"bellSemiClosedNote", bellSemiClosedNote);
+		prop.setProperty(prefix+"bowClosedNote", bowClosedNote);
+		prop.setProperty(prefix+"edgeClosedNote", edgeClosedNote);
+		prop.setProperty(prefix+"bellClosedNote", bellClosedNote);
+		prop.setProperty(prefix+"chickNote", chickNote);
+		prop.setProperty(prefix+"splashNote", splashNote);
+		
+	}
+
+	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
+		type = prop.getBoolean(prefix+"type", type);
+		new_algorithm = prop.getBoolean(prefix+"new_algorithm", new_algorithm);
+		autoLevels = prop.getBoolean(prefix+"autoLevels", autoLevels);
+		altIn = prop.getBoolean(prefix+"altIn", altIn);
+		reverseLevels = prop.getBoolean(prefix+"reverseLevels", reverseLevels);
+		curve = Utils.validateInt(prop.getInt(prefix+"curve", curve),0,15,curve);
+		chickDelay = Utils.validateInt(prop.getInt(prefix+"chickDelay", chickDelay),0,127,chickDelay);
+		cc = Utils.validateInt(prop.getInt(prefix+"cc", cc),0,127,cc);
+		ccRdcLvl = Utils.validateInt(prop.getInt(prefix+"ccRdcLvl", ccRdcLvl),0,127,ccRdcLvl);
+		lowLevel = Utils.validateInt(prop.getInt(prefix+"lowLevel", lowLevel),0,1023,lowLevel);		
+		highLevel = Utils.validateInt(prop.getInt(prefix+"highLevel", highLevel),0,1023,highLevel);
+		openLevel = Utils.validateInt(prop.getInt(prefix+"openLevel", openLevel),0,127,openLevel);
+		closedLevel = Utils.validateInt(prop.getInt(prefix+"closedLevel", closedLevel),0,127,closedLevel);
+		shortThres = Utils.validateInt(prop.getInt(prefix+"shortThres", shortThres),0,127,shortThres);
+		longThres = Utils.validateInt(prop.getInt(prefix+"longThres", longThres),0,127,longThres);
+		hhInput = Utils.validateInt(prop.getInt(prefix+"hhInput", hhInput),2,127,hhInput);
+		softChicks = prop.getBoolean(prefix+"softChicks", softChicks);
+		semiOpenLevel = Utils.validateInt(prop.getInt(prefix+"semiOpenLevel", semiOpenLevel),0,127,semiOpenLevel);
+		halfOpenLevel = Utils.validateInt(prop.getInt(prefix+"halfOpenLevel", halfOpenLevel),0,127,halfOpenLevel);
+		semiOpenLevel2 = Utils.validateInt(prop.getInt(prefix+"semiOpenLevel2", semiOpenLevel2),0,127,semiOpenLevel2);
+		halfOpenLevel2 = Utils.validateInt(prop.getInt(prefix+"halfOpenLevel2", halfOpenLevel2),0,127,halfOpenLevel2);
+		chickCurve = Utils.validateInt(prop.getInt(prefix+"chickCurve", chickCurve),0,15,chickCurve);
+		chickParam1 = Utils.validateInt(prop.getInt(prefix+"chickPeriodShort", chickParam1),0,1023,chickParam1);
+		chickParam2 = Utils.validateInt(prop.getInt(prefix+"chickPeriodLong", chickParam2),0,1023,chickParam2);
+		chickParam3 = Utils.validateInt(prop.getInt(prefix+"chickPeriodDead", chickParam3),0,1023,chickParam3);
+		bowSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bowSemiOpenNote", bowSemiOpenNote),0,127,bowSemiOpenNote);
+		edgeSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"edgeSemiOpenNote", edgeSemiOpenNote),0,127,edgeSemiOpenNote);
+		bellSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bellSemiOpenNote", bellSemiOpenNote),0,127,bellSemiOpenNote);
+		bowSemiOpen2Note = Utils.validateInt(prop.getInt(prefix+"bowSemiOpen2Note", bowSemiOpen2Note),0,127,bowSemiOpen2Note);
+		edgeSemiOpen2Note = Utils.validateInt(prop.getInt(prefix+"edgeSemiOpen2Note", edgeSemiOpen2Note),0,127,edgeSemiOpen2Note);
+		bellSemiOpen2Note = Utils.validateInt(prop.getInt(prefix+"bellSemiOpen2Note", bellSemiOpen2Note),0,127,bellSemiOpen2Note);
+		bowHalfOpenNote = Utils.validateInt(prop.getInt(prefix+"bowHalfOpenNote", bowHalfOpenNote),0,127,bowHalfOpenNote);
+		edgeHalfOpenNote = Utils.validateInt(prop.getInt(prefix+"edgeHalfOpenNote", edgeHalfOpenNote),0,127,edgeHalfOpenNote);
+		bellHalfOpenNote = Utils.validateInt(prop.getInt(prefix+"bellHalfOpenNote", bellHalfOpenNote),0,127,bellHalfOpenNote);
+		bowHalfOpen2Note = Utils.validateInt(prop.getInt(prefix+"bowHalfOpen2Note", bowHalfOpen2Note),0,127,bowHalfOpen2Note);
+		edgeHalfOpen2Note = Utils.validateInt(prop.getInt(prefix+"edgeHalfOpen2Note", edgeHalfOpen2Note),0,127,edgeHalfOpen2Note);
+		bellHalfOpen2Note = Utils.validateInt(prop.getInt(prefix+"bellHalfOpen2Note", bellHalfOpen2Note),0,127,bellHalfOpen2Note);
+		bowSemiClosedNote = Utils.validateInt(prop.getInt(prefix+"bowSemiClosedNote", bowSemiClosedNote),0,127,bowSemiClosedNote);		
+		edgeSemiClosedNote = Utils.validateInt(prop.getInt(prefix+"edgeSemiClosedNote", edgeSemiClosedNote),0,127,edgeSemiClosedNote);
+		bellSemiClosedNote = Utils.validateInt(prop.getInt(prefix+"bellSemiClosedNote", bellSemiClosedNote),0,127,bellSemiClosedNote);
+		bowClosedNote = Utils.validateInt(prop.getInt(prefix+"bowClosedNote", bowClosedNote),0,127,bowClosedNote);
+		edgeClosedNote = Utils.validateInt(prop.getInt(prefix+"edgeClosedNote", edgeClosedNote),0,127,edgeClosedNote);
+		bellClosedNote = Utils.validateInt(prop.getInt(prefix+"bellClosedNote", bellClosedNote),0,127,bellClosedNote);
+		chickNote = Utils.validateInt(prop.getInt(prefix+"chickNote", chickNote),0,127,chickNote);
+		splashNote = Utils.validateInt(prop.getInt(prefix+"splashNote", splashNote),0,127,splashNote);
+		chickThres = Utils.validateInt(prop.getInt(prefix+"chickThres", chickThres),0,127,chickThres);
+	}
+}
