@@ -15,6 +15,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 
 public class UISpinner extends UIControl {
@@ -24,7 +25,6 @@ public class UISpinner extends UIControl {
 	private Integer initValue;
 	private Integer currentValue;
 	private Integer step;
-	private Double spinnerWidth;
 	private HBox layout;
 
 	public UISpinner() {
@@ -61,11 +61,6 @@ public class UISpinner extends UIControl {
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
-//		spinnerWidth = 60.0; 
-//		if (maxValue > 99) spinnerWidth = 67.0; 
-//		if (maxValue > 999) spinnerWidth = 80.0; 
-		spinnerWidth = 80.0;
-		//uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
@@ -191,6 +186,18 @@ public class UISpinner extends UIControl {
             }
         }
 
+    }
+    @Override
+    public void respondToResize(Double h, Double w) {
+    	super.respondToResize(h, w);
+		uispinner.setMinHeight(h);
+		uispinner.setMaxHeight(h);
+		uispinner.setMaxWidth(h*2 + 30.0);
+		uispinner.setMinWidth(h*2 + 30.0);
+		// Spinner buttons width seems to be fixed and not adjustable
+		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
+		
+		uispinner.getEditor().setFont(new Font(h/1.8));
     }
 /*
     @Override

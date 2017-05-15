@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class UIControl extends Control implements UIControlInterface {
 	
@@ -160,6 +161,8 @@ public class UIControl extends Control implements UIControlInterface {
 		layout.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.5));
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
-        uiControl.minHeight(h - padding*2 - 1);
+        label.setFont(new Font(h/2));
+        //uiControl.minHeight(h - padding*2 - 1);
+        //uiControl.respondToResizeControl(h,w);
 	}
 }

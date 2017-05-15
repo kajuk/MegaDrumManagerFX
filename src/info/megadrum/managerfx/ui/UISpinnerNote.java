@@ -6,7 +6,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
@@ -16,9 +18,12 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Font;
 
 public class UISpinnerNote extends UIControl {
 	private Spinner<Integer> uispinner;
@@ -27,13 +32,16 @@ public class UISpinnerNote extends UIControl {
 	private Integer 	initValue;
 	private Integer 	currentValue;
 	private Integer 	step;
-	private Double		spinnerWidth;
 	private Label 		labelNote;
 	private CheckBox	checkBoxNoteLinked;
 	private boolean		linkedNote = false;
 	private boolean		disabledNoteAllowed = false;
-	private GridPane	layout;
-	
+	private GridPane	layoutC;
+	private Integer		octaveShift = 0;
+	private Integer 	octave;
+	private Integer 	note_pointer;
+	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
+
 
 	public UISpinnerNote() {
 		super();
@@ -59,11 +67,6 @@ public class UISpinnerNote extends UIControl {
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
-//		spinnerWidth = 60.0; 
-//		if (maxValue > 99) spinnerWidth = 67.0; 
-//		if (maxValue > 999) spinnerWidth = 80.0; 
-		spinnerWidth = 65.0;
-		//uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
@@ -83,6 +86,7 @@ public class UISpinnerNote extends UIControl {
 							System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),currentValue );
 							currentValue = Integer.valueOf(newValue);
 							intValue = currentValue;
+							changeNoteName();
 						}
 					}
 	            }
@@ -111,16 +115,30 @@ public class UISpinnerNote extends UIControl {
 	        }
 	    });
 	    
-	    layout = new GridPane();
-	    labelNote = new Label("-C2#");
+	    layoutC = new GridPane();
+	    labelNote = new Label("");
 	    checkBoxNoteLinked = new CheckBox();
 	    checkBoxNoteLinked.setTooltip(new Tooltip("Linked to Note"));
 	    //HBox.setHgrow(labelNote, Priority.ALWAYS);
-	    layout.setAlignment(Pos.CENTER_LEFT);
-	    layout.setMinWidth(160.0);
-	    layout.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);
+	    layoutC.setAlignment(Pos.CENTER_LEFT);
+	    
+		GridPane.setConstraints(uispinner, 0, 0);
+		GridPane.setHalignment(uispinner, HPos.LEFT);
+		GridPane.setValignment(uispinner, VPos.CENTER);
+
+		GridPane.setConstraints(labelNote, 1, 0);
+		GridPane.setHalignment(labelNote, HPos.CENTER);
+		GridPane.setValignment(labelNote, VPos.CENTER);
+
+		GridPane.setConstraints(checkBoxNoteLinked, 2, 0);
+		GridPane.setHalignment(checkBoxNoteLinked, HPos.RIGHT);
+		GridPane.setValignment(checkBoxNoteLinked, VPos.CENTER);
+
+		layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);
+
 		//initControl(uispinner);
-		initControl(layout);
+		changeNoteName();
+		initControl(layoutC);
 	}
 
     class IncrementHandler implements EventHandler<MouseEvent> {
@@ -196,6 +214,47 @@ public class UISpinnerNote extends UIControl {
         }
 
     }
+    @Override
+    public void respondToResize(Double h, Double w) {
+    	super.respondToResize(h, w);
+		uispinner.setMinHeight(h);
+		uispinner.setMaxHeight(h);
+		uispinner.setMaxWidth(h*1.7 + 30.0);
+		uispinner.setMinWidth(h*1.7 + 30.0);
+		
+		layoutC.getColumnConstraints().clear();
+		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(h*1.7 + 30.0));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(h*1.7));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(h*1));
+		layoutC.getRowConstraints().clear();
+		layoutC.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
+
+		// Spinner buttons width seems to be fixed and not adjustable
+		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
+		
+		uispinner.getEditor().setFont(new Font(h/1.8));
+		labelNote.setFont(new Font(h/1.8));
+    }
+    
+    public void changeNoteName() {
+		int note_number;
+		int base;
+		String note_text;
+		note_number = currentValue;
+		if (note_number > 0) {
+			octave = note_number/12 ;
+			base = octave*12;
+			note_pointer = note_number - base;
+			note_text = note_names[note_pointer] + " " + Integer.toString(octave - 3 + octaveShift);
+			labelNote.setText(note_text);
+			labelNote.setTooltip(new Tooltip("Note = " + note_text));
+		} else {
+			labelNote.setText("Disbld");
+			labelNote.setTooltip(new Tooltip("Note Disabled"));
+		}		
+    }
+
 /*
     @Override
 	public void setControlMinWidth(Double w) {

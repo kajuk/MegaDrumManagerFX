@@ -2,11 +2,13 @@ package info.megadrum.managerfx.ui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 public class UICheckBox extends UIControl{
 	
@@ -37,6 +39,16 @@ public class UICheckBox extends UIControl{
 		layout.setAlignment(Pos.CENTER_LEFT);
 		layout.getChildren().addAll(checkBox);
 		//layout.setStyle("-fx-background-color: red");
+		//checkBox.setPadding(new Insets(50, 50, 50, 50));
 		initControl(layout);		
 	}
+	
+    @Override
+    public void respondToResize(Double h, Double w) {
+    	super.respondToResize(h, w);
+    	// Standard checkBox is not resizeable
+    	//checkBox.setMinHeight(h);
+    	//checkBox.setMaxHeight(h);
+    }
+
 }
