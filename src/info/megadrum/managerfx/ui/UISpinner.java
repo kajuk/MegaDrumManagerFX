@@ -13,6 +13,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 
 public class UISpinner extends UIControl {
@@ -23,6 +24,7 @@ public class UISpinner extends UIControl {
 	private Integer currentValue;
 	private Integer step;
 	private Double spinnerWidth;
+	private HBox layout;
 
 	public UISpinner() {
 		super();
@@ -109,8 +111,10 @@ public class UISpinner extends UIControl {
 	            handler.stop();
 	        }
 	    });
-
-		initControl(uispinner);
+	    
+	    layout = new HBox();
+	    layout.getChildren().addAll(uispinner);
+		initControl(layout);
 	}
 
     class IncrementHandler implements EventHandler<MouseEvent> {

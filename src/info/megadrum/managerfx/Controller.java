@@ -40,7 +40,7 @@ public class Controller {
 		layout1.getChildren().add(mainMenuBar);
 		layout1.getChildren().add(uiMisc.getUI());
 
-		scene1 = new Scene(layout1, 240,400);
+		scene1 = new Scene(layout1, 300,500);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		optionsWindow = new UIOptions(this);

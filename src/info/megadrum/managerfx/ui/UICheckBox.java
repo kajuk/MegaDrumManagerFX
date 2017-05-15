@@ -5,10 +5,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 public class UICheckBox extends UIControl{
 	
 	private CheckBox checkBox;
+	private HBox layout;
 
 	public UICheckBox() {
 		super();
@@ -30,6 +32,8 @@ public class UICheckBox extends UIControl{
 		    	booleanValue = newValue;
 		    }
 		});
-		initControl(checkBox);		
+		layout = new HBox();
+		layout.getChildren().addAll(checkBox);
+		initControl(layout);		
 	}
 }

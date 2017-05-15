@@ -32,6 +32,7 @@ public class UIMisc {
 	private UICheckBox uiCheckBoxMIDIThru;
 	private UICheckBox uiCheckBoxSendTriggeredIn;
 	private UICheckBox uiCheckBoxAltNoteChoking;
+	private UISpinnerNote uiSpinnerNoteTest;
 	private ArrayList<UIControl> allControls;
 	
 	public UIMisc() {
@@ -90,6 +91,9 @@ public class UIMisc {
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Choking");
 		allControls.add(uiCheckBoxAltNoteChoking);
 
+		uiSpinnerNoteTest = new UISpinnerNote("Note Test");
+		allControls.add(uiSpinnerNoteTest);
+	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
         }

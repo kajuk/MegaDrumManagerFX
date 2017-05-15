@@ -36,7 +36,7 @@ public class UIControl extends Control implements UIControlInterface {
 	protected boolean booleanValue = false;
 	protected boolean mdBooleanValue = false;
 	protected int valueType = Constants.VALUE_TYPE_BOOLEAN;
-	protected Control thisControl;
+	protected Pane thisControl;
 
 	public UIControl() {
 		init("Unknown");
@@ -63,26 +63,27 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setConstraints(label, 0, 0);
 		GridPane.setHalignment(label, HPos.RIGHT);
 		layout.getChildren().add(label);
-		setColumnsSizes(120.0, 120.0);
-		//layout.getColumnConstraints().add(new ColumnConstraints(120.0)); // column 0 is 120 wide
-		//layout.getColumnConstraints().add(new ColumnConstraints(120.0)); // column 1 is 120 wide
+		setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
 	}
 	
 	public void setColumnsSizes(Double labelSize, Double controlSize) {
 		layout.getColumnConstraints().clear();
-		layout.getColumnConstraints().add(new ColumnConstraints(labelSize)); // column 0 is 120 wide
-		layout.getColumnConstraints().add(new ColumnConstraints(controlSize)); // column 1 is 120 wide
+		layout.getColumnConstraints().add(new ColumnConstraints(labelSize));
+		layout.getColumnConstraints().add(new ColumnConstraints(controlSize));
 	}
 	
 	public Node getUI(){
 		return (Node)layout;
 	}
 	
-	public void initControl(Control uiControl) {
+	public void initControl(Pane uiControl) {
 		GridPane.setConstraints(uiControl, 1, 0);
 		GridPane.setHalignment(uiControl, HPos.LEFT);
 		layout.getChildren().add(uiControl);
 		thisControl = uiControl;
+		//thisControl.setMinWidth(USE_COMPUTED_SIZE);
+		//thisControl.setMaxWidth(400.0);
+		//thisControl.setMinWidth(400.0);
 	}
 	
 	public void setControlMinWidth(Double w) {

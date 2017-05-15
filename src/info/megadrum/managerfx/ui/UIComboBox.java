@@ -7,9 +7,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.layout.HBox;
 
 public class UIComboBox extends UIControl {
 	private ComboBox<String> comboBox;
+	private HBox layout;
 
 	public UIComboBox() {
 		super();
@@ -32,8 +34,10 @@ public class UIComboBox extends UIControl {
         });
 
 		comboBox.setEditable(false);
-		comboBox.setMinWidth(120.0);
-		initControl(comboBox);		
+		comboBox.setMinWidth(240.0);
+		layout = new HBox();
+		layout.getChildren().addAll(comboBox);
+		initControl(layout);		
 	}
 
 }
