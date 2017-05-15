@@ -33,6 +33,7 @@ public class UIMisc {
 	private UICheckBox uiCheckBoxSendTriggeredIn;
 	private UICheckBox uiCheckBoxAltNoteChoking;
 	private UISpinnerNote uiSpinnerNoteTest;
+	private UIComboBox uiComboBoxTest;
 	private ArrayList<UIControl> allControls;
 	
 	public UIMisc() {
@@ -93,6 +94,9 @@ public class UIMisc {
 
 		uiSpinnerNoteTest = new UISpinnerNote("Note Test", true);
 		allControls.add(uiSpinnerNoteTest);
+
+		uiComboBoxTest = new UIComboBox("ComboBox Test", true);
+		allControls.add(uiComboBoxTest);
 	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());

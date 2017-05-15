@@ -134,10 +134,11 @@ public class UIOptions {
 		});
         
         window.setScene(scene);
+		layout.setMinWidth(400);
 	}
 	
 	public void show() {
-        //window.setResizable(false);
+        window.setResizable(false);
         window.showAndWait();
 	}
 	

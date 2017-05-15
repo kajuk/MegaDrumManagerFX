@@ -43,9 +43,17 @@ public class UIComboBox extends UIControl {
 	}
     @Override
     public void respondToResize(Double h, Double w) {
+    	Double widthMul;
     	super.respondToResize(h, w);
     	comboBox.setMinHeight(h);
     	comboBox.setMaxHeight(h);
+    	if (copyButtonShown) {
+    		widthMul = 0.4;
+    	} else {
+    		widthMul = 0.58;
+        	comboBox.setMinWidth(w*widthMul);
+        	comboBox.setMaxWidth(w*widthMul);
+    	}
     }
 
 }
