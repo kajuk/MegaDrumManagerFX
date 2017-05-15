@@ -62,28 +62,28 @@ public class UIOptions {
         
         allMidiControls = new ArrayList<UIControl>();
         allMiscControls = new ArrayList<UIControl>();
-        uiCheckBoxSamePort = new UICheckBox("Use same In/Out");
+        uiCheckBoxSamePort = new UICheckBox("Use same In/Out", false);
         allMidiControls.add(uiCheckBoxSamePort);
         
-        uiComboBoxMidiIn = new UIComboBox("MIDI In");
+        uiComboBoxMidiIn = new UIComboBox("MIDI In", false);
         allMidiControls.add(uiComboBoxMidiIn);
         
-        uiComboBoxMidiOut = new UIComboBox("MIDI Out");
+        uiComboBoxMidiOut = new UIComboBox("MIDI Out", false);
         allMidiControls.add(uiComboBoxMidiOut);
 
-        uiComboBoxChainId = new UIComboBox("MegaDrum Chain Id");
+        uiComboBoxChainId = new UIComboBox("MegaDrum Chain Id", false);
         allMidiControls.add(uiComboBoxChainId);
 
-        uiCheckBoxEnableMidiThru = new UICheckBox("Enable MIDI Thru");
+        uiCheckBoxEnableMidiThru = new UICheckBox("Enable MIDI Thru", false);
         allMidiControls.add(uiCheckBoxEnableMidiThru);
 
-        uiComboBoxMidiThru = new UIComboBox("MIDI Thru");
+        uiComboBoxMidiThru = new UIComboBox("MIDI Thru", false);
         allMidiControls.add(uiComboBoxMidiThru);
 
-        uiCheckBoxInitPortsStartup = new UICheckBox("Init Ports on Startup");
+        uiCheckBoxInitPortsStartup = new UICheckBox("Init Ports on Startup", false);
         allMidiControls.add(uiCheckBoxInitPortsStartup);
 
-        uiSpinnerSysexTimeout = new UISpinner("Sysex Timeout", 10, 100, 30, 1);
+        uiSpinnerSysexTimeout = new UISpinner("Sysex Timeout", 10, 100, 30, 1, false);
         allMidiControls.add(uiSpinnerSysexTimeout);
 
         for (int i = 0; i < allMidiControls.size(); i++) {
@@ -96,7 +96,7 @@ public class UIOptions {
         midiLayout.getChildren().add(buttonRescanPort);
         midiLayout.setAlignment(Pos.TOP_CENTER);
         
-    	uiCheckBoxSaveOnExit = new UICheckBox("Save Options on Exit");
+    	uiCheckBoxSaveOnExit = new UICheckBox("Save Options on Exit", false);
         allMiscControls.add(uiCheckBoxSaveOnExit);
 
         for (int i = 0; i < allMiscControls.size(); i++) {
@@ -157,10 +157,10 @@ public class UIOptions {
 		Double tabViewHeight = optionsTabs.getHeight() - optionsTabs.getTabMaxHeight();
 		//System.out.printf("h = %f\n", tabViewHeight.doubleValue());
 		for (int i = 0; i < allMidiControls.size(); i++) {
-			allMidiControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 5)/allMidiControls.size(), w - 5);
+			allMidiControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 10)/allMidiControls.size(), w - 5);
         }
 		for (int i = 0; i < allMiscControls.size(); i++) {
-			allMiscControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 5)/allMidiControls.size(), w - 5);
+			allMiscControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 10)/allMidiControls.size(), w - 5);
         }
 
 	}

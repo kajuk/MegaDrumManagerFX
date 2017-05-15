@@ -52,46 +52,46 @@ public class UIMisc {
 		layout = new VBox();
 		layout.getChildren().add(toolBar);
 
-		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20);
+		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, true);
 		allControls.add(uiSpinnerNoteOffDelay);
 		
-		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10);
+		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10, true);
 		allControls.add(uiSpinnerPressrollTimeout);
 		
-		uiSpinnerLatencytency = new UISpinner("Latency", 10, 100, 15, 1);
+		uiSpinnerLatencytency = new UISpinner("Latency", 10, 100, 15, 1, true);
 		allControls.add(uiSpinnerLatencytency);
 		
-		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1);
+		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, true);
 		allControls.add(uiSpinnerNotesOctaveShift);
 
-		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter");
+		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", true);
 		allControls.add(uiCheckBoxBigVUmeter);
 
-		uiCheckBoxBigVUsplit = new UICheckBox("Big VU split");
+		uiCheckBoxBigVUsplit = new UICheckBox("Big VU split", true);
 		allControls.add(uiCheckBoxBigVUsplit);
 
-		uiCheckBoxBigVUQuickAccess = new UICheckBox("Quick Access");
+		uiCheckBoxBigVUQuickAccess = new UICheckBox("Quick Access", true);
 		allControls.add(uiCheckBoxBigVUQuickAccess);
 		
-		uiCheckBoxAltFalseTrSupp = new UICheckBox("AltFalseTrSupp");
+		uiCheckBoxAltFalseTrSupp = new UICheckBox("AltFalseTrSupp", true);
 		allControls.add(uiCheckBoxAltFalseTrSupp);
 
-		uiCheckBoxInputsPriority = new UICheckBox("Inputs Priority");
+		uiCheckBoxInputsPriority = new UICheckBox("Inputs Priority", true);
 		allControls.add(uiCheckBoxInputsPriority);
 
-		uiCheckBoxUnknownSetting = new UICheckBox("Unknown");
+		uiCheckBoxUnknownSetting = new UICheckBox("Unknown", true);
 		allControls.add(uiCheckBoxUnknownSetting);
 
-		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru");
+		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", true);
 		allControls.add(uiCheckBoxMIDIThru);
 
-		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn");
+		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn", true);
 		allControls.add(uiCheckBoxSendTriggeredIn);
 
-		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Choking");
+		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Choking", true);
 		allControls.add(uiCheckBoxAltNoteChoking);
 
-		uiSpinnerNoteTest = new UISpinnerNote("Note Test");
+		uiSpinnerNoteTest = new UISpinnerNote("Note Test", true);
 		allControls.add(uiSpinnerNoteTest);
 	
 		for (int i = 0; i < allControls.size(); i++) {

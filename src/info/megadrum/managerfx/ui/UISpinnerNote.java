@@ -43,13 +43,13 @@ public class UISpinnerNote extends UIControl {
 	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
 
 
-	public UISpinnerNote() {
-		super();
+	public UISpinnerNote(Boolean showCopyButton) {
+		super(showCopyButton);
 		init();
 	}
 		
-	public UISpinnerNote(String labelText) {
-		super(labelText);
+	public UISpinnerNote(String labelText, Boolean showCopyButton) {
+		super(labelText, showCopyButton);
 		init();
 	}
 
@@ -242,7 +242,7 @@ public class UISpinnerNote extends UIControl {
 		int base;
 		String note_text;
 		note_number = currentValue;
-		if (note_number > 0) {
+		if ((note_number > 0) || (!disabledNoteAllowed)) {
 			octave = note_number/12 ;
 			base = octave*12;
 			note_pointer = note_number - base;

@@ -14,13 +14,13 @@ public class UIComboBox extends UIControl {
 	private ComboBox<String> comboBox;
 	private HBox layout;
 
-	public UIComboBox() {
-		super();
+	public UIComboBox(Boolean showCopyButton) {
+		super(showCopyButton);
 		init();
 	}
 	
-	public UIComboBox(String labelText) {
-		super(labelText);
+	public UIComboBox(String labelText, Boolean showCopyButton) {
+		super(labelText, showCopyButton);
 		init();
 	}
 	

@@ -27,23 +27,23 @@ public class UISpinner extends UIControl {
 	private Integer step;
 	private HBox layout;
 
-	public UISpinner() {
-		super();
+	public UISpinner(Boolean showCopyButton) {
+		super(showCopyButton);
 		init();
 	}
 	
-	public UISpinner(Integer min, Integer max, Integer initial, Integer s) {
-		super();
+	public UISpinner(Integer min, Integer max, Integer initial, Integer s, Boolean showCopyButton) {
+		super(showCopyButton);
 		init(min, max, initial, s);
 	}
 	
-	public UISpinner(String labelText) {
-		super(labelText);
+	public UISpinner(String labelText, Boolean showCopyButton) {
+		super(labelText, showCopyButton);
 		init();
 	}
 
-	public UISpinner(String labelText, Integer min, Integer max, Integer initial, Integer s) {
-		super(labelText);
+	public UISpinner(String labelText, Integer min, Integer max, Integer initial, Integer s, Boolean showCopyButton) {
+		super(labelText, showCopyButton);
 		init(min, max, initial, s);
 	}
 

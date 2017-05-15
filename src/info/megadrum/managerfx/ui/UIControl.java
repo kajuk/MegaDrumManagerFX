@@ -13,9 +13,11 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.ColumnConstraints;
@@ -42,14 +44,17 @@ public class UIControl extends Control implements UIControlInterface {
 	protected boolean mdBooleanValue = false;
 	protected int valueType = Constants.VALUE_TYPE_BOOLEAN;
 	protected Pane uiControl;
-	protected boolean showCopyButton = false;
+	protected boolean copyButtonShown = false;
 	protected Double padding = 2.0;
+	private Button buttonCopy;
 
-	public UIControl() {
+	public UIControl(Boolean showCopyButton) {
+		copyButtonShown = showCopyButton;
 		init("Unknown");
 	}
 	
-	public UIControl(String labelText) {
+	public UIControl(String labelText, Boolean showCopyButton) {
+		copyButtonShown = showCopyButton;
 		init(labelText);
 	}
 	
@@ -71,6 +76,16 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(label, HPos.RIGHT);
 		GridPane.setValignment(label, VPos.CENTER);
 		layout.getChildren().add(label);
+
+		buttonCopy = new Button("c");
+		GridPane.setConstraints(buttonCopy, 2, 0);
+		GridPane.setHalignment(buttonCopy, HPos.RIGHT);
+		GridPane.setValignment(buttonCopy, VPos.CENTER);
+		buttonCopy.setVisible(copyButtonShown);
+		
+		layout.getChildren().add(buttonCopy);
+		
+		
 		//setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
 	}
 
@@ -91,6 +106,8 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(uiControl, HPos.LEFT);
 		GridPane.setValignment(uiControl, VPos.CENTER);
 		layout.getChildren().add(uiControl);
+		//uiControl.setStyle("-fx-background-color: red");
+		//buttonCopy.setStyle("-fx-background-color: blue");
 		//thisControl.setMinWidth(USE_COMPUTED_SIZE);
 		//thisControl.setMaxWidth(400.0);
 		//thisControl.setMinWidth(400.0);
@@ -156,9 +173,28 @@ public class UIControl extends Control implements UIControlInterface {
 	}
 
 	public void respondToResize(Double h, Double w) {
+		Double wCl0, wCl1, wCl2;
+		wCl0 = (w - padding*2)*0.4;
+		//wCl1 = (w - padding*2)*0.4;
+/*		wCl1 = h*5.3;
+		if (wCl1<(wCl0*0.6)) {
+			wCl1 = wCl0*0.6;
+			System.out.println("a");
+		} else {
+			System.out.println("b");
+		}*/
+		wCl1 = h*4.9 + w*0.02 + 5;
+		wCl2 = h;
 		layout.getColumnConstraints().clear();
-		layout.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.4));
-		layout.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.5));
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl0));
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl1));
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl2));
+		buttonCopy.setMaxHeight(h/1.2);
+		buttonCopy.setMinHeight(h/1.2);
+		buttonCopy.setMaxWidth(h/1.2);
+		buttonCopy.setMinWidth(h/1.2);
+		buttonCopy.setFont(new Font(h/2.5));
+		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
         label.setFont(new Font(h/2));

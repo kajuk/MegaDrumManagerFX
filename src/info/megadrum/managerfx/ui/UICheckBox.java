@@ -15,13 +15,13 @@ public class UICheckBox extends UIControl{
 	private CheckBox checkBox;
 	private HBox layout;
 
-	public UICheckBox() {
-		super();
+	public UICheckBox(Boolean showCopyButton) {
+		super(showCopyButton);
 		init();
 	}
 	
-	public UICheckBox(String labelText) {
-		super(labelText);
+	public UICheckBox(String labelText, Boolean showCopyButton) {
+		super(labelText, showCopyButton);
 		init();
 	}
 	
