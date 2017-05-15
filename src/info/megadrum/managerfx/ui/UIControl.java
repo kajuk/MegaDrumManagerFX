@@ -11,13 +11,17 @@ import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
 public class UIControl extends Control implements UIControlInterface {
@@ -36,7 +40,9 @@ public class UIControl extends Control implements UIControlInterface {
 	protected boolean booleanValue = false;
 	protected boolean mdBooleanValue = false;
 	protected int valueType = Constants.VALUE_TYPE_BOOLEAN;
-	protected Pane thisControl;
+	protected Pane uiControl;
+	protected boolean showCopyButton = false;
+	protected Double padding = 2.0;
 
 	public UIControl() {
 		init("Unknown");
@@ -49,47 +55,51 @@ public class UIControl extends Control implements UIControlInterface {
 	private void init(String labelText) {
 		
 		rootPane = new Pane();
-		rootPane.setMaxHeight(30);
-		rootPane.setMaxWidth(240);
+		//rootPane.setMaxHeight(30);
+		//rootPane.setMaxWidth(240);
 		
 		layout = new GridPane();
 		
 		rootPane.getChildren().add(layout);
-		layout.setPadding(new Insets(2, 2, 2, 2));
+		layout.setPadding(new Insets(padding, padding, padding, padding));
 		layout.setHgap(5);
 		
 		label = new Label();
 		label.setText(labelText);
 		GridPane.setConstraints(label, 0, 0);
 		GridPane.setHalignment(label, HPos.RIGHT);
+		GridPane.setValignment(label, VPos.CENTER);
 		layout.getChildren().add(label);
-		setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
+		//setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
 	}
-	
+
+	/*
 	public void setColumnsSizes(Double labelSize, Double controlSize) {
 		layout.getColumnConstraints().clear();
 		layout.getColumnConstraints().add(new ColumnConstraints(labelSize));
 		layout.getColumnConstraints().add(new ColumnConstraints(controlSize));
 	}
-	
+	*/
 	public Node getUI(){
 		return (Node)layout;
 	}
 	
-	public void initControl(Pane uiControl) {
+	public void initControl(Pane uiCtrl) {
+		uiControl = uiCtrl;
 		GridPane.setConstraints(uiControl, 1, 0);
 		GridPane.setHalignment(uiControl, HPos.LEFT);
+		GridPane.setValignment(uiControl, VPos.CENTER);
 		layout.getChildren().add(uiControl);
-		thisControl = uiControl;
 		//thisControl.setMinWidth(USE_COMPUTED_SIZE);
 		//thisControl.setMaxWidth(400.0);
 		//thisControl.setMinWidth(400.0);
 	}
 	
+	/*
 	public void setControlMinWidth(Double w) {
 		thisControl.setMinWidth(w);
 	}
-	
+	*/
 	public void setTextLabel(String text) {
 		label.setText(text);
 	}
@@ -144,4 +154,12 @@ public class UIControl extends Control implements UIControlInterface {
 		}
 	}
 
+	public void respondToResize(Double h, Double w) {
+		layout.getColumnConstraints().clear();
+		layout.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.4));
+		layout.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.5));
+        layout.getRowConstraints().clear();
+        layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
+        uiControl.minHeight(h - padding*2 - 1);
+	}
 }

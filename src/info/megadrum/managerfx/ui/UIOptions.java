@@ -25,6 +25,9 @@ public class UIOptions {
 	private UICheckBox	uiCheckBoxInitPortsStartup;
 	private UISpinner	uiSpinnerSysexTimeout;
 	private Button 		buttonRescanPort;
+	private HBox		okCloseButtonsLayout;
+	private TabPane		optionsTabs;
+	private VBox 		layout;
 
 	private UICheckBox	uiCheckBoxSaveOnExit;
 
@@ -40,9 +43,12 @@ public class UIOptions {
         //Block events to other windows
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Options");
-        window.setMinWidth(250);
+        //window.setMinWidth(250);
 
-        TabPane optionsTabs = new TabPane();
+        optionsTabs = new TabPane();
+        optionsTabs.setTabMaxHeight(20);
+        optionsTabs.setTabMinHeight(20);
+        
         Tab midiTab = new Tab("MIDI");
         midiTab.setClosable(false);
         Tab miscTab = new Tab("Misc");
@@ -82,8 +88,8 @@ public class UIOptions {
 
         for (int i = 0; i < allMidiControls.size(); i++) {
             midiLayout.getChildren().add(allMidiControls.get(i).getUI());
-            allMidiControls.get(i).setColumnsSizes(150.0, 300.0);
-            allMidiControls.get(i).setControlMinWidth(300.0);
+            //allMidiControls.get(i).setColumnsSizes(150.0, 300.0);
+            //allMidiControls.get(i).setControlMinWidth(300.0);
         }
         
         buttonRescanPort = new Button("Rescan MIDI ports");
@@ -95,8 +101,8 @@ public class UIOptions {
 
         for (int i = 0; i < allMiscControls.size(); i++) {
             miscLayout.getChildren().add(allMiscControls.get(i).getUI());        	
-            allMiscControls.get(i).setColumnsSizes(150.0, 300.0);
-            allMiscControls.get(i).setControlMinWidth(300.0);
+            //allMiscControls.get(i).setColumnsSizes(150.0, 300.0);
+            //allMiscControls.get(i).setControlMinWidth(300.0);
         }
         miscLayout.setAlignment(Pos.TOP_CENTER);
         
@@ -107,22 +113,31 @@ public class UIOptions {
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(e -> window.close());
 
-        HBox okCloseButtonsLayout = new HBox();
+        okCloseButtonsLayout = new HBox();
         okCloseButtonsLayout.getChildren().addAll(okButton,cancelButton);
         okCloseButtonsLayout.setAlignment(Pos.CENTER_RIGHT);
         
-        VBox layout = new VBox();
+        layout = new VBox();
         layout.getChildren().add(optionsTabs);
-        layout.getChildren().addAll(okCloseButtonsLayout);
-        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().add(okCloseButtonsLayout);
+        layout.setAlignment(Pos.TOP_CENTER);
+        //okCloseButtonsLayout.setStyle("-fx-background-color: red");
 
         //Display window and wait for it to be closed before returning
         scene = new Scene(layout);
+        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
+			respondToResize(scene.getHeight(),scene.getWidth());
+		});
+
+        scene.heightProperty().addListener((obs, oldVal, newVal) -> {
+			respondToResize(scene.getHeight(),scene.getWidth());
+		});
+        
         window.setScene(scene);
 	}
 	
 	public void show() {
-        window.setResizable(false);
+        //window.setResizable(false);
         window.showAndWait();
 	}
 	
@@ -130,5 +145,23 @@ public class UIOptions {
 		// Tell something to controller here
 		System.out.println("Applying options");
 		window.close();
+	}
+
+	public void respondToResize(Double h, Double w) {
+		optionsTabs.setMinHeight(h - okCloseButtonsLayout.getHeight());
+		optionsTabs.setMaxHeight(h - okCloseButtonsLayout.getHeight());
+		optionsTabs.setMinWidth(w);
+		optionsTabs.setMaxWidth(w);
+		//optionsTabs.setStyle("-fx-background-color: red");
+		//Double tabHeight = optionsTabs.getTabMaxWidth();
+		Double tabViewHeight = optionsTabs.getHeight() - optionsTabs.getTabMaxHeight();
+		//System.out.printf("h = %f\n", tabViewHeight.doubleValue());
+		for (int i = 0; i < allMidiControls.size(); i++) {
+			allMidiControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 5)/allMidiControls.size(), w - 5);
+        }
+		for (int i = 0; i < allMiscControls.size(); i++) {
+			allMiscControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 5)/allMidiControls.size(), w - 5);
+        }
+
 	}
 }

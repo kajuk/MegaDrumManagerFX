@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -34,8 +35,9 @@ public class UIComboBox extends UIControl {
         });
 
 		comboBox.setEditable(false);
-		comboBox.setMinWidth(240.0);
+		//comboBox.setMinWidth(240.0);
 		layout = new HBox();
+		layout.setAlignment(Pos.CENTER_LEFT);
 		layout.getChildren().addAll(comboBox);
 		initControl(layout);		
 	}

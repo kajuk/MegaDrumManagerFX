@@ -23,6 +23,7 @@ public class Controller {
 	private Menu loadFromMdSlotMenu, saveToMdSlotMenu;
 	private MenuItem firmwareUpgradeMenu, optionsMenu, exitMenu;
 	private UIOptions optionsWindow;
+	private UIMisc uiMisc;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -33,19 +34,33 @@ public class Controller {
 		});
 
 		createMainMenuBar();
-		UIMisc uiMisc = new UIMisc();
+		uiMisc = new UIMisc();
 		VBox layout1 = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1.getChildren().add(mainMenuBar);
 		layout1.getChildren().add(uiMisc.getUI());
 
-		scene1 = new Scene(layout1, 300,500);
+		//scene1 = new Scene(layout1, 300,500);
+		scene1 = new Scene(layout1);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		optionsWindow = new UIOptions(this);
 		window.setScene(scene1);
+		window.sizeToScene();
+		scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
+			respondToResize(scene1);
+		});
+
+		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
+			respondToResize(scene1);
+		});
 		window.show();
+	}
+	
+	public void respondToResize(Scene sc) {
+		//System.out.println("Responding to scene resize in Controller");
+		uiMisc.respondToResize(sc.getHeight() - mainMenuBar.getHeight(), sc.getWidth());
 	}
 	
 	public void createMainMenuBar() {

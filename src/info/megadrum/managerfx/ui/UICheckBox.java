@@ -2,6 +2,7 @@ package info.megadrum.managerfx.ui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -33,7 +34,9 @@ public class UICheckBox extends UIControl{
 		    }
 		});
 		layout = new HBox();
+		layout.setAlignment(Pos.CENTER_LEFT);
 		layout.getChildren().addAll(checkBox);
+		//layout.setStyle("-fx-background-color: red");
 		initControl(layout);		
 	}
 }

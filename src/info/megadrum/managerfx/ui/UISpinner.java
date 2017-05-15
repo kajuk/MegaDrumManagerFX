@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
@@ -64,7 +65,7 @@ public class UISpinner extends UIControl {
 //		if (maxValue > 99) spinnerWidth = 67.0; 
 //		if (maxValue > 999) spinnerWidth = 80.0; 
 		spinnerWidth = 80.0;
-		uispinner.setMaxWidth(spinnerWidth);
+		//uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
@@ -113,6 +114,7 @@ public class UISpinner extends UIControl {
 	    });
 	    
 	    layout = new HBox();
+	    layout.setAlignment(Pos.CENTER_LEFT);
 	    layout.getChildren().addAll(uispinner);
 		initControl(layout);
 	}
@@ -190,10 +192,10 @@ public class UISpinner extends UIControl {
         }
 
     }
-
+/*
     @Override
 	public void setControlMinWidth(Double w) {
     	// don't change spinner control width so override setControlMinWidth here
 	}
-
+*/
 }

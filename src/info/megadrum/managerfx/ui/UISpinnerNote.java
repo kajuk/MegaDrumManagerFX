@@ -63,7 +63,7 @@ public class UISpinnerNote extends UIControl {
 //		if (maxValue > 99) spinnerWidth = 67.0; 
 //		if (maxValue > 999) spinnerWidth = 80.0; 
 		spinnerWidth = 65.0;
-		uispinner.setMaxWidth(spinnerWidth);
+		//uispinner.setMaxWidth(spinnerWidth);
 		uispinner.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
@@ -196,10 +196,10 @@ public class UISpinnerNote extends UIControl {
         }
 
     }
-
+/*
     @Override
 	public void setControlMinWidth(Double w) {
     	// don't change spinner control width so override setControlMinWidth here
 	}
-
+*/
 }

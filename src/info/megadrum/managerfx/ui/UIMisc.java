@@ -110,4 +110,14 @@ public class UIMisc {
 	public Node getUI() {
 		return (Node) layout;
 	}
+
+	public void respondToResize(Double h, Double w) {
+		layout.setMaxHeight(h);
+		layout.setMaxWidth(w);
+		//System.out.println("Responding to scene resize in UIMisc");
+		for (int i = 0; i < allControls.size(); i++) {
+			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
+        }
+
+	}
 }
