@@ -254,6 +254,11 @@ public class UISpinnerNote extends UIControl {
 			labelNote.setTooltip(new Tooltip("Note Disabled"));
 		}		
     }
+    
+    public void setDisabledNoteAllowed(Boolean b) {
+    	disabledNoteAllowed = b;
+    	changeNoteName();
+    }
 
 /*
     @Override
