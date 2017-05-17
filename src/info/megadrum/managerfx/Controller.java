@@ -5,6 +5,7 @@ import javax.management.OperationsException;
 import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
+import info.megadrum.managerfx.ui.UIPad;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +27,7 @@ public class Controller {
 	private MenuItem firmwareUpgradeMenu, optionsMenu, exitMenu;
 	private UIOptions optionsWindow;
 	private UIMisc uiMisc;
-	private UIInput uiInput;
+	private UIPad uiPad;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -38,7 +39,7 @@ public class Controller {
 
 		createMainMenuBar();
 		uiMisc = new UIMisc();
-		uiInput = new UIInput();
+		uiPad = new UIPad();
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
@@ -46,7 +47,7 @@ public class Controller {
 		
 		HBox layout2HBox = new HBox();
 		layout2HBox.getChildren().add(uiMisc.getUI());
-		layout2HBox.getChildren().add(uiInput.getUI());
+		layout2HBox.getChildren().add(uiPad.getUI());
 
 		layout1VBox.getChildren().add(layout2HBox);
 
@@ -70,7 +71,7 @@ public class Controller {
 	public void respondToResize(Scene sc) {
 		//System.out.println("Responding to scene resize in Controller");
 		uiMisc.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*0.7, sc.getWidth()/2);
-		uiInput.respondToResize(sc.getHeight() - mainMenuBar.getHeight(), sc.getWidth()/2);
+		uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight(), sc.getWidth()/2);
 	}
 	
 	public void createMainMenuBar() {
