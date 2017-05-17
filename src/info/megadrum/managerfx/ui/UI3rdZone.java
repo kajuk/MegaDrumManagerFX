@@ -9,13 +9,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class UI3rdZone {
 //	private VBox layout;
-	private GridPane layout;
+	//private GridPane layout;
+	private TitledPane 		titledPane;
 	
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
 	private UISpinnerNote 	uiSpinnerNoteAltNote;
@@ -34,7 +36,7 @@ public class UI3rdZone {
 		gridColmn = new ArrayList<Integer>();
 		gridRow = new ArrayList<Integer>();
 
-		layout = new GridPane();
+		GridPane layout = new GridPane();
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
@@ -67,7 +69,7 @@ public class UI3rdZone {
 		gridColmn.add(1);
 		gridRow.add(1);
 		
-		uiSpinnerThreshold = new UISpinner("Midpoint width", 0, 15, 0, 1, true);
+		uiSpinnerThreshold = new UISpinner("Threshold", 0, 15, 0, 1, true);
 		allControls.add(uiSpinnerThreshold);
 		gridColmn.add(1);
 		gridRow.add(2);
@@ -80,6 +82,10 @@ public class UI3rdZone {
         	layout.getChildren().add(allControls.get(i).getUI());
         }
 		
+		titledPane = new TitledPane();
+		titledPane.setText("3rd Zone");
+		titledPane.setContent(layout);
+		titledPane.setCollapsible(false);
 		setAllStateUnknown();
 	}
 
@@ -90,12 +96,12 @@ public class UI3rdZone {
 	}
 	
 	public Node getUI() {
-		return (Node) layout;
+		return (Node) titledPane;
 	}
 
 	public void respondToResize(Double h, Double w) {
-		layout.setMaxHeight(h);
-		layout.setMaxWidth(w);
+		//titledPane.setMaxHeight(h);
+		//titledPane.setMaxWidth(w);
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);

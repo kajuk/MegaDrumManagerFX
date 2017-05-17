@@ -3,16 +3,18 @@ package info.megadrum.managerfx.ui;
 import java.util.ArrayList;
 
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 
 public class UIMisc {
 //	private VBox layout;
-	private VBox layout;
+	private TitledPane titledPane;
 	private Button buttonGet;
 	private Button buttonSend;
 	private Button buttonLoad;
@@ -32,11 +34,10 @@ public class UIMisc {
 	private UICheckBox uiCheckBoxMIDIThru;
 	private UICheckBox uiCheckBoxSendTriggeredIn;
 	private UICheckBox uiCheckBoxAltNoteChoking;
-	private UISpinnerNote uiSpinnerNoteTest;
-	private UIComboBox uiComboBoxTest;
 	private ArrayList<UIControl> allControls;
 	
-	public UIMisc() {
+	public UIMisc(String title) {
+		
 		allControls = new ArrayList<UIControl>();
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
@@ -50,7 +51,7 @@ public class UIMisc {
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
 
-		layout = new VBox();
+		VBox layout = new VBox();
 		layout.getChildren().add(toolBar);
 
 		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, true);
@@ -91,17 +92,17 @@ public class UIMisc {
 
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Choking", true);
 		allControls.add(uiCheckBoxAltNoteChoking);
-
-		uiSpinnerNoteTest = new UISpinnerNote("Note Test", true);
-		allControls.add(uiSpinnerNoteTest);
-
-		uiComboBoxTest = new UIComboBox("ComboBox Test", true);
-		allControls.add(uiComboBoxTest);
 	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
         }
-		
+
+		titledPane = new TitledPane();
+		titledPane.setText(title);
+		titledPane.setContent(layout);
+		titledPane.setCollapsible(false);
+		titledPane.setAlignment(Pos.CENTER);
+
 		setAllStateUnknown();
 	}
 
@@ -112,12 +113,16 @@ public class UIMisc {
 	}
 	
 	public Node getUI() {
-		return (Node) layout;
+		return (Node) titledPane;
 	}
 
 	public void respondToResize(Double h, Double w) {
-		layout.setMaxHeight(h);
-		layout.setMaxWidth(w);
+		//titledPane.setMaxHeight(h);
+		//titledPane.setMaxWidth(w);
+		toolBar.setMaxWidth(w);
+		toolBar.setMaxHeight(h*0.001);
+		buttonGet.setPrefHeight(h*0.001);
+		buttonGet.setPrefWidth(w*0.01);
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);

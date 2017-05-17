@@ -7,12 +7,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 
 public class UIInput {
 //	private VBox layout;
-	private VBox layout;
+	private TitledPane		titledPane;
 	
 	private UIComboBox 		uiComboBoxName;
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
@@ -40,10 +41,10 @@ public class UIInput {
 		
 	private ArrayList<UIControl> allControls;
 	
-	public UIInput() {
+	public UIInput(String title) {
 		allControls = new ArrayList<UIControl>();
 
-		layout = new VBox();
+		VBox layout = new VBox();
 
 		uiComboBoxName = new UIComboBox("Name", true);
 		allControls.add(uiComboBoxName);
@@ -118,6 +119,11 @@ public class UIInput {
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
         }
+
+		titledPane = new TitledPane();
+		titledPane.setText(title);
+		titledPane.setContent(layout);
+		titledPane.setCollapsible(false);
 		
 		setAllStateUnknown();
 	}
@@ -129,12 +135,12 @@ public class UIInput {
 	}
 	
 	public Node getUI() {
-		return (Node) layout;
+		return (Node) titledPane;
 	}
 
 	public void respondToResize(Double h, Double w) {
-		layout.setMaxHeight(h);
-		layout.setMaxWidth(w);
+		//titledPane.setMaxHeight(h);
+		//titledPane.setMaxWidth(w);
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(h/allControls.size(), w);

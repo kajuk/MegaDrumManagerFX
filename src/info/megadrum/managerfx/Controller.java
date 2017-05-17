@@ -38,14 +38,16 @@ public class Controller {
 		});
 
 		createMainMenuBar();
-		uiMisc = new UIMisc();
-		uiPad = new UIPad();
+		uiMisc = new UIMisc("Misc");
+		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1VBox.getChildren().add(mainMenuBar);
 		
-		HBox layout2HBox = new HBox();
+		HBox layout2HBox = new HBox(5);
+		Button button = new Button("b");
+		layout2HBox.getChildren().add(button);
 		layout2HBox.getChildren().add(uiMisc.getUI());
 		layout2HBox.getChildren().add(uiPad.getUI());
 
@@ -69,9 +71,13 @@ public class Controller {
 	}
 	
 	public void respondToResize(Scene sc) {
+		Double height = sc.getHeight() - mainMenuBar.getHeight();
+		Double width = height*2;
 		//System.out.println("Responding to scene resize in Controller");
-		uiMisc.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*0.7, sc.getWidth()/2);
-		uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight(), sc.getWidth()/2);
+		uiMisc.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*0.45, sc.getWidth()*0.3);
+		uiPad.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*1.0, sc.getWidth()*0.6);
+		//uiMisc.respondToResize(height*0.5, width*0.25);
+		//uiPad.respondToResize(height, width*0.3);
 	}
 	
 	public void createMainMenuBar() {

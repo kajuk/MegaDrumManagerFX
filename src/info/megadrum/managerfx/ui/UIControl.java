@@ -82,7 +82,9 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(buttonCopy, HPos.RIGHT);
 		GridPane.setValignment(buttonCopy, VPos.CENTER);
 		buttonCopy.setVisible(copyButtonShown);
-		
+
+		layout.setStyle("-fx-background-color: red");
+		label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
 		
 		
@@ -174,15 +176,7 @@ public class UIControl extends Control implements UIControlInterface {
 
 	public void respondToResize(Double h, Double w) {
 		Double wCl0, wCl1, wCl2;
-		wCl0 = (w - padding*2)*0.4;
-		//wCl1 = (w - padding*2)*0.4;
-/*		wCl1 = h*5.3;
-		if (wCl1<(wCl0*0.6)) {
-			wCl1 = wCl0*0.6;
-			System.out.println("a");
-		} else {
-			System.out.println("b");
-		}*/
+		wCl0 = (w - padding*2)*0.3;
 		wCl1 = h*4.9 + w*0.02 + 5;
 		wCl2 = h;
 		layout.getColumnConstraints().clear();
@@ -197,7 +191,7 @@ public class UIControl extends Control implements UIControlInterface {
 		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
-        label.setFont(new Font(h/2));
+        label.setFont(new Font(h*0.4));
         //uiControl.minHeight(h - padding*2 - 1);
         //uiControl.respondToResizeControl(h,w);
 	}
