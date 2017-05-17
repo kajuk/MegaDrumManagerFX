@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -73,10 +74,20 @@ public class UIPad extends Parent {
 
 	}
 	
-	public void respondToResize (Double h, Double w) {
-		uiInputLeft.respondToResize(h*0.7, w/2);
-		uiInputRight.respondToResize(h*0.7, w/2);
-		ui3rdZone.respondToResize(h*0.1163, w);
+	public void respondToResize (Double h, Double w, Double fullHeight) {
+		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double titledPaneFontHeight = toolBarFontHeight*1.4;
+		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			//System.out.printf("ToolBar font size = %f\n",fontHeight);
+			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+			toolBarNavigator.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		}
+		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight);
+		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight);
+		ui3rdZone.respondToResize(h*0.093, w*1.0, fullHeight);
 	}
 
 	public Node getUI() {

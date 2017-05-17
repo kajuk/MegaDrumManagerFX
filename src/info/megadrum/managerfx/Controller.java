@@ -74,8 +74,8 @@ public class Controller {
 		Double height = sc.getHeight() - mainMenuBar.getHeight();
 		Double width = height*2;
 		//System.out.println("Responding to scene resize in Controller");
-		uiMisc.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*0.45, sc.getWidth()*0.3);
-		uiPad.respondToResize((sc.getHeight() - mainMenuBar.getHeight())*1.0, sc.getWidth()*0.6);
+		uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.3, height);
+		uiPad.respondToResize((height)*1.0, sc.getWidth()*0.6, height);
 		//uiMisc.respondToResize(height*0.5, width*0.25);
 		//uiPad.respondToResize(height, width*0.3);
 	}

@@ -83,8 +83,8 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setValignment(buttonCopy, VPos.CENTER);
 		buttonCopy.setVisible(copyButtonShown);
 
-		layout.setStyle("-fx-background-color: red");
-		label.setStyle("-fx-background-color: grey");
+		//layout.setStyle("-fx-background-color: red");
+		//label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
 		
 		
@@ -178,7 +178,13 @@ public class UIControl extends Control implements UIControlInterface {
 		Double wCl0, wCl1, wCl2;
 		wCl0 = (w - padding*2)*0.3;
 		wCl1 = h*4.9 + w*0.02 + 5;
-		wCl2 = h;
+		if (copyButtonShown) {
+			wCl2 = h;
+		} else {
+			//wCl0 = wCl0*1.2;
+			wCl1 = wCl1*0.7;
+			wCl2 = 0.0;
+		}
 		layout.getColumnConstraints().clear();
 		layout.getColumnConstraints().add(new ColumnConstraints(wCl0));
 		layout.getColumnConstraints().add(new ColumnConstraints(wCl1));

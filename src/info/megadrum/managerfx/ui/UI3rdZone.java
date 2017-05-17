@@ -99,9 +99,13 @@ public class UI3rdZone {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w) {
-		//titledPane.setMaxHeight(h);
-		//titledPane.setMaxWidth(w);
+	public void respondToResize(Double h, Double w, Double fullHeight) {
+		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double titledPaneFontHeight = toolBarFontHeight*1.0;
+		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			//System.out.printf("ToolBar font size = %f\n",fontHeight);
+			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		}
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);

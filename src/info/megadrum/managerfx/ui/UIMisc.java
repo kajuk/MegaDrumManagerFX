@@ -43,7 +43,6 @@ public class UIMisc {
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");
 		buttonSave = new Button("Save");
-//		toolBar = new ToolBar( buttonGet,buttonSend,new Separator(), buttonLoad,buttonSave);
 		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);
 		toolBar.getItems().add(buttonSend);
@@ -51,46 +50,47 @@ public class UIMisc {
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
 
+
 		VBox layout = new VBox();
 		layout.getChildren().add(toolBar);
 
-		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, true);
+		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, false);
 		allControls.add(uiSpinnerNoteOffDelay);
 		
-		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10, true);
+		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10, false);
 		allControls.add(uiSpinnerPressrollTimeout);
 		
-		uiSpinnerLatencytency = new UISpinner("Latency", 10, 100, 15, 1, true);
+		uiSpinnerLatencytency = new UISpinner("Latency", 10, 100, 15, 1, false);
 		allControls.add(uiSpinnerLatencytency);
 		
-		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, true);
+		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, false);
 		allControls.add(uiSpinnerNotesOctaveShift);
 
-		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", true);
+		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", false);
 		allControls.add(uiCheckBoxBigVUmeter);
 
-		uiCheckBoxBigVUsplit = new UICheckBox("Big VU split", true);
+		uiCheckBoxBigVUsplit = new UICheckBox("Big VU split", false);
 		allControls.add(uiCheckBoxBigVUsplit);
 
-		uiCheckBoxBigVUQuickAccess = new UICheckBox("Quick Access", true);
+		uiCheckBoxBigVUQuickAccess = new UICheckBox("Quick Access", false);
 		allControls.add(uiCheckBoxBigVUQuickAccess);
 		
-		uiCheckBoxAltFalseTrSupp = new UICheckBox("AltFalseTrSupp", true);
+		uiCheckBoxAltFalseTrSupp = new UICheckBox("AltFalseTrSupp", false);
 		allControls.add(uiCheckBoxAltFalseTrSupp);
 
-		uiCheckBoxInputsPriority = new UICheckBox("Inputs Priority", true);
+		uiCheckBoxInputsPriority = new UICheckBox("Inputs Priority", false);
 		allControls.add(uiCheckBoxInputsPriority);
 
-		uiCheckBoxUnknownSetting = new UICheckBox("Unknown", true);
+		uiCheckBoxUnknownSetting = new UICheckBox("Unknown", false);
 		allControls.add(uiCheckBoxUnknownSetting);
 
-		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", true);
+		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", false);
 		allControls.add(uiCheckBoxMIDIThru);
 
-		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn", true);
+		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn", false);
 		allControls.add(uiCheckBoxSendTriggeredIn);
 
-		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Choking", true);
+		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Chokng", false);
 		allControls.add(uiCheckBoxAltNoteChoking);
 	
 		for (int i = 0; i < allControls.size(); i++) {
@@ -116,13 +116,16 @@ public class UIMisc {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w) {
-		//titledPane.setMaxHeight(h);
-		//titledPane.setMaxWidth(w);
-		toolBar.setMaxWidth(w);
-		toolBar.setMaxHeight(h*0.001);
-		buttonGet.setPrefHeight(h*0.001);
-		buttonGet.setPrefWidth(w*0.01);
+	public void respondToResize(Double h, Double w, Double fullHeight) {
+		
+		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double titledPaneFontHeight = toolBarFontHeight*1.4;
+		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			//System.out.printf("ToolBar font size = %f\n",fontHeight);
+			toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		}
+		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
