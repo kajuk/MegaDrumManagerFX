@@ -87,7 +87,7 @@ public class UIPad extends Parent {
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight);
 		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight);
-		ui3rdZone.respondToResize(h*0.093, w*1.0, fullHeight);
+		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight);
 	}
 
 	public Node getUI() {

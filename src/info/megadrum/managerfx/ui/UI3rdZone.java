@@ -37,6 +37,7 @@ public class UI3rdZone {
 		gridRow = new ArrayList<Integer>();
 
 		GridPane layout = new GridPane();
+		layout.setHgap(15);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);

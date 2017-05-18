@@ -67,6 +67,12 @@ public class UISlider extends UIControl {
                 }
             });
 		
+		uiSlider.setShowTickMarks(true);
+		//uiSlider.setSnapToTicks(true);
+		//uiSlider.setMajorTickUnit(16f);
+		//uiSlider.setBlockIncrement(1.0f);
+		uiSlider.setMinorTickCount(24);
+		
 	    layout = new HBox();
 	    layout.setAlignment(Pos.CENTER_LEFT);
 	    layout.getChildren().addAll(uiSlider);
