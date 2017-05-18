@@ -233,8 +233,8 @@ public class UISpinnerNote extends UIControl {
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
 		
-		uispinner.getEditor().setFont(new Font(h/1.8));
-		labelNote.setFont(new Font(h/1.8));
+		uispinner.getEditor().setFont(new Font(h*0.6));
+		labelNote.setFont(new Font(h*0.4));
     }
     
     public void changeNoteName() {

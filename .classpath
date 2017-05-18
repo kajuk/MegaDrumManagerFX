@@ -13,6 +13,10 @@
 	<classpathentry kind="lib" path="libraries/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libraries/mmj.jar"/>
+	<classpathentry kind="lib" path="libraries/mmj.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MegaDrumManagerFX/libraries"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,5 +1,8 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -55,5 +58,17 @@ public class UIComboBox extends UIControl {
         	comboBox.setMaxWidth(w*widthMul);
     	}
     }
-
+    
+    public void uiCtlSetValuesArray(List<String> list) {
+    	comboBox.getItems().clear();
+    	comboBox.getItems().addAll(list);
+    }
+    
+    public void uiCtlSetValue(String value) {
+    	comboBox.setValue(value);
+    }
+    
+    public String uiCtlGetSelected() {
+    	return comboBox.getValue();
+    }
 }

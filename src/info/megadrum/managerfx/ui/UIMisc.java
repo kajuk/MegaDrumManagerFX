@@ -10,6 +10,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class UIMisc {
@@ -102,7 +103,6 @@ public class UIMisc {
 		titledPane.setContent(layout);
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
-
 		setAllStateUnknown();
 	}
 
@@ -125,11 +125,11 @@ public class UIMisc {
 			toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
 		}
+		//titledPane.setMaxHeight(h);
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
         }
-
 	}
 }

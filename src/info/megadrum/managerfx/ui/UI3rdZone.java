@@ -111,6 +111,7 @@ public class UI3rdZone {
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);
         }
-
+		//titledPane.setMinHeight(h);
+		//titledPane.setMaxHeight(h);
 	}
 }

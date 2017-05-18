@@ -149,6 +149,8 @@ public class UIInput {
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(h/allControls.size(), w);
         }
+		//titledPane.setMinHeight(h);
+		//titledPane.setMaxHeight(h);
 
 	}
 }

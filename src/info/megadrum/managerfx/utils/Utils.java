@@ -13,6 +13,7 @@ import info.megadrum.managerfx.data.ConfigPositional;
 public class Utils {
 
 	public static void show_error(String msg) {
+		System.out.printf("Utils.show_error -> %s\n",msg);
 /*		JOptionPane.showMessageDialog(null,
 			    msg,
 			    "Error",

@@ -50,5 +50,9 @@ public class UICheckBox extends UIControl{
     	//checkBox.setMinHeight(h);
     	//checkBox.setMaxHeight(h);
     }
+    
+    public void uiCtlSetSelected(Boolean selected) {
+    	checkBox.setSelected(selected);
+    }
 
 }

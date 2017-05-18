@@ -1,8 +1,18 @@
 package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EventObject;
+import java.util.List;
+
+import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.Controller;
+import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.midi.MidiEvent;
+import info.megadrum.managerfx.midi.MidiEventListener;
+import info.megadrum.managerfx.midi.MidiRescanEvent;
+import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,14 +40,33 @@ public class UIOptions {
 	private VBox 		layout;
 
 	private UICheckBox	uiCheckBoxSaveOnExit;
+	
+	private ConfigOptions	configOptions;
 
 	private ArrayList<UIControl> allMidiControls;
 	private ArrayList<UIControl> allMiscControls;
 	
 	//private TabPane optionsTabs;
 	//private Tab midiTab, miscTab;
+	protected EventListenerList listenerList = new EventListenerList();
 	
-	public UIOptions(Controller controller) {
+	public void addMidiRescanEventListener(MidiRescanEventListener listener) {
+		listenerList.add(MidiRescanEventListener.class, listener);
+	}
+	public void removeMidiRescanEventListener(MidiRescanEventListener listener) {
+		listenerList.remove(MidiRescanEventListener.class, listener);
+	}
+	protected void fireMidiRescanEvent(MidiRescanEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == MidiRescanEventListener.class) {
+				((MidiRescanEventListener) listeners[i+1]).midiRescanEventOccurred(evt);
+			}
+		}
+	}
+	
+	public UIOptions(Controller controller, ConfigOptions config) {
+		configOptions = config;
         window = new Stage();
 
         //Block events to other windows
@@ -93,6 +122,7 @@ public class UIOptions {
         }
         
         buttonRescanPort = new Button("Rescan MIDI ports");
+        buttonRescanPort.setOnAction(e-> fireMidiRescanEvent(new MidiRescanEvent(this)));
         midiLayout.getChildren().add(buttonRescanPort);
         midiLayout.setAlignment(Pos.TOP_CENTER);
         
@@ -133,11 +163,13 @@ public class UIOptions {
 			respondToResize(scene.getHeight(),scene.getWidth());
 		});
         
+        uiComboBoxChainId.uiCtlSetValuesArray(Arrays.asList("0", "1", "2", "3" ));
         window.setScene(scene);
 		layout.setMinWidth(400);
 	}
 	
 	public void show() {
+		//updateControls();
         window.setResizable(false);
         window.showAndWait();
 	}
@@ -146,6 +178,30 @@ public class UIOptions {
 		// Tell something to controller here
 		System.out.println("Applying options");
 		window.close();
+	}
+	
+	public void setMidiInList(List<String> list) {
+		uiComboBoxMidiIn.uiCtlSetValuesArray(list);
+	}
+	
+	public void setMidiOutList(List<String> list) {
+		uiComboBoxMidiOut.uiCtlSetValuesArray(list);
+	}
+	
+	public void setMidiThruList(List<String> list) {
+		uiComboBoxMidiThru.uiCtlSetValuesArray(list);
+	}
+	
+	public void updateControls() {
+		uiCheckBoxSamePort.uiCtlSetSelected(configOptions.useSamePort);
+		uiCheckBoxEnableMidiThru.uiCtlSetSelected(configOptions.useThruPort);
+		uiCheckBoxInitPortsStartup.uiCtlSetSelected(configOptions.autoOpenPorts);
+		uiCheckBoxSaveOnExit.uiCtlSetSelected(configOptions.saveOnExit);
+		uiSpinnerSysexTimeout.uiCtlSetValue(configOptions.sysexDelay);
+		uiComboBoxMidiIn.uiCtlSetValue(configOptions.MidiInName);
+		uiComboBoxMidiOut.uiCtlSetValue(configOptions.MidiOutName);
+		uiComboBoxMidiThru.uiCtlSetValue(configOptions.MidiThruName);
+		uiComboBoxChainId.uiCtlSetValue(String.valueOf(configOptions.chainId));
 	}
 
 	public void respondToResize(Double h, Double w) {

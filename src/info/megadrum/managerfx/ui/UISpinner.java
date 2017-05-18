@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.data.ConfigOptions;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +27,7 @@ public class UISpinner extends UIControl {
 	private Integer currentValue;
 	private Integer step;
 	private HBox layout;
+	private SpinnerValueFactory<Integer> valueFactory;
 
 	public UISpinner(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -57,7 +59,7 @@ public class UISpinner extends UIControl {
 		initValue = initial;
 		currentValue = initValue;
 		step = s;
-		SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
+		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
@@ -205,4 +207,7 @@ public class UISpinner extends UIControl {
     	// don't change spinner control width so override setControlMinWidth here
 	}
 */
+    public void uiCtlSetValue(Integer n) {
+    	valueFactory.setValue(n);
+    }
 }
