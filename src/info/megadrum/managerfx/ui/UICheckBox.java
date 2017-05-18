@@ -54,5 +54,13 @@ public class UICheckBox extends UIControl{
     public void uiCtlSetSelected(Boolean selected) {
     	checkBox.setSelected(selected);
     }
+    
+    public Boolean uiCtlIsSelected() {
+    	return checkBox.isSelected();
+    }
+    
+    public void addListener(ChangeListener<Boolean> listener) {
+    	checkBox.selectedProperty().addListener(listener);
+    }
 
 }

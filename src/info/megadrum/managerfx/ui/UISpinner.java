@@ -210,4 +210,8 @@ public class UISpinner extends UIControl {
     public void uiCtlSetValue(Integer n) {
     	valueFactory.setValue(n);
     }
+    
+    public Integer uiCtlGetValue() {
+    	return valueFactory.getValue();
+    }
 }

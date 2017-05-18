@@ -133,6 +133,9 @@ public class Controller implements MidiRescanEventListener {
 	private void showOptionsWindow() {
 		optionsUpdatePorts();
 		optionsWindow.show();
+		if (optionsWindow.getClosedWithOk()) {
+			System.out.println("Closed with ok");
+		}
 	}
 	
 	private void initMidi() {

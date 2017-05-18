@@ -71,4 +71,12 @@ public class UIComboBox extends UIControl {
     public String uiCtlGetSelected() {
     	return comboBox.getValue();
     }
+    
+    public void addListener(ChangeListener<String> listener) {
+    	comboBox.getSelectionModel().selectedItemProperty().addListener(listener);
+    }
+    
+    public void uiCtlSetDisable(Boolean state) {
+    	comboBox.setDisable(state);
+    }
 }

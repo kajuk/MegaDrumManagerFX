@@ -13,6 +13,8 @@ import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,6 +44,7 @@ public class UIOptions {
 	private UICheckBox	uiCheckBoxSaveOnExit;
 	
 	private ConfigOptions	configOptions;
+	private Boolean			closedWithOk;
 
 	private ArrayList<UIControl> allMidiControls;
 	private ArrayList<UIControl> allMiscControls;
@@ -92,12 +95,36 @@ public class UIOptions {
         allMidiControls = new ArrayList<UIControl>();
         allMiscControls = new ArrayList<UIControl>();
         uiCheckBoxSamePort = new UICheckBox("Use same In/Out", false);
+        uiCheckBoxSamePort.addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	//checkBox.setSelected(!newValue);
+				//System.out.printf("%s: new value = %s, old value = %s\n",label.getText(),(newValue ? "true" : "false"),(oldValue ? "true" : "false") );
+		    	setSameMidiInOut(newValue);
+		    }
+		});
         allMidiControls.add(uiCheckBoxSamePort);
         
         uiComboBoxMidiIn = new UIComboBox("MIDI In", false);
+        uiComboBoxMidiIn.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+				setSameMidiInOut(uiCheckBoxSamePort.uiCtlIsSelected());
+			}
+        });
+        
         allMidiControls.add(uiComboBoxMidiIn);
         
         uiComboBoxMidiOut = new UIComboBox("MIDI Out", false);
+        uiComboBoxMidiOut.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+			}
+        });
         allMidiControls.add(uiComboBoxMidiOut);
 
         uiComboBoxChainId = new UIComboBox("MegaDrum Chain Id", false);
@@ -107,6 +134,13 @@ public class UIOptions {
         allMidiControls.add(uiCheckBoxEnableMidiThru);
 
         uiComboBoxMidiThru = new UIComboBox("MIDI Thru", false);
+        uiComboBoxMidiThru.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+			}
+        });
         allMidiControls.add(uiComboBoxMidiThru);
 
         uiCheckBoxInitPortsStartup = new UICheckBox("Init Ports on Startup", false);
@@ -170,14 +204,29 @@ public class UIOptions {
 	
 	public void show() {
 		//updateControls();
+		closedWithOk = false;
         window.setResizable(false);
         window.showAndWait();
 	}
-	
+
 	public void okAndClose() {
 		// Tell something to controller here
 		System.out.println("Applying options");
+		configOptions.useSamePort = uiCheckBoxSamePort.uiCtlIsSelected();
+		configOptions.useThruPort = uiCheckBoxEnableMidiThru.uiCtlIsSelected();
+		configOptions.autoOpenPorts = uiCheckBoxInitPortsStartup.uiCtlIsSelected();
+		configOptions.saveOnExit = uiCheckBoxSaveOnExit.uiCtlIsSelected();
+		configOptions.sysexDelay = uiSpinnerSysexTimeout.uiCtlGetValue();
+		configOptions.MidiInName = uiComboBoxMidiIn.uiCtlGetSelected();
+		configOptions.MidiOutName = uiComboBoxMidiOut.uiCtlGetSelected();
+		configOptions.MidiThruName = uiComboBoxMidiThru.uiCtlGetSelected();
+		configOptions.chainId = Integer.valueOf(uiComboBoxChainId.uiCtlGetSelected());
+		closedWithOk = true;
 		window.close();
+	}
+	
+	public boolean getClosedWithOk() {
+		return closedWithOk;
 	}
 	
 	public void setMidiInList(List<String> list) {
@@ -192,6 +241,16 @@ public class UIOptions {
 		uiComboBoxMidiThru.uiCtlSetValuesArray(list);
 	}
 	
+	private void setSameMidiInOut(Boolean same) {
+		if (same) {
+			uiComboBoxMidiOut.uiCtlSetValue(uiComboBoxMidiIn.uiCtlGetSelected());		
+			uiComboBoxMidiOut.uiCtlSetDisable(true);
+		} else {
+			uiComboBoxMidiOut.uiCtlSetValue(configOptions.MidiOutName);
+			uiComboBoxMidiOut.uiCtlSetDisable(false);
+		}		
+	}
+	
 	public void updateControls() {
 		uiCheckBoxSamePort.uiCtlSetSelected(configOptions.useSamePort);
 		uiCheckBoxEnableMidiThru.uiCtlSetSelected(configOptions.useThruPort);
@@ -199,7 +258,7 @@ public class UIOptions {
 		uiCheckBoxSaveOnExit.uiCtlSetSelected(configOptions.saveOnExit);
 		uiSpinnerSysexTimeout.uiCtlSetValue(configOptions.sysexDelay);
 		uiComboBoxMidiIn.uiCtlSetValue(configOptions.MidiInName);
-		uiComboBoxMidiOut.uiCtlSetValue(configOptions.MidiOutName);
+		setSameMidiInOut(configOptions.useSamePort);
 		uiComboBoxMidiThru.uiCtlSetValue(configOptions.MidiThruName);
 		uiComboBoxChainId.uiCtlSetValue(String.valueOf(configOptions.chainId));
 	}
