@@ -1,10 +1,14 @@
 package info.megadrum.managerfx;
 
 import java.lang.reflect.Array;
+import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.management.OperationsException;
 
+import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
@@ -13,6 +17,8 @@ import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
 import info.megadrum.managerfx.ui.UIPad;
+import info.megadrum.managerfx.utils.Constants;
+import info.megadrum.managerfx.utils.Utils;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
@@ -38,9 +45,13 @@ public class Controller implements MidiRescanEventListener {
 	private UIOptions optionsWindow;
 	private UIMisc uiMisc;
 	private UIPad uiPad;
+	private ProgressBar tempProgressBar;
 	
 	private MidiController midiController;
 	private ConfigOptions configOptions;
+	private ConfigFull configFull;
+
+	private List<byte[]> sysexSendList;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -53,7 +64,9 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
+		tempProgressBar = new ProgressBar();
 		uiMisc = new UIMisc("Misc");
+		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
 
@@ -128,6 +141,15 @@ public class Controller implements MidiRescanEventListener {
 	private void closeProgram() {
 		System.out.println("Exiting\n");
 		window.close();
+		System.exit(0);
+	}
+	
+	private void sendSysexMisc() {
+		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
+		sysexSendList.clear();
+		sysexSendList.add(sysex);
+		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
 	}
 	
 	private void showOptionsWindow() {
@@ -135,16 +157,22 @@ public class Controller implements MidiRescanEventListener {
 		optionsWindow.show();
 		if (optionsWindow.getClosedWithOk()) {
 			System.out.println("Closed with ok");
+			if (configOptions.useThruPort) {
+				midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, configOptions.MidiThruName);				
+			} else {
+				midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, "");
+			}
 		}
 	}
 	
 	private void initMidi() {
 		midiController = new MidiController();
-		
+		sysexSendList = new ArrayList<>();
 	}
 	
 	private void initConfigs() {
 		configOptions = new ConfigOptions();
+		configFull = new ConfigFull(); 
 	}
 
 	private void optionsUpdatePorts() {

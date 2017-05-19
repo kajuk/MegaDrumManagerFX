@@ -132,4 +132,8 @@ public class UIMisc {
 			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
         }
 	}
+	
+	public Button getButtonSend() {
+		return buttonSend;
+	}
 }
