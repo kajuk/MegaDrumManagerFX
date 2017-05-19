@@ -19,6 +19,8 @@ import info.megadrum.managerfx.ui.UIOptions;
 import info.megadrum.managerfx.ui.UIPad;
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -149,6 +151,15 @@ public class Controller implements MidiRescanEventListener {
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 		sysexSendList.clear();
 		sysexSendList.add(sysex);
+		midiController.sendSysexConfigsTaskRecreate();
+		midiController.addSendSysexConfigsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				// TODO Auto-generated method stub
+				System.out.println("SendSysexConfigsTask succeeded");
+			}
+		});
 		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
 	}
 	

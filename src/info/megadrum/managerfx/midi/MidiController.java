@@ -10,6 +10,8 @@ import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 
 public class MidiController {
@@ -73,7 +75,6 @@ public class MidiController {
 	
 	public MidiController() {
 		midiHandler = new Midi_handler();
-		sendSysexConfigsTask = new SendSysexConfigsTask<Void>();
 		
 		midiHandler.addMidiEventListener(new MidiEventListener() {
 			@Override
@@ -134,7 +135,7 @@ public class MidiController {
 		int delayCounter;
 		System.out.println("sendSysexConfigFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
-			System.out.printf("Retry %d\n", sendSysexConfigRetries);
+			System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
 			delayCounter = retryDelay;
         	switch (sysex[3]) {
@@ -199,6 +200,17 @@ public class MidiController {
 			System.out.println(sendSysexConfigResult);
 		} 	
 	}
+	public void sendSysexConfigsTaskRecreate() {
+		if (sendSysexConfigsTask != null) {
+			sendSysexConfigsTask = null;
+		}
+		sendSysexConfigsTask = new SendSysexConfigsTask<Void>();
+	}
+	
+	public void addSendSysexConfigsTaskSucceedEventHandler(EventHandler<WorkerStateEvent> eh) {
+		sendSysexConfigsTask.setOnSucceeded(eh);
+	}
+	
 	public void sendSysexConfigs(List<byte[]> sysexSendList, ProgressBar progressBar, Integer maxRetries, Integer retryDelay) {
 		sendSysexConfigResult = "";
 		sendingSysex = true;
@@ -207,10 +219,6 @@ public class MidiController {
 		sysexTimedOut = false;
 
 		if (midiHandler.isMidiOpen()) {
-			if (sendSysexConfigsTask != null) {
-				sendSysexConfigsTask = null;
-				sendSysexConfigsTask = new SendSysexConfigsTask<Void>();
-			}
 			sendSysexConfigsTask.setParameters(sysexSendList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexConfigsTask.progressProperty());
 			System.out.printf("Starting thread with number of sysexes = %d\n", sysexSendList.size());
