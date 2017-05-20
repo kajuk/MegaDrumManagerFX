@@ -54,6 +54,7 @@ public class UIMisc {
 
 		VBox layout = new VBox();
 		layout.getChildren().add(toolBar);
+		layout.setStyle("-fx-padding: 0.0em 0.2em 0.0em 0.2em");
 
 		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, false);
 		allControls.add(uiSpinnerNoteOffDelay);

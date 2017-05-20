@@ -59,7 +59,7 @@ public class UIComboBox extends UIControl {
         	if (copyButtonShown) {
         		width = w*0.25;
         	} else {
-        		width = w*0.40;
+        		width = w*0.41;
         	}    		
     	}
     	comboBox.setMinWidth(width);

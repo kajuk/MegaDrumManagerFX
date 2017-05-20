@@ -82,6 +82,7 @@ public class UISpinner extends UIControl {
 							System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),currentValue );
 							currentValue = Integer.valueOf(newValue);
 							intValue = currentValue;
+							resizeFont();
 						}
 					}
 	            }
@@ -189,17 +190,28 @@ public class UISpinner extends UIControl {
         }
 
     }
+    
+    private void resizeFont() {
+		Double we = uispinner.getEditor().getWidth();
+		Integer l = valueFactory.getValue().toString().length();
+		Double ll = (4/(4 + l.doubleValue()))*1.8;
+		we = we*ll;
+		//uispinner.getEditor().setFont(new Font(h*0.4));
+		uispinner.getEditor().setFont(new Font(we*0.25));    	
+    }
+    
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
-		uispinner.setMaxWidth(h*2 + 30.0);
-		uispinner.setMinWidth(h*2 + 30.0);
+		//uispinner.setMaxWidth(h*2 + 30.0);
+		//uispinner.setMinWidth(h*2 + 30.0);
+		uispinner.setMaxWidth(w*0.30);
+		uispinner.setMinWidth(w*0.30);
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
-		
-		uispinner.getEditor().setFont(new Font(h/1.8));
+		resizeFont();
     }
 /*
     @Override

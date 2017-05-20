@@ -131,7 +131,7 @@ public class Controller implements MidiRescanEventListener {
 		Double height = sc.getHeight();
 		Double width = height*2;
 		Double controlH, controlW;
-		controlH= height *0.05;
+		controlH= height *0.039;
 		//controlW= width *0.2;
 		controlW= controlH *8;
 		//System.out.println("Responding to scene resize in Controller");
