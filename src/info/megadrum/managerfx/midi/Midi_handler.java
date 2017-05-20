@@ -86,6 +86,12 @@ public class Midi_handler {
 			public void midiEventOccurred(MidiEvent evt) {
 				fireMidiEvent(new MidiEvent(this));
 			}
+
+			@Override
+			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		getMidiBlocked = false;
 		bufferIn = null;

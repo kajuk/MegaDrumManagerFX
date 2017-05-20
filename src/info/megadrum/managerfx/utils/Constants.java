@@ -183,4 +183,10 @@ public interface Constants {
 
 	public static final Double FX_TITLEBARS_FONT_MIN_SIZE	= 2.0;
 	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.006;
+	public static final Double FX_MISC_CONTROL_WIDTH_MUL	= 1.0;
+	public static final Double FX_PEDAL_CONTROL_WIDTH_MUL	= 1.4;
+	public static final Double FX_INPUT_CONTROL_WIDTH_MUL	= 1.33;
+	public static final Double FX_MISC_LABEL_WIDTH_MUL	= 0.60;
+	public static final Double FX_PEDAL_LABEL_WIDTH_MUL	= 0.5;
+	public static final Double FX_INPUT_LABEL_WIDTH_MUL	= 0.37;
 }

@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +59,7 @@ public class UISlider extends UIControl {
 		maxValue = max;
 		initValue = initial;
 		currentValue = initValue;
+		valueType = Constants.VALUE_TYPE_INT;
 
 		uiSlider = new Slider(minValue, maxValue, intValue);
 		uiSlider.valueProperty().addListener(new ChangeListener<Number>() {

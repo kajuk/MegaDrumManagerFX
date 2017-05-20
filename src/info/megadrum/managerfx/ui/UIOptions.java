@@ -75,7 +75,6 @@ public class UIOptions {
         //Block events to other windows
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Options");
-        //window.setMinWidth(250);
 
         optionsTabs = new TabPane();
         optionsTabs.setTabMaxHeight(20);
@@ -202,13 +201,18 @@ public class UIOptions {
         
         uiComboBoxChainId.uiCtlSetValuesArray(Arrays.asList("0", "1", "2", "3" ));
         window.setScene(scene);
-		layout.setMinWidth(400);
+		//layout.setMinWidth(400);
+        window.setMinWidth(600);
+        window.setMaxWidth(600);
+        window.setMinHeight(350);
+        window.setMaxHeight(350);
 	}
 	
 	public void show() {
 		//updateControls();
 		closedWithOk = false;
         window.setResizable(false);
+        
         window.showAndWait();
 	}
 
@@ -276,10 +280,10 @@ public class UIOptions {
 		Double tabViewHeight = optionsTabs.getHeight() - optionsTabs.getTabMaxHeight();
 		//System.out.printf("h = %f\n", tabViewHeight.doubleValue());
 		for (int i = 0; i < allMidiControls.size(); i++) {
-			allMidiControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 10)/allMidiControls.size(), w - 5);
+			allMidiControls.get(i).respondToResize(h*0.09, w*0.85);
         }
 		for (int i = 0; i < allMiscControls.size(); i++) {
-			allMiscControls.get(i).respondToResize((tabViewHeight - buttonRescanPort.getHeight() - 10)/allMidiControls.size(), w - 5);
+			allMiscControls.get(i).respondToResize(h*0.09, w*0.85);
         }
 
 	}

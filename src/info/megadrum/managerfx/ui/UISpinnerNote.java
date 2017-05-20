@@ -1,6 +1,7 @@
 package info.megadrum.managerfx.ui;
 
 import info.megadrum.managerfx.ui.UISpinner.IncrementHandler;
+import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -69,6 +70,7 @@ public class UISpinnerNote extends UIControl {
 		maxValue = max;
 		initValue = initial;
 		currentValue = initValue;
+		valueType = Constants.VALUE_TYPE_INT;
 		step = s;
 		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
 
@@ -228,11 +230,11 @@ public class UISpinnerNote extends UIControl {
     }
     private void resizeFont() {
 		Double we = uispinner.getEditor().getWidth();
-		Integer l = valueFactory.getValue().toString().length();
-		Double ll = (4/(4 + l.doubleValue()))*1.8;
+		Integer l = maxValue.toString().length();
+		Double ll = (4/(4 + l.doubleValue()))*0.57;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
-		uispinner.getEditor().setFont(new Font(we*0.25));    	
+		uispinner.getEditor().setFont(new Font(we));    	
     }
 
     @Override
@@ -240,17 +242,17 @@ public class UISpinnerNote extends UIControl {
     	super.respondToResize(h, w);
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
-		uispinner.setMaxWidth(w*0.17);
-		uispinner.setMinWidth(w*0.17);
+		uispinner.setMaxWidth(w*0.20);
+		uispinner.setMinWidth(w*0.20);
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.17));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.20));
 		if (linkedNote) {
-			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.10));
-			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.08));			
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.15));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.05));			
 		} else {
-			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.17));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.19));
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.01));
 		}
 		layoutC.getRowConstraints().clear();

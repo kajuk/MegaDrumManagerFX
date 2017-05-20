@@ -11,6 +11,8 @@ import javax.management.OperationsException;
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.midi.MidiController;
+import info.megadrum.managerfx.midi.MidiEvent;
+import info.megadrum.managerfx.midi.MidiEventListener;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.UIInput;
@@ -54,6 +56,7 @@ public class Controller implements MidiRescanEventListener {
 	private MidiController midiController;
 	private ConfigOptions configOptions;
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 
 	private List<byte[]> sysexSendList;
 	
@@ -71,7 +74,7 @@ public class Controller implements MidiRescanEventListener {
 		tempProgressBar = new ProgressBar();
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
-		uiMisc.getButtonGet().setOnAction(e-> sendAllSysexRequests());
+		uiMisc.getButtonGet().setOnAction(e-> sendSysexMiscRequest());
 		uiPedal = new UIPedal("HiHat Pedal");
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
@@ -194,17 +197,37 @@ public class Controller implements MidiRescanEventListener {
 		});
 		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
 	}
-	
+
+	private void sendSysexMiscRequest() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_MISC;
+		sysexSendList.clear();
+		sysexSendList.add(typeAndId);
+		midiController.sendSysexRequestsTaskRecreate();
+		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				// TODO Auto-generated method stub
+				System.out.println("SendSysexRequestsTask succeeded");
+				tempProgressBar.progressProperty().unbind();
+				tempProgressBar.setProgress(1.0);
+			}
+		});
+		tempProgressBar.setProgress(0.0);
+		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);
+
+	}
+
 	private void sendAllSysexRequests() {
 		byte [] typeAndId;
 		byte i;
-		byte j;
 		sysexSendList.clear();
 		for (i = 0; i < 32; i++) {
-			typeAndId = new byte[Constants.MD_SYSEX_PAD];
-			j = (byte)(i + 1);
-			typeAndId[0] = i;
-			typeAndId[1] = j;
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_PAD;
+			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
 		}
 		midiController.sendSysexRequestsTaskRecreate();
@@ -239,11 +262,79 @@ public class Controller implements MidiRescanEventListener {
 	private void initMidi() {
 		midiController = new MidiController();
 		sysexSendList = new ArrayList<>();
+		midiController.addMidiEventListener(new MidiEventListener() {
+			@Override
+			public void midiEventOccurred(MidiEvent evt) {
+				// TODO Auto-generated method stub
+/*				if (!upgradeDialog.isVisible()) {
+					sendSysexEnabled = false;
+					midiController.getMidi();
+					if (midiController.sysexReceived) {
+						midiController.sysexReceived = false;
+						if (compareSysexToConfigIsOn) {
+							compareSysexToConfig(midiController.bufferIn);
+						} else {
+							decodeSysex(midiController.bufferIn);						
+						}
+					} else if (midiController.bufferIn != null) {
+						decodeShortMidi(midiController.bufferIn);
+					}
+					midiController.bufferIn = null;
+				}
+*/				
+			}
+
+			@Override
+			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
+				// TODO Auto-generated method stub
+				System.out.println("Received MidiEvent with buffer");
+				processSysex(buffer);
+			}
+		});		
 	}
 	
+	private void processSysex(byte [] sysex) {
+    	switch (sysex[3]) {
+		case Constants.MD_SYSEX_3RD:
+			break;
+		case Constants.MD_SYSEX_CONFIG_COUNT:
+			break;
+		case Constants.MD_SYSEX_CONFIG_CURRENT:
+			break;
+		case Constants.MD_SYSEX_CONFIG_NAME:
+			break;
+		case Constants.MD_SYSEX_CURVE:
+			break;
+		case Constants.MD_SYSEX_CUSTOM_NAME:
+			break;
+		case Constants.MD_SYSEX_GLOBAL_MISC:
+			break;
+		case Constants.MD_SYSEX_MCU_TYPE:
+			break;
+		case Constants.MD_SYSEX_MISC:
+			Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
+			Utils.copySysexToConfigMisc(sysex, moduleConfigFull.configMisc);
+			configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
+			configFull.configMisc.sysexReceived = true;
+			uiMisc.setControlsFromConfig(configFull.configMisc);
+			break;
+		case Constants.MD_SYSEX_PAD:
+			break;
+		case Constants.MD_SYSEX_PEDAL:
+			break;
+		case Constants.MD_SYSEX_POS:
+			break;
+		case Constants.MD_SYSEX_VERSION:
+			break;
+		default:
+			break;
+		}
+
+	}
 	private void initConfigs() {
 		configOptions = new ConfigOptions();
 		configFull = new ConfigFull(); 
+		moduleConfigFull = new ConfigFull();
 	}
 
 	private void optionsUpdatePorts() {

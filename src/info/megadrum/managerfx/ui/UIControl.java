@@ -49,6 +49,8 @@ public class UIControl extends Control implements UIControlInterface {
 	protected boolean copyButtonShown = false;
 	protected Double padding = 2.0;
 	private Button buttonCopy;
+	private Double labelWidthMultiplier = 0.4;
+	private Double controlWidthMultiplier;
 
 	public UIControl(Boolean showCopyButton) {
 		copyButtonShown = showCopyButton;
@@ -88,7 +90,7 @@ public class UIControl extends Control implements UIControlInterface {
 		layout.setStyle("-fx-background-color: grey");
 		//label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
-		
+		setLabelWidthMultiplier(labelWidthMultiplier);
 		
 		//setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
 	}
@@ -206,14 +208,20 @@ public class UIControl extends Control implements UIControlInterface {
         //uiControl.respondToResizeControl(h,w);
 	}
 */
-public void respondToResize(Double h, Double w) {
+
+	public void setLabelWidthMultiplier(Double mul) {
+		labelWidthMultiplier = mul;
+		controlWidthMultiplier = 1.0 - mul - 0.05;
+	}
+	
+	public void respondToResize(Double h, Double w) {
 		Double wCl0, wCl1, wCl2;
-		wCl0 = (w - padding*2)*0.5;
+		wCl0 = (w - padding*2)*labelWidthMultiplier;
 		if (copyButtonShown) {
-			wCl1 = (w - padding*2)*0.35;
+			wCl1 = (w - padding*2)*controlWidthMultiplier*0.8;
 			wCl2 = (w - padding*2)*0.1;
 		} else {
-			wCl1 = (w - padding*2)*0.45;
+			wCl1 = (w - padding*2)*controlWidthMultiplier;
 			wCl2 = 0.0;
 		}
 		layout.getColumnConstraints().clear();
@@ -228,7 +236,7 @@ public void respondToResize(Double h, Double w) {
 		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
-        label.setFont(new Font(h*0.4));
+        label.setFont(new Font(h*0.5));
 		//layout.setMaxWidth(w);
         //uiControl.minHeight(h - padding*2 - 1);
         //uiControl.respondToResizeControl(h,w);

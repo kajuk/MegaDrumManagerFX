@@ -1,6 +1,7 @@
 package info.megadrum.managerfx.ui;
 
 import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +59,8 @@ public class UISpinner extends UIControl {
 		maxValue = max;
 		initValue = initial;
 		currentValue = initValue;
+		valueType = Constants.VALUE_TYPE_INT;
+
 		step = s;
 		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
 
@@ -193,8 +196,8 @@ public class UISpinner extends UIControl {
     
     private void resizeFont() {
 		Double we = uispinner.getEditor().getWidth();
-		Integer l = valueFactory.getValue().toString().length();
-		Double ll = (4/(4 + l.doubleValue()))*1.8;
+		Integer l = maxValue.toString().length();
+		Double ll = (8/(8 + l.doubleValue()))*1.4;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		uispinner.getEditor().setFont(new Font(we*0.25));    	
@@ -207,8 +210,8 @@ public class UISpinner extends UIControl {
 		uispinner.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);
 		//uispinner.setMinWidth(h*2 + 30.0);
-		uispinner.setMaxWidth(w*0.30);
-		uispinner.setMinWidth(w*0.30);
+		uispinner.setMaxWidth(w*0.25);
+		uispinner.setMinWidth(w*0.25);
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
 		resizeFont();
@@ -221,6 +224,7 @@ public class UISpinner extends UIControl {
 */
     public void uiCtlSetValue(Integer n) {
     	valueFactory.setValue(n);
+		resizeFont();    	
     }
     
     public Integer uiCtlGetValue() {

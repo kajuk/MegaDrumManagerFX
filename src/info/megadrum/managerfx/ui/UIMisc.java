@@ -2,6 +2,7 @@ package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
 
+import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,7 +25,7 @@ public class UIMisc {
 	
 	private UISpinner uiSpinnerNoteOffDelay;
 	private UISpinner uiSpinnerPressrollTimeout;
-	private UISpinner uiSpinnerLatencytency;
+	private UISpinner uiSpinnerLatency;
 	private UISpinner uiSpinnerNotesOctaveShift;
 	private UICheckBox uiCheckBoxBigVUmeter;
 	private UICheckBox uiCheckBoxBigVUsplit;
@@ -62,8 +63,8 @@ public class UIMisc {
 		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10, false);
 		allControls.add(uiSpinnerPressrollTimeout);
 		
-		uiSpinnerLatencytency = new UISpinner("Latency", 10, 100, 15, 1, false);
-		allControls.add(uiSpinnerLatencytency);
+		uiSpinnerLatency = new UISpinner("Latency", 10, 100, 15, 1, false);
+		allControls.add(uiSpinnerLatency);
 		
 		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, false);
 		allControls.add(uiSpinnerNotesOctaveShift);
@@ -97,6 +98,7 @@ public class UIMisc {
 	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
+        	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);        	
         }
 
 		titledPane = new TitledPane();
@@ -128,15 +130,15 @@ public class UIMisc {
 		}
 		//titledPane.setMaxHeight(h);
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		System.out.printf("Misc ControlW = %f\n", controlW);
+		//System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
 			//allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
-			allControls.get(i).respondToResize(controlH, controlW);
+			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
         }
 		toolBar.setMinWidth(controlW*0.99);
 		toolBar.setMaxWidth(controlW*0.99);
-		titledPane.setMinWidth(controlW);
-		titledPane.setMaxWidth(controlW);
+		titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 	}
 	
 	public Button getButtonSend() {
@@ -146,4 +148,21 @@ public class UIMisc {
 	public Button getButtonGet() {
 		return buttonGet;
 	}
+	
+	public void setControlsFromConfig(ConfigMisc config) {
+		uiSpinnerNoteOffDelay.uiCtlSetValue(config.getNoteOff()*10);
+		uiSpinnerPressrollTimeout.uiCtlSetValue(config.pressroll);
+		uiSpinnerLatency.uiCtlSetValue(config.latency);
+		uiSpinnerNotesOctaveShift.uiCtlSetValue(config.octave_shift);
+		uiCheckBoxBigVUmeter.uiCtlSetSelected(config.big_vu_meter);
+		uiCheckBoxBigVUsplit.uiCtlSetSelected(config.big_vu_split);
+		uiCheckBoxBigVUQuickAccess.uiCtlSetSelected(config.quick_access);
+		uiCheckBoxAltFalseTrSupp.uiCtlSetSelected(config.alt_false_tr_supp);
+		uiCheckBoxInputsPriority.uiCtlSetSelected(config.inputs_priority);
+		uiCheckBoxUnknownSetting.uiCtlSetSelected(config.all_gains_low);
+		uiCheckBoxMIDIThru.uiCtlSetSelected(config.midi_thru);
+		uiCheckBoxSendTriggeredIn.uiCtlSetSelected(config.send_triggered_in);
+		uiCheckBoxAltNoteChoking.uiCtlSetSelected(config.alt_note_choking);
+	}
+		
 }

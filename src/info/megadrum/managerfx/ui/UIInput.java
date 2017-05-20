@@ -53,10 +53,10 @@ public class UIInput {
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		
-		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true, true);
+		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
 		allControls.add(uiSpinnerNoteAltNote);
 
-		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true, true);
+		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
 		allControls.add(uiSpinnerNotePressNote);
 
 		uiSpinnerChannel = new UISpinner("Channel", 1, 16, 10, 1, true);
@@ -118,7 +118,8 @@ public class UIInput {
 	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
-        }
+        	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
+       }
 
 		titledPane = new TitledPane();
 		titledPane.setText(title);
@@ -148,7 +149,7 @@ public class UIInput {
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			//allControls.get(i).respondToResize(h/allControls.size(), w);
-			allControls.get(i).respondToResize(controlH, controlW);
+			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);

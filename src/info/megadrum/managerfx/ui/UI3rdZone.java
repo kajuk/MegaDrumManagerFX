@@ -45,17 +45,17 @@ public class UI3rdZone {
 		gridColmn.add(0);
 		gridRow.add(0);
 				
-		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true, true);
+		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
 		allControls.add(uiSpinnerNoteAltNote);
 		gridColmn.add(0);
 		gridRow.add(1);
 
-		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true, true);
+		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
 		allControls.add(uiSpinnerNotePressNote);
 		gridColmn.add(0);
 		gridRow.add(2);
 
-		uiSpinnerNoteDampenedNote = new UISpinnerNote("Dampened Note", true);
+		uiSpinnerNoteDampenedNote = new UISpinnerNote("DampenedNote", true);
 		allControls.add(uiSpinnerNoteDampenedNote);
 		gridColmn.add(0);
 		gridRow.add(3);
@@ -65,7 +65,7 @@ public class UI3rdZone {
 		gridColmn.add(1);
 		gridRow.add(0);
 		
-		uiSpinnerMidpointWidth = new UISpinner("Midpoint width", 0, 15, 0, 1, true);
+		uiSpinnerMidpointWidth = new UISpinner("MidpointWidth", 0, 15, 0, 1, true);
 		allControls.add(uiSpinnerMidpointWidth);
 		gridColmn.add(1);
 		gridRow.add(1);
@@ -81,6 +81,7 @@ public class UI3rdZone {
 			GridPane.setHalignment(allControls.get(i).getUI(), HPos.LEFT);
 			GridPane.setValignment(allControls.get(i).getUI(), VPos.CENTER);
         	layout.getChildren().add(allControls.get(i).getUI());
+        	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         }
 		
 		titledPane = new TitledPane();
@@ -110,7 +111,7 @@ public class UI3rdZone {
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
 			//allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);
-			allControls.get(i).respondToResize(controlH, controlW);
+			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);

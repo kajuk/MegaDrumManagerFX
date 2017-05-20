@@ -5,6 +5,7 @@ import java.util.List;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
+import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
@@ -108,6 +109,32 @@ public class MidiController {
 	private SendSysexConfigsTask<Void> sendSysexConfigsTask;
 	private SendSysexRequestsTask<Void> sendSysexRequestsTask;
 	
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addMidiEventListener(MidiEventListener listener) {
+		listenerList.add(MidiEventListener.class, listener);
+	}
+	public void removeMidiEventListener(MidiEventListener listener) {
+		listenerList.remove(MidiEventListener.class, listener);
+	}
+	protected void fireMidiEvent(MidiEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == MidiEventListener.class) {
+				((MidiEventListener) listeners[i+1]).midiEventOccurred(evt);
+			}
+		}
+	}
+	
+	protected void fireMidiEventWithBuffer(MidiEvent evt, byte [] buffer) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == MidiEventListener.class) {
+				((MidiEventListener) listeners[i+1]).midiEventOccurredWithBuffer(evt, buffer);
+			}
+		}
+	}
+
 	public MidiController() {
 		midiHandler = new Midi_handler();
 		
@@ -125,12 +152,19 @@ public class MidiController {
 					midiHandler.resetBufferIn();
 				}
 			}
+
+			@Override
+			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
+				// TODO Auto-generated method stub
+				
+			}
 		});		
 	}
 	
 	private void processSysex(byte [] buffer) {
 		sendingSysex = false;
 		sysexReceived = true;
+		fireMidiEventWithBuffer(new MidiEvent(this), buffer);
 	}
 
 	private void processShortMidi(byte [] buffer) {
@@ -358,4 +392,7 @@ public class MidiController {
 		}
 	}
 
+	public void getMidi() {
+		midiHandler.getMidi();
+	}
 }

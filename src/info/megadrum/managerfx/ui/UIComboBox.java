@@ -3,6 +3,7 @@ package info.megadrum.managerfx.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -30,6 +31,7 @@ public class UIComboBox extends UIControl {
 	}
 	
 	private void init () {
+		valueType = Constants.VALUE_TYPE_INT;
 		comboBox = new ComboBox<String>();
 		comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
