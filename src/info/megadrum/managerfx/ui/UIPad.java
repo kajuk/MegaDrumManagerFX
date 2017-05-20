@@ -74,7 +74,7 @@ public class UIPad extends Parent {
 
 	}
 	
-	public void respondToResize (Double h, Double w, Double fullHeight) {
+	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
 		Double h1,h2,h3;
@@ -86,20 +86,9 @@ public class UIPad extends Parent {
 		}
 		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight);
-		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight);
-		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight);
-		//titledPane.setMaxHeight(Region.USE_PREF_SIZE);
-		//titledPane.setMaxHeight(h);
-/*		h1 = h - toolBarNavigator.getHeight() - toolBarTop.getHeight();
-		h2 = h1*0.8;
-		h3 = h1 - h2;
-		uiInputLeft.respondToResize(h2, w*0.5, fullHeight);
-		uiInputRight.respondToResize(h2, w*0.5, fullHeight);
-		ui3rdZone.respondToResize(h3*0.5, w*1.0, fullHeight);
-		titledPane.setMinHeight(h);
-		titledPane.setMaxHeight(h);
-*/
+		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
+		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
+		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight, controlH, controlW);
 	}
 
 	public Node getUI() {

@@ -12,10 +12,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 public class UIComboBox extends UIControl {
 	private ComboBox<String> comboBox;
 	private HBox layout;
+	private Boolean comboBoxWide = false;
 
 	public UIComboBox(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -46,17 +48,22 @@ public class UIComboBox extends UIControl {
 	}
     @Override
     public void respondToResize(Double h, Double w) {
-    	Double widthMul;
+    	Double width;
     	super.respondToResize(h, w);
     	comboBox.setMinHeight(h);
     	comboBox.setMaxHeight(h);
-    	if (copyButtonShown) {
-    		widthMul = 0.4;
-    	} else {
-    		widthMul = 0.58;
-        	comboBox.setMinWidth(w*widthMul);
-        	comboBox.setMaxWidth(w*widthMul);
+    	width = w*0.1;
+    	if (comboBoxWide) {
+    		width = w*0.67;
+    	} else {    		
+        	if (copyButtonShown) {
+        		width = w*0.25;
+        	} else {
+        		width = w*0.40;
+        	}    		
     	}
+    	comboBox.setMinWidth(width);
+    	comboBox.setMaxWidth(width);
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
@@ -78,5 +85,9 @@ public class UIComboBox extends UIControl {
     
     public void uiCtlSetDisable(Boolean state) {
     	comboBox.setDisable(state);
+    }
+    
+    public void setComboBoxWide(Boolean w) {
+    	comboBoxWide = true;
     }
 }

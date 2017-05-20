@@ -106,6 +106,7 @@ public class UIOptions {
         allMidiControls.add(uiCheckBoxSamePort);
         
         uiComboBoxMidiIn = new UIComboBox("MIDI In", false);
+        uiComboBoxMidiIn.setComboBoxWide(true);
         uiComboBoxMidiIn.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -118,6 +119,7 @@ public class UIOptions {
         allMidiControls.add(uiComboBoxMidiIn);
         
         uiComboBoxMidiOut = new UIComboBox("MIDI Out", false);
+        uiComboBoxMidiOut.setComboBoxWide(true);
         uiComboBoxMidiOut.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -134,6 +136,7 @@ public class UIOptions {
         allMidiControls.add(uiCheckBoxEnableMidiThru);
 
         uiComboBoxMidiThru = new UIComboBox("MIDI Thru", false);
+        uiComboBoxMidiThru.setComboBoxWide(true);
         uiComboBoxMidiThru.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

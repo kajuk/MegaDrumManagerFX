@@ -45,12 +45,12 @@ public class UI3rdZone {
 		gridColmn.add(0);
 		gridRow.add(0);
 				
-		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true);
+		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true, true);
 		allControls.add(uiSpinnerNoteAltNote);
 		gridColmn.add(0);
 		gridRow.add(1);
 
-		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true);
+		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true, true);
 		allControls.add(uiSpinnerNotePressNote);
 		gridColmn.add(0);
 		gridRow.add(2);
@@ -100,7 +100,7 @@ public class UI3rdZone {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w, Double fullHeight) {
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.0;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
@@ -109,7 +109,8 @@ public class UI3rdZone {
 		}
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);
+			//allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);
+			allControls.get(i).respondToResize(controlH, controlW);
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);

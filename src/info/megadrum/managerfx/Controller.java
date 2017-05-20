@@ -17,6 +17,7 @@ import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
 import info.megadrum.managerfx.ui.UIPad;
+import info.megadrum.managerfx.ui.UIPedal;
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
 import javafx.concurrent.WorkerStateEvent;
@@ -46,6 +47,7 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem firmwareUpgradeMenu, optionsMenu, exitMenu;
 	private UIOptions optionsWindow;
 	private UIMisc uiMisc;
+	private UIPedal uiPedal;
 	private UIPad uiPad;
 	private ProgressBar tempProgressBar;
 	
@@ -66,23 +68,25 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
-		tempProgressBar = new ProgressBar(0);
+		tempProgressBar = new ProgressBar();
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiMisc.getButtonGet().setOnAction(e-> sendAllSysexRequests());
+		uiPedal = new UIPedal("HiHat Pedal");
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1VBox.getChildren().add(mainMenuBar);
 		tempProgressBar.setMaxWidth(400);
-		layout1VBox.getChildren().add(tempProgressBar);
+		//layout1VBox.getChildren().add(tempProgressBar);
 		
 		HBox layout2HBox = new HBox(5);
 		Button button = new Button("b");
 		//layout2HBox.getChildren().add(button);
 		layout2HBox.getChildren().add(uiMisc.getUI());
-		layout2HBox.getChildren().add(uiPad.getUI());
+		layout2HBox.getChildren().add(uiPedal.getUI());
+		//layout2HBox.getChildren().add(uiPad.getUI());
 
 		layout1VBox.getChildren().add(layout2HBox);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
@@ -105,16 +109,40 @@ public class Controller implements MidiRescanEventListener {
 		});
 		window.show();
 	}
-	
+
+/*
 	public void respondToResize(Scene sc) {
 		Double height = sc.getHeight() - mainMenuBar.getHeight();
 		Double width = height*2;
+		Double controlH, controlW;
+		controlH= height *0.05;
+		//controlW= width *0.2;
+		controlW= controlH *5;
 		//System.out.println("Responding to scene resize in Controller");
-		uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.3, height);
-		uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.6, height);
+		//uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.17, height, controlH, controlW);
+		uiMisc.respondToResize(height, width, height, controlH, controlW);
+		//uiPedal.respondToResize((height)*0.65, sc.getWidth()*0.17, height, controlH, controlW);
+		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
 		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
 	}
-	
+*/	
+	public void respondToResize(Scene sc) {
+		//Double height = sc.getHeight() - mainMenuBar.getHeight();
+		Double height = sc.getHeight();
+		Double width = height*2;
+		Double controlH, controlW;
+		controlH= height *0.05;
+		//controlW= width *0.2;
+		controlW= controlH *8;
+		//System.out.println("Responding to scene resize in Controller");
+		//uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.17, height, controlH, controlW);
+		uiMisc.respondToResize(height, width, height, controlH, controlW);
+		//uiPedal.respondToResize((height)*0.65, sc.getWidth()*0.17, height, controlH, controlW);
+		uiPedal.respondToResize(height, width, height, controlH, controlW);
+		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
+		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
+	}
+
 	public void createMainMenuBar() {
 		mainMenuBar = new MenuBar();
 		mainMenu = new Menu("Main");

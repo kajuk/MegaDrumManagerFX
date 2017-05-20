@@ -116,7 +116,7 @@ public class UIMisc {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w, Double fullHeight) {
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
@@ -127,10 +127,13 @@ public class UIMisc {
 		}
 		//titledPane.setMaxHeight(h);
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		//System.out.println("Responding to scene resize in UIMisc");
+		System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
+			//allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
+			allControls.get(i).respondToResize(controlH, controlW);
         }
+		titledPane.setMinWidth(controlW);
+		titledPane.setMaxWidth(controlW);
 	}
 	
 	public Button getButtonSend() {

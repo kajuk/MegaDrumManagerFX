@@ -53,6 +53,12 @@ public class UISpinnerNote extends UIControl {
 		init();
 	}
 
+	public UISpinnerNote(String labelText, Boolean showCopyButton, Boolean showLinked) {
+		super(labelText, showCopyButton);
+		linkedNote =  showLinked;
+		init();
+	}
+
 	private void init() {
 		init(0,127,0,1);
 	}
@@ -134,7 +140,11 @@ public class UISpinnerNote extends UIControl {
 		GridPane.setHalignment(checkBoxNoteLinked, HPos.RIGHT);
 		GridPane.setValignment(checkBoxNoteLinked, VPos.CENTER);
 
-		layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);
+		if (linkedNote) {
+			layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);			
+		} else {
+			layoutC.getChildren().addAll(uispinner,labelNote);
+		}
 
 		//initControl(uispinner);
 		changeNoteName();

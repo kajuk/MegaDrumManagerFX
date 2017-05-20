@@ -53,10 +53,10 @@ public class UIInput {
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		
-		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true);
+		uiSpinnerNoteAltNote = new UISpinnerNote("Alt Note", true, true);
 		allControls.add(uiSpinnerNoteAltNote);
 
-		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true);
+		uiSpinnerNotePressNote = new UISpinnerNote("Pressroll Note", true, true);
 		allControls.add(uiSpinnerNotePressNote);
 
 		uiSpinnerChannel = new UISpinner("Channel", 1, 16, 10, 1, true);
@@ -138,7 +138,7 @@ public class UIInput {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w, Double fullHeight) {
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.0;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
@@ -147,7 +147,8 @@ public class UIInput {
 		}
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize(h/allControls.size(), w);
+			//allControls.get(i).respondToResize(h/allControls.size(), w);
+			allControls.get(i).respondToResize(controlH, controlW);
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);

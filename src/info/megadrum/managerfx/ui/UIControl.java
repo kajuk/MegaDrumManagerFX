@@ -23,6 +23,8 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -83,7 +85,7 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setValignment(buttonCopy, VPos.CENTER);
 		buttonCopy.setVisible(copyButtonShown);
 
-		//layout.setStyle("-fx-background-color: red");
+		layout.setStyle("-fx-background-color: grey");
 		//label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
 		
@@ -108,7 +110,8 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(uiControl, HPos.LEFT);
 		GridPane.setValignment(uiControl, VPos.CENTER);
 		layout.getChildren().add(uiControl);
-		//uiControl.setStyle("-fx-background-color: red");
+		uiControl.setStyle("-fx-background-color: green");
+		GridPane.setHgrow(uiControl,Priority.ALWAYS);
 		//buttonCopy.setStyle("-fx-background-color: blue");
 		//thisControl.setMinWidth(USE_COMPUTED_SIZE);
 		//thisControl.setMaxWidth(400.0);
@@ -173,7 +176,7 @@ public class UIControl extends Control implements UIControlInterface {
 			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);			
 		}
 	}
-
+/*
 	public void respondToResize(Double h, Double w) {
 		Double wCl0, wCl1, wCl2;
 		wCl0 = (w - padding*2)*0.3;
@@ -198,6 +201,35 @@ public class UIControl extends Control implements UIControlInterface {
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
         label.setFont(new Font(h*0.4));
+		//layout.setMaxWidth(w);
+        //uiControl.minHeight(h - padding*2 - 1);
+        //uiControl.respondToResizeControl(h,w);
+	}
+*/
+public void respondToResize(Double h, Double w) {
+		Double wCl0, wCl1, wCl2;
+		wCl0 = (w - padding*2)*0.5;
+		if (copyButtonShown) {
+			wCl1 = (w - padding*2)*0.35;
+			wCl2 = (w - padding*2)*0.1;
+		} else {
+			wCl1 = (w - padding*2)*0.45;
+			wCl2 = 0.0;
+		}
+		layout.getColumnConstraints().clear();
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl0));
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl1));
+		layout.getColumnConstraints().add(new ColumnConstraints(wCl2));
+		buttonCopy.setMaxHeight(h/1.2);
+		buttonCopy.setMinHeight(h/1.2);
+		buttonCopy.setMaxWidth(h/1.2);
+		buttonCopy.setMinWidth(h/1.2);
+		buttonCopy.setFont(new Font(h/2.5));
+		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
+        layout.getRowConstraints().clear();
+        layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
+        label.setFont(new Font(h*0.4));
+		//layout.setMaxWidth(w);
         //uiControl.minHeight(h - padding*2 - 1);
         //uiControl.respondToResizeControl(h,w);
 	}
