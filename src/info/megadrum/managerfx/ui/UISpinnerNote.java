@@ -246,8 +246,13 @@ public class UISpinnerNote extends UIControl {
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
 		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.17));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.20));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.20));
+		if (linkedNote) {
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.10));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.08));			
+		} else {
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.17));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.01));
+		}
 		layoutC.getRowConstraints().clear();
 		layoutC.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
 
@@ -255,7 +260,11 @@ public class UISpinnerNote extends UIControl {
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
 		
 		resizeFont();
-		labelNote.setFont(new Font(h*0.4));
+		if (linkedNote) {
+			labelNote.setFont(new Font(h*0.28));			
+		} else {
+			labelNote.setFont(new Font(h*0.35));
+		}
     }
     
     public void changeNoteName() {

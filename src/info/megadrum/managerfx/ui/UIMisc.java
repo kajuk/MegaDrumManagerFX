@@ -133,6 +133,8 @@ public class UIMisc {
 			//allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
 			allControls.get(i).respondToResize(controlH, controlW);
         }
+		toolBar.setMinWidth(controlW*0.99);
+		toolBar.setMaxWidth(controlW*0.99);
 		titledPane.setMinWidth(controlW);
 		titledPane.setMaxWidth(controlW);
 	}

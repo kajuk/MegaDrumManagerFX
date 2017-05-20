@@ -46,7 +46,9 @@ public class UIPad extends Parent {
 		uiInputRight = new UIInput("Rim/Edge");
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
-		vBox = new VBox(5);
+		vBox = new VBox(1);
+		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+
 		toolBarTop = new ToolBar();
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");

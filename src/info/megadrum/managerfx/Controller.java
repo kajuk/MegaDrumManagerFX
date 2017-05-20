@@ -86,7 +86,7 @@ public class Controller implements MidiRescanEventListener {
 		//layout2HBox.getChildren().add(button);
 		layout2HBox.getChildren().add(uiMisc.getUI());
 		layout2HBox.getChildren().add(uiPedal.getUI());
-		//layout2HBox.getChildren().add(uiPad.getUI());
+		layout2HBox.getChildren().add(uiPad.getUI());
 
 		layout1VBox.getChildren().add(layout2HBox);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
@@ -131,7 +131,7 @@ public class Controller implements MidiRescanEventListener {
 		Double height = sc.getHeight();
 		Double width = height*2;
 		Double controlH, controlW;
-		controlH= height *0.039;
+		controlH= height *0.039 *0.75;
 		//controlW= width *0.2;
 		controlW= controlH *8;
 		//System.out.println("Responding to scene resize in Controller");
@@ -140,6 +140,7 @@ public class Controller implements MidiRescanEventListener {
 		//uiPedal.respondToResize((height)*0.65, sc.getWidth()*0.17, height, controlH, controlW);
 		uiPedal.respondToResize(height, width, height, controlH, controlW);
 		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
+		uiPad.respondToResize(height, width, height, controlH, controlW);
 		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
 	}
 
