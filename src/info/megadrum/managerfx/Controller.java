@@ -66,14 +66,17 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
-		tempProgressBar = new ProgressBar();
+		tempProgressBar = new ProgressBar(0);
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
+		uiMisc.getButtonGet().setOnAction(e-> sendAllSysexRequests());
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1VBox.getChildren().add(mainMenuBar);
+		tempProgressBar.setMaxWidth(400);
+		layout1VBox.getChildren().add(tempProgressBar);
 		
 		HBox layout2HBox = new HBox(5);
 		Button button = new Button("b");
@@ -161,6 +164,34 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
+	}
+	
+	private void sendAllSysexRequests() {
+		byte [] typeAndId;
+		byte i;
+		byte j;
+		sysexSendList.clear();
+		for (i = 0; i < 32; i++) {
+			typeAndId = new byte[Constants.MD_SYSEX_PAD];
+			j = (byte)(i + 1);
+			typeAndId[0] = i;
+			typeAndId[1] = j;
+			sysexSendList.add(typeAndId);
+		}
+		midiController.sendSysexRequestsTaskRecreate();
+		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				// TODO Auto-generated method stub
+				System.out.println("SendSysexRequestsTask succeeded");
+				tempProgressBar.progressProperty().unbind();
+				tempProgressBar.setProgress(1.0);
+			}
+		});
+		tempProgressBar.setProgress(0.0);
+		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);
+
 	}
 	
 	private void showOptionsWindow() {

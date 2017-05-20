@@ -136,4 +136,8 @@ public class UIMisc {
 	public Button getButtonSend() {
 		return buttonSend;
 	}
+
+	public Button getButtonGet() {
+		return buttonGet;
+	}
 }
