@@ -37,7 +37,7 @@ public class UIMisc {
 	private UICheckBox uiCheckBoxSendTriggeredIn;
 	private UICheckBox uiCheckBoxAltNoteChoking;
 	private ArrayList<UIControl> allControls;
-	
+		
 	public UIMisc(String title) {
 		
 		allControls = new ArrayList<UIControl>();
@@ -149,20 +149,20 @@ public class UIMisc {
 		return buttonGet;
 	}
 	
-	public void setControlsFromConfig(ConfigMisc config) {
-		uiSpinnerNoteOffDelay.uiCtlSetValue(config.getNoteOff()*10);
-		uiSpinnerPressrollTimeout.uiCtlSetValue(config.pressroll);
-		uiSpinnerLatency.uiCtlSetValue(config.latency);
-		uiSpinnerNotesOctaveShift.uiCtlSetValue(config.octave_shift);
-		uiCheckBoxBigVUmeter.uiCtlSetSelected(config.big_vu_meter);
-		uiCheckBoxBigVUsplit.uiCtlSetSelected(config.big_vu_split);
-		uiCheckBoxBigVUQuickAccess.uiCtlSetSelected(config.quick_access);
-		uiCheckBoxAltFalseTrSupp.uiCtlSetSelected(config.alt_false_tr_supp);
-		uiCheckBoxInputsPriority.uiCtlSetSelected(config.inputs_priority);
-		uiCheckBoxUnknownSetting.uiCtlSetSelected(config.all_gains_low);
-		uiCheckBoxMIDIThru.uiCtlSetSelected(config.midi_thru);
-		uiCheckBoxSendTriggeredIn.uiCtlSetSelected(config.send_triggered_in);
-		uiCheckBoxAltNoteChoking.uiCtlSetSelected(config.alt_note_choking);
+	public void setControlsFromConfig(ConfigMisc config, Boolean setFromSysex) {
+		uiSpinnerNoteOffDelay.uiCtlSetValue(config.getNoteOff()*10, setFromSysex);
+		uiSpinnerPressrollTimeout.uiCtlSetValue(config.pressroll, setFromSysex);
+		uiSpinnerLatency.uiCtlSetValue(config.latency, setFromSysex);
+		uiSpinnerNotesOctaveShift.uiCtlSetValue(config.octave_shift, setFromSysex);
+		uiCheckBoxBigVUmeter.uiCtlSetSelected(config.big_vu_meter, setFromSysex);
+		uiCheckBoxBigVUsplit.uiCtlSetSelected(config.big_vu_split, setFromSysex);
+		uiCheckBoxBigVUQuickAccess.uiCtlSetSelected(config.quick_access, setFromSysex);
+		uiCheckBoxAltFalseTrSupp.uiCtlSetSelected(config.alt_false_tr_supp, setFromSysex);
+		uiCheckBoxInputsPriority.uiCtlSetSelected(config.inputs_priority, setFromSysex);
+		uiCheckBoxUnknownSetting.uiCtlSetSelected(config.all_gains_low, setFromSysex);
+		uiCheckBoxMIDIThru.uiCtlSetSelected(config.midi_thru, setFromSysex);
+		uiCheckBoxSendTriggeredIn.uiCtlSetSelected(config.send_triggered_in, setFromSysex);
+		uiCheckBoxAltNoteChoking.uiCtlSetSelected(config.alt_note_choking, setFromSysex);
 	}
 		
 }

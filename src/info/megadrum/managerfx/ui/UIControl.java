@@ -40,10 +40,12 @@ public class UIControl extends Control implements UIControlInterface {
 	private GridPane layout;
 	protected Label label;
 	private Pane rootPane;
-	protected int intValue = 0;
-	protected int mdIntValue = 0;
-	protected boolean booleanValue = false;
-	protected boolean mdBooleanValue = false;
+	protected Integer intValue = 0;
+	protected Integer mdIntValue = 0;
+	protected Integer syncState = Constants.SYNC_STATE_UNKNOWN;
+	protected Integer changedFromSet = 0;
+	protected Boolean booleanValue = false;
+	protected Boolean mdBooleanValue = false;
 	protected int valueType = Constants.VALUE_TYPE_BOOLEAN;
 	protected Pane uiControl;
 	protected boolean copyButtonShown = false;
@@ -131,6 +133,7 @@ public class UIControl extends Control implements UIControlInterface {
 	
 	@Override
 	public void setSyncState(int state) {
+		syncState = state;
 		Color color;
 		// TODO Auto-generated method stub
 		switch (state) {

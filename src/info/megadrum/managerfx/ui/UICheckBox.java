@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -32,7 +33,15 @@ public class UICheckBox extends UIControl{
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	//checkBox.setSelected(!newValue);
 				//System.out.printf("%s: new value = %s, old value = %s\n",label.getText(),(newValue ? "true" : "false"),(oldValue ? "true" : "false") );
+	    		//System.out.println("Checkbox changed");
 		    	booleanValue = newValue;
+				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+					if (booleanValue == mdBooleanValue) {
+						setSyncState(Constants.SYNC_STATE_SYNCED);						
+					} else {
+						setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+					}
+				}
 		    }
 		});
 		layout = new HBox();
@@ -51,9 +60,15 @@ public class UICheckBox extends UIControl{
     	//checkBox.setMaxHeight(h);
     }
     
-    public void uiCtlSetSelected(Boolean selected) {
+    public void uiCtlSetSelected(Boolean selected, Boolean setFromSysex) {
+    	setSyncState(Constants.SYNC_STATE_SYNCED);
     	checkBox.setSelected(selected);
-    }
+		booleanValue = selected;
+    	if (setFromSysex) {
+    		setSyncState(Constants.SYNC_STATE_SYNCED);
+    		mdBooleanValue = selected;
+    	}
+   }
     
     public Boolean uiCtlIsSelected() {
     	return checkBox.isSelected();

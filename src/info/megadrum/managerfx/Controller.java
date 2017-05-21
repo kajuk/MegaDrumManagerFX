@@ -196,7 +196,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
-				System.out.println("SendSysexConfigsTask succeeded");
+				//System.out.println("SendSysexConfigsTask succeeded");
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
@@ -214,7 +214,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
-				System.out.println("SendSysexRequestsTask succeeded");
+				//System.out.println("SendSysexRequestsTask succeeded");
 				tempProgressBar.progressProperty().unbind();
 				tempProgressBar.setProgress(1.0);
 			}
@@ -240,7 +240,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
-				System.out.println("SendSysexRequestsTask succeeded");
+				//System.out.println("SendSysexRequestsTask succeeded");
 				tempProgressBar.progressProperty().unbind();
 				tempProgressBar.setProgress(1.0);
 			}
@@ -291,7 +291,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
 				// TODO Auto-generated method stub
-				System.out.println("Received MidiEvent with buffer");
+				//System.out.println("Received MidiEvent with buffer");
 				processSysex(buffer);
 			}
 		});		
@@ -320,7 +320,7 @@ public class Controller implements MidiRescanEventListener {
 			Utils.copySysexToConfigMisc(sysex, moduleConfigFull.configMisc);
 			configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
 			configFull.configMisc.sysexReceived = true;
-			uiMisc.setControlsFromConfig(configFull.configMisc);
+			uiMisc.setControlsFromConfig(configFull.configMisc, true);
 			break;
 		case Constants.MD_SYSEX_PAD:
 			break;

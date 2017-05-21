@@ -24,8 +24,8 @@ public class UISpinner extends UIControl {
 	private Spinner<Integer> uispinner;
 	private Integer minValue;
 	private Integer maxValue;
-	private Integer initValue;
-	private Integer currentValue;
+	//private Integer initValue;
+	//private Integer currentValue;
 	private Integer step;
 	private HBox layout;
 	private SpinnerValueFactory<Integer> valueFactory;
@@ -57,12 +57,11 @@ public class UISpinner extends UIControl {
 	private void init(Integer min, Integer max, Integer initial, Integer s) {
 		minValue = min;
 		maxValue = max;
-		initValue = initial;
-		currentValue = initValue;
+		intValue = initial;
 		valueType = Constants.VALUE_TYPE_INT;
 
 		step = s;
-		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
+		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, intValue, step);
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
@@ -75,21 +74,33 @@ public class UISpinner extends UIControl {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// Spinner number validation
-	            if (!newValue.matches("\\d*")) {
-	            	uispinner.getEditor().setText(currentValue.toString());
-	            } else {
-					if (newValue.matches("")) {
-						uispinner.getEditor().setText(currentValue.toString());
-					} else {
-						if (currentValue != Integer.valueOf(newValue)) {
-							System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),currentValue );
-							currentValue = Integer.valueOf(newValue);
-							intValue = currentValue;
-							resizeFont();
+		    	if (changedFromSet > 0) {
+		    		changedFromSet--;
+		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+		    	} else {
+		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+		            if (!newValue.matches("\\d*")) {
+		            	uispinner.getEditor().setText(intValue.toString());
+		            } else {
+						if (newValue.matches("")) {
+							uispinner.getEditor().setText(intValue.toString());
+						} else {
+							if (intValue != Integer.valueOf(newValue)) {
+								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+								intValue = Integer.valueOf(newValue);
+								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+									if (intValue.intValue() == mdIntValue.intValue()) {
+										setSyncState(Constants.SYNC_STATE_SYNCED);						
+									} else {
+										setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+									}
+									
+								}
+								//resizeFont();
+							}
 						}
-					}
-	            }
-				
+		            }		    		
+		    	}
 			}
 	    });
 		
@@ -222,9 +233,18 @@ public class UISpinner extends UIControl {
     	// don't change spinner control width so override setControlMinWidth here
 	}
 */
-    public void uiCtlSetValue(Integer n) {
+    public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
+    	if (intValue.intValue() != n.intValue()) {
+        	changedFromSet++;
+    		intValue = n;
+    	}
+    	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
+    	if (setFromSysex) {
+    		setSyncState(Constants.SYNC_STATE_SYNCED);
+    		mdIntValue = n;
+    	}
     	valueFactory.setValue(n);
-		resizeFont();    	
+		resizeFont();
     }
     
     public Integer uiCtlGetValue() {

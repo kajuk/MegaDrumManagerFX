@@ -45,7 +45,7 @@ public class MidiController {
 		
 		@Override
 		protected V call()  {
-			System.out.println("thread started");
+			//System.out.println("thread started");
 			try {
 		        final int max = sysexesList.size();
 		        for (int i = 0; i < max; i++) {
@@ -60,7 +60,7 @@ public class MidiController {
 			} catch (Exception e) {
 				System.out.printf("Thread exception text = %s\n", e.getMessage());				
 			}
-			System.out.println("thread finished");
+			//System.out.println("thread finished");
 			return null;
 		}
 		
@@ -80,7 +80,7 @@ public class MidiController {
 		
 		@Override
 		protected V call()  {
-			System.out.println("thread started");
+			//System.out.println("thread started");
 			try {
 		        final int max = typesAndIds.size();
 		        for (int i = 0; i < max; i++) {
@@ -94,7 +94,7 @@ public class MidiController {
 			} catch (Exception e) {
 				System.out.printf("Thread exception text = %s\n", e.getMessage());				
 			}
-			System.out.println("thread finished");
+			//System.out.println("thread finished");
 			return null;
 		}
 		
@@ -200,9 +200,9 @@ public class MidiController {
 	public void sendSysexRequestFromThread(byte type, byte id, Integer maxRetries, Integer retryDelay) {
 		sendSysexConfigRetries = maxRetries;
 		int delayCounter;
-		System.out.println("sendSysexRequestFromThread called\n");
+		//System.out.println("sendSysexRequestFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
-			System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
+			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
 			delayCounter = retryDelay;
         	switch (type) {
@@ -261,7 +261,7 @@ public class MidiController {
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
-			System.out.println(sendSysexConfigResult);
+			//System.out.println(sendSysexConfigResult);
 		}
 		Utils.delayMs(100);
 	}
@@ -287,7 +287,7 @@ public class MidiController {
 		if (midiHandler.isMidiOpen()) {
 			sendSysexRequestsTask.setParameters(typesAndIdsList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexRequestsTask.progressProperty());
-			System.out.printf("Starting thread with number of sysexes = %d\n", typesAndIdsList.size());
+			//System.out.printf("Starting thread with number of sysexes = %d\n", typesAndIdsList.size());
 			new Thread(sendSysexRequestsTask).start();
 			
 		}
@@ -297,9 +297,9 @@ public class MidiController {
 		sendSysexConfigRetries = maxRetries;
     	midiHandler.sendSysex(sysex);
 		int delayCounter;
-		System.out.println("sendSysexConfigFromThread called\n");
+		//System.out.println("sendSysexConfigFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
-			System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
+			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
 			delayCounter = retryDelay;
         	switch (sysex[3]) {
@@ -361,7 +361,7 @@ public class MidiController {
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
-			System.out.println(sendSysexConfigResult);
+			//System.out.println(sendSysexConfigResult);
 		} 	
 	}
 	
@@ -386,7 +386,7 @@ public class MidiController {
 		if (midiHandler.isMidiOpen()) {
 			sendSysexConfigsTask.setParameters(sysexSendList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexConfigsTask.progressProperty());
-			System.out.printf("Starting thread with number of sysexes = %d\n", sysexSendList.size());
+			//System.out.printf("Starting thread with number of sysexes = %d\n", sysexSendList.size());
 			new Thread(sendSysexConfigsTask).start();
 			
 		}

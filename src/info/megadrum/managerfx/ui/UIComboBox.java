@@ -59,7 +59,7 @@ public class UIComboBox extends UIControl {
     		width = w*0.67;
     	} else {    		
         	if (copyButtonShown) {
-        		width = w*0.25;
+        		width = w*0.45;
         	} else {
         		width = w*0.41;
         	}    		

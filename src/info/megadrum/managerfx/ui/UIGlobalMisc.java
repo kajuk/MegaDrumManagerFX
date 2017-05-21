@@ -8,6 +8,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -23,6 +24,7 @@ public class UIGlobalMisc {
 	private	Label		lblFwVersion;
 	private Label		labelLcdContrast;
 	private Spinner<Integer>		spinnerLcdContrast;
+	private SpinnerValueFactory<Integer> valueFactoryLcd;
 	private Label		labelMcu;
 	private	Label		lblMcu;
 	private Label		labelConfigNamesEn;
@@ -93,12 +95,15 @@ public class UIGlobalMisc {
 		rootGridPane.getChildren().add(labelLcdContrast);
 
 		spinnerLcdContrast = new Spinner<Integer>();
-		spinnerLcdContrast.setMaxWidth(65.0);
-		spinnerLcdContrast.setMinWidth(65.0);
+		spinnerLcdContrast.setMaxWidth(70.0);
+		spinnerLcdContrast.setMinWidth(70.0);
 		GridPane.setConstraints(spinnerLcdContrast, 3, 1);
 		GridPane.setHalignment(spinnerLcdContrast, HPos.LEFT);
 		GridPane.setValignment(spinnerLcdContrast, VPos.CENTER);
 		rootGridPane.getChildren().add(spinnerLcdContrast);
+		valueFactoryLcd = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 50, 1);
+		spinnerLcdContrast.setValueFactory(valueFactoryLcd);
+
 
 		labelMcu = new Label("MCU:");
 		GridPane.setConstraints(labelMcu, 4, 0);
