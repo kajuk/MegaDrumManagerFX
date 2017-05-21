@@ -17,7 +17,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean useThruPort = false;
 	public boolean autoOpenPorts = false;
 	public boolean saveOnExit = false;
-	public boolean interactive = false;
+	public boolean liveUpdates = true;
 	//public String lastDir = "";
 	public int lastConfig = 0;
 	//public String [] configsNames;
@@ -64,7 +64,7 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("useThruPort", useThruPort);
 		prop.setProperty("autoOpenPorts", autoOpenPorts);
 		prop.setProperty("saveOnExit", saveOnExit);
-		prop.setProperty("interactive", interactive);
+		prop.setProperty("interactive", liveUpdates);
 		//prop.setProperty("lastDir", lastDir);
 		prop.setProperty("lastConfig", lastConfig);
 		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
@@ -104,7 +104,7 @@ public class ConfigOptions implements java.io.Serializable {
 		useThruPort = prop.getBoolean("useThruPort", useThruPort);
 		autoOpenPorts = prop.getBoolean("autoOpenPorts", autoOpenPorts);
 		saveOnExit = prop.getBoolean("saveOnExit", saveOnExit);
-		interactive = prop.getBoolean("interactive", interactive);
+		liveUpdates = prop.getBoolean("interactive", liveUpdates);
 		//lastDir = prop.getString("lastDir", lastDir);
 		lastConfig = Utils.validateInt(prop.getInt("lastConfig",lastConfig),0,Constants.CONFIGS_COUNT-1,lastConfig);
 		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {

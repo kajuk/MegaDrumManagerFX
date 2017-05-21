@@ -2,6 +2,8 @@ package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
 
+import javax.swing.event.EventListenerList;
+
 import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
@@ -38,6 +40,23 @@ public class UIMisc {
 	private UICheckBox uiCheckBoxAltNoteChoking;
 	private ArrayList<UIControl> allControls;
 		
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt);
+			}
+		}
+	}
+	
 	public UIMisc(String title) {
 		
 		allControls = new ArrayList<UIControl>();
@@ -98,7 +117,15 @@ public class UIMisc {
 	
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
-        	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);        	
+        	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);
+        	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this));
+				}
+			});
         }
 
 		titledPane = new TitledPane();
@@ -165,4 +192,20 @@ public class UIMisc {
 		uiCheckBoxAltNoteChoking.uiCtlSetSelected(config.alt_note_choking, setFromSysex);
 	}
 		
+	public void setConfigFromControls(ConfigMisc config) {
+		config.setNoteOff(uiSpinnerNoteOffDelay.uiCtlGetValue()/10);
+		config.pressroll = uiSpinnerPressrollTimeout.uiCtlGetValue();
+		config.latency = uiSpinnerLatency.uiCtlGetValue();
+		config.octave_shift = uiSpinnerNotesOctaveShift.uiCtlGetValue();
+		config.big_vu_meter = uiCheckBoxBigVUmeter.uiCtlIsSelected();
+		config.big_vu_split = uiCheckBoxBigVUsplit.uiCtlIsSelected();
+		config.quick_access = uiCheckBoxBigVUQuickAccess.uiCtlIsSelected();
+		config.alt_false_tr_supp = uiCheckBoxAltFalseTrSupp.uiCtlIsSelected();
+		config.inputs_priority= uiCheckBoxInputsPriority.uiCtlIsSelected();
+		config.all_gains_low = uiCheckBoxUnknownSetting.uiCtlIsSelected();
+		config.midi_thru = uiCheckBoxMIDIThru.uiCtlIsSelected();
+		config.send_triggered_in = uiCheckBoxSendTriggeredIn.uiCtlIsSelected();
+		config.alt_note_choking = uiCheckBoxAltNoteChoking.uiCtlIsSelected();
+	}
+
 }

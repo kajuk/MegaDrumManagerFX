@@ -15,6 +15,8 @@ import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
+import info.megadrum.managerfx.ui.ControlChangeEvent;
+import info.megadrum.managerfx.ui.ControlChangeEventListener;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
@@ -78,6 +80,16 @@ public class Controller implements MidiRescanEventListener {
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiMisc.getButtonGet().setOnAction(e-> sendSysexMiscRequest());
+		uiMisc.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt) {
+				// TODO Auto-generated method stub
+				if (configOptions.liveUpdates) {
+					sendSysexMisc();
+				}
+			}
+		});
 		uiPedal = new UIPedal("HiHat Pedal");
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
@@ -86,7 +98,7 @@ public class Controller implements MidiRescanEventListener {
 		layout1VBox.getChildren().add(mainMenuBar);
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		tempProgressBar.setMaxWidth(400);
-		//layout1VBox.getChildren().add(tempProgressBar);
+		layout1VBox.getChildren().add(tempProgressBar);
 		
 		HBox layout2HBox = new HBox(5);
 		Button button = new Button("b");
@@ -186,6 +198,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexMisc() {
+		uiMisc.setConfigFromControls(configFull.configMisc);
 		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 		sysexSendList.clear();
@@ -197,6 +210,8 @@ public class Controller implements MidiRescanEventListener {
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
 				//System.out.println("SendSysexConfigsTask succeeded");
+				tempProgressBar.progressProperty().unbind();
+				tempProgressBar.setProgress(1.0);
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);

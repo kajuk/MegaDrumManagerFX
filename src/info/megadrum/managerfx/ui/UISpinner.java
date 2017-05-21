@@ -88,6 +88,7 @@ public class UISpinner extends UIControl {
 							if (intValue != Integer.valueOf(newValue)) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
+								fireControlChangeEvent(new ControlChangeEvent(this));
 								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 									if (intValue.intValue() == mdIntValue.intValue()) {
 										setSyncState(Constants.SYNC_STATE_SYNCED);						

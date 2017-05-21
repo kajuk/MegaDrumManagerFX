@@ -36,6 +36,7 @@ public class UICheckBox extends UIControl{
 	    		//System.out.println("Checkbox changed");
 		    	booleanValue = newValue;
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+					fireControlChangeEvent(new ControlChangeEvent(this));
 					if (booleanValue == mdBooleanValue) {
 						setSyncState(Constants.SYNC_STATE_SYNCED);						
 					} else {

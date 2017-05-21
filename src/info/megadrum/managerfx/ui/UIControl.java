@@ -2,7 +2,9 @@ package info.megadrum.managerfx.ui;
 
 import java.util.Set;
 
-import com.sun.glass.ui.Size;
+import javax.swing.event.EventListenerList;
+
+//import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.property.ObjectProperty;
@@ -54,6 +56,23 @@ public class UIControl extends Control implements UIControlInterface {
 	private Double labelWidthMultiplier = 0.4;
 	private Double controlWidthMultiplier;
 
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt);
+			}
+		}
+	}
+	
 	public UIControl(Boolean showCopyButton) {
 		copyButtonShown = showCopyButton;
 		init("Unknown");
