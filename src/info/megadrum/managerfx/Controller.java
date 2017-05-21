@@ -15,6 +15,7 @@ import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
+import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
@@ -51,6 +52,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIMisc uiMisc;
 	private UIPedal uiPedal;
 	private UIPad uiPad;
+	private UIGlobalMisc uiGlobalMisc;
 	private ProgressBar tempProgressBar;
 	
 	private MidiController midiController;
@@ -72,6 +74,7 @@ public class Controller implements MidiRescanEventListener {
 		initConfigs();
 		createMainMenuBar();
 		tempProgressBar = new ProgressBar();
+		uiGlobalMisc = new UIGlobalMisc();
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiMisc.getButtonGet().setOnAction(e-> sendSysexMiscRequest());
@@ -81,6 +84,7 @@ public class Controller implements MidiRescanEventListener {
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1VBox.getChildren().add(mainMenuBar);
+		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		tempProgressBar.setMaxWidth(400);
 		//layout1VBox.getChildren().add(tempProgressBar);
 		
