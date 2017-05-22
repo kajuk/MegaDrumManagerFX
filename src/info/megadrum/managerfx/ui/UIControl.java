@@ -1,7 +1,5 @@
 package info.megadrum.managerfx.ui;
 
-import java.util.Set;
-
 import javax.swing.event.EventListenerList;
 
 //import javax.swing.event.EventListenerList;

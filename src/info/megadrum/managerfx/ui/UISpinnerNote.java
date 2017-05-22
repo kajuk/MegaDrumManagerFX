@@ -74,6 +74,7 @@ public class UISpinnerNote extends UIControl {
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
 		uispinner.setEditable(true);
+		//uispinner.seton
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
 		//uispinner.set
@@ -81,6 +82,7 @@ public class UISpinnerNote extends UIControl {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				//System.out.println("Spinner change event");
 				// Spinner number validation
 		    	if (changedFromSet > 0) {
 		    		changedFromSet--;
@@ -93,7 +95,7 @@ public class UISpinnerNote extends UIControl {
 							uispinner.getEditor().setText(intValue.toString());
 						} else {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
-								System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
 								changeNoteName();
 								fireControlChangeEvent(new ControlChangeEvent(this));
@@ -307,18 +309,20 @@ public class UISpinnerNote extends UIControl {
         	changedFromSet++;
     		intValue = n;
     	}
+    	//System.out.printf("New value = %d for %s\n", intValue, label.getText());
     	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
     	}
     	valueFactory.setValue(n);
+    	uispinner.getEditor().setText(intValue.toString());
 		resizeFont();
 		changeNoteName();
     }
     
     public Integer uiCtlGetValue() {
-    	return valueFactory.getValue();
+    	return intValue;
     }
 
 /*

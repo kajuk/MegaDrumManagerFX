@@ -141,16 +141,24 @@ public class MidiController {
 		midiHandler.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
-				if (!isInFirmwareUpgrade) {
-					midiHandler.getMidi();
-					if (midiHandler.isSysexReceived()) {
-						midiHandler.resetSysexReceived();
-						processSysex(midiHandler.getBufferIn());						
-					} else if (midiHandler.getBufferIn() != null) {
-						processShortMidi(midiHandler.getBufferIn());
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						if (!isInFirmwareUpgrade) {
+							midiHandler.getMidi();
+							if (midiHandler.isSysexReceived()) {
+								midiHandler.resetSysexReceived();
+								processSysex(midiHandler.getBufferIn());						
+							} else if (midiHandler.getBufferIn() != null) {
+								processShortMidi(midiHandler.getBufferIn());
+							}
+							midiHandler.resetBufferIn();
+						}
+						
 					}
-					midiHandler.resetBufferIn();
-				}
+				});
 			}
 
 			@Override
@@ -287,8 +295,16 @@ public class MidiController {
 		if (midiHandler.isMidiOpen()) {
 			sendSysexRequestsTask.setParameters(typesAndIdsList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexRequestsTask.progressProperty());
-			//System.out.printf("Starting thread with number of sysexes = %d\n", typesAndIdsList.size());
-			new Thread(sendSysexRequestsTask).start();
+			//System.out.printf("Starting thread with number of sysexes = %d\n", typesAndIdsList.size());midiEventOccurred
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					new Thread(sendSysexRequestsTask).start();
+					
+				}
+			});
 			
 		}
 	}

@@ -45,7 +45,7 @@ public class UIComboBox extends UIControl {
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
 		    		Integer newIntValue = listValues.indexOf(newValue);
 					if (intValue.intValue() != newIntValue.intValue()) {
-						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),newIntValue.intValue(),intValue );
 						intValue = newIntValue;
 						fireControlChangeEvent(new ControlChangeEvent(this));
 						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
@@ -107,6 +107,7 @@ public class UIComboBox extends UIControl {
     		mdIntValue = n;
     	}
     	stringValue = listValues.get(intValue);
+    	//System.out.printf("ComboBox: index = %d, string at this index = %s\n", intValue, stringValue);
     	comboBox.setValue(stringValue);
     }
     

@@ -107,7 +107,7 @@ public class UIPedal {
 	
 	public UIPedal(String title) {
 		
-		listHiHatInputs = new ArrayList<String>(Arrays.asList("2", "4"));
+		listHiHatInputs = new ArrayList<String>(Arrays.asList("2", "4", "6", "8"));
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
 		allNotesControls = new ArrayList<UIControl>();
@@ -366,7 +366,7 @@ public class UIPedal {
 		uiComboBoxMiscType.uiCtlSetValue(config.type ? 1:0, setFromSysex);
 		uiComboBoxMiscCurve.uiCtlSetValue(config.curve, setFromSysex);
 		uiComboBoxMiscChickCurve.uiCtlSetValue(config.chickCurve, setFromSysex);
-		uiComboBoxMiscHiHatInput.uiCtlSetValue((config.hhInput-2/2), setFromSysex);
+		uiComboBoxMiscHiHatInput.uiCtlSetValue(((config.hhInput-2)/2), setFromSysex);
 		uiCheckBoxMiscAltInput.uiCtlSetSelected(config.altIn, setFromSysex);
 		uiCheckBoxMiscReversLevels.uiCtlSetSelected(config.reverseLevels, setFromSysex);
 		uiCheckBoxMiscSoftChicks.uiCtlSetSelected(config.softChicks, setFromSysex);
@@ -417,7 +417,7 @@ public class UIPedal {
 		config.type = (uiComboBoxMiscType.uiCtlGetValue() > 0 ? true:false);
 		config.curve = uiComboBoxMiscCurve.uiCtlGetValue();
 		config.chickCurve = uiComboBoxMiscChickCurve.uiCtlGetValue();
-		config.hhInput = uiComboBoxMiscHiHatInput.uiCtlGetValue()*2 + 2;
+		config.hhInput = (uiComboBoxMiscHiHatInput.uiCtlGetValue()*2) + 2;
 		config.altIn = uiCheckBoxMiscAltInput.uiCtlIsSelected();
 		config.reverseLevels = uiCheckBoxMiscReversLevels.uiCtlIsSelected();
 		config.softChicks = uiCheckBoxMiscSoftChicks.uiCtlIsSelected();

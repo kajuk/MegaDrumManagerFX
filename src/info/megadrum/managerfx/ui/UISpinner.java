@@ -245,10 +245,11 @@ public class UISpinner extends UIControl {
     		mdIntValue = n;
     	}
     	valueFactory.setValue(n);
+    	uispinner.getEditor().setText(intValue.toString());
 		resizeFont();
     }
     
     public Integer uiCtlGetValue() {
-    	return valueFactory.getValue();
+    	return intValue;
     }
 }

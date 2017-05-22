@@ -17,7 +17,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean useThruPort = false;
 	public boolean autoOpenPorts = false;
 	public boolean saveOnExit = false;
-	public boolean liveUpdates = true;
+	public boolean liveUpdates = false;
 	//public String lastDir = "";
 	public int lastConfig = 0;
 	//public String [] configsNames;

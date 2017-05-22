@@ -90,6 +90,7 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
+
 		uiPedal = new UIPedal("HiHat Pedal");
 		uiPedal.getButtonSend().setOnAction(e-> sendSysexPedal());
 		uiPedal.getButtonGet().setOnAction(e-> sendSysexPedalRequest());
