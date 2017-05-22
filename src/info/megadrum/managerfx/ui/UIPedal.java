@@ -1,7 +1,13 @@
 package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import javax.swing.event.EventListenerList;
+
+import info.megadrum.managerfx.data.ConfigMisc;
+import info.megadrum.managerfx.data.ConfigPedal;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -47,7 +53,7 @@ public class UIPedal {
 	private UISpinner	uiSpinnerLevelsHalfOpen2;
 	private UISpinner	uiSpinnerLevelsClosed;
 	private UISpinner	uiSpinnerLevelsChickThresh;
-	private UISpinner	uiSpinnerLevelsSoftChickThresh;
+	private UISpinner	uiSpinnerLevelsShortChickThresh;
 	private UISpinner	uiSpinnerLevelsLongChickThresh;
 	private UISpinner	uiSpinnerLevelsChickMinVel;
 	private UISpinner	uiSpinnerLevelsChickMaxVel;
@@ -80,9 +86,28 @@ public class UIPedal {
 	private ArrayList<UIControl> allMiscControls;
 	private ArrayList<UIControl> allLevelsControls;
 	private ArrayList<UIControl> allNotesControls;
+	private List<String>	listHiHatInputs;
+	
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt);
+			}
+		}
+	}
 	
 	public UIPedal(String title) {
 		
+		listHiHatInputs = new ArrayList<String>(Arrays.asList("2", "4"));
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
 		allNotesControls = new ArrayList<UIControl>();
@@ -124,12 +149,20 @@ public class UIPedal {
         tabNotes.setContent(vBoxNotes);
 
         uiComboBoxMiscType = new UIComboBox("Type", false);
+        uiComboBoxMiscType.uiCtlSetValuesArray(Arrays.asList(Constants.PEDAL_TYPES_LIST));
+        uiComboBoxMiscType.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscType);
         uiComboBoxMiscCurve = new UIComboBox("Curve", false);
+        uiComboBoxMiscCurve.uiCtlSetValuesArray(Arrays.asList(Constants.CURVES_LIST));
+        uiComboBoxMiscCurve.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscCurve);
         uiComboBoxMiscChickCurve = new UIComboBox("Chick Curve", false);
+        uiComboBoxMiscChickCurve.uiCtlSetValuesArray(Arrays.asList(Constants.CURVES_LIST));
+        uiComboBoxMiscChickCurve.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscChickCurve);
         uiComboBoxMiscHiHatInput = new UIComboBox("HiHat Input", false);
+        uiComboBoxMiscHiHatInput.uiCtlSetValuesArray(listHiHatInputs);
+        uiComboBoxMiscHiHatInput.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscHiHatInput);
         uiCheckBoxMiscAltInput = new UICheckBox("Alt Input", false);
         allMiscControls.add(uiCheckBoxMiscAltInput);
@@ -151,7 +184,15 @@ public class UIPedal {
 		for (int i = 0; i < allMiscControls.size(); i++) {
         	vBoxMisc.getChildren().add(allMiscControls.get(i).getUI());
         	allMiscControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
-       }
+        	allMiscControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this));
+				}
+			});
+		}
 		
 		uiSpinnerLevelsLow = new UISpinner("Low", 0, 1023, 16, 1, false);
         allLevelsControls.add(uiSpinnerLevelsLow);
@@ -171,8 +212,8 @@ public class UIPedal {
         allLevelsControls.add(uiSpinnerLevelsClosed);
         uiSpinnerLevelsChickThresh = new UISpinner("ChickThresh", 0, 127, 120, 1, false);
         allLevelsControls.add(uiSpinnerLevelsChickThresh);
-        uiSpinnerLevelsSoftChickThresh = new UISpinner("SoftChickThresh", 0, 127, 115, 1, false);
-        allLevelsControls.add(uiSpinnerLevelsSoftChickThresh);
+        uiSpinnerLevelsShortChickThresh = new UISpinner("SoftChickThresh", 0, 127, 115, 1, false);
+        allLevelsControls.add(uiSpinnerLevelsShortChickThresh);
         uiSpinnerLevelsLongChickThresh = new UISpinner("LongChickThresh", 0, 127, 16, 1, false);
         allLevelsControls.add(uiSpinnerLevelsLongChickThresh);
         uiSpinnerLevelsChickMinVel = new UISpinner("Chick Min Velocity", 0, 1023, 400, 1, false);
@@ -185,6 +226,14 @@ public class UIPedal {
 		for (int i = 0; i < allLevelsControls.size(); i++) {
         	vBoxLevels.getChildren().add(allLevelsControls.get(i).getUI());
         	allLevelsControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
+        	allLevelsControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this));
+				}
+			});
         }
 
 		uiSpinnerNoteBowSemiOpen = new UISpinnerNote("Bow SemiOpen", false);
@@ -237,6 +286,14 @@ public class UIPedal {
 		for (int i = 0; i < allNotesControls.size(); i++) {
         	vBoxNotes.getChildren().add(allNotesControls.get(i).getUI());
         	allNotesControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
+        	allNotesControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this));
+				}
+			});
         }
 		
 		titledPane = new TitledPane();
@@ -303,5 +360,108 @@ public class UIPedal {
 
 	public Button getButtonGet() {
 		return buttonGet;
+	}
+	
+	public void setControlsFromConfig(ConfigPedal config, Boolean setFromSysex) {
+		uiComboBoxMiscType.uiCtlSetValue(config.type ? 1:0, setFromSysex);
+		uiComboBoxMiscCurve.uiCtlSetValue(config.curve, setFromSysex);
+		uiComboBoxMiscChickCurve.uiCtlSetValue(config.chickCurve, setFromSysex);
+		uiComboBoxMiscHiHatInput.uiCtlSetValue((config.hhInput-2/2), setFromSysex);
+		uiCheckBoxMiscAltInput.uiCtlSetSelected(config.altIn, setFromSysex);
+		uiCheckBoxMiscReversLevels.uiCtlSetSelected(config.reverseLevels, setFromSysex);
+		uiCheckBoxMiscSoftChicks.uiCtlSetSelected(config.softChicks, setFromSysex);
+		uiCheckBoxMiscAutoLevels.uiCtlSetSelected(config.autoLevels, setFromSysex);
+		uiCheckBoxMiscAlgorithm.uiCtlSetSelected(config.new_algorithm, setFromSysex);
+		uiSpinnerMiscChickDelay.uiCtlSetValue(config.chickDelay, setFromSysex);
+		uiSpinnerMiscCCNumber.uiCtlSetValue(config.cc, setFromSysex);
+		uiSpinnerMiscCCReduction.uiCtlSetValue(config.ccRdcLvl, setFromSysex);
+		
+		uiSpinnerLevelsLow.uiCtlSetValue(config.lowLevel, setFromSysex);
+		uiSpinnerLevelsHigh.uiCtlSetValue(config.highLevel, setFromSysex);
+		uiSpinnerLevelsOpen.uiCtlSetValue(config.openLevel, setFromSysex);
+		uiSpinnerLevelsSemiOpen.uiCtlSetValue(config.semiOpenLevel, setFromSysex);
+		uiSpinnerLevelsSemiOpen2.uiCtlSetValue(config.semiOpenLevel2, setFromSysex);
+		uiSpinnerLevelsHalfOpen.uiCtlSetValue(config.halfOpenLevel, setFromSysex);
+		uiSpinnerLevelsHalfOpen2.uiCtlSetValue(config.halfOpenLevel2, setFromSysex);
+		uiSpinnerLevelsClosed.uiCtlSetValue(config.closedLevel, setFromSysex);
+		uiSpinnerLevelsChickThresh.uiCtlSetValue(config.chickThres, setFromSysex);
+		uiSpinnerLevelsShortChickThresh.uiCtlSetValue(config.shortThres, setFromSysex);
+		uiSpinnerLevelsLongChickThresh.uiCtlSetValue(config.longThres, setFromSysex);
+		uiSpinnerLevelsChickMinVel.uiCtlSetValue(config.chickParam1, setFromSysex);
+		uiSpinnerLevelsChickMaxVel.uiCtlSetValue(config.chickParam2, setFromSysex);
+		uiSpinnerLevelsChickDeadPeriod.uiCtlSetValue(config.chickParam3, setFromSysex);
+		
+		uiSpinnerNoteBowSemiOpen.uiCtlSetValue(config.bowSemiOpenNote, setFromSysex);
+		uiSpinnerNoteEdgeSemiOpen.uiCtlSetValue(config.edgeSemiOpenNote, setFromSysex);
+		uiSpinnerNoteBellSemiOpen.uiCtlSetValue(config.bellSemiOpenNote, setFromSysex);
+		uiSpinnerNoteBowSemiOpen2.uiCtlSetValue(config.bowSemiOpen2Note, setFromSysex);
+		uiSpinnerNoteEdgeSemiOpen2.uiCtlSetValue(config.edgeSemiOpen2Note, setFromSysex);
+		uiSpinnerNoteBellSemiOpen2.uiCtlSetValue(config.bellSemiOpen2Note, setFromSysex);
+		uiSpinnerNoteBowHalfOpen.uiCtlSetValue(config.bowHalfOpenNote, setFromSysex);
+		uiSpinnerNoteEdgeHalfOpen.uiCtlSetValue(config.edgeHalfOpenNote, setFromSysex);
+		uiSpinnerNoteBellHalfOpen.uiCtlSetValue(config.bellHalfOpenNote, setFromSysex);
+		uiSpinnerNoteBowHalfOpen2.uiCtlSetValue(config.bowHalfOpen2Note, setFromSysex);
+		uiSpinnerNoteEdgeHalfOpen2.uiCtlSetValue(config.edgeHalfOpen2Note, setFromSysex);
+		uiSpinnerNoteBellHalfOpen2.uiCtlSetValue(config.bellHalfOpen2Note, setFromSysex);
+		uiSpinnerNoteBowSemiClosed.uiCtlSetValue(config.bowSemiClosedNote, setFromSysex);
+		uiSpinnerNoteEdgeSemiClosed.uiCtlSetValue(config.edgeSemiClosedNote, setFromSysex);
+		uiSpinnerNoteBellSemiClosed.uiCtlSetValue(config.bellSemiClosedNote, setFromSysex);
+		uiSpinnerNoteBowClosed.uiCtlSetValue(config.bowClosedNote, setFromSysex);
+		uiSpinnerNoteEdgeClosed.uiCtlSetValue(config.edgeClosedNote, setFromSysex);
+		uiSpinnerNoteBellClosed.uiCtlSetValue(config.bellClosedNote, setFromSysex);
+		uiSpinnerNoteChick.uiCtlSetValue(config.chickNote, setFromSysex);
+		uiSpinnerNoteSplash.uiCtlSetValue(config.splashNote, setFromSysex);
+	}
+	
+	public void setConfigFromControls(ConfigPedal config) {
+		config.type = (uiComboBoxMiscType.uiCtlGetValue() > 0 ? true:false);
+		config.curve = uiComboBoxMiscCurve.uiCtlGetValue();
+		config.chickCurve = uiComboBoxMiscChickCurve.uiCtlGetValue();
+		config.hhInput = uiComboBoxMiscHiHatInput.uiCtlGetValue()*2 + 2;
+		config.altIn = uiCheckBoxMiscAltInput.uiCtlIsSelected();
+		config.reverseLevels = uiCheckBoxMiscReversLevels.uiCtlIsSelected();
+		config.softChicks = uiCheckBoxMiscSoftChicks.uiCtlIsSelected();
+		config.autoLevels = uiCheckBoxMiscAutoLevels.uiCtlIsSelected();
+		config.new_algorithm = uiCheckBoxMiscAlgorithm.uiCtlIsSelected();
+		config.chickDelay = uiSpinnerMiscChickDelay.uiCtlGetValue();
+		config.cc = uiSpinnerMiscCCNumber.uiCtlGetValue();
+		config.ccRdcLvl = uiSpinnerMiscCCReduction.uiCtlGetValue();
+		
+		config.lowLevel = uiSpinnerLevelsLow.uiCtlGetValue();
+		config.highLevel = uiSpinnerLevelsHigh.uiCtlGetValue();
+		config.openLevel = uiSpinnerLevelsOpen.uiCtlGetValue();
+		config.semiOpenLevel = uiSpinnerLevelsSemiOpen.uiCtlGetValue();
+		config.semiOpenLevel2 = uiSpinnerLevelsSemiOpen2.uiCtlGetValue();
+		config.halfOpenLevel = uiSpinnerLevelsHalfOpen.uiCtlGetValue();
+		config.halfOpenLevel2 = uiSpinnerLevelsHalfOpen2.uiCtlGetValue();
+		config.closedLevel = uiSpinnerLevelsClosed.uiCtlGetValue();
+		config.chickThres = uiSpinnerLevelsChickThresh.uiCtlGetValue();
+		config.shortThres = uiSpinnerLevelsShortChickThresh.uiCtlGetValue();
+		config.longThres = uiSpinnerLevelsLongChickThresh.uiCtlGetValue();
+		config.chickParam1 = uiSpinnerLevelsChickMinVel.uiCtlGetValue();
+		config.chickParam2 = uiSpinnerLevelsChickMaxVel.uiCtlGetValue();
+		config.chickParam3 = uiSpinnerLevelsChickDeadPeriod.uiCtlGetValue();
+		
+		config.bowSemiOpenNote = uiSpinnerNoteBowSemiOpen.uiCtlGetValue();
+		config.edgeSemiOpenNote = uiSpinnerNoteEdgeSemiOpen.uiCtlGetValue();
+		config.bellSemiOpenNote = uiSpinnerNoteBellSemiOpen.uiCtlGetValue();
+		config.bowSemiOpen2Note = uiSpinnerNoteBowSemiOpen2.uiCtlGetValue();
+		config.edgeSemiOpen2Note = uiSpinnerNoteEdgeSemiOpen2.uiCtlGetValue();
+		config.bellSemiOpen2Note = uiSpinnerNoteBellSemiOpen2.uiCtlGetValue();
+		config.bowHalfOpenNote = uiSpinnerNoteBowHalfOpen.uiCtlGetValue();
+		config.edgeHalfOpenNote = uiSpinnerNoteEdgeHalfOpen.uiCtlGetValue();
+		config.bellHalfOpenNote = uiSpinnerNoteBellHalfOpen.uiCtlGetValue();
+		config.bowHalfOpen2Note = uiSpinnerNoteBowHalfOpen2.uiCtlGetValue();
+		config.edgeHalfOpen2Note = uiSpinnerNoteEdgeHalfOpen2.uiCtlGetValue();
+		config.bellHalfOpen2Note = uiSpinnerNoteBellHalfOpen2.uiCtlGetValue();
+		config.bowSemiClosedNote = uiSpinnerNoteBowSemiClosed.uiCtlGetValue();
+		config.edgeSemiClosedNote = uiSpinnerNoteEdgeSemiClosed.uiCtlGetValue();
+		config.bellSemiClosedNote = uiSpinnerNoteBellSemiClosed.uiCtlGetValue();
+		config.bowClosedNote = uiSpinnerNoteBowClosed.uiCtlGetValue();
+		config.edgeClosedNote = uiSpinnerNoteEdgeClosed.uiCtlGetValue();
+		config.bellClosedNote = uiSpinnerNoteBellClosed.uiCtlGetValue();
+		config.chickNote = uiSpinnerNoteChick.uiCtlGetValue();
+		config.splashNote = uiSpinnerNoteSplash.uiCtlGetValue();
+		
 	}
 }

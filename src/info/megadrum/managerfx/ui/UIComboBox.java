@@ -19,6 +19,7 @@ public class UIComboBox extends UIControl {
 	private ComboBox<String> comboBox;
 	private HBox layout;
 	private Boolean comboBoxWide = false;
+	private List<String> listValues;
 
 	public UIComboBox(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -37,7 +38,27 @@ public class UIComboBox extends UIControl {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				
+		    	if (changedFromSet > 0) {
+		    		changedFromSet--;
+		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+		    	} else {
+		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+		    		Integer newIntValue = listValues.indexOf(newValue);
+					if (intValue.intValue() != newIntValue.intValue()) {
+						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+						intValue = newIntValue;
+						fireControlChangeEvent(new ControlChangeEvent(this));
+						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+							if (intValue.intValue() == mdIntValue.intValue()) {
+								setSyncState(Constants.SYNC_STATE_SYNCED);						
+							} else {
+								setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+							}
+							
+						}
+						//resizeFont();
+					}
+		    	}				
 			}
         });
 
@@ -71,8 +92,28 @@ public class UIComboBox extends UIControl {
     public void uiCtlSetValuesArray(List<String> list) {
     	comboBox.getItems().clear();
     	comboBox.getItems().addAll(list);
+    	listValues = list;
     }
     
+    public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
+    	String stringValue;
+    	if (intValue.intValue() != n.intValue()) {
+        	changedFromSet++;
+    		intValue = n;
+    	}
+    	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
+    	if (setFromSysex) {
+    		setSyncState(Constants.SYNC_STATE_SYNCED);
+    		mdIntValue = n;
+    	}
+    	stringValue = listValues.get(intValue);
+    	comboBox.setValue(stringValue);
+    }
+    
+    public Integer uiCtlGetValue() {
+    	return intValue;
+    }
+ 
     public void uiCtlSetValue(String value) {
     	comboBox.setValue(value);
     }

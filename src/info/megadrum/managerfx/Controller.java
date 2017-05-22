@@ -91,6 +91,18 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		uiPedal = new UIPedal("HiHat Pedal");
+		uiPedal.getButtonSend().setOnAction(e-> sendSysexPedal());
+		uiPedal.getButtonGet().setOnAction(e-> sendSysexPedalRequest());
+		uiPedal.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt) {
+				// TODO Auto-generated method stub
+				if (configOptions.liveUpdates) {
+					sendSysexPedal();
+				}
+			}
+		});
 		uiPad = new UIPad("Pads");
 		VBox layout1VBox = new VBox();
 
@@ -197,12 +209,7 @@ public class Controller implements MidiRescanEventListener {
 		System.exit(0);
 	}
 	
-	private void sendSysexMisc() {
-		uiMisc.setConfigFromControls(configFull.configMisc);
-		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
-		sysexSendList.clear();
-		sysexSendList.add(sysex);
+	private void sendSysex() {
 		midiController.sendSysexConfigsTaskRecreate();
 		midiController.addSendSysexConfigsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
@@ -214,15 +221,10 @@ public class Controller implements MidiRescanEventListener {
 				tempProgressBar.setProgress(1.0);
 			}
 		});
-		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);
+		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);		
 	}
-
-	private void sendSysexMiscRequest() {
-		byte [] typeAndId;
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_MISC;
-		sysexSendList.clear();
-		sysexSendList.add(typeAndId);
+	
+	private void sendSysexRequest() {
 		midiController.sendSysexRequestsTaskRecreate();
 		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
@@ -235,10 +237,45 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		tempProgressBar.setProgress(0.0);
-		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);
-
+		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);		
 	}
 
+	private void sendSysexMisc() {
+		uiMisc.setConfigFromControls(configFull.configMisc);
+		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
+		sysexSendList.clear();
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
+
+	private void sendSysexMiscRequest() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_MISC;
+		sysexSendList.clear();
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+	}
+
+	private void sendSysexPedal() {
+		uiPedal.setConfigFromControls(configFull.configPedal);
+		byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		sysexSendList.clear();
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
+
+	private void sendSysexPedalRequest() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL;
+		sysexSendList.clear();
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+	}
+	
 	private void sendAllSysexRequests() {
 		byte [] typeAndId;
 		byte i;
@@ -340,6 +377,11 @@ public class Controller implements MidiRescanEventListener {
 		case Constants.MD_SYSEX_PAD:
 			break;
 		case Constants.MD_SYSEX_PEDAL:
+			Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
+			Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal);
+			configFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
+			configFull.configPedal.sysexReceived = true;
+			uiPedal.setControlsFromConfig(configFull.configPedal, true);
 			break;
 		case Constants.MD_SYSEX_POS:
 			break;

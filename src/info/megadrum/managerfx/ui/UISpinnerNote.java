@@ -31,8 +31,6 @@ public class UISpinnerNote extends UIControl {
 	private SpinnerValueFactory<Integer> valueFactory;
 	private Integer 	minValue;
 	private Integer 	maxValue;
-	private Integer 	initValue;
-	private Integer 	currentValue;
 	private Integer 	step;
 	private Label 		labelNote;
 	private CheckBox	checkBoxNoteLinked;
@@ -68,11 +66,10 @@ public class UISpinnerNote extends UIControl {
 	private void init(Integer min, Integer max, Integer initial, Integer s) {
 		minValue = min;
 		maxValue = max;
-		initValue = initial;
-		currentValue = initValue;
+		intValue = initial;
 		valueType = Constants.VALUE_TYPE_INT;
 		step = s;
-		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initValue, step);
+		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, intValue, step);
 
 		uispinner = new Spinner<Integer>();
 		uispinner.setValueFactory(valueFactory);
@@ -85,21 +82,34 @@ public class UISpinnerNote extends UIControl {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// Spinner number validation
-	            if (!newValue.matches("\\d*")) {
-	            	uispinner.getEditor().setText(currentValue.toString());
-	            } else {
-					if (newValue.matches("")) {
-						uispinner.getEditor().setText(currentValue.toString());
-					} else {
-						if (currentValue != Integer.valueOf(newValue)) {
-							System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),currentValue );
-							currentValue = Integer.valueOf(newValue);
-							intValue = currentValue;
-							changeNoteName();
-							resizeFont();
+		    	if (changedFromSet > 0) {
+		    		changedFromSet--;
+		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+		    	} else {
+		            if (!newValue.matches("\\d*")) {
+		            	uispinner.getEditor().setText(intValue.toString());
+		            } else {
+						if (newValue.matches("")) {
+							uispinner.getEditor().setText(intValue.toString());
+						} else {
+							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
+								System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+								intValue = Integer.valueOf(newValue);
+								changeNoteName();
+								fireControlChangeEvent(new ControlChangeEvent(this));
+								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+									if (intValue.intValue() == mdIntValue.intValue()) {
+										setSyncState(Constants.SYNC_STATE_SYNCED);						
+									} else {
+										setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+									}
+									
+								}
+								//resizeFont();
+							}
 						}
-					}
-	            }
+		            }		    		
+		    	}
 				
 			}
 	    });
@@ -273,7 +283,7 @@ public class UISpinnerNote extends UIControl {
 		int note_number;
 		int base;
 		String note_text;
-		note_number = currentValue;
+		note_number = intValue;
 		if ((note_number > 0) || (!disabledNoteAllowed)) {
 			octave = note_number/12 ;
 			base = octave*12;
@@ -290,6 +300,25 @@ public class UISpinnerNote extends UIControl {
     public void setDisabledNoteAllowed(Boolean b) {
     	disabledNoteAllowed = b;
     	changeNoteName();
+    }
+
+    public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
+    	if (intValue.intValue() != n.intValue()) {
+        	changedFromSet++;
+    		intValue = n;
+    	}
+    	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
+    	if (setFromSysex) {
+    		setSyncState(Constants.SYNC_STATE_SYNCED);
+    		mdIntValue = n;
+    	}
+    	valueFactory.setValue(n);
+		resizeFont();
+		changeNoteName();
+    }
+    
+    public Integer uiCtlGetValue() {
+    	return valueFactory.getValue();
     }
 
 /*

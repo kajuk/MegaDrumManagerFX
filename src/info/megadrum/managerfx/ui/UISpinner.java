@@ -85,7 +85,7 @@ public class UISpinner extends UIControl {
 						if (newValue.matches("")) {
 							uispinner.getEditor().setText(intValue.toString());
 						} else {
-							if (intValue != Integer.valueOf(newValue)) {
+							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
 								fireControlChangeEvent(new ControlChangeEvent(this));
