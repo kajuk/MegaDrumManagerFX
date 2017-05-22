@@ -26,8 +26,6 @@ public class UISlider extends UIControl {
 	private Slider uiSlider;
 	private Integer minValue;
 	private Integer maxValue;
-	private Integer initValue;
-	private Integer currentValue;
 	private HBox layout;
 
 	public UISlider(Boolean showCopyButton) {
@@ -57,17 +55,34 @@ public class UISlider extends UIControl {
 	private void init(Integer min, Integer max, Integer initial) {
 		minValue = min;
 		maxValue = max;
-		initValue = initial;
-		currentValue = initValue;
+		intValue = initial;
 		valueType = Constants.VALUE_TYPE_INT;
 
 		uiSlider = new Slider(minValue, maxValue, intValue);
 		uiSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-            		currentValue = new_val.intValue();
-            		System.out.printf("Slider new value = %d\n", currentValue);
-                }
-            });
+		    	if (changedFromSet > 0) {
+		    		changedFromSet--;
+		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+		    	} else {
+		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+					if (intValue.intValue() != new_val.intValue()) {
+						intValue = new_val.intValue();
+						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+						fireControlChangeEvent(new ControlChangeEvent(this));
+						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+							if (intValue.intValue() == mdIntValue.intValue()) {
+								setSyncState(Constants.SYNC_STATE_SYNCED);						
+							} else {
+								setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+							}
+							
+						}
+						//resizeFont();
+					}
+		    	}
+            }
+		});
 		
 		uiSlider.setShowTickMarks(true);
 		//uiSlider.setSnapToTicks(true);
@@ -98,4 +113,20 @@ public class UISlider extends UIControl {
     	// don't change spinner control width so override setControlMinWidth here
 	}
 */
+    public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
+    	if (intValue.intValue() != n.intValue()) {
+        	changedFromSet++;
+    		intValue = n;
+    	}
+    	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
+    	if (setFromSysex) {
+    		setSyncState(Constants.SYNC_STATE_SYNCED);
+    		mdIntValue = n;
+    	}
+    	uiSlider.setValue(intValue);
+    }
+    
+    public Integer uiCtlGetValue() {
+    	return (int)uiSlider.getValue();
+    }
 }
