@@ -306,6 +306,8 @@ public class MidiController {
 				}
 			});
 			
+		} else {
+			progressBar.setVisible(false);
 		}
 	}
 
@@ -404,7 +406,8 @@ public class MidiController {
 			progressBar.progressProperty().bind(sendSysexConfigsTask.progressProperty());
 			//System.out.printf("Starting thread with number of sysexes = %d\n", sysexSendList.size());
 			new Thread(sendSysexConfigsTask).start();
-			
+		} else {
+			progressBar.setVisible(false);
 		}
 	}
 

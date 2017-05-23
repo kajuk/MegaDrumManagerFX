@@ -17,6 +17,7 @@ import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
+import info.megadrum.managerfx.ui.UIGlobal;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
 import info.megadrum.managerfx.ui.UIMisc;
@@ -51,11 +52,12 @@ public class Controller implements MidiRescanEventListener {
 	private Menu loadFromMdSlotMenu, saveToMdSlotMenu;
 	private MenuItem firmwareUpgradeMenu, optionsMenu, exitMenu;
 	private UIOptions optionsWindow;
+	private UIGlobal uiGlobal;
+	private UIGlobalMisc uiGlobalMisc;
 	private UIMisc uiMisc;
 	private UIPedal uiPedal;
 	private UIPad uiPad;
-	private UIGlobalMisc uiGlobalMisc;
-	private ProgressBar tempProgressBar;
+	//private ProgressBar tempProgressBar;
 	
 	private MidiController midiController;
 	private ConfigOptions configOptions;
@@ -75,7 +77,7 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
-		tempProgressBar = new ProgressBar();
+		uiGlobal = new UIGlobal();
 		uiGlobalMisc = new UIGlobalMisc();
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
@@ -109,9 +111,8 @@ public class Controller implements MidiRescanEventListener {
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		layout1VBox.getChildren().add(mainMenuBar);
+		layout1VBox.getChildren().add(uiGlobal.getUI());
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
-		tempProgressBar.setMaxWidth(400);
-		layout1VBox.getChildren().add(tempProgressBar);
 		
 		HBox layout2HBox = new HBox(5);
 		Button button = new Button("b");
@@ -218,27 +219,29 @@ public class Controller implements MidiRescanEventListener {
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
 				//System.out.println("SendSysexConfigsTask succeeded");
-				tempProgressBar.progressProperty().unbind();
-				tempProgressBar.setProgress(1.0);
+				uiGlobal.getProgressBarSysex().progressProperty().unbind();
+				uiGlobal.getProgressBarSysex().setProgress(1.0);
 			}
 		});
-		midiController.sendSysexConfigs(sysexSendList, tempProgressBar, 10, 50);		
+		midiController.sendSysexConfigs(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 	
 	private void sendSysexRequest() {
 		midiController.sendSysexRequestsTaskRecreate();
+		uiGlobal.getProgressBarSysex().setVisible(true);
 		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
 				//System.out.println("SendSysexRequestsTask succeeded");
-				tempProgressBar.progressProperty().unbind();
-				tempProgressBar.setProgress(1.0);
+				uiGlobal.getProgressBarSysex().progressProperty().unbind();
+				uiGlobal.getProgressBarSysex().setProgress(1.0);
+				uiGlobal.getProgressBarSysex().setVisible(false);
 			}
 		});
-		tempProgressBar.setProgress(0.0);
-		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);		
+		uiGlobal.getProgressBarSysex().setProgress(0.0);
+		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 
 	private void sendSysexMisc() {
@@ -294,12 +297,12 @@ public class Controller implements MidiRescanEventListener {
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
 				//System.out.println("SendSysexRequestsTask succeeded");
-				tempProgressBar.progressProperty().unbind();
-				tempProgressBar.setProgress(1.0);
+				uiGlobal.getProgressBarSysex().progressProperty().unbind();
+				uiGlobal.getProgressBarSysex().setProgress(1.0);
 			}
 		});
-		tempProgressBar.setProgress(0.0);
-		midiController.sendSysexRequests(sysexSendList, tempProgressBar, 10, 50);
+		uiGlobal.getProgressBarSysex().setProgress(0.0);
+		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);
 
 	}
 	
