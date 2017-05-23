@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 public class UIGlobal {
 	private HBox		hBoxPane;
@@ -33,6 +34,7 @@ public class UIGlobal {
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
 		buttonLoadFromSlot = new Button("LoadFromSlot");
+		buttonLoadFromSlot.setMinWidth(80);
 		buttonSaveToSlot = new Button("SaveToSlot");
 		buttonLoadAll = new Button("LoadAll");
 		buttonSaveAll = new Button("SaveAll");
@@ -63,6 +65,14 @@ public class UIGlobal {
 		hBoxPane.getChildren().add(labelMidiStatus);
 		hBoxPane.getChildren().add(progressBarSysex);
 		progressBarSysex.setVisible(false);
+		for (int i = 0; i < hBoxPane.getChildren().size(); i++) {
+			if (hBoxPane.getChildren().get(i) instanceof Button) {
+				((Button)hBoxPane.getChildren().get(i)).setFont(new Font(10));
+				
+			}
+		}
+		comboBoxFile.getEditor().setFont(new Font(10));
+		comboBoxFile.setMinWidth(200);
 	}
 
 	public ProgressBar getProgressBarSysex() {

@@ -237,10 +237,8 @@ public class Controller implements MidiRescanEventListener {
 				//System.out.println("SendSysexRequestsTask succeeded");
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
-				uiGlobal.getProgressBarSysex().setVisible(false);
 			}
 		});
-		uiGlobal.getProgressBarSysex().setProgress(0.0);
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 
