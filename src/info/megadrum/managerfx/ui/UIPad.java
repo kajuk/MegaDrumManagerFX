@@ -85,6 +85,10 @@ public class UIPad extends Parent {
 			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 			toolBarNavigator.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		} else {
+			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
 		}
 		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");

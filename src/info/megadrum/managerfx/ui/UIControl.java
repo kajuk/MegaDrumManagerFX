@@ -53,6 +53,7 @@ public class UIControl extends Control implements UIControlInterface {
 	private Button buttonCopy;
 	private Double labelWidthMultiplier = 0.4;
 	private Double controlWidthMultiplier;
+	protected final static Boolean debugSizes = false;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -106,7 +107,9 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setValignment(buttonCopy, VPos.CENTER);
 		buttonCopy.setVisible(copyButtonShown);
 
-		layout.setStyle("-fx-background-color: grey");
+		if (debugSizes) {
+			layout.setStyle("-fx-background-color: grey");
+		}
 		//label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
 		setLabelWidthMultiplier(labelWidthMultiplier);
@@ -131,7 +134,9 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(uiControl, HPos.LEFT);
 		GridPane.setValignment(uiControl, VPos.CENTER);
 		layout.getChildren().add(uiControl);
-		uiControl.setStyle("-fx-background-color: green");
+		if (debugSizes) {
+			uiControl.setStyle("-fx-background-color: green");			
+		}
 		GridPane.setHgrow(uiControl,Priority.ALWAYS);
 		//buttonCopy.setStyle("-fx-background-color: blue");
 		//thisControl.setMinWidth(USE_COMPUTED_SIZE);

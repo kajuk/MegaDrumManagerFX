@@ -132,6 +132,7 @@ public class Controller implements MidiRescanEventListener {
 		optionsWindow.addMidiRescanEventListener(this);
 		
 		window.setScene(scene1);
+		window.setMinWidth(1000);
 		window.sizeToScene();
 		scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
@@ -160,11 +161,15 @@ public class Controller implements MidiRescanEventListener {
 	}
 */	
 	public void respondToResize(Scene sc) {
-		//Double height = sc.getHeight() - mainMenuBar.getHeight();
-		Double height = sc.getHeight();
+		Double mainMenuBarHeight = mainMenuBar.getHeight();
+		Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
+		Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
+		System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
+		//Double height = sc.getHeight();
+		Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
 		Double width = height*2;
 		Double controlH, controlW;
-		controlH= height *0.039 *0.75;
+		controlH= height *0.039 *0.8;
 		//controlW= width *0.2;
 		controlW= controlH *8;
 		//System.out.println("Responding to scene resize in Controller");
@@ -179,6 +184,7 @@ public class Controller implements MidiRescanEventListener {
 
 	public void createMainMenuBar() {
 		mainMenuBar = new MenuBar();
+		mainMenuBar.setStyle("-fx-font-size: 10 pt");
 		mainMenu = new Menu("Main");
 		viewMenu = new Menu("View");
 		aboutMenu = new Menu("About");
@@ -221,6 +227,7 @@ public class Controller implements MidiRescanEventListener {
 				//System.out.println("SendSysexConfigsTask succeeded");
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
+				uiGlobal.getProgressBarSysex().setVisible(false);
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
@@ -237,6 +244,7 @@ public class Controller implements MidiRescanEventListener {
 				//System.out.println("SendSysexRequestsTask succeeded");
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
+				uiGlobal.getProgressBarSysex().setVisible(false);
 			}
 		});
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		

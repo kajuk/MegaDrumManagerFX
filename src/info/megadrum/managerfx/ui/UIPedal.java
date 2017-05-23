@@ -301,7 +301,7 @@ public class UIPedal {
 		titledPane.setContent(vBox1);
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
-		tabPane.setStyle("-fx-background-color: red");
+		//tabPane.setStyle("-fx-background-color: red");
 		setAllStateUnknown();
 	}
 
@@ -330,6 +330,9 @@ public class UIPedal {
 			//System.out.printf("ToolBar font size = %f\n",fontHeight);
 			toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		} else {
+			toolBar.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
 		}
 		//titledPane.setMaxHeight(h);
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
@@ -352,6 +355,8 @@ public class UIPedal {
 		for (int i = 0; i < allNotesControls.size(); i++ ) {
 			allNotesControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		}
+		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
+		tabPane.setMinHeight(0);
 	}
 	
 	public Button getButtonSend() {

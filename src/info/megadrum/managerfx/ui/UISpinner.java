@@ -212,7 +212,12 @@ public class UISpinner extends UIControl {
 		Double ll = (8/(8 + l.doubleValue()))*1.4;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
-		uispinner.getEditor().setFont(new Font(we*0.25));    	
+		if (label.getText().equals("Sysex Timeout")) {
+			// Temp hack
+			uispinner.getEditor().setFont(new Font(13));			
+		} else {
+			uispinner.getEditor().setFont(new Font(we*0.25));			
+		}
     }
     
     @Override

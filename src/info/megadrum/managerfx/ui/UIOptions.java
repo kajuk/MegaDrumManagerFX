@@ -211,7 +211,7 @@ public class UIOptions {
 	public void show() {
 		//updateControls();
 		closedWithOk = false;
-        window.setResizable(false);
+        //window.setResizable(false);
         
         window.showAndWait();
 	}
