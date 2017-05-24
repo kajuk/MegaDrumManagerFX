@@ -195,7 +195,19 @@ public interface Constants {
 	public static final int FX_SPINNER_TYPE_STANDARD = 0;	
 	public static final int FX_SPINNER_TYPE_SYSEX = 1;
 
-	public static final String[] PAD_FUNCTIONS_LIST = { "Normal", "ProgramChange", "CutoOff"};
+	public static final String[] PAD_FUNCTION_LIST 	= { "Normal", "ProgramChange", "CutoOff"};
+	public static final String[] PAD_COMPRESSION_LIST 		= { "0", "1", "2", "3", "4", "5", "6", "7"};
+	public static final String[] PAD_LEVEL_SHIFT_LIST 		= { "0", "8", "16", "24", "32", "40", "48", "56"};
+	public static final String[] PAD_XTALK_LEVEL_LIST 		= { "0", "1", "2", "3", "4", "5", "6", "7"};
+	public static final String[] PAD_XTALK_GROUP_LIST 		= { "0", "1", "2", "3", "4", "5", "6", "7"};
+	public static final String[] PAD_GAIN_LIST 		= { "0", "1", "2", "3", "4", "5", "6", "7", "8"};
+	public static final String[] PAD_DYN_LEVEL_LIST	= { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+	public static final String[] PAD_DYN_TIME_LIST	= { "0", "4", "8", "12", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60"};
+	public static final String[] PAD_POS_LEVEL_LIST	= { "Disabled", "1", "2", "3" };
+	public static final String[] PAD_TYPE_HEAD_LIST	= { "Single Piezo", "Dual or 3way Yamaha", "3way Roland"};
+	public static final String[] PAD_TYPE_EDGE_LIST	= { "Piezo", "Switch"};
+	public static final int PAD_TYPE_HEAD = 0;
+	public static final int PAD_TYPE_EDGE = 1;
 	
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"}; 
 }

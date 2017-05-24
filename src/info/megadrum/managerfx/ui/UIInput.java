@@ -2,6 +2,7 @@ package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
@@ -39,6 +40,9 @@ public class UIInput {
 	private UISpinner 		uiSpinnerPosLow;
 	private UISpinner 		uiSpinnerPosHigh;
 	private UIComboBox 		uiComboBoxType;
+	
+	private List<String>    listInputType;
+	private int				inputType;
 		
 	private ArrayList<UIControl> allControls;
 	
@@ -64,28 +68,34 @@ public class UIInput {
 		allControls.add(uiSpinnerChannel);
 		
 		uiComboBoxFunction = new UIComboBox("Function", true);
-		uiComboBoxFunction.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_FUNCTIONS_LIST));
+		uiComboBoxFunction.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_FUNCTION_LIST));
 		allControls.add(uiComboBoxFunction);
 
 		uiComboBoxCurve = new UIComboBox("Curve", true);
+		uiComboBoxCurve.uiCtlSetValuesArray(Arrays.asList(Constants.CURVES_LIST));
 		allControls.add(uiComboBoxCurve);
 
 		uiComboBoxCompression = new UIComboBox("Compression", true);
+		uiComboBoxCompression.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_COMPRESSION_LIST));
 		allControls.add(uiComboBoxCompression);
 
 		uiComboBoxLevelShift = new UIComboBox("Level Shift", true);
+		uiComboBoxLevelShift.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_LEVEL_SHIFT_LIST));
 		allControls.add(uiComboBoxLevelShift);
 
 		uiComboBoxXTalkLevel = new UIComboBox("XTalk Level", true);
+		uiComboBoxXTalkLevel.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_XTALK_LEVEL_LIST));
 		allControls.add(uiComboBoxXTalkLevel);
 
 		uiComboBoxXTalkGroup = new UIComboBox("XTalk Group", true);
+		uiComboBoxXTalkGroup.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_XTALK_GROUP_LIST));
 		allControls.add(uiComboBoxXTalkGroup);
 
 		uiSpinnerThreshold = new UISpinner("Threshold", 0, 127, 30, 1, true);
 		allControls.add(uiSpinnerThreshold);
 
 		uiComboBoxGain = new UIComboBox("Gain", true);
+		uiComboBoxGain.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_GAIN_LIST));
 		allControls.add(uiComboBoxGain);
 
 		uiCheckBoxHighAuto = new UICheckBox("HighLevel Auto", true);
@@ -98,15 +108,18 @@ public class UIInput {
 		allControls.add(uiSpinnerRetrigger);
 
 		uiComboBoxDynLevel = new UIComboBox("DynLevel", true);
+		uiComboBoxDynLevel.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_DYN_LEVEL_LIST));
 		allControls.add(uiComboBoxDynLevel);
 
 		uiComboBoxDynTime = new UIComboBox("DynTime", true);
+		uiComboBoxDynTime.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_DYN_TIME_LIST));
 		allControls.add(uiComboBoxDynTime);
 
 		uiSpinnerMinScan = new UISpinner("MinScan", 10, 100, 20, 1, true);
 		allControls.add(uiSpinnerMinScan);
 
 		uiComboBoxPosLevel = new UIComboBox("Pos Level", true);
+		uiComboBoxPosLevel.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_POS_LEVEL_LIST));
 		allControls.add(uiComboBoxPosLevel);
 
 		uiSpinnerPosLow = new UISpinner("Pos Low", 0, 100, 5, 1, true);
@@ -114,8 +127,9 @@ public class UIInput {
 
 		uiSpinnerPosHigh = new UISpinner("Pos High", 0, 100, 15, 1, true);
 		allControls.add(uiSpinnerPosHigh);
-
+		
 		uiComboBoxType = new UIComboBox("Type", true);
+		setHeadEdgeType(Constants.PAD_TYPE_HEAD);
 		allControls.add(uiComboBoxType);
 	
 		for (int i = 0; i < allControls.size(); i++) {
@@ -156,5 +170,16 @@ public class UIInput {
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);
 
+	}
+	
+	public void setHeadEdgeType(int type) {
+		inputType = type;
+		if (type == Constants.PAD_TYPE_HEAD) {
+			listInputType = Arrays.asList(Constants.PAD_TYPE_HEAD_LIST);
+		}
+		if (type == Constants.PAD_TYPE_EDGE) {
+			listInputType = Arrays.asList(Constants.PAD_TYPE_EDGE_LIST);
+		}
+		uiComboBoxType.uiCtlSetValuesArray(listInputType);
 	}
 }
