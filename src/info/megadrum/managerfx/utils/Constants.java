@@ -195,6 +195,7 @@ public interface Constants {
 	public static final int FX_SPINNER_TYPE_STANDARD = 0;	
 	public static final int FX_SPINNER_TYPE_SYSEX = 1;
 
+	public static final String[] PAD_FUNCTIONS_LIST = { "Normal", "ProgramChange", "CutoOff"};
 	
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"}; 
 }

@@ -1,6 +1,7 @@
 package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
@@ -63,6 +64,7 @@ public class UIInput {
 		allControls.add(uiSpinnerChannel);
 		
 		uiComboBoxFunction = new UIComboBox("Function", true);
+		uiComboBoxFunction.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_FUNCTIONS_LIST));
 		allControls.add(uiComboBoxFunction);
 
 		uiComboBoxCurve = new UIComboBox("Curve", true);

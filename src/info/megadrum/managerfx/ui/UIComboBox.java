@@ -14,6 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 
 public class UIComboBox extends UIControl {
 	private ComboBox<String> comboBox;
@@ -80,13 +81,15 @@ public class UIComboBox extends UIControl {
     		width = w*0.67;
     	} else {    		
         	if (copyButtonShown) {
-        		width = w*0.45;
+        		width = w*0.48;
         	} else {
-        		width = w*0.41;
+        		width = w*0.46;
         	}    		
     	}
     	comboBox.setMinWidth(width);
     	comboBox.setMaxWidth(width);
+		Double fontSize = h*0.30;
+		comboBox.setStyle("-fx-font-size: " + fontSize.toString() + "pt");			
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
