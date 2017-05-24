@@ -51,11 +51,19 @@ public class UICheckBox extends UIControl{
 		//layout.setStyle("-fx-background-color: red");
 		//checkBox.setPadding(new Insets(50, 50, 50, 50));
 		initControl(layout);		
-	}
+  }
 	
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
+    	// Padding setting really should be done via css and on init.
+    	// This is a temp hack
+    	if (copyButtonShown) {
+          	checkBox.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
+    	} else {
+          	checkBox.lookup(".box").setStyle("-fx-padding: 0.4em 0.4em 0.6em 0.6em;");    		
+    	}
+    	 	
     	// Standard checkBox is not resizeable
     	//checkBox.setMinHeight(h);
     	//checkBox.setMaxHeight(h);

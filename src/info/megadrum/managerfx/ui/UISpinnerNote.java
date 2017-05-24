@@ -276,10 +276,13 @@ public class UISpinnerNote extends UIControl {
 		resizeFont();
 		if (linkedNote) {
 			labelNote.setFont(new Font(h*0.28));			
+    		checkBoxNoteLinked.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
 		} else {
 			labelNote.setFont(new Font(h*0.35));
 		}
-    }
+    	// Padding setting really should be done via css and on init.
+    	// This is a temp hack
+   }
     
     public void changeNoteName() {
 		int note_number;

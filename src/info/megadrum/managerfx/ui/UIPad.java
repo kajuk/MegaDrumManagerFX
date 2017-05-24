@@ -43,7 +43,9 @@ public class UIPad extends Parent {
 		// TODO Auto-generated constructor stub
 		HBox hBox = new HBox(5);
 		uiInputLeft = new UIInput("Head/Bow");
+		uiInputLeft.setHeadEdgeType(Constants.PAD_TYPE_HEAD);
 		uiInputRight = new UIInput("Rim/Edge");
+		uiInputRight.setHeadEdgeType(Constants.PAD_TYPE_EDGE);
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
 		vBox = new VBox(1);
