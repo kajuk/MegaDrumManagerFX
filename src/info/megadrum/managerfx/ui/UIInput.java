@@ -41,8 +41,10 @@ public class UIInput {
 	private UISpinner 		uiSpinnerPosHigh;
 	private UIComboBox 		uiComboBoxType;
 	
+	private List<String>    listInputName;
 	private List<String>    listInputType;
 	private int				inputType;
+	
 		
 	private ArrayList<UIControl> allControls;
 	
@@ -181,5 +183,9 @@ public class UIInput {
 			listInputType = Arrays.asList(Constants.PAD_TYPE_EDGE_LIST);
 		}
 		uiComboBoxType.uiCtlSetValuesArray(listInputType);
+	}
+	
+	public void setNameList(List<String> list) {
+		uiComboBoxName.uiCtlSetValuesArray(list);
 	}
 }
