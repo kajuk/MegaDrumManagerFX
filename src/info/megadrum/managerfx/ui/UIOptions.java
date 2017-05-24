@@ -13,6 +13,7 @@ import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
 import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
+import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -149,6 +150,7 @@ public class UIOptions {
         allMidiControls.add(uiCheckBoxInitPortsStartup);
 
         uiSpinnerSysexTimeout = new UISpinner("Sysex Timeout", 10, 100, 30, 1, false);
+        uiSpinnerSysexTimeout.setSpinnerType(Constants.FX_SPINNER_TYPE_SYSEX);
         allMidiControls.add(uiSpinnerSysexTimeout);
 
         for (int i = 0; i < allMidiControls.size(); i++) {

@@ -192,6 +192,9 @@ public interface Constants {
 	public static final Double FX_MISC_LABEL_WIDTH_MUL	= 0.60;
 	public static final Double FX_PEDAL_LABEL_WIDTH_MUL	= 0.5;
 	public static final Double FX_INPUT_LABEL_WIDTH_MUL	= 0.37;
+	public static final int FX_SPINNER_TYPE_STANDARD = 0;	
+	public static final int FX_SPINNER_TYPE_SYSEX = 1;
+
 	
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"}; 
 }

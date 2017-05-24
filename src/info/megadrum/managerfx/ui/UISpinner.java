@@ -24,6 +24,7 @@ public class UISpinner extends UIControl {
 	private Spinner<Integer> uispinner;
 	private Integer minValue;
 	private Integer maxValue;
+	private Integer spinnerType = Constants.FX_SPINNER_TYPE_STANDARD;
 	//private Integer initValue;
 	//private Integer currentValue;
 	private Integer step;
@@ -88,14 +89,16 @@ public class UISpinner extends UIControl {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
-								fireControlChangeEvent(new ControlChangeEvent(this));
-								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-									if (intValue.intValue() == mdIntValue.intValue()) {
-										setSyncState(Constants.SYNC_STATE_SYNCED);						
-									} else {
-										setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+								if (spinnerType == Constants.FX_SPINNER_TYPE_STANDARD) {
+									fireControlChangeEvent(new ControlChangeEvent(this));
+									System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+									if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+										if (intValue.intValue() == mdIntValue.intValue()) {
+											setSyncState(Constants.SYNC_STATE_SYNCED);						
+										} else {
+											setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+										}
 									}
-									
 								}
 								//resizeFont();
 							}
@@ -210,25 +213,38 @@ public class UISpinner extends UIControl {
 		Double we = uispinner.getEditor().getWidth();
 		Integer l = maxValue.toString().length();
 		Double ll = (8/(8 + l.doubleValue()))*1.4;
-		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
-		if (label.getText().equals("Sysex Timeout")) {
-			// Temp hack
-			uispinner.getEditor().setFont(new Font(13));			
-		} else {
-			uispinner.getEditor().setFont(new Font(we*0.25));			
+		switch (spinnerType) {
+		case Constants.FX_SPINNER_TYPE_SYSEX:
+			we = 13.0;
+			break;
+		case Constants.FX_SPINNER_TYPE_STANDARD:
+		default:
+			we = we*ll*0.25;
+			break;
 		}
+		uispinner.getEditor().setFont(new Font(we));			
     }
     
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
+    	Double width = w*0.25;
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);
 		//uispinner.setMinWidth(h*2 + 30.0);
-		uispinner.setMaxWidth(w*0.25);
-		uispinner.setMinWidth(w*0.25);
+		switch (spinnerType) {
+		case Constants.FX_SPINNER_TYPE_SYSEX:
+			width = w*0.15;
+			break;
+		case Constants.FX_SPINNER_TYPE_STANDARD:
+		default:
+			//width = w*0.25;
+			break;
+		}
+		uispinner.setMaxWidth(width);
+		uispinner.setMinWidth(width);
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
 		resizeFont();
@@ -256,5 +272,9 @@ public class UISpinner extends UIControl {
     
     public Integer uiCtlGetValue() {
     	return intValue;
+    }
+    
+    public void setSpinnerType(Integer type) {
+    	spinnerType = type;
     }
 }
