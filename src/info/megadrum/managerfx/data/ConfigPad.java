@@ -21,6 +21,7 @@ public class ConfigPad {
 	public boolean autoLevel = true;
 	public boolean dual = false;
 	public boolean threeWay = false;
+	public boolean leftInput = true;
 	public int function = 0;
 	public int gain = 0;
 	public int xtalkLevel = 3;
@@ -100,5 +101,52 @@ public class ConfigPad {
 		pressrollNote = Utils.validateInt(prop.getInt(prefix+"pressrollNote", pressrollNote),0,127,pressrollNote);
 		altNote_linked = prop.getBoolean(prefix+"altNote_linked", altNote_linked);
 		pressrollNote_linked = prop.getBoolean(prefix+"pressrollNote_linked", pressrollNote_linked);				
-	}	
+	}
+	
+	public void setTypeInt(int typeInt) {
+		if (leftInput) {
+			type = false;
+			switch (typeInt) {
+			case 1:
+				dual = true;
+				threeWay = false;
+				break;
+			case 2:
+				dual = false;
+				threeWay = true;
+				break;
+			default:
+				dual = false;
+				threeWay = false;
+				break;
+			}
+		} else {
+			if (typeInt == 0) {
+				type = false;
+			} else {
+				type = true;
+			}
+		}			
+
+	}
+	
+	public int getIntType() {
+		int result = 0;
+		if (leftInput) {
+			if (dual) {
+				result = 1;
+			} else if (threeWay) {
+				result = 2;
+			} else {
+				result = 0;
+			}
+		} else {
+			if (type) {
+				result = 1;
+			} else {
+				result = 0;
+			}
+		}
+	return result;
+	}
 }

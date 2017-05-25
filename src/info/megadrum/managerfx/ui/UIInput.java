@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import info.megadrum.managerfx.data.ConfigMisc;
+import info.megadrum.managerfx.data.ConfigPad;
+import info.megadrum.managerfx.data.ConfigPositional;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -45,6 +48,8 @@ public class UIInput {
 	private List<String>    listInputType;
 	private int				inputType;
 	
+	//private ConfigPad			configPad;
+	//private ConfigPositional	configPos;
 		
 	private ArrayList<UIControl> allControls;
 	
@@ -188,4 +193,63 @@ public class UIInput {
 	public void setNameList(List<String> list) {
 		uiComboBoxName.uiCtlSetValuesArray(list);
 	}
+
+	public void setControlsFromConfigPos(ConfigPositional configPos, Boolean setFromSysex) {
+		uiComboBoxPosLevel.uiCtlSetValue(configPos.level, setFromSysex);
+		uiSpinnerPosLow.uiCtlSetValue(configPos.low, setFromSysex);
+		uiSpinnerPosHigh.uiCtlSetValue(configPos.high, setFromSysex);
+	}
+	
+	public void setControlsFromConfigPad(ConfigPad configPad, Boolean setFromSysex) {
+		uiComboBoxName.uiCtlSetValue(configPad.name, setFromSysex);
+		uiSpinnerNoteMainNote.uiCtlSetValue(configPad.note, setFromSysex);
+		uiSpinnerNoteAltNote.uiCtlSetValue(configPad.altNote, setFromSysex);
+		uiSpinnerNotePressNote.uiCtlSetValue(configPad.pressrollNote, setFromSysex);
+		uiSpinnerChannel.uiCtlSetValue(configPad.channel + 1, setFromSysex);
+		uiComboBoxFunction.uiCtlSetValue(configPad.function, setFromSysex);
+		uiComboBoxCurve.uiCtlSetValue(configPad.curve, setFromSysex);
+		uiComboBoxCompression.uiCtlSetValue(configPad.compression, setFromSysex);
+		uiComboBoxLevelShift.uiCtlSetValue(configPad.shift, setFromSysex);
+		uiComboBoxXTalkLevel.uiCtlSetValue(configPad.xtalkLevel, setFromSysex);
+		uiComboBoxXTalkGroup.uiCtlSetValue(configPad.xtalkGroup, setFromSysex);
+		uiSpinnerThreshold.uiCtlSetValue(configPad.threshold, setFromSysex);
+		uiComboBoxGain.uiCtlSetValue(configPad.gain, setFromSysex);
+		uiCheckBoxHighAuto.uiCtlSetSelected(configPad.autoLevel, setFromSysex);
+		uiSpinnerHighLevel.uiCtlSetValue(configPad.levelMax, setFromSysex);
+		uiSpinnerRetrigger.uiCtlSetValue(configPad.retrigger, setFromSysex);
+		uiComboBoxDynLevel.uiCtlSetValue(configPad.dynLevel, setFromSysex);
+		uiComboBoxDynTime.uiCtlSetValue(configPad.dynTime, setFromSysex);
+		uiSpinnerMinScan.uiCtlSetValue(configPad.minScan, setFromSysex);
+		uiComboBoxType.uiCtlSetValue(configPad.getIntType(), setFromSysex);
+	}
+	
+	public void setConfigPosFromControls(ConfigPositional configPos) {
+		configPos.level = uiComboBoxPosLevel.uiCtlGetValue();
+		configPos.low = uiSpinnerPosLow.uiCtlGetValue();
+		configPos.high = uiSpinnerPosHigh.uiCtlGetValue();		
+	}
+	
+	public void setConfigPadFromControls(ConfigPad configPad) {
+		configPad.name = uiComboBoxName.uiCtlGetValue();
+		configPad.note = uiSpinnerNoteMainNote.uiCtlGetValue();
+		configPad.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();
+		configPad.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();
+		configPad.channel = uiSpinnerChannel.uiCtlGetValue() - 1;
+		configPad.function = uiComboBoxFunction.uiCtlGetValue();
+		configPad.curve = uiComboBoxCurve.uiCtlGetValue();
+		configPad.compression = uiComboBoxCompression.uiCtlGetValue();
+		configPad.shift = uiComboBoxLevelShift.uiCtlGetValue();
+		configPad.xtalkLevel = uiComboBoxXTalkLevel.uiCtlGetValue();
+		configPad.xtalkGroup = uiComboBoxXTalkGroup.uiCtlGetValue();
+		configPad.threshold = uiSpinnerThreshold.uiCtlGetValue();
+		configPad.gain = uiComboBoxGain.uiCtlGetValue();
+		configPad.autoLevel = uiCheckBoxHighAuto.uiCtlIsSelected();
+		configPad.levelMax = uiSpinnerHighLevel.uiCtlGetValue();
+		configPad.retrigger = uiSpinnerRetrigger.uiCtlGetValue();
+		configPad.dynLevel = uiComboBoxDynLevel.uiCtlGetValue();
+		configPad.dynTime = uiComboBoxDynTime.uiCtlGetValue();
+		configPad.minScan = uiSpinnerMinScan.uiCtlGetValue();
+		configPad.setTypeInt(uiComboBoxType.uiCtlGetValue());
+	}
+
 }

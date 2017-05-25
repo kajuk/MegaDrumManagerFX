@@ -63,6 +63,7 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigOptions configOptions;
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
+	private int padPair;
 
 	private List<byte[]> sysexSendList;
 	
@@ -107,6 +108,26 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		uiPad = new UIPad("Pads");
+		padPair = 0;
+		uiPad.getButtonPrev().setOnAction(e-> {
+			if (padPair > 0) {
+				padPair--;
+				if (padPair == 0) {
+					uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null);					
+				} else {
+					uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
+				}
+			}
+		});
+		uiPad.getButtonNext().setOnAction(e-> {
+			if (padPair < 26) {
+				padPair++;
+				System.out.printf("padPair = %d\n", padPair);
+				uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
+			}
+		});
+		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null);
+		//uiPad.setInputPair(1, configFull.configPads[1], configFull.configPos[1], configFull.configPads[2], configFull.configPos[2]);
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());

@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import info.megadrum.managerfx.data.ConfigPad;
+import info.megadrum.managerfx.data.ConfigPositional;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -43,11 +45,17 @@ public class UIPad extends Parent {
 	private	Button		buttonNext;
 	private	Button		buttonLast;
 	
-	private	Integer		inputPair; // 0 for Kick, 1 for HiHat Bow/Edge, 2 for Snare Head/Rim and so on
-	private String[]	arrayNames;
+	//private	Integer		inputPair; // 0 for Kick, 1 for HiHat Bow/Edge, 2 for Snare Head/Rim and so on
+	private String[]	arrayNamesLeft;
+	private String[]	arrayNamesRight;
 	private Boolean		customNamesEnabled = false;
 	//private Integer		customNamesCount = 0;
 	private String[]	arrayCustomNames;
+	//private ConfigPad	configPadLeft;
+	//private ConfigPad	configPadRight;
+	//private ConfigPositional	configPosLeft;
+	//private ConfigPositional	configPosRight;
+	private Integer		padPair;
 	
 	public UIPad(String title) {
 		// TODO Auto-generated constructor stub
@@ -86,25 +94,32 @@ public class UIPad extends Parent {
 		titledPane.setContent(vBox);
 		titledPane.setCollapsible(false);
 		reCreateNamesArray();
-		switchToInputPair(1);
+		switchToInputPair(0);
 
 	}
 	
 	private void reCreateNamesArray() {
-		if (arrayNames != null) {
-			arrayNames = null;
+		if (arrayNamesLeft != null) {
+			arrayNamesLeft = null;
+		}
+		if (arrayNamesRight != null) {
+			arrayNamesRight = null;
 		}
 		if (customNamesEnabled) {
-			arrayNames = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + arrayCustomNames.length + 1];			
+			arrayNamesLeft = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + arrayCustomNames.length + 1];			
+			arrayNamesRight = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + arrayCustomNames.length + 1];			
 		} else {
-			arrayNames = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + 1];			
+			arrayNamesLeft = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + 1];			
+			arrayNamesRight = new String[Constants.CUSTOM_PADS_NAMES_LIST.length + 1];			
 		}
 		for (int i=0; i < Constants.CUSTOM_PADS_NAMES_LIST.length; i++) {
-			arrayNames[i+1] = Constants.CUSTOM_PADS_NAMES_LIST[i];
+			arrayNamesLeft[i+1] = Constants.CUSTOM_PADS_NAMES_LIST[i];
+			arrayNamesRight[i+1] = Constants.CUSTOM_PADS_NAMES_LIST[i];
 		}
 		if (customNamesEnabled) {
 			for (int i=0; i < arrayCustomNames.length; i++) {
-				arrayNames[i + 1 + Constants.CUSTOM_PADS_NAMES_LIST.length] = arrayCustomNames[i];
+				arrayNamesLeft[i + 1 + Constants.CUSTOM_PADS_NAMES_LIST.length] = arrayCustomNames[i];
+				arrayNamesRight[i + 1 + Constants.CUSTOM_PADS_NAMES_LIST.length] = arrayCustomNames[i];
 			}
 		}
 	}
@@ -134,19 +149,67 @@ public class UIPad extends Parent {
 		return (Node) titledPane;
 	}
 	
-	public void switchToInputPair(Integer pair) {
+	public void switchToInputPairWithConfig(Integer pair, ConfigPad configLeft, ConfigPad configRight) {
+		if (pair == 0) {
+			
+		} else {
+			
+		}
+	}
+		
+	public void setControlsFromConfigPad(ConfigPad configPad, Boolean leftInput, Boolean setFromSysex) {
+		if (leftInput) {
+			uiInputLeft.setControlsFromConfigPad(configPad, setFromSysex);			
+		} else {
+			uiInputRight.setControlsFromConfigPad(configPad, setFromSysex);						
+		}
+	}
+
+	public void setControlsFromConfigPos(ConfigPositional configPos, Boolean leftInput, Boolean setFromSysex) {
+		if (leftInput) {
+			uiInputLeft.setControlsFromConfigPos(configPos, setFromSysex);			
+		} else {
+			uiInputRight.setControlsFromConfigPos(configPos, setFromSysex);						
+		}
+	}
+
+	public void setConfigFromControlsPad(ConfigPad config,Boolean leftInput ) {
+		if (leftInput) {
+			uiInputLeft.setConfigPadFromControls(config);
+		} else {
+			uiInputRight.setConfigPadFromControls(config);
+		}
+	}
+	
+	public void setInputPair(Integer pair, ConfigPad configPadLeft, ConfigPositional configPosLeft, ConfigPad configPadRight, ConfigPositional configPosRight) {
+		switchToInputPair(pair);
+		if (pair == 0) {
+			setControlsFromConfigPad(configPadLeft, true, false);
+			setControlsFromConfigPos(configPosLeft, true, false);
+		} else {
+			setControlsFromConfigPad(configPadLeft, true, false);
+			setControlsFromConfigPos(configPosLeft, true, false);			
+			setControlsFromConfigPad(configPadRight, false, false);
+			setControlsFromConfigPos(configPosRight, false, false);			
+		}
+	}
+	
+	private void switchToInputPair(Integer pair) {
+		padPair = pair;
 		List<String> listNames;
 		if (pair == 0) {
-			arrayNames[0] = Constants.CUSTOM_PADS_NAMES_LIST[0];
-			listNames = Arrays.asList(arrayNames);
+			arrayNamesLeft[0] = Constants.CUSTOM_PADS_NAMES_LIST[0];
+			listNames = Arrays.asList(arrayNamesLeft);
 			uiInputLeft.setNameList(listNames);
+			uiInputRight.getUI().setVisible(false);
 		} else {
-			arrayNames[0] = Constants.PADS_NAMES_LIST[(pair - 1) + 1];
-			listNames = Arrays.asList(arrayNames);
+			arrayNamesLeft[0] = Constants.PADS_NAMES_LIST[((pair - 1)*2) + 1];
+			listNames = Arrays.asList(arrayNamesLeft);
 			uiInputLeft.setNameList(listNames);
-			arrayNames[0] = Constants.PADS_NAMES_LIST[(pair - 1) + 2];
-			listNames = Arrays.asList(arrayNames);
+			arrayNamesRight[0] = Constants.PADS_NAMES_LIST[((pair - 1)*2) + 2];
+			listNames = Arrays.asList(arrayNamesRight);
 			uiInputRight.setNameList(listNames);
+			uiInputRight.getUI().setVisible(true);
 		}
 	}
 
@@ -155,8 +218,17 @@ public class UIPad extends Parent {
 		customNamesEnabled = true;
 		reCreateNamesArray();
 	}
+	
 	public void removeAllCustomNames() {
 		customNamesEnabled = false;
 		reCreateNamesArray();
+	}
+	
+	public Button getButtonPrev() {
+		return buttonPrev;
+	}
+	
+	public Button getButtonNext() {
+		return buttonNext;
 	}
 }

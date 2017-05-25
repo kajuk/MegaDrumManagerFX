@@ -70,7 +70,6 @@ public class UICheckBox extends UIControl{
     }
     
     public void uiCtlSetSelected(Boolean selected, Boolean setFromSysex) {
-    	setSyncState(Constants.SYNC_STATE_SYNCED);
     	checkBox.setSelected(selected);
 		booleanValue = selected;
     	if (setFromSysex) {
