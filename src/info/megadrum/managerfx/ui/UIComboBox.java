@@ -93,25 +93,26 @@ public class UIComboBox extends UIControl {
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
+    	changedFromSet++;
     	comboBox.getItems().clear();
     	comboBox.getItems().addAll(list);
     	listValues = list;
     }
     
     public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
-    	String stringValue;
+    	//String stringValue;
     	if (intValue.intValue() != n.intValue()) {
         	changedFromSet++;
-    		intValue = n;
-    	}
+        }
     	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
     	}
-    	stringValue = listValues.get(intValue);
+	   	//stringValue = listValues.get(intValue);
     	//System.out.printf("ComboBox: index = %d, string at this index = %s\n", intValue, stringValue);
-    	comboBox.setValue(stringValue);
+    	comboBox.getSelectionModel().select(n);
+	   	intValue = n;
     }
     
     public Integer uiCtlGetValue() {

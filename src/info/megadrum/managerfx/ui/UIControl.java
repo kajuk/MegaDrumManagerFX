@@ -67,7 +67,7 @@ public class UIControl extends Control implements UIControlInterface {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i = i+2) {
 			if (listeners[i] == ControlChangeEventListener.class) {
-				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt);
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
 			}
 		}
 	}

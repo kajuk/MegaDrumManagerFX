@@ -86,7 +86,7 @@ public class Controller implements MidiRescanEventListener {
 		uiMisc.addControlChangeEventListener(new ControlChangeEventListener() {
 			
 			@Override
-			public void controlChangeEventOccurred(ControlChangeEvent evt) {
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				if (configOptions.liveUpdates) {
 					sendSysexMisc();
@@ -100,7 +100,7 @@ public class Controller implements MidiRescanEventListener {
 		uiPedal.addControlChangeEventListener(new ControlChangeEventListener() {
 			
 			@Override
-			public void controlChangeEventOccurred(ControlChangeEvent evt) {
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				if (configOptions.liveUpdates) {
 					sendSysexPedal();
@@ -108,6 +108,15 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		uiPad = new UIPad("Pads");
+		uiPad.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				System.out.printf("Input %s control change\n", (parameter == Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT) ? "left" : "right");
+			}
+		});
+
 		padPair = 0;
 		uiPad.getButtonPrev().setOnAction(e-> {
 			if (padPair > 0) {
@@ -120,9 +129,8 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		uiPad.getButtonNext().setOnAction(e-> {
-			if (padPair < 26) {
+			if (padPair < (configFull.configGlobalMisc.inputs_count/2)) {
 				padPair++;
-				System.out.printf("padPair = %d\n", padPair);
 				uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
 			}
 		});

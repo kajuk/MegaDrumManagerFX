@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.event.EventListenerList;
+
 import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.data.ConfigPositional;
 import info.megadrum.managerfx.utils.Constants;
@@ -56,7 +58,26 @@ public class UIPad extends Parent {
 	//private ConfigPositional	configPosLeft;
 	//private ConfigPositional	configPosRight;
 	private Integer		padPair;
+	//private Integer		controlsCha
+
+	protected EventListenerList listenerList = new EventListenerList();
 	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	
+	protected void fireControlChangeEvent(ControlChangeEvent evt, Integer left) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, left);
+			}
+		}
+	}
+
 	public UIPad(String title) {
 		// TODO Auto-generated constructor stub
 		HBox hBox = new HBox(5);
@@ -95,6 +116,22 @@ public class UIPad extends Parent {
 		titledPane.setCollapsible(false);
 		reCreateNamesArray();
 		switchToInputPair(0);
+    	uiInputLeft.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT);
+			}
+		});
+    	uiInputRight.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT);
+			}
+		});
 
 	}
 	

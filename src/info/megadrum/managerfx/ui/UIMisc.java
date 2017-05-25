@@ -52,7 +52,7 @@ public class UIMisc {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i = i+2) {
 			if (listeners[i] == ControlChangeEventListener.class) {
-				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt);
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
 			}
 		}
 	}
@@ -121,7 +121,7 @@ public class UIMisc {
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
 				@Override
-				public void controlChangeEventOccurred(ControlChangeEvent evt) {
+				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
 					fireControlChangeEvent(new ControlChangeEvent(this));
 				}

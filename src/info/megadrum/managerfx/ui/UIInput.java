@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.event.EventListenerList;
+
 import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.data.ConfigPositional;
@@ -52,6 +54,23 @@ public class UIInput {
 	//private ConfigPositional	configPos;
 		
 	private ArrayList<UIControl> allControls;
+	
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
+			}
+		}
+	}
 	
 	public UIInput(String title) {
 		allControls = new ArrayList<UIControl>();
@@ -142,6 +161,14 @@ public class UIInput {
 		for (int i = 0; i < allControls.size(); i++) {
         	layout.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
+        	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this));
+				}
+			});
        }
 
 		titledPane = new TitledPane();
