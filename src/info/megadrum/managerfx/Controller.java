@@ -28,6 +28,8 @@ import info.megadrum.managerfx.ui.UIPad;
 import info.megadrum.managerfx.ui.UIPedal;
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -124,27 +126,37 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.getButtonPrev().setOnAction(e-> {
 			if (padPair > 0) {
 				padPair--;
-				if (padPair == 0) {
-					uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null);					
-				} else {
-					uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
-				}
+				switchToSelectedPair();
 			}
 		});
 		uiPad.getButtonNext().setOnAction(e-> {
 			if (padPair < ((configFull.configGlobalMisc.inputs_count/2) - 1)) {
 				padPair++;
-				uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
+				switchToSelectedPair();
 			}
 		});
 		uiPad.getButtonFirst().setOnAction(e-> {
 			padPair = 0;
-			uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null);					
+			switchToSelectedPair();
 		});
 		uiPad.getButtonLast().setOnAction(e-> {
 			padPair = (configFull.configGlobalMisc.inputs_count/2) - 1;
-			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
+			switchToSelectedPair();
 		});
+		uiPad.getComboBoxInput().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+		    	if (comboBoxInputChangedFromSet > 0) {
+		    		comboBoxInputChangedFromSet--;
+		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+		    	} else {
+		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+		    		padPair = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
+		    		switchToSelectedPair();
+		    	}				
+			}
+        });
 		updateComboBoxInput();
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null);
 		//uiPad.setInputPair(1, configFull.configPads[1], configFull.configPos[1], configFull.configPads[2], configFull.configPos[2]);
@@ -481,7 +493,7 @@ public class Controller implements MidiRescanEventListener {
 		return result;
 	}
 	
-	public void updateComboBoxInput() {
+	private void updateComboBoxInput() {
 		List<String> list;
 		String name;
 		list = new ArrayList<>();
@@ -502,5 +514,13 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.getComboBoxInput().getItems().clear();
 		uiPad.getComboBoxInput().getItems().addAll(list);
 		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
+	}
+	
+	private void switchToSelectedPair() {
+		if (padPair == 0) {
+			uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null);
+		} else {
+			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
+		}
 	}
 }
