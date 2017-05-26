@@ -15,12 +15,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class UIPad extends Parent {
 
@@ -41,7 +45,8 @@ public class UIPad extends Parent {
 	private Button 		buttonCopy;
 	private Button 		buttonDisableOthers;
 	
-	private UIComboBox	uiComboBoxInput;
+	private Label		labelInput;
+	private ComboBox	comboBoxInput;
 	private	Button		buttonFirst;
 	private	Button		buttonPrev;
 	private	Button		buttonNext;
@@ -102,12 +107,13 @@ public class UIPad extends Parent {
 		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave,new Separator(),buttonCopy,buttonDisableOthers);
 
 		toolBarNavigator = new ToolBar();
-		uiComboBoxInput = new UIComboBox("Input",false);
+		labelInput = new Label("Input(s):");
+		comboBoxInput = new ComboBox<String>();
 		buttonFirst = new Button("First");
 		buttonPrev = new Button("Prev");
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
-		toolBarNavigator.getItems().addAll(uiComboBoxInput.getUI(), buttonFirst, buttonPrev, buttonNext, buttonLast);
+		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
 		
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
 		titledPane = new TitledPane();
@@ -180,6 +186,9 @@ public class UIPad extends Parent {
 		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight, controlH, controlW);
+		comboBoxInput.setMinWidth(controlH*8);
+		comboBoxInput.setMaxWidth(controlH*8);
+		labelInput.setFont(new Font(controlH*0.4));
 	}
 
 	public Node getUI() {
@@ -268,4 +277,14 @@ public class UIPad extends Parent {
 	public Button getButtonNext() {
 		return buttonNext;
 	}
+	
+	public Button getButtonFirst() {
+		return buttonFirst;
+	}
+	
+	public Button getButtonLast() {
+		return buttonLast;
+	}
+	
+
 }

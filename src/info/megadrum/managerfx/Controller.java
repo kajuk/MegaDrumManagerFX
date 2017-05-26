@@ -129,10 +129,18 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});
 		uiPad.getButtonNext().setOnAction(e-> {
-			if (padPair < (configFull.configGlobalMisc.inputs_count/2)) {
+			if (padPair < ((configFull.configGlobalMisc.inputs_count/2) - 1)) {
 				padPair++;
 				uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
 			}
+		});
+		uiPad.getButtonFirst().setOnAction(e-> {
+			padPair = 0;
+			uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null);					
+		});
+		uiPad.getButtonLast().setOnAction(e-> {
+			padPair = (configFull.configGlobalMisc.inputs_count/2) - 1;
+			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
 		});
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null);
 		//uiPad.setInputPair(1, configFull.configPads[1], configFull.configPos[1], configFull.configPads[2], configFull.configPos[2]);
