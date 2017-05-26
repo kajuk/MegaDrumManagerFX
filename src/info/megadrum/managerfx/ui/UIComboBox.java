@@ -44,21 +44,25 @@ public class UIComboBox extends UIControl {
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
 		    	} else {
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
-		    		Integer newIntValue = listValues.indexOf(newValue);
-					if (intValue.intValue() != newIntValue.intValue()) {
-						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),newIntValue.intValue(),intValue );
-						intValue = newIntValue;
-						fireControlChangeEvent(new ControlChangeEvent(this));
-						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-							if (intValue.intValue() == mdIntValue.intValue()) {
-								setSyncState(Constants.SYNC_STATE_SYNCED);						
-							} else {
-								setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		    		//Integer newIntValue = listValues.indexOf(newValue);
+		    		Integer newIntValue = comboBox.getSelectionModel().getSelectedIndex();
+		    		if (newIntValue > -1) {
+						if (intValue.intValue() != newIntValue.intValue()) {
+				        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+							//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),newIntValue.intValue(),intValue );
+							intValue = newIntValue;
+							fireControlChangeEvent(new ControlChangeEvent(this));
+							if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+								if (intValue.intValue() == mdIntValue.intValue()) {
+									setSyncState(Constants.SYNC_STATE_SYNCED);						
+								} else {
+									setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+								}
+								
 							}
-							
+							//resizeFont();
 						}
-						//resizeFont();
-					}
+		    		}
 		    	}				
 			}
         });
@@ -93,16 +97,20 @@ public class UIComboBox extends UIControl {
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
-    	changedFromSet++;
+    	int s = comboBox.getSelectionModel().getSelectedIndex();
+    	//changedFromSet = 5;
     	comboBox.getItems().clear();
     	comboBox.getItems().addAll(list);
     	listValues = list;
+    	//changedFromSet = 1;
+    	comboBox.getSelectionModel().select(s);
     }
     
     public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
     	//String stringValue;
     	if (intValue.intValue() != n.intValue()) {
-        	changedFromSet++;
+        	//changedFromSet++;
+        	changedFromSet = 1;
         }
     	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
     	if (setFromSysex) {

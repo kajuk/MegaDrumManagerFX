@@ -151,9 +151,12 @@ public class Controller implements MidiRescanEventListener {
 		    		comboBoxInputChangedFromSet--;
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
 		    	} else {
+		    		Integer newInValue = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
-		    		padPair = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
-		    		switchToSelectedPair();
+		    		if (newInValue > -1) {
+			    		padPair = newInValue;
+			    		switchToSelectedPair();		    			
+		    		}
 		    	}				
 			}
         });
