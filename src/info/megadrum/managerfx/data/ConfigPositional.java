@@ -3,12 +3,14 @@ package info.megadrum.managerfx.data;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
+import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
 
 public class ConfigPositional {
 	public int level = 0;
 	public int low = 5;
 	public int high = 15;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
 
 	

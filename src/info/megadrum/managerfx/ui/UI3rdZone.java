@@ -2,6 +2,10 @@ package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
 
+import javax.swing.event.EventListenerList;
+
+import info.megadrum.managerfx.data.Config3rd;
+import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -30,7 +34,24 @@ public class UI3rdZone {
 	private ArrayList<UIControl> allControls;
 	private ArrayList<Integer> gridColmn;
 	private ArrayList<Integer> gridRow;
+
+	protected EventListenerList listenerList = new EventListenerList();
 	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt, Integer parameter) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, parameter);
+			}
+		}
+	}
+
 	public UI3rdZone() {
 		allControls = new ArrayList<UIControl>();
 		gridColmn = new ArrayList<Integer>();
@@ -82,6 +103,14 @@ public class UI3rdZone {
 			GridPane.setValignment(allControls.get(i).getUI(), VPos.CENTER);
         	layout.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
+        	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
+				
+				@Override
+				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+					// TODO Auto-generated method stub
+					fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+				}
+			});
         }
 		
 		titledPane = new TitledPane();
@@ -115,5 +144,27 @@ public class UI3rdZone {
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);
+	}
+	
+	private void setMidPointAndWidthFromThreshold(int threshold, Boolean setFromSysex) {
+		uiSliderMidpoint.uiCtlSetValue((threshold&0xf0)>>4, setFromSysex);
+		uiSpinnerMidpointWidth.uiCtlSetValue(threshold&0xf0, setFromSysex);
+	}
+	
+	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {
+		uiSpinnerNoteMainNote.uiCtlSetValue(config.note, setFromSysex);
+		uiSpinnerNoteAltNote.uiCtlSetValue(config.altNote, setFromSysex);
+		uiSpinnerNotePressNote.uiCtlSetValue(config.pressrollNote, setFromSysex);
+		uiSpinnerNoteDampenedNote.uiCtlSetValue(config.dampenedNote, setFromSysex);
+		uiSpinnerThreshold.uiCtlSetValue(config.threshold, setFromSysex);
+		setMidPointAndWidthFromThreshold(config.threshold, setFromSysex);
+	}
+	
+	public void setConfig3rdFromControls(Config3rd config) {
+		config.note = uiSpinnerNoteMainNote.uiCtlGetValue();
+		config.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();
+		config.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();
+		config.dampenedNote = uiSpinnerNoteDampenedNote.uiCtlGetValue();
+		config.threshold = uiSpinnerThreshold.uiCtlGetValue();
 	}
 }

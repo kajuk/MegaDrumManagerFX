@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.swing.event.EventListenerList;
 
+import info.megadrum.managerfx.data.Config3rd;
 import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.data.ConfigPositional;
 import info.megadrum.managerfx.utils.Constants;
@@ -145,7 +146,17 @@ public class UIPad extends Parent {
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT);
 			}
 		});
-
+    	ui3rdZone.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
+					nameChanged = true;
+				}
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_3RD_INPUT);
+			}
+		});
 	}
 	
 	public Boolean isNameChanged() {
@@ -242,7 +253,23 @@ public class UIPad extends Parent {
 		}
 	}
 	
-	public void setInputPair(Integer pair, ConfigPad configPadLeft, ConfigPositional configPosLeft, ConfigPad configPadRight, ConfigPositional configPosRight) {
+	public void setConfigPosFromControlsPad(ConfigPositional config,Boolean leftInput ) {
+		if (leftInput) {
+			uiInputLeft.setConfigPosFromControls(config);
+		} else {
+			uiInputRight.setConfigPosFromControls(config);
+		}
+	}
+
+	public void setControlsFromConfig3rd(Config3rd config,Boolean setFromSysex ) {
+		ui3rdZone.setControlsFromConfig3rd(config, setFromSysex);
+	}
+
+	public void setConfig3rdFromControlsPad(Config3rd config ) {
+		ui3rdZone.setConfig3rdFromControls(config);
+	}
+
+	public void setInputPair(Integer pair, ConfigPad configPadLeft, ConfigPositional configPosLeft, ConfigPad configPadRight, ConfigPositional configPosRight, Config3rd config3rd) {
 		switchToInputPair(pair);
 		if (pair == 0) {
 			setControlsFromConfigPad(configPadLeft, true, false);
@@ -251,7 +278,8 @@ public class UIPad extends Parent {
 			setControlsFromConfigPad(configPadLeft, true, false);
 			setControlsFromConfigPos(configPosLeft, true, false);			
 			setControlsFromConfigPad(configPadRight, false, false);
-			setControlsFromConfigPos(configPosRight, false, false);			
+			setControlsFromConfigPos(configPosRight, false, false);
+			setControlsFromConfig3rd(config3rd, false);
 		}
 	}
 	
