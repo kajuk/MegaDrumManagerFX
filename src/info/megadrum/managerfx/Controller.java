@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.management.OperationsException;
 
+import com.sun.javafx.scene.traversal.TopMostTraversalEngine;
+
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.midi.MidiController;
@@ -63,7 +65,8 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigOptions configOptions;
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
-	private int padPair;
+	private int padPair = 0;
+	private int comboBoxInputChangedFromSet = 0;
 
 	private List<byte[]> sysexSendList;
 	
@@ -142,6 +145,7 @@ public class Controller implements MidiRescanEventListener {
 			padPair = (configFull.configGlobalMisc.inputs_count/2) - 1;
 			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
 		});
+		updateComboBoxInput();
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null);
 		//uiPad.setInputPair(1, configFull.configPads[1], configFull.configPos[1], configFull.configPads[2], configFull.configPos[2]);
 		VBox layout1VBox = new VBox();
@@ -460,4 +464,43 @@ public class Controller implements MidiRescanEventListener {
 		
 	}
 
+	private String getInputName(int input) {
+		String result = Integer.valueOf(input + 1).toString() + " ";
+		int totalCustomNames = Constants.CUSTOM_PADS_NAMES_LIST.length;
+		int namePointer;
+		namePointer = configFull.configPads[input].name;
+		if (namePointer == 0) {
+			result = result + Constants.PADS_NAMES_LIST[input];
+		} else {
+			if (namePointer < (totalCustomNames + 1 )) {
+				result = result + (Constants.CUSTOM_PADS_NAMES_LIST[namePointer - 1]);
+			} else {
+				result = result + configFull.configCustomNames[namePointer - totalCustomNames + 1];
+			}
+		}
+		return result;
+	}
+	
+	public void updateComboBoxInput() {
+		List<String> list;
+		String name;
+		list = new ArrayList<>();
+		int inputPointer;
+		for (int i = 0; i < ((configFull.configGlobalMisc.inputs_count/2)); i++) {
+			if (i == 0) {
+				list.add(getInputName(i));
+			} else {
+				inputPointer = (i*2) - 1;
+				name = getInputName(inputPointer);
+				name = name + "/";
+				inputPointer++;
+				name = name + getInputName(inputPointer);
+				list.add(name);
+			}
+		}
+		comboBoxInputChangedFromSet++;
+		uiPad.getComboBoxInput().getItems().clear();
+		uiPad.getComboBoxInput().getItems().addAll(list);
+		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
+	}
 }

@@ -46,7 +46,7 @@ public class UIPad extends Parent {
 	private Button 		buttonDisableOthers;
 	
 	private Label		labelInput;
-	private ComboBox	comboBoxInput;
+	private ComboBox<String>	comboBoxInput;
 	private	Button		buttonFirst;
 	private	Button		buttonPrev;
 	private	Button		buttonNext;
@@ -186,8 +186,8 @@ public class UIPad extends Parent {
 		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight, controlH, controlW);
-		comboBoxInput.setMinWidth(controlH*8);
-		comboBoxInput.setMaxWidth(controlH*8);
+		comboBoxInput.setMinWidth(controlH*6);
+		comboBoxInput.setMaxWidth(controlH*6);
 		labelInput.setFont(new Font(controlH*0.4));
 	}
 
@@ -286,5 +286,8 @@ public class UIPad extends Parent {
 		return buttonLast;
 	}
 	
+	public ComboBox<String> getComboBoxInput() {
+		return comboBoxInput;
+	}
 
 }
