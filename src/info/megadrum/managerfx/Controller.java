@@ -220,7 +220,7 @@ public class Controller implements MidiRescanEventListener {
 		Double mainMenuBarHeight = mainMenuBar.getHeight();
 		Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
 		Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
-		System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
+		//System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
 		//Double height = sc.getHeight();
 		Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
 		Double width = height*2;
@@ -492,6 +492,11 @@ public class Controller implements MidiRescanEventListener {
 			} else {
 				result = result + configFull.configCustomNames[namePointer - totalCustomNames + 1];
 			}
+			if ((input & 1) > 0) {
+				result += "h";
+			} else {
+				result += "r";
+			}
 		}
 		return result;
 	}
@@ -525,5 +530,6 @@ public class Controller implements MidiRescanEventListener {
 		} else {
 			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2]);
 		}
+		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
 	}
 }

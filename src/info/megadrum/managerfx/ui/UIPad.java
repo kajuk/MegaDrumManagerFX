@@ -244,7 +244,7 @@ public class UIPad extends Parent {
 		padPair = pair;
 		List<String> listNames;
 		if (pair == 0) {
-			arrayNamesLeft[0] = Constants.CUSTOM_PADS_NAMES_LIST[0];
+			arrayNamesLeft[0] = Constants.PADS_NAMES_LIST[0];
 			listNames = Arrays.asList(arrayNamesLeft);
 			uiInputLeft.setNameList(listNames);
 			uiInputRight.getUI().setVisible(false);

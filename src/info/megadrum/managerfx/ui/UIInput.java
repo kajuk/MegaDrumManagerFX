@@ -124,7 +124,7 @@ public class UIInput {
 		uiComboBoxGain.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_GAIN_LIST));
 		allControls.add(uiComboBoxGain);
 
-		uiCheckBoxHighAuto = new UICheckBox("HighLevel Auto", true);
+		uiCheckBoxHighAuto = new UICheckBox("HighLevelAuto", true);
 		allControls.add(uiCheckBoxHighAuto);
 		
 		uiSpinnerHighLevel = new UISpinner("HighLevel", 64, 1023, 64, 1, true);

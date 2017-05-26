@@ -66,7 +66,7 @@ public interface Constants {
 	public static final String[] CURVES_LIST = { "LinearCustom1", "Log1Custom2", "Log2Custom3", "Log3Custom4", "Log4Custom5",
 		"Exp1Custom6", "Exp2Custom7", "S1Custom8", "S2Custom9", "Strong1Custom10", "Strong2Custom11", "MaxCustom12",
 		"Custom13", "Custom14", "Custom15", "Custom16" };
-	public static final String[] PADS_NAMES_LIST = { "Kick", "HiHatB",
+	public static final String[] PADS_NAMES_LIST = { "Kick ", "HiHatB",
 			"HiHatE", "SnareH", "SnareR", "RideB", "RideE", "CrashB", "CrashE",
 			"Tom1H", "Tom1R", "Tom2H", "Tom2R", "Tom3H", "Tom3R", "Tom4H",
 			"Tom4R", "Aux1H", "Aux1R", "Aux2H", "Aux2R", "Aux3H", "Aux3R",
@@ -188,10 +188,10 @@ public interface Constants {
 	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.006;
 	public static final Double FX_MISC_CONTROL_WIDTH_MUL	= 1.0;
 	public static final Double FX_PEDAL_CONTROL_WIDTH_MUL	= 1.4;
-	public static final Double FX_INPUT_CONTROL_WIDTH_MUL	= 1.33;
+	public static final Double FX_INPUT_CONTROL_WIDTH_MUL	= 1.3;
 	public static final Double FX_MISC_LABEL_WIDTH_MUL	= 0.60;
-	public static final Double FX_PEDAL_LABEL_WIDTH_MUL	= 0.5;
-	public static final Double FX_INPUT_LABEL_WIDTH_MUL	= 0.37;
+	public static final Double FX_PEDAL_LABEL_WIDTH_MUL	= 0.45;
+	public static final Double FX_INPUT_LABEL_WIDTH_MUL	= 0.36;
 	public static final int FX_SPINNER_TYPE_STANDARD = 0;	
 	public static final int FX_SPINNER_TYPE_SYSEX = 1;
 

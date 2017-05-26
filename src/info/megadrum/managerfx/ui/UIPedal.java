@@ -338,7 +338,7 @@ public class UIPedal {
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//tabPane.setMinHeight(h - toolBar.getHeight());
 		//tabPane.setMaxHeight(h - toolBar.getHeight());
-		System.out.printf("Pedal ControlW = %f\n", controlW);
+		//System.out.printf("Pedal ControlW = %f\n", controlW);
 		//tabPane.setMinWidth(controlW);
 		//tabPane.setMaxWidth(controlW);
 		titledPane.setMinWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);

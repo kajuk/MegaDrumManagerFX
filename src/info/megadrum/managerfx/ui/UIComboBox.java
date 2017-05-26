@@ -46,6 +46,7 @@ public class UIComboBox extends UIControl {
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
 		    		//Integer newIntValue = listValues.indexOf(newValue);
 		    		Integer newIntValue = comboBox.getSelectionModel().getSelectedIndex();
+					//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),newIntValue.intValue(),intValue );
 		    		if (newIntValue > -1) {
 						if (intValue.intValue() != newIntValue.intValue()) {
 				        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
@@ -85,24 +86,22 @@ public class UIComboBox extends UIControl {
     		width = w*0.67;
     	} else {    		
         	if (copyButtonShown) {
-        		width = w*0.48;
+        		width = w*0.50;
         	} else {
-        		width = w*0.46;
+        		width = w*0.50;
         	}    		
     	}
     	comboBox.setMinWidth(width);
     	comboBox.setMaxWidth(width);
-		Double fontSize = h*0.30;
+		Double fontSize = h*0.325;
 		comboBox.setStyle("-fx-font-size: " + fontSize.toString() + "pt");			
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
     	int s = comboBox.getSelectionModel().getSelectedIndex();
-    	//changedFromSet = 5;
     	comboBox.getItems().clear();
     	comboBox.getItems().addAll(list);
     	listValues = list;
-    	//changedFromSet = 1;
     	comboBox.getSelectionModel().select(s);
     }
     
