@@ -63,11 +63,11 @@ public class UIInput {
 	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
 		listenerList.remove(ControlChangeEventListener.class, listener);
 	}
-	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+	protected void fireControlChangeEvent(ControlChangeEvent evt, Integer parameter) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i = i+2) {
 			if (listeners[i] == ControlChangeEventListener.class) {
-				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, parameter);
 			}
 		}
 	}
@@ -166,7 +166,7 @@ public class UIInput {
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
-					fireControlChangeEvent(new ControlChangeEvent(this));
+					fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 				}
 			});
        }

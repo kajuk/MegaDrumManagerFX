@@ -63,6 +63,7 @@ public class UIPad extends Parent {
 	//private ConfigPositional	configPosLeft;
 	//private ConfigPositional	configPosRight;
 	private Integer		padPair;
+	private Boolean		nameChanged = false;
 	//private Integer		controlsCha
 
 	protected EventListenerList listenerList = new EventListenerList();
@@ -127,6 +128,9 @@ public class UIPad extends Parent {
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
+				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
+					nameChanged = true;
+				}
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT);
 			}
 		});
@@ -135,10 +139,21 @@ public class UIPad extends Parent {
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
+				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
+					nameChanged = true;
+				}
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT);
 			}
 		});
 
+	}
+	
+	public Boolean isNameChanged() {
+		return nameChanged;
+	}
+	
+	public void resetNameChanged() {
+		nameChanged = false;
 	}
 	
 	private void reCreateNamesArray() {

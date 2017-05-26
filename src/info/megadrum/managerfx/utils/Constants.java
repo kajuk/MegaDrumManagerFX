@@ -210,6 +210,8 @@ public interface Constants {
 	public static final int PAD_TYPE_EDGE = 1;
 	public static final int CONTROL_CHANGE_EVENT_LEFT_INPUT = 0;
 	public static final int CONTROL_CHANGE_EVENT_RIGHT_INPUT = 1;
+	public static final int CONTROL_CHANGE_EVENT_3RD_INPUT = 2;
+	public static final int CONTROL_CHANGE_EVENT_NAME = 1;
 	
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"}; 
 }

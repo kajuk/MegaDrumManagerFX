@@ -118,7 +118,29 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
+				Integer inputNumber = 0;
+				if (padPair > 0) {
+					inputNumber = ((padPair - 1)*2) +1; 
+				}				
 				System.out.printf("Input %s control change\n", (parameter == Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT) ? "left" : "right");
+				switch (parameter) {
+				case Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT:
+					uiPad.setConfigFromControlsPad(configFull.configPads[inputNumber], true);
+					break;
+				case Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT:
+					uiPad.setConfigFromControlsPad(configFull.configPads[inputNumber + 1], false);					
+					break;
+				case Constants.CONTROL_CHANGE_EVENT_3RD_INPUT:
+					
+					break;
+
+				default:
+					break;
+				}
+				if (uiPad.isNameChanged()) {
+					uiPad.resetNameChanged();
+					updateComboBoxInput();
+				}
 			}
 		});
 
