@@ -186,15 +186,15 @@ public class UIMisc {
 		uiSpinnerPressrollTimeout.uiCtlSetValue(config.pressroll, setFromSysex);
 		uiSpinnerLatency.uiCtlSetValue(config.latency, setFromSysex);
 		uiSpinnerNotesOctaveShift.uiCtlSetValue(config.octave_shift, setFromSysex);
-		uiCheckBoxBigVUmeter.uiCtlSetSelected(config.big_vu_meter, setFromSysex);
-		uiCheckBoxBigVUsplit.uiCtlSetSelected(config.big_vu_split, setFromSysex);
-		uiCheckBoxBigVUQuickAccess.uiCtlSetSelected(config.quick_access, setFromSysex);
-		uiCheckBoxAltFalseTrSupp.uiCtlSetSelected(config.alt_false_tr_supp, setFromSysex);
-		uiCheckBoxInputsPriority.uiCtlSetSelected(config.inputs_priority, setFromSysex);
-		uiCheckBoxUnknownSetting.uiCtlSetSelected(config.all_gains_low, setFromSysex);
-		uiCheckBoxMIDIThru.uiCtlSetSelected(config.midi_thru, setFromSysex);
-		uiCheckBoxSendTriggeredIn.uiCtlSetSelected(config.send_triggered_in, setFromSysex);
-		uiCheckBoxAltNoteChoking.uiCtlSetSelected(config.alt_note_choking, setFromSysex);
+		uiCheckBoxBigVUmeter.uiCtlSetValue(config.big_vu_meter, setFromSysex);
+		uiCheckBoxBigVUsplit.uiCtlSetValue(config.big_vu_split, setFromSysex);
+		uiCheckBoxBigVUQuickAccess.uiCtlSetValue(config.quick_access, setFromSysex);
+		uiCheckBoxAltFalseTrSupp.uiCtlSetValue(config.alt_false_tr_supp, setFromSysex);
+		uiCheckBoxInputsPriority.uiCtlSetValue(config.inputs_priority, setFromSysex);
+		uiCheckBoxUnknownSetting.uiCtlSetValue(config.all_gains_low, setFromSysex);
+		uiCheckBoxMIDIThru.uiCtlSetValue(config.midi_thru, setFromSysex);
+		uiCheckBoxSendTriggeredIn.uiCtlSetValue(config.send_triggered_in, setFromSysex);
+		uiCheckBoxAltNoteChoking.uiCtlSetValue(config.alt_note_choking, setFromSysex);
 	}
 		
 	public void setConfigFromControls(ConfigMisc config) {

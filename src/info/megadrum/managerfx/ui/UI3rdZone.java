@@ -120,12 +120,18 @@ public class UI3rdZone {
 		setAllStateUnknown();
 	}
 
-	private void setAllStateUnknown() {
+	public void setAllStateUnknown() {
 		for (int i = 0; i < allControls.size(); i++ ) {
 			allControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		}
 	}
-	
+
+	public void setAllStateNotSynced() {
+		for (int i = 0; i < allControls.size(); i++ ) {
+			allControls.get(i).setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		}
+	}
+
 	public Node getUI() {
 		return (Node) titledPane;
 	}
@@ -151,6 +157,14 @@ public class UI3rdZone {
 		uiSpinnerMidpointWidth.uiCtlSetValue(threshold&0x0f, setFromSysex);
 	}
 	
+	public void setMdValuesFromConfig3rd(Config3rd config) {
+		uiSpinnerNoteMainNote.uiCtlSetMdValue(config.note);
+		uiSpinnerNoteAltNote.uiCtlSetMdValue(config.altNote);
+		uiSpinnerNotePressNote.uiCtlSetMdValue(config.pressrollNote);
+		uiSpinnerNoteDampenedNote.uiCtlSetMdValue(config.dampenedNote);
+		uiSpinnerThreshold.uiCtlSetMdValue(config.threshold);		
+	}
+
 	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {
 		uiSpinnerNoteMainNote.uiCtlSetValue(config.note, setFromSysex);
 		uiSpinnerNoteAltNote.uiCtlSetValue(config.altNote, setFromSysex);

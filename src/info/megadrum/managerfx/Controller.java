@@ -127,14 +127,20 @@ public class Controller implements MidiRescanEventListener {
 				case Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT:
 					//uiPad.setConfigFromControlsPad(configFull.configPads[inputNumber], true);
 					//uiPad.setConfigPosFromControlsPad(configFull.configPos[inputNumber], true);
-					sendSysexInput(inputNumber, true);
+					if (configOptions.liveUpdates) {
+						sendSysexInput(inputNumber, true);
+					}
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT:
+					if (configOptions.liveUpdates) {
+					}
 					sendSysexInput(inputNumber + 1, false);
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_3RD_INPUT:
-					if (padPair > 0) {
-						sendSysex3rd(padPair);
+					if (configOptions.liveUpdates) {
+						if (padPair > 0) {
+							sendSysex3rd(padPair);
+						}
 					}
 					break;
 
@@ -158,23 +164,19 @@ public class Controller implements MidiRescanEventListener {
 		});
 		uiPad.getButtonPrev().setOnAction(e-> {
 			if (padPair > 0) {
-				padPair--;
-				switchToSelectedPair();
+				switchToSelectedPair(padPair - 1);
 			}
 		});
 		uiPad.getButtonNext().setOnAction(e-> {
 			if (padPair < ((configFull.configGlobalMisc.inputs_count/2) - 1)) {
-				padPair++;
-				switchToSelectedPair();
+				switchToSelectedPair(padPair + 1);
 			}
 		});
 		uiPad.getButtonFirst().setOnAction(e-> {
-			padPair = 0;
-			switchToSelectedPair();
+			switchToSelectedPair(0);
 		});
 		uiPad.getButtonLast().setOnAction(e-> {
-			padPair = (configFull.configGlobalMisc.inputs_count/2) - 1;
-			switchToSelectedPair();
+			switchToSelectedPair((configFull.configGlobalMisc.inputs_count/2) - 1);
 		});
 		uiPad.getComboBoxInput().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -187,8 +189,7 @@ public class Controller implements MidiRescanEventListener {
 		    		Integer newInValue = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
 		    		if (newInValue > -1) {
-			    		padPair = newInValue;
-			    		switchToSelectedPair();		    			
+			    		switchToSelectedPair(newInValue);		    			
 		    		}
 		    	}				
 			}
@@ -524,8 +525,8 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_3RD:
 				Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
 				Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
-				configFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
-				configFull.config3rds[pointer].sysexReceived = true;
+				moduleConfigFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.config3rds[pointer].sysexReceived = true;
 				if ((pointer + 1) == padPair) {
 					uiPad.setControlsFromConfig3rd(configFull.config3rds[pointer], true);					
 				}
@@ -547,15 +548,15 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_MISC:
 				Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
 				Utils.copySysexToConfigMisc(sysex, moduleConfigFull.configMisc);
-				configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
-				configFull.configMisc.sysexReceived = true;
+				moduleConfigFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configMisc.sysexReceived = true;
 				uiMisc.setControlsFromConfig(configFull.configMisc, true);
 				break;
 			case Constants.MD_SYSEX_PAD:
 				Utils.copySysexToConfigPad(sysex, configFull.configPads[pointer - 1]);
 				Utils.copySysexToConfigPad(sysex, moduleConfigFull.configPads[pointer - 1]);
-				configFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
-				configFull.configPads[pointer - 1].sysexReceived = true;
+				moduleConfigFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configPads[pointer - 1].sysexReceived = true;
 				if ((pointer - 1) == 0) {
 					if (padPair == 0) {
 						uiPad.setControlsFromConfigPad(configFull.configPads[pointer - 1], true, true);					
@@ -569,15 +570,15 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_PEDAL:
 				Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
 				Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal);
-				configFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
-				configFull.configPedal.sysexReceived = true;
+				moduleConfigFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configPedal.sysexReceived = true;
 				uiPedal.setControlsFromConfig(configFull.configPedal, true);
 				break;
 			case Constants.MD_SYSEX_POS:
 				Utils.copySysexToConfigPos(sysex, configFull.configPos[pointer]);
 				Utils.copySysexToConfigPos(sysex, moduleConfigFull.configPos[pointer]);
-				configFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
-				configFull.configPos[pointer].sysexReceived = true;
+				moduleConfigFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configPos[pointer].sysexReceived = true;
 				if (pointer == 0) {
 					if (padPair == 0) {
 						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], true, true);					
@@ -661,10 +662,35 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
 	}
 	
-	private void switchToSelectedPair() {
+	private void switchToSelectedPair(Integer newPadPair) {
 		if (padPair == 0) {
+			uiPad.setConfigFromControlsPad(configFull.configPads[0], true);			
+			uiPad.setConfigPosFromControlsPad(configFull.configPos[0], true);			
+		} else {
+			uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 1], true);
+			uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 1], true);
+			uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 2], false);
+			uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 2], false);
+			uiPad.setConfig3rdFromControlsPad(configFull.config3rds[padPair - 1]);
+		}		
+		padPair = newPadPair;
+		if (padPair == 0) {
+			uiPad.setControlsUnknown(moduleConfigFull.configPads[0].sysexReceived, false, false);
+			if (moduleConfigFull.configPads[0].sysexReceived) {
+				uiPad.setMdValuesPad(moduleConfigFull.configPads[0], configFull.configPos[0], true);
+			}
 			uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null, null);
 		} else {
+			uiPad.setControlsUnknown(moduleConfigFull.configPads[((padPair-1)*2) + 1].sysexReceived, moduleConfigFull.configPads[((padPair-1)*2) + 2].sysexReceived, moduleConfigFull.config3rds[padPair - 1].sysexReceived);
+			if (moduleConfigFull.configPads[((padPair-1)*2) + 1].sysexReceived) {
+				uiPad.setMdValuesPad(moduleConfigFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], true);				
+			}
+			if (moduleConfigFull.configPads[((padPair-1)*2) + 2].sysexReceived) {
+				uiPad.setMdValuesPad(moduleConfigFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2], false);				
+			}
+			if (moduleConfigFull.config3rds[padPair - 1].sysexReceived) {
+				uiPad.setMdValues3rd(moduleConfigFull.config3rds[padPair - 1]);
+			}
 			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2], configFull.config3rds[padPair - 1]);
 		}
 		comboBoxInputChangedFromSet++;

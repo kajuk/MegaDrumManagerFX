@@ -110,29 +110,31 @@ public class UIComboBox extends UIControl {
     	if (intValue.intValue() != n.intValue()) {
         	//changedFromSet++;
         	changedFromSet = 1;
+    	   	intValue = n;
         }
     	//System.out.printf("changedFromSet = %d for %s\n", changedFromSet, label.getText());
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
+    	} else {
+        	updateSyncStateConditional();
     	}
 	   	//stringValue = listValues.get(intValue);
     	//System.out.printf("ComboBox: index = %d, string at this index = %s\n", intValue, stringValue);
     	comboBox.getSelectionModel().select(n);
-	   	intValue = n;
-    }
-    
-    public Integer uiCtlGetValue() {
+   }
+   
+   public Integer uiCtlGetValue() {
     	return intValue;
-    }
+   }
  
-    public void uiCtlSetValue(String value) {
+   public void uiCtlSetValue(String value) {
     	comboBox.setValue(value);
-    }
+   }
     
-    public String uiCtlGetSelected() {
-    	return comboBox.getValue();
-    }
+	public String uiCtlGetSelected() {
+		return comboBox.getValue();
+	}
     
     public void addListener(ChangeListener<String> listener) {
     	comboBox.getSelectionModel().selectedItemProperty().addListener(listener);

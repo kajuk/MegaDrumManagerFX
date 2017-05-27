@@ -189,6 +189,12 @@ public class UIControl extends Control implements UIControlInterface {
 		}
 	}
 */
+	public void updateSyncStateConditional() {
+		if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+			updateSyncState();
+		}
+	}
+	
 	public void updateSyncState() {
 		boolean valuesAreEqual = false;
 		switch (valueType) {
@@ -207,6 +213,21 @@ public class UIControl extends Control implements UIControlInterface {
 			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);			
 		}
 	}
+	
+    public void uiCtlSetMdValue(Object value) {
+		switch (valueType) {
+		case Constants.VALUE_TYPE_BOOLEAN:
+			mdBooleanValue = (Boolean)value;
+			break;
+		case Constants.VALUE_TYPE_INT:
+			mdIntValue = (Integer)value;
+			break;
+		default:
+			break;
+		}
+		setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+    }
+
 /*
 	public void respondToResize(Double h, Double w) {
 		Double wCl0, wCl1, wCl2;

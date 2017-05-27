@@ -261,10 +261,10 @@ public class UIOptions {
 	}
 	
 	public void updateControls() {
-		uiCheckBoxSamePort.uiCtlSetSelected(configOptions.useSamePort, true);
-		uiCheckBoxEnableMidiThru.uiCtlSetSelected(configOptions.useThruPort, true);
-		uiCheckBoxInitPortsStartup.uiCtlSetSelected(configOptions.autoOpenPorts, true);
-		uiCheckBoxSaveOnExit.uiCtlSetSelected(configOptions.saveOnExit, true);
+		uiCheckBoxSamePort.uiCtlSetValue(configOptions.useSamePort, true);
+		uiCheckBoxEnableMidiThru.uiCtlSetValue(configOptions.useThruPort, true);
+		uiCheckBoxInitPortsStartup.uiCtlSetValue(configOptions.autoOpenPorts, true);
+		uiCheckBoxSaveOnExit.uiCtlSetValue(configOptions.saveOnExit, true);
 		uiSpinnerSysexTimeout.uiCtlSetValue(configOptions.sysexDelay, true);
 		uiComboBoxMidiIn.uiCtlSetValue(configOptions.MidiInName);
 		setSameMidiInOut(configOptions.useSamePort);

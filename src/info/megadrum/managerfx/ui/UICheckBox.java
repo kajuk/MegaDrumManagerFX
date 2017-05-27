@@ -69,15 +69,17 @@ public class UICheckBox extends UIControl{
     	//checkBox.setMaxHeight(h);
     }
     
-    public void uiCtlSetSelected(Boolean selected, Boolean setFromSysex) {
+    public void uiCtlSetValue(Boolean selected, Boolean setFromSysex) {
     	checkBox.setSelected(selected);
 		booleanValue = selected;
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdBooleanValue = selected;
+    	} else {
+        	updateSyncStateConditional();
     	}
-   }
-    
+    }
+        
     public Boolean uiCtlIsSelected() {
     	return checkBox.isSelected();
     }

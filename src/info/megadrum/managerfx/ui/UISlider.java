@@ -122,6 +122,8 @@ public class UISlider extends UIControl {
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
+    	} else {
+        	updateSyncStateConditional();
     	}
     	uiSlider.setValue(intValue);
     }

@@ -372,11 +372,11 @@ public class UIPedal {
 		uiComboBoxMiscCurve.uiCtlSetValue(config.curve, setFromSysex);
 		uiComboBoxMiscChickCurve.uiCtlSetValue(config.chickCurve, setFromSysex);
 		uiComboBoxMiscHiHatInput.uiCtlSetValue(((config.hhInput-2)/2), setFromSysex);
-		uiCheckBoxMiscAltInput.uiCtlSetSelected(config.altIn, setFromSysex);
-		uiCheckBoxMiscReversLevels.uiCtlSetSelected(config.reverseLevels, setFromSysex);
-		uiCheckBoxMiscSoftChicks.uiCtlSetSelected(config.softChicks, setFromSysex);
-		uiCheckBoxMiscAutoLevels.uiCtlSetSelected(config.autoLevels, setFromSysex);
-		uiCheckBoxMiscAlgorithm.uiCtlSetSelected(config.new_algorithm, setFromSysex);
+		uiCheckBoxMiscAltInput.uiCtlSetValue(config.altIn, setFromSysex);
+		uiCheckBoxMiscReversLevels.uiCtlSetValue(config.reverseLevels, setFromSysex);
+		uiCheckBoxMiscSoftChicks.uiCtlSetValue(config.softChicks, setFromSysex);
+		uiCheckBoxMiscAutoLevels.uiCtlSetValue(config.autoLevels, setFromSysex);
+		uiCheckBoxMiscAlgorithm.uiCtlSetValue(config.new_algorithm, setFromSysex);
 		uiSpinnerMiscChickDelay.uiCtlSetValue(config.chickDelay, setFromSysex);
 		uiSpinnerMiscCCNumber.uiCtlSetValue(config.cc, setFromSysex);
 		uiSpinnerMiscCCReduction.uiCtlSetValue(config.ccRdcLvl, setFromSysex);

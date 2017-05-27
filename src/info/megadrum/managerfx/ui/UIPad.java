@@ -157,6 +157,8 @@ public class UIPad extends Parent {
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_3RD_INPUT);
 			}
 		});
+    	
+    	setControlsUnknown(false, false, false);
 	}
 	
 	public Boolean isNameChanged() {
@@ -269,17 +271,46 @@ public class UIPad extends Parent {
 		ui3rdZone.setConfig3rdFromControls(config);
 	}
 
+	public void setControlsUnknown(Boolean leftKnown, Boolean rightKnown, Boolean zone3rdKnow) {
+		if (!leftKnown) {
+			uiInputLeft.setAllStateUnknown();
+		}
+		if (!rightKnown) {
+			uiInputRight.setAllStateUnknown();
+		}
+		if (!zone3rdKnow) {
+			ui3rdZone.setAllStateUnknown();
+		}
+	}
+	
+	public void setMdValuesPad(ConfigPad configPad, ConfigPositional configPos, Boolean left ) {
+		UIInput ui;
+		if (left) {
+			ui = uiInputLeft;
+		} else {
+			ui = uiInputRight;
+		}
+		ui.setMdValuesFromConfigPad(configPad);
+		ui.setMdValuesFromConfigPos(configPos);
+	}
+	
+	public void setMdValues3rd(Config3rd config) {
+		ui3rdZone.setMdValuesFromConfig3rd(config);
+	}
+	
 	public void setInputPair(Integer pair, ConfigPad configPadLeft, ConfigPositional configPosLeft, ConfigPad configPadRight, ConfigPositional configPosRight, Config3rd config3rd) {
 		switchToInputPair(pair);
 		if (pair == 0) {
 			setControlsFromConfigPad(configPadLeft, true, false);
 			setControlsFromConfigPos(configPosLeft, true, false);
+			ui3rdZone.getUI().setVisible(false);
 		} else {
 			setControlsFromConfigPad(configPadLeft, true, false);
 			setControlsFromConfigPos(configPosLeft, true, false);			
 			setControlsFromConfigPad(configPadRight, false, false);
 			setControlsFromConfigPos(configPosRight, false, false);
 			setControlsFromConfig3rd(config3rd, false);
+			ui3rdZone.getUI().setVisible(true);
 		}
 	}
 	

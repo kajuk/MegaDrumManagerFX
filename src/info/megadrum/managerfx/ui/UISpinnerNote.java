@@ -317,6 +317,8 @@ public class UISpinnerNote extends UIControl {
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
+    	} else {
+        	updateSyncStateConditional();
     	}
     	valueFactory.setValue(n);
     	uispinner.getEditor().setText(intValue.toString());

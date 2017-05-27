@@ -264,13 +264,15 @@ public class UISpinner extends UIControl {
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
+    	} else {
+        	updateSyncStateConditional();
     	}
     	valueFactory.setValue(n);
     	uispinner.getEditor().setText(intValue.toString());
 		resizeFont();
     }
     
-    public Integer uiCtlGetValue() {
+   public Integer uiCtlGetValue() {
     	return intValue;
     }
     

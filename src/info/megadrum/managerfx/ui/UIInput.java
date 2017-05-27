@@ -179,12 +179,18 @@ public class UIInput {
 		setAllStateUnknown();
 	}
 
-	private void setAllStateUnknown() {
+	public void setAllStateUnknown() {
 		for (int i = 0; i < allControls.size(); i++ ) {
 			allControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		}
 	}
 	
+	public void setAllStateNotSynced() {
+		for (int i = 0; i < allControls.size(); i++ ) {
+			allControls.get(i).setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		}
+	}
+
 	public Node getUI() {
 		return (Node) titledPane;
 	}
@@ -221,6 +227,35 @@ public class UIInput {
 		uiComboBoxName.uiCtlSetValuesArray(list);
 	}
 
+	public void setMdValuesFromConfigPos(ConfigPositional configPos) {
+		uiComboBoxPosLevel.uiCtlSetMdValue(configPos.level);
+		uiSpinnerPosLow.uiCtlSetMdValue(configPos.low);
+		uiSpinnerPosHigh.uiCtlSetMdValue(configPos.high);
+	}
+	
+	public void setMdValuesFromConfigPad(ConfigPad configPad) {
+		uiComboBoxName.uiCtlSetMdValue(configPad.name);
+		uiSpinnerNoteMainNote.uiCtlSetMdValue(configPad.note);
+		uiSpinnerNoteAltNote.uiCtlSetMdValue(configPad.altNote);
+		uiSpinnerNotePressNote.uiCtlSetMdValue(configPad.pressrollNote);
+		uiSpinnerChannel.uiCtlSetMdValue(configPad.channel + 1);
+		uiComboBoxFunction.uiCtlSetMdValue(configPad.function);
+		uiComboBoxCurve.uiCtlSetMdValue(configPad.curve);
+		uiComboBoxCompression.uiCtlSetMdValue(configPad.compression);
+		uiComboBoxLevelShift.uiCtlSetMdValue(configPad.shift);
+		uiComboBoxXTalkLevel.uiCtlSetMdValue(configPad.xtalkLevel);
+		uiComboBoxXTalkGroup.uiCtlSetMdValue(configPad.xtalkGroup);
+		uiSpinnerThreshold.uiCtlSetMdValue(configPad.threshold);
+		uiComboBoxGain.uiCtlSetMdValue(configPad.gain);
+		uiCheckBoxHighAuto.uiCtlSetMdValue(configPad.autoLevel);
+		uiSpinnerHighLevel.uiCtlSetMdValue(configPad.levelMax);
+		uiSpinnerRetrigger.uiCtlSetMdValue(configPad.retrigger);
+		uiComboBoxDynLevel.uiCtlSetMdValue(configPad.dynLevel);
+		uiComboBoxDynTime.uiCtlSetMdValue(configPad.dynTime);
+		uiSpinnerMinScan.uiCtlSetMdValue(configPad.minScan);
+		uiComboBoxType.uiCtlSetMdValue(configPad.getIntType());
+	}
+	
 	public void setControlsFromConfigPos(ConfigPositional configPos, Boolean setFromSysex) {
 		uiComboBoxPosLevel.uiCtlSetValue(configPos.level, setFromSysex);
 		uiSpinnerPosLow.uiCtlSetValue(configPos.low, setFromSysex);
@@ -241,7 +276,7 @@ public class UIInput {
 		uiComboBoxXTalkGroup.uiCtlSetValue(configPad.xtalkGroup, setFromSysex);
 		uiSpinnerThreshold.uiCtlSetValue(configPad.threshold, setFromSysex);
 		uiComboBoxGain.uiCtlSetValue(configPad.gain, setFromSysex);
-		uiCheckBoxHighAuto.uiCtlSetSelected(configPad.autoLevel, setFromSysex);
+		uiCheckBoxHighAuto.uiCtlSetValue(configPad.autoLevel, setFromSysex);
 		uiSpinnerHighLevel.uiCtlSetValue(configPad.levelMax, setFromSysex);
 		uiSpinnerRetrigger.uiCtlSetValue(configPad.retrigger, setFromSysex);
 		uiComboBoxDynLevel.uiCtlSetValue(configPad.dynLevel, setFromSysex);
