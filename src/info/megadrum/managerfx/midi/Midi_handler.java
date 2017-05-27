@@ -525,13 +525,15 @@ public class Midi_handler {
 		int size = 0;
 		if (bufferIn == null) {
 			bufferIn = dump_receiver.getByteMessage();
-			
-			size = bufferIn.length;
-			if (( bufferIn[0] == Constants.SYSEX_START) && (bufferIn[size-1] == Constants.SYSEX_END)) {
-				sysexReceived = true;
-			} else {
-				// TO-DO
-				sendMidiShortThru(bufferIn);
+			if (bufferIn != null) {
+				//System.out.printf("bufferIn length = %d\n", bufferIn.length);
+				size = bufferIn.length;
+				if (( bufferIn[0] == Constants.SYSEX_START) && (bufferIn[size-1] == Constants.SYSEX_END)) {
+					sysexReceived = true;
+				} else {
+					// TO-DO
+					sendMidiShortThru(bufferIn);
+				}
 			}
 		}
 	}

@@ -518,81 +518,82 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void processSysex(byte [] sysex) {
-		byte pointer = sysex[4];
-    	switch (sysex[3]) {
-		case Constants.MD_SYSEX_3RD:
-			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
-			Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
-			configFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
-			configFull.config3rds[pointer].sysexReceived = true;
-			if ((pointer + 1) == padPair) {
-				uiPad.setControlsFromConfig3rd(configFull.config3rds[pointer], true);					
-			}
-			break;
-		case Constants.MD_SYSEX_CONFIG_COUNT:
-			break;
-		case Constants.MD_SYSEX_CONFIG_CURRENT:
-			break;
-		case Constants.MD_SYSEX_CONFIG_NAME:
-			break;
-		case Constants.MD_SYSEX_CURVE:
-			break;
-		case Constants.MD_SYSEX_CUSTOM_NAME:
-			break;
-		case Constants.MD_SYSEX_GLOBAL_MISC:
-			break;
-		case Constants.MD_SYSEX_MCU_TYPE:
-			break;
-		case Constants.MD_SYSEX_MISC:
-			Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
-			Utils.copySysexToConfigMisc(sysex, moduleConfigFull.configMisc);
-			configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
-			configFull.configMisc.sysexReceived = true;
-			uiMisc.setControlsFromConfig(configFull.configMisc, true);
-			break;
-		case Constants.MD_SYSEX_PAD:
-			Utils.copySysexToConfigPad(sysex, configFull.configPads[pointer - 1]);
-			Utils.copySysexToConfigPad(sysex, moduleConfigFull.configPads[pointer - 1]);
-			configFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
-			configFull.configPads[pointer - 1].sysexReceived = true;
-			if ((pointer - 1) == 0) {
-				if (padPair == 0) {
-					uiPad.setControlsFromConfigPad(configFull.configPads[pointer - 1], true, true);					
+		if (sysex.length > 6) {
+			byte pointer = sysex[4];
+	    	switch (sysex[3]) {
+			case Constants.MD_SYSEX_3RD:
+				Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
+				Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
+				configFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				configFull.config3rds[pointer].sysexReceived = true;
+				if ((pointer + 1) == padPair) {
+					uiPad.setControlsFromConfig3rd(configFull.config3rds[pointer], true);					
 				}
-			} else {
-				if ((((pointer - 2)/2) + 1) == padPair) {
-					uiPad.setControlsFromConfigPad(configFull.configPads[pointer - 1], (pointer&1) == 0, true);
+				break;
+			case Constants.MD_SYSEX_CONFIG_COUNT:
+				break;
+			case Constants.MD_SYSEX_CONFIG_CURRENT:
+				break;
+			case Constants.MD_SYSEX_CONFIG_NAME:
+				break;
+			case Constants.MD_SYSEX_CURVE:
+				break;
+			case Constants.MD_SYSEX_CUSTOM_NAME:
+				break;
+			case Constants.MD_SYSEX_GLOBAL_MISC:
+				break;
+			case Constants.MD_SYSEX_MCU_TYPE:
+				break;
+			case Constants.MD_SYSEX_MISC:
+				Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
+				Utils.copySysexToConfigMisc(sysex, moduleConfigFull.configMisc);
+				configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
+				configFull.configMisc.sysexReceived = true;
+				uiMisc.setControlsFromConfig(configFull.configMisc, true);
+				break;
+			case Constants.MD_SYSEX_PAD:
+				Utils.copySysexToConfigPad(sysex, configFull.configPads[pointer - 1]);
+				Utils.copySysexToConfigPad(sysex, moduleConfigFull.configPads[pointer - 1]);
+				configFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
+				configFull.configPads[pointer - 1].sysexReceived = true;
+				if ((pointer - 1) == 0) {
+					if (padPair == 0) {
+						uiPad.setControlsFromConfigPad(configFull.configPads[pointer - 1], true, true);					
+					}
+				} else {
+					if ((((pointer - 2)/2) + 1) == padPair) {
+						uiPad.setControlsFromConfigPad(configFull.configPads[pointer - 1], (pointer&1) == 0, true);
+					}
 				}
-			}
-			break;
-		case Constants.MD_SYSEX_PEDAL:
-			Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
-			Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal);
-			configFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
-			configFull.configPedal.sysexReceived = true;
-			uiPedal.setControlsFromConfig(configFull.configPedal, true);
-			break;
-		case Constants.MD_SYSEX_POS:
-			Utils.copySysexToConfigPos(sysex, configFull.configPos[pointer]);
-			Utils.copySysexToConfigPos(sysex, moduleConfigFull.configPos[pointer]);
-			configFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
-			configFull.configPos[pointer].sysexReceived = true;
-			if (pointer == 0) {
-				if (padPair == 0) {
-					uiPad.setControlsFromConfigPos(configFull.configPos[pointer], true, true);					
+				break;
+			case Constants.MD_SYSEX_PEDAL:
+				Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
+				Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal);
+				configFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
+				configFull.configPedal.sysexReceived = true;
+				uiPedal.setControlsFromConfig(configFull.configPedal, true);
+				break;
+			case Constants.MD_SYSEX_POS:
+				Utils.copySysexToConfigPos(sysex, configFull.configPos[pointer]);
+				Utils.copySysexToConfigPos(sysex, moduleConfigFull.configPos[pointer]);
+				configFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				configFull.configPos[pointer].sysexReceived = true;
+				if (pointer == 0) {
+					if (padPair == 0) {
+						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], true, true);					
+					}
+				} else {
+					if ((((pointer - 1)/2) + 1) == padPair) {
+						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], ((pointer+1)&1) > 0, true);
+					}
 				}
-			} else {
-				if ((((pointer - 1)/2) + 1) == padPair) {
-					uiPad.setControlsFromConfigPos(configFull.configPos[pointer], ((pointer+1)&1) > 0, true);
-				}
-			}
-			break;
-		case Constants.MD_SYSEX_VERSION:
-			break;
-		default:
-			break;
+				break;
+			case Constants.MD_SYSEX_VERSION:
+				break;
+			default:
+				break;
+			}			
 		}
-
 	}
 	private void initConfigs() {
 		configOptions = new ConfigOptions();
