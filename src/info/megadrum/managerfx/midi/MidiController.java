@@ -242,7 +242,7 @@ public class MidiController {
 				midiHandler.requestConfigMisc();
 				break;
 			case Constants.MD_SYSEX_PAD:
-				midiHandler.requestConfigPad(id);
+				midiHandler.requestConfigPad(id + 1);
 				break;
 			case Constants.MD_SYSEX_PEDAL:
 				midiHandler.requestConfigPedal();

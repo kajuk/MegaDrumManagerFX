@@ -91,7 +91,7 @@ public class UI3rdZone {
 		gridColmn.add(1);
 		gridRow.add(1);
 		
-		uiSpinnerThreshold = new UISpinner("Threshold", 0, 15, 0, 1, true);
+		uiSpinnerThreshold = new UISpinner("Threshold", 0, 255, 0, 1, true);
 		allControls.add(uiSpinnerThreshold);
 		gridColmn.add(1);
 		gridRow.add(2);
@@ -148,7 +148,7 @@ public class UI3rdZone {
 	
 	private void setMidPointAndWidthFromThreshold(int threshold, Boolean setFromSysex) {
 		uiSliderMidpoint.uiCtlSetValue((threshold&0xf0)>>4, setFromSysex);
-		uiSpinnerMidpointWidth.uiCtlSetValue(threshold&0xf0, setFromSysex);
+		uiSpinnerMidpointWidth.uiCtlSetValue(threshold&0x0f, setFromSysex);
 	}
 	
 	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {

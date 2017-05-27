@@ -313,6 +313,14 @@ public class UIPad extends Parent {
 		reCreateNamesArray();
 	}
 	
+	public Button getButtonGet() {
+		return buttonGet;
+	}
+
+	public Button getButtonSend() {
+		return buttonSend;
+	}
+
 	public Button getButtonPrev() {
 		return buttonPrev;
 	}
