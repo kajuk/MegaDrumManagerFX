@@ -85,9 +85,27 @@ public class Controller implements MidiRescanEventListener {
 		createMainMenuBar();
 		uiGlobal = new UIGlobal();
 		uiGlobalMisc = new UIGlobalMisc();
+		uiGlobalMisc.getButtonGet().setOnAction(e-> sendSysexGlobalMiscRequest());
+		uiGlobalMisc.getButtonSend().setOnAction(e-> sendSysexGlobalMisc());
+		uiGlobalMisc.getCheckBoxLiveUpdates().selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	configOptions.liveUpdates = newValue;
+		    }
+		});
+		uiGlobalMisc.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				if (configOptions.liveUpdates) {
+					sendSysexGlobalMisc();
+				}
+			}
+		});
 		uiMisc = new UIMisc("Misc");
-		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiMisc.getButtonGet().setOnAction(e-> sendSysexMiscRequest());
+		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
 		uiMisc.addControlChangeEventListener(new ControlChangeEventListener() {
 			
 			@Override
@@ -340,6 +358,25 @@ public class Controller implements MidiRescanEventListener {
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 
+	private void sendSysexGlobalMisc() {
+		uiGlobalMisc.setConfigFromControls(configFull.configGlobalMisc);
+		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
+		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
+		sysexSendList.clear();
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
+
+	private void sendSysexGlobalMiscRequest() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
+		sysexSendList.clear();
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+	}
+	
+	
 	private void sendSysexMisc() {
 		uiMisc.setConfigFromControls(configFull.configMisc);
 		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];

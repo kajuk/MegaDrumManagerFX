@@ -56,7 +56,9 @@ public class UIGlobalMisc {
 	private CheckBox	checkBoxMidi2ForSysex;
 	private Button		buttonGet;
 	private Button		buttonSend;
-	private Button		buttonLiveUpdates;
+	private Label		labelLiveUpdates;
+	private CheckBox	checkBoxLiveUpdates;
+	//private Button		buttonLiveUpdates;
 	
 	private ArrayList<Label> allControlLabels;
 
@@ -286,7 +288,7 @@ public class UIGlobalMisc {
 							spinnerLcdContrast.getEditor().setText(valueLcdContrast.toString());
 						} else {
 							if (valueLcdContrast.intValue() != Integer.valueOf(newValue).intValue()) {
-								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
+								System.out.printf("%s: new value = %d, old value = %d\n",labelLcdContrast.getText(),Integer.valueOf(newValue),valueLcdContrast );
 								valueLcdContrast = Integer.valueOf(newValue);
 								fireControlChangeEvent(new ControlChangeEvent(this));
 								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
@@ -363,13 +365,34 @@ public class UIGlobalMisc {
 		GridPane.setHalignment(checkBoxMidi2ForSysex, HPos.LEFT);
 		GridPane.setValignment(checkBoxMidi2ForSysex, VPos.CENTER);
 		rootGridPane.getChildren().add(checkBoxMidi2ForSysex);
+
+		labelLiveUpdates = new Label("Live Updates");
+		GridPane.setConstraints(labelLiveUpdates, 11, 1);
+		GridPane.setHalignment(labelLiveUpdates, HPos.RIGHT);
+		GridPane.setValignment(labelLiveUpdates, VPos.CENTER);
+		rootGridPane.getChildren().add(labelLiveUpdates);
+
+		checkBoxLiveUpdates = new CheckBox();
+/*		
+		checkBoxMidi2ForSysex.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	//TODO
+		    }
+		});
+*/
+		GridPane.setConstraints(checkBoxLiveUpdates, 12, 1);
+		GridPane.setHalignment(checkBoxLiveUpdates, HPos.LEFT);
+		GridPane.setValignment(checkBoxLiveUpdates, VPos.CENTER);
+		rootGridPane.getChildren().add(checkBoxLiveUpdates);
 		
+/*
 		buttonLiveUpdates = new Button("Live Updates");
 		GridPane.setConstraints(buttonLiveUpdates, 11, 1);
 		GridPane.setHalignment(buttonLiveUpdates, HPos.CENTER);
 		GridPane.setValignment(buttonLiveUpdates, VPos.CENTER);
 		rootGridPane.getChildren().add(buttonLiveUpdates);
-	
+*/	
 		for (int i = 0; i < rootGridPane.getChildren().size(); i++) {
 			if (rootGridPane.getChildren().get(i) instanceof Button) {
 				((Button)rootGridPane.getChildren().get(i)).setFont(new Font(10));
@@ -380,7 +403,7 @@ public class UIGlobalMisc {
 				
 			}
 		}
-		setAllStateUnknown();
+		setAllStatesUnknown();
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(40.0)); // 0
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(70.0)); // 1
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(70.0)); // 2
@@ -399,7 +422,7 @@ public class UIGlobalMisc {
 		
 	}
 	
-	private void setAllStateUnknown() {
+	private void setAllStatesUnknown() {
 		syncState = Constants.SYNC_STATE_UNKNOWN;
 		for (int i = 0; i < allControlLabels.size(); i++ ) {
 			allControlLabels.get(i).setTextFill(Constants.SYNC_STATE_UNKNOWN_COLOR);
@@ -410,14 +433,34 @@ public class UIGlobalMisc {
 		lblSlotsCount.setText("??");
 	}
 
+	private void setGlobalMiscStatesKnown() {
+		syncState = Constants.SYNC_STATE_SYNCED;
+		labelInputs.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		labelLcdContrast.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		labelPadsNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		labelConfigNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		labelMidi2ForSysex.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+	}
 
 	public Node getUI() {
 		return (Node) rootGridPane;
 	}
 	
 	public void setControlsFromConfig(ConfigGlobalMisc config, Boolean setFromSysex) {
+		if (setFromSysex) {
+			syncState = Constants.SYNC_STATE_SYNCED;
+			valueModuleLcdContrast = config.lcd_contrast;
+			valueModuleConfigNamesEn = config.config_names_en;
+			valueModulePadsNamesEn = config.custom_names_en;
+			valueModuleMidi2ForSysex = config.midi2_for_sysex;
+			setGlobalMiscStatesKnown();
+		}
 		setInputsCount(config.inputs_count, setFromSysex);
-		spinnerLcdContrast.getEditor().setText(Integer.toString(config.lcd_contrast));
+		//spinnerLcdContrast.getEditor().setText(Integer.toString(config.lcd_contrast));
+		if (spinnerLcdContrast.getValueFactory().getValue().intValue() != config.lcd_contrast ) {
+			changedFromLcdContrast = 1;
+			spinnerLcdContrast.getValueFactory().setValue(config.lcd_contrast);
+		}
 		checkBoxConfigNamesEn.setSelected(config.config_names_en);
 		checkBoxPadsNamesEn.setSelected(config.custom_names_en);
 		checkBoxMidi2ForSysex.setSelected(config.midi2_for_sysex);
@@ -462,5 +505,20 @@ public class UIGlobalMisc {
 	//	return comboBoxInputs.getSelectionModel().getSelectedIndex()*2 + 18;
 	//}
 	
-	//publi
+	public Button getButtonGet() {
+		return buttonGet;
+	}
+	
+	public Button getButtonSend() {
+		return buttonSend;
+	}
+	
+	public Button getButtonMidi() {
+		return buttonMidi;
+	}
+	
+	public CheckBox getCheckBoxLiveUpdates() {
+		return checkBoxLiveUpdates;
+	}
+	
 }
