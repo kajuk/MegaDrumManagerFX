@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -31,7 +32,7 @@ public class UIGlobalMisc {
 	
 	private GridPane 	rootGridPane;
 	private Label 		labelMidi;
-	private Button		buttonMidi;
+	private ToggleButton	toggleButtonMidi;
 	private Label		labelInputs;
 	private ComboBox<String> 	comboBoxInputs;
 	private List<String> listValuesInputs;
@@ -106,11 +107,12 @@ public class UIGlobalMisc {
 		GridPane.setValignment(labelMidi, VPos.CENTER);
 		rootGridPane.getChildren().add(labelMidi);
 
-		buttonMidi = new Button("Open MIDI");
-		GridPane.setConstraints(buttonMidi, 1, 0);
-		GridPane.setHalignment(buttonMidi, HPos.LEFT);
-		GridPane.setValignment(buttonMidi, VPos.CENTER);
-		rootGridPane.getChildren().add(buttonMidi);
+		toggleButtonMidi = new ToggleButton("Open MIDI");
+		toggleButtonMidi.setFont(new Font(10));
+		GridPane.setConstraints(toggleButtonMidi, 1, 0);
+		GridPane.setHalignment(toggleButtonMidi, HPos.LEFT);
+		GridPane.setValignment(toggleButtonMidi, VPos.CENTER);
+		rootGridPane.getChildren().add(toggleButtonMidi);
 		
 		labelInputs = new Label("Inputs:");
 		allControlLabels.add(labelInputs);
@@ -513,8 +515,8 @@ public class UIGlobalMisc {
 		return buttonSend;
 	}
 	
-	public Button getButtonMidi() {
-		return buttonMidi;
+	public ToggleButton getToggleButtonMidi() {
+		return toggleButtonMidi;
 	}
 	
 	public CheckBox getCheckBoxLiveUpdates() {

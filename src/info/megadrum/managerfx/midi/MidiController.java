@@ -414,4 +414,12 @@ public class MidiController {
 	public void getMidi() {
 		midiHandler.getMidi();
 	}
+	
+	public Boolean isMidiOpen() {
+		return midiHandler.isMidiOpen();
+	}
+	
+	public void closeAllPorts() {
+		midiHandler.closeAllPorts();
+	}
 }

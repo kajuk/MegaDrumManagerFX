@@ -69,6 +69,7 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigFull moduleConfigFull;
 	private int padPair = 0;
 	private int comboBoxInputChangedFromSet = 0;
+	private int toggleButtonMidiChangedFromSet = 0;
 
 	private List<byte[]> sysexSendList;
 	
@@ -103,6 +104,7 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
+		uiGlobalMisc.getToggleButtonMidi().setOnAction(e-> openMidiPorts(uiGlobalMisc.getToggleButtonMidi().isSelected()));
 		uiMisc = new UIMisc("Misc");
 		uiMisc.getButtonGet().setOnAction(e-> sendSysexMiscRequest());
 		uiMisc.getButtonSend().setOnAction(e-> sendSysexMisc());
@@ -513,11 +515,29 @@ public class Controller implements MidiRescanEventListener {
 		optionsWindow.show();
 		if (optionsWindow.getClosedWithOk()) {
 			System.out.println("Closed with ok");
+			openMidiPorts(true);
+		}
+	}
+	
+	private void openMidiPorts(Boolean toOpen) {
+		if (toOpen) {
+			if (midiController.isMidiOpen()) {
+				midiController.closeAllPorts();
+			}
 			if (configOptions.useThruPort) {
 				midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, configOptions.MidiThruName);				
 			} else {
 				midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, "");
 			}
+		} else {
+			midiController.closeAllPorts();
+		}
+		if (midiController.isMidiOpen()) {
+			uiGlobalMisc.getToggleButtonMidi().setSelected(true);
+			uiGlobalMisc.getToggleButtonMidi().setText("Close MIDI");
+		} else {
+			uiGlobalMisc.getToggleButtonMidi().setSelected(false);
+			uiGlobalMisc.getToggleButtonMidi().setText("Open MIDI");			
 		}
 	}
 	
