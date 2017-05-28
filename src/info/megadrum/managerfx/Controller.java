@@ -542,6 +542,11 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_CUSTOM_NAME:
 				break;
 			case Constants.MD_SYSEX_GLOBAL_MISC:
+				Utils.copySysexToConfigGlobalMisc(sysex, configFull.configGlobalMisc);
+				Utils.copySysexToConfigGlobalMisc(sysex, moduleConfigFull.configGlobalMisc);
+				moduleConfigFull.configGlobalMisc.syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configGlobalMisc.sysexReceived = true;
+				uiGlobalMisc.setControlsFromConfig(configFull.configGlobalMisc, true);
 				break;
 			case Constants.MD_SYSEX_MCU_TYPE:
 				break;
