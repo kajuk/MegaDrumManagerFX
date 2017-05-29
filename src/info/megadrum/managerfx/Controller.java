@@ -1,12 +1,16 @@
 package info.megadrum.managerfx;
 
+import java.awt.Color;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.management.OperationsException;
+import javax.swing.JOptionPane;
 
 import com.sun.javafx.scene.traversal.TopMostTraversalEngine;
 
@@ -360,6 +364,24 @@ public class Controller implements MidiRescanEventListener {
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 
+	private void sendSysexReadOnlyRequest() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_VERSION;
+		sysexSendList.clear();
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_MCU_TYPE;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_COUNT;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();		
+	}
+	
 	private void sendSysexGlobalMisc() {
 		uiGlobalMisc.setConfigFromControls(configFull.configGlobalMisc);
 		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
@@ -535,9 +557,11 @@ public class Controller implements MidiRescanEventListener {
 		if (midiController.isMidiOpen()) {
 			uiGlobalMisc.getToggleButtonMidi().setSelected(true);
 			uiGlobalMisc.getToggleButtonMidi().setText("Close MIDI");
+			sendSysexReadOnlyRequest();
 		} else {
 			uiGlobalMisc.getToggleButtonMidi().setSelected(false);
-			uiGlobalMisc.getToggleButtonMidi().setText("Open MIDI");			
+			uiGlobalMisc.getToggleButtonMidi().setText("Open MIDI");
+			uiGlobalMisc.setAllStatesUnknown();
 		}
 	}
 	
@@ -576,7 +600,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void processSysex(byte [] sysex) {
-		if (sysex.length > 6) {
+		if (sysex.length >= 5) {
 			byte pointer = sysex[4];
 	    	switch (sysex[3]) {
 			case Constants.MD_SYSEX_3RD:
@@ -589,8 +613,39 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_COUNT:
+				System.out.println("AAAAAAAAAAAAAAAA");
+				if (sysex.length >= Constants.MD_SYSEX_CONFIG_COUNT_SIZE) {
+					int b;
+					b = (int)sysex[4];
+					uiGlobalMisc.setConfigsCount(b);
+					configFull.configNamesCount = b;
+					configFull.configCountSysexReceived = true;
+					//TODO
+/*
+					setSysexOk();
+					popupMenuSaveToSlot.removeAll();
+					mntmSaveToMd.removeAll();
+					popupMenuLoadFromSlot.removeAll();
+					mntmLoadFromMd.removeAll();
+					for (int i = 0; i < b; i++) {
+						popupMenuSaveToSlot.add(popupMenuItemsSaveToSlot[i]);
+						mntmSaveToMd.add(menuItemsSaveToSlot[i]);
+						popupMenuLoadFromSlot.add(popupMenuItemsLoadFromSlot[i]);
+						mntmLoadFromMd.add(menuItemsLoadFromSlot[i]);
+					}
+*/
+				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_CURRENT:
+				System.out.println("BBBBBBBBBBBBBBBBB");
+				if (sysex.length >= Constants.MD_SYSEX_CONFIG_CURRENT_SIZE) {
+					int b;
+					b = (int)sysex[4];
+					uiGlobalMisc.setConfigCurrent(b);
+					configFull.configCurrentSysexReceived = true;
+					//TODO
+					//setSysexOk();
+				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
 				break;
@@ -606,6 +661,15 @@ public class Controller implements MidiRescanEventListener {
 				uiGlobalMisc.setControlsFromConfig(configFull.configGlobalMisc, true);
 				break;
 			case Constants.MD_SYSEX_MCU_TYPE:
+				if (sysex.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
+					configOptions.mcuType = (int)(sysex[4]<<4);
+					configOptions.mcuType |= (int)sysex[5];
+					if (configOptions.mcuType < Constants.MCU_TYPES.length ) {
+						uiGlobalMisc.setMcu(configOptions.mcuType);								
+					}
+					//TODO
+					//setSysexOk();
+				}
 				break;
 			case Constants.MD_SYSEX_MISC:
 				Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
@@ -652,6 +716,40 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_VERSION:
+				int ver = 0;
+				if (sysex.length >= Constants.MD_SYSEX_VERSION_SIZE) {
+					int b;
+					for (int i=0;i<4;i++) {
+						b = (int)(sysex[i*2 + 4]<<4);
+						b |= (int)sysex[i*2 + 5];
+						ver += b<<(8*i);
+					}
+					configOptions.version = ver;
+					uiGlobalMisc.setVersion(ver);
+					//TODO
+/*
+					setSysexOk();
+					if (ver < Constants.MD_MINIMUM_VERSION) {
+						if (!versionWarningAlreadyShown) {
+							versionWarningAlreadyShown = true;
+							lblVersion.setBackground(Color.RED);
+							Timer warning_timer = new Timer();
+							warning_timer.schedule(new TimerTask() {
+								
+								@Override
+								public void run() {
+									JOptionPane.showMessageDialog(null,
+										    "<html><font size=5>"+Constants.WARNING_VERSION+"</font></html>",
+										    "Warning",
+										    JOptionPane.WARNING_MESSAGE);
+								}
+							}, 200);
+						}
+					} else {
+						lblVersion.setBackground(Color.GREEN);
+					}
+*/
+				}
 				break;
 			default:
 				break;

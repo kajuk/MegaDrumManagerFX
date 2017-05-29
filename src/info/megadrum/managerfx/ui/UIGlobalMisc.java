@@ -2,7 +2,10 @@ package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.data.ConfigGlobalMisc;
@@ -159,6 +162,7 @@ public class UIGlobalMisc {
 		lblFwVersion = new Label("FwVersion");
 		lblFwVersion.setStyle("-fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
 		lblFwVersion.setMinWidth(80);
+		lblFwVersion.setAlignment(Pos.CENTER);
 		GridPane.setConstraints(lblFwVersion, 3, 0);
 		GridPane.setHalignment(lblFwVersion, HPos.LEFT);
 		GridPane.setValignment(lblFwVersion, VPos.CENTER);
@@ -173,7 +177,8 @@ public class UIGlobalMisc {
 
 		lblMcu = new Label("mcu");
 		lblMcu.setStyle("-fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
-		lblMcu.setMinWidth(80);
+		lblMcu.setMinWidth(100);
+		lblMcu.setAlignment(Pos.CENTER);
 		GridPane.setConstraints(lblMcu, 3, 1);
 		GridPane.setHalignment(lblMcu, HPos.LEFT);
 		GridPane.setValignment(lblMcu, VPos.CENTER);
@@ -409,7 +414,7 @@ public class UIGlobalMisc {
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(40.0)); // 0
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(70.0)); // 1
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(70.0)); // 2
-		rootGridPane.getColumnConstraints().add(new ColumnConstraints(80.0)); // 3
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(110.0)); // 3
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(90.0)); // 4
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(20.0)); // 5
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(70.0)); // 6
@@ -424,7 +429,7 @@ public class UIGlobalMisc {
 		
 	}
 	
-	private void setAllStatesUnknown() {
+	public void setAllStatesUnknown() {
 		syncState = Constants.SYNC_STATE_UNKNOWN;
 		for (int i = 0; i < allControlLabels.size(); i++ ) {
 			allControlLabels.get(i).setTextFill(Constants.SYNC_STATE_UNKNOWN_COLOR);
@@ -448,6 +453,35 @@ public class UIGlobalMisc {
 		return (Node) rootGridPane;
 	}
 	
+	public void setVersion(Integer version) {
+		lblFwVersion.setText(version.toString());
+		labelFwVersion.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		//TODO
+/*
+		if (version < Constants.MD_MINIMUM_VERSION) {
+			lblFwVersion.setBackground(Color.RED);
+		} else {
+			lblFwVersion.setBackground(Color.GREEN);
+		}
+*/
+	}
+
+	public void setMcu(Integer mcu) {
+		lblMcu.setText(Constants.MCU_TYPES[mcu]);
+		labelMcu.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+	}
+	
+	public void setConfigsCount(Integer count) {
+		lblSlotsCount.setText(count.toString());
+		labelSlotsCount.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+	}
+
+	public void setConfigCurrent(int current) {
+		Integer c = current + 1;
+		lblSlotCurrent.setText(c.toString());
+		labelSlotCurrent.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+	}
+
 	public void setControlsFromConfig(ConfigGlobalMisc config, Boolean setFromSysex) {
 		if (setFromSysex) {
 			syncState = Constants.SYNC_STATE_SYNCED;
@@ -497,7 +531,7 @@ public class UIGlobalMisc {
 			valueInputsCount = count;			
 		}
     	if (setFromSysex) {
-    		labelInputs.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);;
+    		labelInputs.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
     		valueModuleInputsCount = count;
     	}
     	comboBoxInputs.getSelectionModel().select((count-18)/2);
