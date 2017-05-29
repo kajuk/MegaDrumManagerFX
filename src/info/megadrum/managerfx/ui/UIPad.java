@@ -352,6 +352,14 @@ public class UIPad extends Parent {
 		return buttonSend;
 	}
 
+	public Button getButtonGetAll() {
+		return buttonGetAll;
+	}
+
+	public Button getButtonSendAll() {
+		return buttonSendAll;
+	}
+
 	public Button getButtonPrev() {
 		return buttonPrev;
 	}

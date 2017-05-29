@@ -173,6 +173,13 @@ public class Controller implements MidiRescanEventListener {
 				sendSysexPairRequest(padPair);
 			}
 		});
+		uiPad.getButtonSend().setOnAction(e-> {
+			if (padPair == 0) {
+				sendSysexInput(0, true);
+			} else {
+				sendSysexPair(padPair);
+			}
+		});
 		uiPad.getButtonPrev().setOnAction(e-> {
 			if (padPair > 0) {
 				switchToSelectedPair(padPair - 1);
@@ -454,7 +461,32 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
-	
+
+	private void sendSysexPair(Integer pair) {
+		sysexSendList.clear();
+		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
+		Utils.copyConfigPadToSysex(configFull.configPads[(pair*2) - 1], sysex, configOptions.chainId, (pair*2) - 1);
+		sysexSendList.add(sysex);
+		
+		sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
+		Utils.copyConfigPadToSysex(configFull.configPads[(pair*2)], sysex, configOptions.chainId, (pair*2));
+		sysexSendList.add(sysex);
+
+		sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
+		Utils.copyConfigPosToSysex(configFull.configPos[(pair*2) - 1], sysex, configOptions.chainId, (pair*2) - 1);
+		sysexSendList.add(sysex);
+		
+		sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
+		Utils.copyConfigPosToSysex(configFull.configPos[(pair*2)], sysex, configOptions.chainId, (pair*2));
+		sysexSendList.add(sysex);
+
+		sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
+		Utils.copyConfig3rdToSysex(configFull.config3rds[pair - 1], sysex, configOptions.chainId, pair - 1);
+		sysexSendList.add(sysex);
+
+		sendSysex();
+	}
+
 	private void controlsInputChanged(Integer input, Boolean leftInput) {
 		uiPad.setConfigFromControlsPad(configFull.configPads[input], leftInput);
 		// Needs implementation for Positional on Atmega644 and Atmega1284
@@ -478,7 +510,7 @@ public class Controller implements MidiRescanEventListener {
 			sendSysex3rd(pair);
 		}
 	}
-
+	
 	private void sendSysexInputRequest(Integer input) {
 		byte [] typeAndId;
 		typeAndId = new byte[2];
@@ -619,9 +651,11 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void processSysex(byte [] sysex) {
 		if (sysex.length >= 5) {
+			//System.out.printf("Sysex received type = %d\n", sysex[3]);			
 			byte pointer = sysex[4];
 	    	switch (sysex[3]) {
 			case Constants.MD_SYSEX_3RD:
+				//System.out.printf("Sysex 3rd pointer = %d\n", pointer);
 				Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
 				Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
 				moduleConfigFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
@@ -631,7 +665,6 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_COUNT:
-				System.out.println("AAAAAAAAAAAAAAAA");
 				if (sysex.length >= Constants.MD_SYSEX_CONFIG_COUNT_SIZE) {
 					int b;
 					b = (int)sysex[4];
@@ -655,7 +688,6 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_CURRENT:
-				System.out.println("BBBBBBBBBBBBBBBBB");
 				if (sysex.length >= Constants.MD_SYSEX_CONFIG_CURRENT_SIZE) {
 					int b;
 					b = (int)sysex[4];
@@ -697,6 +729,7 @@ public class Controller implements MidiRescanEventListener {
 				uiMisc.setControlsFromConfig(configFull.configMisc, true);
 				break;
 			case Constants.MD_SYSEX_PAD:
+				//System.out.printf("Sysex pad pointer = %d\n", pointer);
 				Utils.copySysexToConfigPad(sysex, configFull.configPads[pointer - 1]);
 				Utils.copySysexToConfigPad(sysex, moduleConfigFull.configPads[pointer - 1]);
 				moduleConfigFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
@@ -719,6 +752,7 @@ public class Controller implements MidiRescanEventListener {
 				uiPedal.setControlsFromConfig(configFull.configPedal, true);
 				break;
 			case Constants.MD_SYSEX_POS:
+				//System.out.printf("Sysex pos pointer = %d\n", pointer);
 				Utils.copySysexToConfigPos(sysex, configFull.configPos[pointer]);
 				Utils.copySysexToConfigPos(sysex, moduleConfigFull.configPos[pointer]);
 				moduleConfigFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;

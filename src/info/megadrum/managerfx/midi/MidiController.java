@@ -2,6 +2,7 @@ package info.megadrum.managerfx.midi;
 
 import java.util.List;
 
+import javax.rmi.CORBA.Util;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
@@ -49,7 +50,8 @@ public class MidiController {
 			try {
 		        final int max = sysexesList.size();
 		        for (int i = 0; i < max; i++) {
-					buf = sysexesList.get(i);					
+					buf = sysexesList.get(i);
+					//System.out.printf("Sending Sysex config with sysex[3,4] = %d %d\n", buf[3], buf[4]);
 		        	sendSysexConfigFromThread(buf, maxRetries, retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
@@ -85,6 +87,7 @@ public class MidiController {
 		        final int max = typesAndIds.size();
 		        for (int i = 0; i < max; i++) {
 		        	sendSysexRequestFromThread(typesAndIds.get(i)[0],typesAndIds.get(i)[1], maxRetries,retryDelay);
+		        	//Utils.delayMs(20);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
 		        		break;
@@ -209,6 +212,7 @@ public class MidiController {
 		sendSysexConfigRetries = maxRetries;
 		int delayCounter;
 		//System.out.println("sendSysexRequestFromThread called\n");
+		sysexReceived = false;
 		while (sendSysexConfigRetries > 0) {
 			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
@@ -313,8 +317,10 @@ public class MidiController {
 
 	public void sendSysexConfigFromThread(byte [] sysex, Integer maxRetries, Integer retryDelay) {
 		sendSysexConfigRetries = maxRetries;
+		byte id = sysex[4];
     	midiHandler.sendSysex(sysex);
 		int delayCounter;
+		sysexReceived = false;
 		//System.out.println("sendSysexConfigFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
 			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
@@ -322,7 +328,7 @@ public class MidiController {
 			delayCounter = retryDelay;
         	switch (sysex[3]) {
 			case Constants.MD_SYSEX_3RD:
-				midiHandler.requestConfig3rd(sysex[4]);
+				midiHandler.requestConfig3rd(id);
 				break;
 			// Config Count is read only
 			//case Constants.MD_SYSEX_CONFIG_COUNT:
@@ -332,13 +338,13 @@ public class MidiController {
 				midiHandler.requestConfigCurrent();
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
-				midiHandler.requestConfigConfigName(sysex[4]);
+				midiHandler.requestConfigConfigName(id);
 				break;
 			case Constants.MD_SYSEX_CURVE:
-				midiHandler.requestConfigCurve(sysex[4]);
+				midiHandler.requestConfigCurve(id);
 				break;
 			case Constants.MD_SYSEX_CUSTOM_NAME:
-				midiHandler.requestConfigCustomName(sysex[4]);
+				midiHandler.requestConfigCustomName(id);
 				break;
 			case Constants.MD_SYSEX_GLOBAL_MISC:
 				midiHandler.requestConfigGlobalMisc();
@@ -351,13 +357,13 @@ public class MidiController {
 				midiHandler.requestConfigMisc();
 				break;
 			case Constants.MD_SYSEX_PAD:
-				midiHandler.requestConfigPad(sysex[4]);
+				midiHandler.requestConfigPad(id);
 				break;
 			case Constants.MD_SYSEX_PEDAL:
 				midiHandler.requestConfigPedal();
 				break;
 			case Constants.MD_SYSEX_POS:
-				midiHandler.requestConfigPos(sysex[4]);
+				midiHandler.requestConfigPos(id);
 				break;
 			// Version is read only
 			//case Constants.MD_SYSEX_VERSION:
