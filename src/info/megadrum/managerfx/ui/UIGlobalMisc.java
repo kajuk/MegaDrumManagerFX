@@ -135,8 +135,8 @@ public class UIGlobalMisc {
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
 		    	} else {
 			    	valueInputsCount = comboBoxInputs.getSelectionModel().getSelectedIndex()*2 + 18;
+					fireControlChangeEvent(new ControlChangeEvent(this));
 					if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-						fireControlChangeEvent(new ControlChangeEvent(this));
 						if (valueInputsCount == valueModuleInputsCount) {
 							labelInputs.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 						} else {
@@ -196,8 +196,8 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valuePadsNamesEn = newValue;
+				fireControlChangeEvent(new ControlChangeEvent(this));
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-					fireControlChangeEvent(new ControlChangeEvent(this));
 					if (valuePadsNamesEn == valueModulePadsNamesEn) {
 						labelPadsNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 					} else {
@@ -223,8 +223,8 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valueConfigNamesEn = newValue;
+				fireControlChangeEvent(new ControlChangeEvent(this));
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-					fireControlChangeEvent(new ControlChangeEvent(this));
 					if (valueConfigNamesEn == valueModuleConfigNamesEn) {
 						labelConfigNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 					} else {
@@ -358,8 +358,8 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valueMidi2ForSysex = newValue;
+				fireControlChangeEvent(new ControlChangeEvent(this));
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-					fireControlChangeEvent(new ControlChangeEvent(this));
 					if (valueMidi2ForSysex == valueModuleMidi2ForSysex) {
 						labelMidi2ForSysex.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 					} else {
