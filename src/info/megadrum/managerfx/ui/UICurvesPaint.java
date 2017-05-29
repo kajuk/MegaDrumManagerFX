@@ -3,6 +3,8 @@ package info.megadrum.managerfx.ui;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 
+import javax.swing.event.EventListenerList;
+
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,19 +25,36 @@ public class UICurvesPaint extends Pane {
 	private Color hookColor = Color.RED;
 	private static final int xShift = 30;
 	private static final int yShift = 4;
-	public int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
+	private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
+	private int [] MdYvalues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private int posId;
 	private boolean posCaptured;
 	private int xPos;
 	private int yPos;
 	private Font labelsFont;
 
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
+			}
+		}
+	}
 
 	public UICurvesPaint() {
 		// TODO Auto-generated constructor stub
 		canvas = new Canvas(300, 300);
 		gc = canvas.getGraphicsContext2D();
-		paintComponent();
+		repaint();
 		
 		getChildren().add(canvas);
 		
@@ -52,6 +71,7 @@ public class UICurvesPaint extends Pane {
 					posId = (xPos - xShift + 15)/32;
 					posCaptured = true;
 					updateYvalues(yPos);
+					fireControlChangeEvent(new ControlChangeEvent(this));
 				}
             }
         });
@@ -64,6 +84,7 @@ public class UICurvesPaint extends Pane {
 				if (posCaptured) {
 					yPos = (int)event.getY();
 					updateYvalues(yPos);
+					fireControlChangeEvent(new ControlChangeEvent(this));
 				}
             }
         });
@@ -84,11 +105,11 @@ public class UICurvesPaint extends Pane {
 			}
 			yValues[posId] = yValue;
 			//repaint();
-			paintComponent();
+			repaint();
 		}		
 	}
 
-	public void paintComponent() {
+	public void repaint() {
 		gc.setFill(bgColor);
 		gc.fillRect(xShift, yShift, 256, 256);
 		labelsFont = new Font(8.0);
@@ -123,6 +144,29 @@ public class UICurvesPaint extends Pane {
 				gc.setStroke(hookColor);
 				gc.strokeOval(xShift + (i*32) - 3, 256 -yValues[i] + yShift - 3, 6, 6);
 			}
+		}
+	}
+
+	public void setYvalues(int [] values, Boolean setFromSysex) {
+		for (int i = 0; i < yValues.length; i++ ) {
+			yValues[i] = values[i];
+			if (setFromSysex) {
+				MdYvalues[i] = values[i];
+			}
+		}
+		repaint();
+	}
+
+	public void setMdYvalues(int [] values) {
+		for (int i = 0; i < yValues.length; i++ ) {
+			MdYvalues[i] = values[i];
+		}
+		repaint();
+	}
+	
+	public void getYvalues(int [] values) {
+		for (int i = 0; i < yValues.length; i++ ) {
+			values[i] = yValues[i];
 		}
 	}
 

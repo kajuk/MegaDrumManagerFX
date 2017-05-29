@@ -12,6 +12,8 @@ import java.util.TimerTask;
 import javax.management.OperationsException;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.collections.functors.AndPredicate;
+
 import com.sun.javafx.scene.traversal.TopMostTraversalEngine;
 
 import info.megadrum.managerfx.data.ConfigFull;
@@ -77,6 +79,8 @@ public class Controller implements MidiRescanEventListener {
 	private int comboBoxInputChangedFromSet = 0;
 	private int toggleButtonMidiChangedFromSet = 0;
 	private int oldInputsCounts = 0;
+	
+	private int curvePointer = 0;
 
 	private List<byte[]> sysexSendList;
 	
@@ -224,6 +228,45 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null, null);
 		
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
+		uiPadsExtra.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				if (parameter.intValue() == Constants.CONTROL_CHANGE_EVENT_CURVE) {
+					controlsCurveChanged();
+				} else {
+					
+				}
+			}
+		});
+		uiPadsExtra.getCurvesButtonGet().setOnAction(e-> sendSysexCurveRequest());
+		uiPadsExtra.getCurvesButtonSend().setOnAction(e-> sendSysexCurve());
+		uiPadsExtra.getCurvesButtonGetAll().setOnAction(e-> sendAllCurvesSysexRequests());
+		uiPadsExtra.getCurvesButtonSendAll().setOnAction(e-> sendAllCurvesSysex());
+		uiPadsExtra.getCurvesComboBox().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				int newCurve = uiPadsExtra.getCurvesComboBox().getSelectionModel().getSelectedIndex();
+				if (newCurve != curvePointer) {
+					switchToSelectedCurve(newCurve);
+				}
+			}
+		});
+		uiPadsExtra.getCurvesButtonFirst().setOnAction(e-> {
+			switchToSelectedCurve(0);
+		});
+		uiPadsExtra.getCurvesButtonPrev().setOnAction(e-> {
+			switchToSelectedCurve(curvePointer - 1);
+		});
+		uiPadsExtra.getCurvesButtonNext().setOnAction(e-> {
+			switchToSelectedCurve(curvePointer + 1);
+		});
+		uiPadsExtra.getCurvesButtonLast().setOnAction(e-> {
+			switchToSelectedCurve(Constants.CURVES_COUNT - 1);
+		});
 		
 		VBox layout1VBox = new VBox();
 
@@ -416,7 +459,57 @@ public class Controller implements MidiRescanEventListener {
 		sendSysexRequest();
 	}
 	
+	private void sendSysexCurve() {
+		sysexSendList.clear();
+		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
+		Utils.copyConfigCurveToSysex(configFull.configCurves[curvePointer], sysex, configOptions.chainId, curvePointer);
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
 	
+	private void controlsCurveChanged() {
+		uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
+		if (configOptions.liveUpdates) {
+			sendSysexCurve();
+		}
+	}
+
+	private void sendSysexCurveRequest() {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CURVE;
+		typeAndId[1] = (byte)curvePointer;
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+	}
+
+	private void sendAllCurvesSysex() {
+		sysexSendList.clear();
+		byte [] sysex;
+		byte i;
+		for (i = 0; i < Constants.CURVES_COUNT; i++) {
+			sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];	
+			Utils.copyConfigCurveToSysex(configFull.configCurves[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+		}
+		sendSysex();
+	}
+	
+	private void sendAllCurvesSysexRequests() {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		byte i;
+		for (i = 0; i < Constants.CURVES_COUNT; i++) {
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_CURVE;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+		}
+		sendSysexRequest();
+	}
+
 	private void sendSysexMisc() {
 		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
@@ -778,6 +871,13 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_CONFIG_NAME:
 				break;
 			case Constants.MD_SYSEX_CURVE:
+				Utils.copySysexToConfigCurve(sysex, configFull.configCurves[pointer]);
+				Utils.copySysexToConfigCurve(sysex, moduleConfigFull.configCurves[pointer]);
+				moduleConfigFull.configCurves[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configCurves[pointer].sysexReceived = true;
+				if (pointer == curvePointer) {
+					uiPadsExtra.setYvalues(configFull.configCurves[pointer].yValues, true);					
+				}
 				break;
 			case Constants.MD_SYSEX_CUSTOM_NAME:
 				break;
@@ -992,5 +1092,16 @@ public class Controller implements MidiRescanEventListener {
 		}
 		//comboBoxInputChangedFromSet = 1;
 		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
+	}
+	
+	private void switchToSelectedCurve(Integer curve) {
+		if ((curve > -1) && (curve < Constants.CURVES_COUNT)) {
+			uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
+			curvePointer = curve;
+			if (moduleConfigFull.configCurves[curvePointer].sysexReceived) {
+				uiPadsExtra.setMdYvalues(moduleConfigFull.configCurves[curvePointer].yValues);
+			}
+			uiPadsExtra.getCurvesComboBox().getSelectionModel().select(curvePointer);
+		}
 	}
 }

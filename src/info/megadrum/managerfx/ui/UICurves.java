@@ -1,5 +1,10 @@
 package info.megadrum.managerfx.ui;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import javax.swing.event.EventListenerList;
+
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -30,6 +35,22 @@ public class UICurves {
 	private	Button		buttonNext;
 	private	Button		buttonLast;
 	
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.add(ControlChangeEventListener.class, listener);
+	}
+	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
+		listenerList.remove(ControlChangeEventListener.class, listener);
+	}
+	protected void fireControlChangeEvent(ControlChangeEvent evt, Integer parameter) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == ControlChangeEventListener.class) {
+				((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, parameter);
+			}
+		}
+	}
 
 	public UICurves() {
 		toolBarTop = new ToolBar();
@@ -51,6 +72,18 @@ public class UICurves {
 		toolBarNavigator.getItems().addAll(labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
 
 		curvesPaint = new UICurvesPaint();
+		curvesPaint.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+			}
+		});
+		
+		comboBoxCurve.getItems().clear();
+		comboBoxCurve.getItems().addAll(Arrays.asList(Constants.CURVES_LIST));
+		comboBoxCurve.getSelectionModel().select(0);
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
@@ -80,4 +113,51 @@ public class UICurves {
 		labelCurve.setFont(new Font(controlH*0.4));
 	}
 
+	public void setYvalues(int [] values, Boolean setFromSysex) {
+		curvesPaint.setYvalues(values, setFromSysex);
+	}
+
+	public void setMdYvalues(int [] values) {
+		curvesPaint.setMdYvalues(values);
+	}
+
+	public void getYvalues(int [] values) {
+		curvesPaint.getYvalues(values);
+	}
+
+	public Button getButtonGet() {
+		return buttonGet;
+	}
+
+	public Button getButtonSend() {
+		return buttonSend;
+	}
+
+	public Button getButtonGetAll() {
+		return buttonGetAll;
+	}
+
+	public Button getButtonSendAll() {
+		return buttonSendAll;
+	}
+
+	public Button getButtonFirst() {
+		return buttonFirst;
+	}
+
+	public Button getButtonPrev() {
+		return buttonPrev;
+	}
+
+	public Button getButtonNext() {
+		return buttonNext;
+	}
+
+	public Button getButtonLast() {
+		return buttonLast;
+	}
+
+	public ComboBox<String> getComboBoxCurve() {
+		return comboBoxCurve;
+	}
 }
