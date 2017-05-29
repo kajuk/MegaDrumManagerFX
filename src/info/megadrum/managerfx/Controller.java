@@ -23,6 +23,7 @@ import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
+import info.megadrum.managerfx.ui.UIPadsExtra;
 import info.megadrum.managerfx.ui.UIGlobal;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
@@ -65,6 +66,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIMisc uiMisc;
 	private UIPedal uiPedal;
 	private UIPad uiPad;
+	private UIPadsExtra uiPadsExtra;
 	//private ProgressBar tempProgressBar;
 	
 	private MidiController midiController;
@@ -220,7 +222,9 @@ public class Controller implements MidiRescanEventListener {
         });
 		updateComboBoxInput();
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null, null);
-		//uiPad.setInputPair(1, configFull.configPads[1], configFull.configPos[1], configFull.configPads[2], configFull.configPos[2]);
+		
+		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
+		
 		VBox layout1VBox = new VBox();
 
 		mainMenuBar.prefWidthProperty().bind(primaryStage.widthProperty());
@@ -234,6 +238,7 @@ public class Controller implements MidiRescanEventListener {
 		layout2HBox.getChildren().add(uiMisc.getUI());
 		layout2HBox.getChildren().add(uiPedal.getUI());
 		layout2HBox.getChildren().add(uiPad.getUI());
+		layout2HBox.getChildren().add(uiPadsExtra.getUI());
 
 		layout1VBox.getChildren().add(layout2HBox);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
@@ -255,6 +260,8 @@ public class Controller implements MidiRescanEventListener {
 		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
 		});
+		window.setWidth(1200);
+		window.setHeight(800);
 		window.show();
 	}
 
@@ -294,6 +301,7 @@ public class Controller implements MidiRescanEventListener {
 		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
 		uiPad.respondToResize(height, width, height, controlH, controlW);
 		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
+		uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
 	}
 
 	public void createMainMenuBar() {
