@@ -34,15 +34,19 @@ public class UICheckBox extends UIControl{
 		    	//checkBox.setSelected(!newValue);
 				//System.out.printf("%s: new value = %s, old value = %s\n",label.getText(),(newValue ? "true" : "false"),(oldValue ? "true" : "false") );
 	    		//System.out.println("Checkbox changed");
-		    	booleanValue = newValue;
-				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+		    	if (changedFromSet > 0) {
+		    		changedFromSet = 0;
+		    	} else {
+			    	booleanValue = newValue;
 					fireControlChangeEvent(new ControlChangeEvent(this));
-					if (booleanValue == mdBooleanValue) {
-						setSyncState(Constants.SYNC_STATE_SYNCED);						
-					} else {
-						setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+					if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+						if (booleanValue == mdBooleanValue) {
+							setSyncState(Constants.SYNC_STATE_SYNCED);						
+						} else {
+							setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+						}
 					}
-				}
+		    	}
 		    }
 		});
 		layout = new HBox();
@@ -70,7 +74,10 @@ public class UICheckBox extends UIControl{
     }
     
     public void uiCtlSetValue(Boolean selected, Boolean setFromSysex) {
-    	checkBox.setSelected(selected);
+    	if (selected != checkBox.isSelected()) {
+    		changedFromSet = 1;
+        	checkBox.setSelected(selected);    		
+    	}
 		booleanValue = selected;
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);

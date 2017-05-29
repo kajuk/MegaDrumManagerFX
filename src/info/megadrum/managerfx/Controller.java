@@ -180,6 +180,12 @@ public class Controller implements MidiRescanEventListener {
 				sendSysexPair(padPair);
 			}
 		});
+		uiPad.getButtonGetAll().setOnAction(e-> {
+			sendAllInputsSysexRequests();
+		});
+		uiPad.getButtonSendAll().setOnAction(e-> {
+			sendAllInputsSysex();
+		});
 		uiPad.getButtonPrev().setOnAction(e-> {
 			if (padPair > 0) {
 				switchToSelectedPair(padPair - 1);
@@ -327,6 +333,7 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void sendSysex() {
 		midiController.sendSysexConfigsTaskRecreate();
+		uiGlobal.getProgressBarSysex().setVisible(true);
 		midiController.addSendSysexConfigsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
 			@Override
@@ -359,10 +366,10 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void sendSysexReadOnlyRequest() {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_VERSION;
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_MCU_TYPE;
@@ -377,9 +384,9 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexGlobalMisc() {
+		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
 		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
-		sysexSendList.clear();
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
@@ -393,19 +400,19 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void sendSysexGlobalMiscRequest() {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
 	}
 	
 	
 	private void sendSysexMisc() {
+		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
-		sysexSendList.clear();
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
@@ -418,18 +425,18 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexMiscRequest() {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_MISC;
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
 	}
 
 	private void sendSysexPedal() {
+		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
 		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
-		sysexSendList.clear();
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
@@ -442,18 +449,18 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexPedalRequest() {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_PEDAL;
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
 	}
 	
 	private void sendSysexInput(Integer input, Boolean leftInput) {
+		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
 		Utils.copyConfigPadToSysex(configFull.configPads[input], sysex, configOptions.chainId, input);
-		sysexSendList.clear();
 		sysexSendList.add(sysex);
 		
 		sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
@@ -512,11 +519,11 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexInputRequest(Integer input) {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_PAD;
 		typeAndId[1] = input.byteValue();
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 		
 		typeAndId = new byte[2];
@@ -527,11 +534,11 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void sendSysexPairRequest(Integer pair) {
+		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_PAD;
 		typeAndId[1] = (byte)((pair*2) - 1);
-		sysexSendList.clear();
 		sysexSendList.add(typeAndId);
 
 		typeAndId = new byte[2];
@@ -556,6 +563,52 @@ public class Controller implements MidiRescanEventListener {
 		sendSysexRequest();
 	}
 
+	private void sendAllInputsSysex() {
+		sysexSendList.clear();
+		byte [] sysex;
+		byte i;
+		for (i = 0; i < configFull.configGlobalMisc.inputs_count; i++) {
+			sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
+			Utils.copyConfigPadToSysex(configFull.configPads[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+			sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
+			Utils.copyConfigPosToSysex(configFull.configPos[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+
+			if ((i&1) > 0) {
+				sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
+				Utils.copyConfig3rdToSysex(configFull.config3rds[(i-1)/2], sysex, configOptions.chainId, ((i-1)/2));
+				sysexSendList.add(sysex);
+			}
+		}
+		sendSysex();
+	}
+	
+	private void sendAllInputsSysexRequests() {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		byte i;
+		for (i = 0; i < configFull.configGlobalMisc.inputs_count; i++) {
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_PAD;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_POS;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+			if ((i&1) > 0) {
+				typeAndId = new byte[2];
+				typeAndId[0] = Constants.MD_SYSEX_3RD;
+				typeAndId[1] = (byte)((i-1)/2);
+				sysexSendList.add(typeAndId);
+				
+			}
+		}
+		sendSysexRequest();
+	}
+	
 	private void sendAllSysexRequests() {
 		byte [] typeAndId;
 		byte i;
@@ -729,7 +782,7 @@ public class Controller implements MidiRescanEventListener {
 				uiMisc.setControlsFromConfig(configFull.configMisc, true);
 				break;
 			case Constants.MD_SYSEX_PAD:
-				//System.out.printf("Sysex pad pointer = %d\n", pointer);
+				//System.out.printf("Sysex received wiht pad pointer = %d\n", pointer);
 				Utils.copySysexToConfigPad(sysex, configFull.configPads[pointer - 1]);
 				Utils.copySysexToConfigPad(sysex, moduleConfigFull.configPads[pointer - 1]);
 				moduleConfigFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;
@@ -870,7 +923,7 @@ public class Controller implements MidiRescanEventListener {
 					list.add(name);
 				}
 			}
-			comboBoxInputChangedFromSet++;
+			//comboBoxInputChangedFromSet = 1;
 			uiPad.getComboBoxInput().getItems().clear();
 			uiPad.getComboBoxInput().getItems().addAll(list);
 			if ((configFull.configGlobalMisc.inputs_count)/2 > padPair) {
@@ -912,7 +965,7 @@ public class Controller implements MidiRescanEventListener {
 			}
 			uiPad.setInputPair(padPair, configFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], configFull.configPads[((padPair-1)*2) + 2], configFull.configPos[((padPair-1)*2) + 2], configFull.config3rds[padPair - 1]);
 		}
-		comboBoxInputChangedFromSet++;
+		//comboBoxInputChangedFromSet = 1;
 		uiPad.getComboBoxInput().getSelectionModel().select(padPair);
 	}
 }

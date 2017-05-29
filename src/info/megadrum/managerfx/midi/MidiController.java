@@ -87,7 +87,6 @@ public class MidiController {
 		        final int max = typesAndIds.size();
 		        for (int i = 0; i < max; i++) {
 		        	sendSysexRequestFromThread(typesAndIds.get(i)[0],typesAndIds.get(i)[1], maxRetries,retryDelay);
-		        	//Utils.delayMs(20);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
 		        		break;
@@ -275,7 +274,6 @@ public class MidiController {
 			sendSysexConfigResult = "Sysex timed out";
 			//System.out.println(sendSysexConfigResult);
 		}
-		Utils.delayMs(100);
 	}
 
 	public void sendSysexRequestsTaskRecreate() {
