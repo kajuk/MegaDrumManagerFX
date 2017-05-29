@@ -757,6 +757,11 @@ public class Controller implements MidiRescanEventListener {
 			}
 		}
 		uiPad.setAllStatesUnknown(false, false, false);
+		uiPadsExtra.setCurveSysexReceived(false);
+		uiPadsExtra.testCurveSyncState();
+		for (int i = 0; i < Constants.CURVES_COUNT; i++) {
+			moduleConfigFull.configCurves[i].sysexReceived = false;
+		}
 		
 	}
 	private void openMidiPorts(Boolean toOpen) {
@@ -1096,12 +1101,19 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void switchToSelectedCurve(Integer curve) {
 		if ((curve > -1) && (curve < Constants.CURVES_COUNT)) {
-			uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
+			//uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
+			int [] t = configFull.configCurves[curvePointer].yValues;
+			//System.out.printf("Y values at %d: %d %d %d %d %d %d %d %d %d\n", curvePointer, t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8] );
 			curvePointer = curve;
 			if (moduleConfigFull.configCurves[curvePointer].sysexReceived) {
 				uiPadsExtra.setMdYvalues(moduleConfigFull.configCurves[curvePointer].yValues);
+				uiPadsExtra.setCurveSysexReceived(true);
+			} else {
+				uiPadsExtra.setCurveSysexReceived(false);				
 			}
 			uiPadsExtra.getCurvesComboBox().getSelectionModel().select(curvePointer);
+			uiPadsExtra.setYvalues(configFull.configCurves[curvePointer].yValues, false);
+			uiPadsExtra.testCurveSyncState();
 		}
 	}
 }

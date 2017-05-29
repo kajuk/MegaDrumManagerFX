@@ -2,8 +2,11 @@ package info.megadrum.managerfx.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.util.Arrays;
 
 import javax.swing.event.EventListenerList;
+
+import org.apache.commons.collections.functors.IfClosure;
 
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
@@ -110,6 +113,9 @@ public class UICurvesPaint extends Pane {
 	}
 
 	public void repaint() {
+		//TODO . How to match Pane background color?
+		gc.setFill(gridColor);
+		gc.fillRect(0, 0, 300, 300);
 		gc.setFill(bgColor);
 		gc.fillRect(xShift, yShift, 256, 256);
 		labelsFont = new Font(8.0);
@@ -168,6 +174,10 @@ public class UICurvesPaint extends Pane {
 		for (int i = 0; i < yValues.length; i++ ) {
 			values[i] = yValues[i];
 		}
+	}
+	
+	public boolean isInSync() {
+		return Arrays.equals(yValues, MdYvalues);
 	}
 
 }

@@ -58,8 +58,9 @@ public class UIPadsExtra {
 		titledPane.setContent(tabPane);
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
-		titledPane.setMinSize(400, 400);
-		titledPane.setMaxSize(400, 400);
+		titledPane.setMinWidth(320);
+		//titledPane.setMinSize(0, 0);
+		//titledPane.setMaxSize(400, 400);
 	}
 
 	public Node getUI() {
@@ -69,12 +70,12 @@ public class UIPadsExtra {
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
-		Double h1,h2,h3;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
 		} else {
 			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
 		}
+		titledPane.setMaxWidth(fullHeight*0.35);
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
 
@@ -88,6 +89,14 @@ public class UIPadsExtra {
 
 	public void getYvalues(int [] values) {
 		uiCurves.getYvalues(values);
+	}
+	
+	public void setCurveSysexReceived(Boolean received) {
+		uiCurves.setSysexReceived(received);
+	}
+	
+	public void testCurveSyncState() {
+		uiCurves.testSyncState();
 	}
 
 	public Button getCurvesButtonGet() {

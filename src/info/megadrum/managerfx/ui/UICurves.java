@@ -6,13 +6,16 @@ import java.util.Arrays;
 import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class UICurves {
@@ -34,6 +37,9 @@ public class UICurves {
 	private	Button		buttonPrev;
 	private	Button		buttonNext;
 	private	Button		buttonLast;
+	
+	private int			syncState = Constants.SYNC_STATE_UNKNOWN;
+	private Boolean		sysexReceived = false;
 	
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -69,7 +75,7 @@ public class UICurves {
 		buttonPrev = new Button("Prev");
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
-		toolBarNavigator.getItems().addAll(labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
+		toolBarNavigator.getItems().addAll( labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
 
 		curvesPaint = new UICurvesPaint();
 		curvesPaint.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -78,6 +84,7 @@ public class UICurves {
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+				testSyncState();
 			}
 		});
 		
@@ -87,7 +94,6 @@ public class UICurves {
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
-
 	}
 
 	public Node getUI() {
@@ -96,25 +102,32 @@ public class UICurves {
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.4;
-		Double h1,h2,h3;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			//System.out.printf("ToolBar font size = %f\n",fontHeight);
 			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 			toolBarNavigator.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
 		} else {
 			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
-			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			toolBarNavigator.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
 		}
-		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		comboBoxCurve.setMinWidth(controlH*6);
-		comboBoxCurve.setMaxWidth(controlH*6);
+		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		//toolBarNavigator.setMaxWidth(controlH*15);
+		//toolBarNavigator.setMinWidth(controlH*15);
+		//toolBarNavigator.setMinWidth(vBox.getWidth()*0.95);
+		//toolBarNavigator.setMaxWidth(vBox.getWidth()*0.95);
+		comboBoxCurve.setMinWidth(controlH*4);
+		comboBoxCurve.setMaxWidth(controlH*4);
 		labelCurve.setFont(new Font(controlH*0.4));
+		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 	}
 
 	public void setYvalues(int [] values, Boolean setFromSysex) {
 		curvesPaint.setYvalues(values, setFromSysex);
+		if (setFromSysex) {
+			setSysexReceived(true);
+			testSyncState();
+		}
 	}
 
 	public void setMdYvalues(int [] values) {
@@ -159,5 +172,42 @@ public class UICurves {
 
 	public ComboBox<String> getComboBoxCurve() {
 		return comboBoxCurve;
+	}
+	
+	public  void testSyncState() {
+		if (sysexReceived) {
+			if (curvesPaint.isInSync()) {
+				setSyncState(Constants.SYNC_STATE_SYNCED);
+			} else {
+				setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+			}
+		} else {
+			setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		}
+	}
+	
+	public void setSyncState(int state) {
+		syncState = state;
+		Color color;
+		// TODO Auto-generated method stub
+		switch (state) {
+		case Constants.SYNC_STATE_UNKNOWN:
+			color = Constants.SYNC_STATE_UNKNOWN_COLOR;
+			break;
+		case Constants.SYNC_STATE_SYNCED:
+			color = Constants.SYNC_STATE_SYNCED_COLOR;
+			break;
+		case Constants.SYNC_STATE_NOT_SYNCED:
+			color = Constants.SYNC_STATE_NOT_SYNCED_COLOR;
+			break;
+		default:
+			color = Constants.SYNC_STATE_SYNCED_COLOR;
+			break;
+		}
+		labelCurve.setTextFill(color);
+	}
+
+	public void setSysexReceived(Boolean received) {
+		sysexReceived = received;
 	}
 }
