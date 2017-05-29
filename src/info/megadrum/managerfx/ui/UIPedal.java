@@ -305,7 +305,7 @@ public class UIPedal {
 		setAllStateUnknown();
 	}
 
-	private void setAllStateUnknown() {
+	public void setAllStateUnknown() {
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
 			allMiscControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		}

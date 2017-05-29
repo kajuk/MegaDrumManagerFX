@@ -158,7 +158,7 @@ public class UIPad extends Parent {
 			}
 		});
     	
-    	setControlsUnknown(false, false, false);
+    	setAllStatesUnknown(false, false, false);
 	}
 	
 	public Boolean isNameChanged() {
@@ -271,7 +271,7 @@ public class UIPad extends Parent {
 		ui3rdZone.setConfig3rdFromControls(config);
 	}
 
-	public void setControlsUnknown(Boolean leftKnown, Boolean rightKnown, Boolean zone3rdKnow) {
+	public void setAllStatesUnknown(Boolean leftKnown, Boolean rightKnown, Boolean zone3rdKnow) {
 		if (!leftKnown) {
 			uiInputLeft.setAllStateUnknown();
 		}

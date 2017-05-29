@@ -55,6 +55,7 @@ public class MidiController {
 		        	sendSysexConfigFromThread(buf, maxRetries, retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
+		        		System.out.printf("Sysex timed out\n");
 		        		break;
 		        	}
 		            updateProgress(i, max);
@@ -89,6 +90,7 @@ public class MidiController {
 		        	sendSysexRequestFromThread(typesAndIds.get(i)[0],typesAndIds.get(i)[1], maxRetries,retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
+		        		System.out.printf("Sysex timed out\n");
 		        		break;
 		        	}
 		            updateProgress(i, max);
@@ -272,6 +274,7 @@ public class MidiController {
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
+			sysexTimedOut = true;
 			//System.out.println(sendSysexConfigResult);
 		}
 	}
@@ -383,6 +386,7 @@ public class MidiController {
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
+			sysexTimedOut = true;
 			//System.out.println(sendSysexConfigResult);
 		} 	
 	}

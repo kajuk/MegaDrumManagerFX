@@ -567,7 +567,7 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.clear();
 		byte [] sysex;
 		byte i;
-		for (i = 0; i < configFull.configGlobalMisc.inputs_count; i++) {
+		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
 			Utils.copyConfigPadToSysex(configFull.configPads[i], sysex, configOptions.chainId, i);
 			sysexSendList.add(sysex);
@@ -589,7 +589,7 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.clear();
 		byte [] typeAndId;
 		byte i;
-		for (i = 0; i < configFull.configGlobalMisc.inputs_count; i++) {
+		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			typeAndId = new byte[2];
 			typeAndId[0] = Constants.MD_SYSEX_PAD;
 			typeAndId[1] = i;
@@ -644,6 +644,20 @@ public class Controller implements MidiRescanEventListener {
 		}
 	}
 	
+	private void setAllStatesUnknown() {
+		uiGlobalMisc.setAllStatesUnknown();
+		uiMisc.setAllStateUnknown();
+		uiPedal.setAllStateUnknown();
+		for (int i = 0; i < Constants.MAX_INPUTS; i++ ) {
+			moduleConfigFull.configPads[i].sysexReceived = false;
+			moduleConfigFull.configPos[i].sysexReceived = false;
+			if ((i&1) > 0) {
+				moduleConfigFull.config3rds[(i-1)/2].sysexReceived = false;
+			}
+		}
+		uiPad.setAllStatesUnknown(false, false, false);
+		
+	}
 	private void openMidiPorts(Boolean toOpen) {
 		if (toOpen) {
 			if (midiController.isMidiOpen()) {
@@ -665,6 +679,7 @@ public class Controller implements MidiRescanEventListener {
 			uiGlobalMisc.getToggleButtonMidi().setSelected(false);
 			uiGlobalMisc.getToggleButtonMidi().setText("Open MIDI");
 			uiGlobalMisc.setAllStatesUnknown();
+			setAllStatesUnknown();
 		}
 	}
 	
@@ -709,12 +724,14 @@ public class Controller implements MidiRescanEventListener {
 	    	switch (sysex[3]) {
 			case Constants.MD_SYSEX_3RD:
 				//System.out.printf("Sysex 3rd pointer = %d\n", pointer);
-				Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
-				Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
-				moduleConfigFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
-				moduleConfigFull.config3rds[pointer].sysexReceived = true;
-				if ((pointer + 1) == padPair) {
-					uiPad.setControlsFromConfig3rd(configFull.config3rds[pointer], true);					
+				if (pointer < configFull.config3rds.length) {
+					Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
+					Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
+					moduleConfigFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+					moduleConfigFull.config3rds[pointer].sysexReceived = true;
+					if ((pointer + 1) == padPair) {
+						uiPad.setControlsFromConfig3rd(configFull.config3rds[pointer], true);					
+					}
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_COUNT:
@@ -947,13 +964,13 @@ public class Controller implements MidiRescanEventListener {
 		}		
 		padPair = newPadPair;
 		if (padPair == 0) {
-			uiPad.setControlsUnknown(moduleConfigFull.configPads[0].sysexReceived, false, false);
+			uiPad.setAllStatesUnknown(moduleConfigFull.configPads[0].sysexReceived, false, false);
 			if (moduleConfigFull.configPads[0].sysexReceived) {
 				uiPad.setMdValuesPad(moduleConfigFull.configPads[0], configFull.configPos[0], true);
 			}
 			uiPad.setInputPair(padPair, configFull.configPads[0], configFull.configPos[0], null, null, null);
 		} else {
-			uiPad.setControlsUnknown(moduleConfigFull.configPads[((padPair-1)*2) + 1].sysexReceived, moduleConfigFull.configPads[((padPair-1)*2) + 2].sysexReceived, moduleConfigFull.config3rds[padPair - 1].sysexReceived);
+			uiPad.setAllStatesUnknown(moduleConfigFull.configPads[((padPair-1)*2) + 1].sysexReceived, moduleConfigFull.configPads[((padPair-1)*2) + 2].sysexReceived, moduleConfigFull.config3rds[padPair - 1].sysexReceived);
 			if (moduleConfigFull.configPads[((padPair-1)*2) + 1].sysexReceived) {
 				uiPad.setMdValuesPad(moduleConfigFull.configPads[((padPair-1)*2) + 1], configFull.configPos[((padPair-1)*2) + 1], true);				
 			}

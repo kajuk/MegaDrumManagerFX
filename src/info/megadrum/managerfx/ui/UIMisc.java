@@ -136,7 +136,7 @@ public class UIMisc {
 		setAllStateUnknown();
 	}
 
-	private void setAllStateUnknown() {
+	public void setAllStateUnknown() {
 		for (int i = 0; i < allControls.size(); i++ ) {
 			allControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		}
