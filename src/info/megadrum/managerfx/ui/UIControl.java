@@ -63,14 +63,14 @@ public class UIControl extends Control implements UIControlInterface {
 	public void removeControlChangeEventListener(ControlChangeEventListener listener) {
 		listenerList.remove(ControlChangeEventListener.class, listener);
 	}
-	protected void fireControlChangeEvent(ControlChangeEvent evt) {
+	protected void fireControlChangeEvent(ControlChangeEvent evt, Integer parameter) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i = i+2) {
 			if (listeners[i] == ControlChangeEventListener.class) {
 				if (label.getText().equals("Name")) {
 					((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, Constants.CONTROL_CHANGE_EVENT_NAME);					
 				} else {
-					((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, 0);
+					((ControlChangeEventListener) listeners[i+1]).controlChangeEventOccurred(evt, parameter);
 				}
 			}
 		}

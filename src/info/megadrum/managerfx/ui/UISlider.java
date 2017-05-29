@@ -69,7 +69,7 @@ public class UISlider extends UIControl {
 					if (intValue.intValue() != new_val.intValue()) {
 						intValue = new_val.intValue();
 						//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
-						fireControlChangeEvent(new ControlChangeEvent(this));
+						fireControlChangeEvent(new ControlChangeEvent(this), 0);
 						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 							if (intValue.intValue() == mdIntValue.intValue()) {
 								setSyncState(Constants.SYNC_STATE_SYNCED);						

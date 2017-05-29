@@ -61,6 +61,7 @@ public class UI3rdZone {
 		layout.setHgap(15);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
+		uiSpinnerNoteMainNote.setNoteIsMain(true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		gridColmn.add(0);
@@ -108,7 +109,14 @@ public class UI3rdZone {
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
-					fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
+						linkedNoteStateChanged();
+					} else {
+						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
+							linkedNoteStateChanged();
+						}
+						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					}
 				}
 			});
         }
@@ -165,10 +173,31 @@ public class UI3rdZone {
 		uiSpinnerThreshold.uiCtlSetMdValue(config.threshold);		
 	}
 
+	private void linkedNoteStateChanged() {
+		if (uiSpinnerNoteAltNote.getLinked()) {
+			uiSpinnerNoteAltNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
+		}
+		uiSpinnerNoteAltNote.setLinked(uiSpinnerNoteAltNote.getLinked());
+		if (uiSpinnerNotePressNote.getLinked()) {
+			uiSpinnerNotePressNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
+		}
+		uiSpinnerNotePressNote.setLinked(uiSpinnerNotePressNote.getLinked());
+	}
+	
 	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {
 		uiSpinnerNoteMainNote.uiCtlSetValue(config.note, setFromSysex);
-		uiSpinnerNoteAltNote.uiCtlSetValue(config.altNote, setFromSysex);
-		uiSpinnerNotePressNote.uiCtlSetValue(config.pressrollNote, setFromSysex);
+		if (config.altNote_linked) {
+			uiSpinnerNoteAltNote.uiCtlSetValue(config.note, setFromSysex);
+		} else {
+			uiSpinnerNoteAltNote.uiCtlSetValue(config.altNote, setFromSysex);			
+		}
+		uiSpinnerNoteAltNote.setLinked(config.altNote_linked);		
+		if (config.pressrollNote_linked) {
+			uiSpinnerNotePressNote.uiCtlSetValue(config.note, setFromSysex);
+		} else {
+			uiSpinnerNotePressNote.uiCtlSetValue(config.pressrollNote, setFromSysex);			
+		}
+		uiSpinnerNotePressNote.setLinked(config.pressrollNote_linked);
 		uiSpinnerNoteDampenedNote.uiCtlSetValue(config.dampenedNote, setFromSysex);
 		uiSpinnerThreshold.uiCtlSetValue(config.threshold, setFromSysex);
 		setMidPointAndWidthFromThreshold(config.threshold, setFromSysex);
@@ -176,8 +205,18 @@ public class UI3rdZone {
 	
 	public void setConfig3rdFromControls(Config3rd config) {
 		config.note = uiSpinnerNoteMainNote.uiCtlGetValue();
-		config.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();
-		config.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();
+		if (uiSpinnerNoteAltNote.getLinked()) {
+			config.altNote = uiSpinnerNoteMainNote.uiCtlGetValue();
+		} else {
+			config.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();			
+		}
+		config.altNote_linked = uiSpinnerNoteAltNote.getLinked();
+		if (uiSpinnerNotePressNote.getLinked()) {
+			config.pressrollNote = uiSpinnerNoteMainNote.uiCtlGetValue();
+		} else {
+			config.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();			
+		}
+		config.pressrollNote_linked = uiSpinnerNotePressNote.getLinked();
 		config.dampenedNote = uiSpinnerNoteDampenedNote.uiCtlGetValue();
 		config.threshold = uiSpinnerThreshold.uiCtlGetValue();
 	}

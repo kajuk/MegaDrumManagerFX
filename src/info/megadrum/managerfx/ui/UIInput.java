@@ -81,6 +81,7 @@ public class UIInput {
 		allControls.add(uiComboBoxName);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
+		uiSpinnerNoteMainNote.setNoteIsMain(true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		
@@ -166,7 +167,14 @@ public class UIInput {
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
-					fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
+						linkedNoteStateChanged();
+					} else {
+						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
+							linkedNoteStateChanged();
+						}
+						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					}
 				}
 			});
        }
@@ -262,10 +270,32 @@ public class UIInput {
 		uiSpinnerPosHigh.uiCtlSetValue(configPos.high, setFromSysex);
 	}
 	
+	private void linkedNoteStateChanged() {
+		if (uiSpinnerNoteAltNote.getLinked()) {
+			uiSpinnerNoteAltNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
+		}
+		uiSpinnerNoteAltNote.setLinked(uiSpinnerNoteAltNote.getLinked());
+		if (uiSpinnerNotePressNote.getLinked()) {
+			uiSpinnerNotePressNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
+		}
+		uiSpinnerNotePressNote.setLinked(uiSpinnerNotePressNote.getLinked());
+	}
+	
 	public void setControlsFromConfigPad(ConfigPad configPad, Boolean setFromSysex) {
 		uiComboBoxName.uiCtlSetValue(configPad.name, setFromSysex);
 		uiSpinnerNoteMainNote.uiCtlSetValue(configPad.note, setFromSysex);
-		uiSpinnerNoteAltNote.uiCtlSetValue(configPad.altNote, setFromSysex);
+		if (configPad.altNote_linked) {
+			uiSpinnerNoteAltNote.uiCtlSetValue(configPad.note, setFromSysex);
+		} else {
+			uiSpinnerNoteAltNote.uiCtlSetValue(configPad.altNote, setFromSysex);			
+		}
+		uiSpinnerNoteAltNote.setLinked(configPad.altNote_linked);		
+		if (configPad.pressrollNote_linked) {
+			uiSpinnerNotePressNote.uiCtlSetValue(configPad.note, setFromSysex);
+		} else {
+			uiSpinnerNotePressNote.uiCtlSetValue(configPad.pressrollNote, setFromSysex);			
+		}
+		uiSpinnerNotePressNote.setLinked(configPad.pressrollNote_linked);
 		uiSpinnerNotePressNote.uiCtlSetValue(configPad.pressrollNote, setFromSysex);
 		uiSpinnerChannel.uiCtlSetValue(configPad.channel + 1, setFromSysex);
 		uiComboBoxFunction.uiCtlSetValue(configPad.function, setFromSysex);
@@ -294,8 +324,19 @@ public class UIInput {
 	public void setConfigPadFromControls(ConfigPad configPad) {
 		configPad.name = uiComboBoxName.uiCtlGetValue();
 		configPad.note = uiSpinnerNoteMainNote.uiCtlGetValue();
-		configPad.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();
-		configPad.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();
+		if (uiSpinnerNoteAltNote.getLinked()) {
+			configPad.altNote = uiSpinnerNoteMainNote.uiCtlGetValue();
+		} else {
+			configPad.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();			
+		}
+		configPad.altNote_linked = uiSpinnerNoteAltNote.getLinked();
+		if (uiSpinnerNotePressNote.getLinked()) {
+			configPad.pressrollNote = uiSpinnerNoteMainNote.uiCtlGetValue();
+		} else {
+			configPad.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();			
+		}
+		configPad.pressrollNote_linked = uiSpinnerNotePressNote.getLinked();
+				
 		configPad.channel = uiSpinnerChannel.uiCtlGetValue() - 1;
 		configPad.function = uiComboBoxFunction.uiCtlGetValue();
 		configPad.curve = uiComboBoxCurve.uiCtlGetValue();

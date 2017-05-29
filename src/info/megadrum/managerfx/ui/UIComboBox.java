@@ -52,7 +52,7 @@ public class UIComboBox extends UIControl {
 				        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
 							//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),newIntValue.intValue(),intValue );
 							intValue = newIntValue;
-							fireControlChangeEvent(new ControlChangeEvent(this));
+							fireControlChangeEvent(new ControlChangeEvent(this), 0);
 							if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 								if (intValue.intValue() == mdIntValue.intValue()) {
 									setSyncState(Constants.SYNC_STATE_SYNCED);						

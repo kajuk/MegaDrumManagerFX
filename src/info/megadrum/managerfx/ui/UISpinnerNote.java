@@ -40,6 +40,8 @@ public class UISpinnerNote extends UIControl {
 	private Integer		octaveShift = 0;
 	private Integer 	octave;
 	private Integer 	note_pointer;
+	private Integer		linkedChangedFromSet = 0;
+	private Boolean		mainNote = false;
 	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
 
 
@@ -98,7 +100,11 @@ public class UISpinnerNote extends UIControl {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
 								changeNoteName();
-								fireControlChangeEvent(new ControlChangeEvent(this));
+								if (mainNote) {
+									fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN);									
+								} else {
+									fireControlChangeEvent(new ControlChangeEvent(this), 0);
+								}
 								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 									if (intValue.intValue() == mdIntValue.intValue()) {
 										setSyncState(Constants.SYNC_STATE_SYNCED);						
@@ -157,7 +163,17 @@ public class UISpinnerNote extends UIControl {
 		GridPane.setValignment(checkBoxNoteLinked, VPos.CENTER);
 
 		if (linkedNote) {
-			layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);			
+			layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);		
+			checkBoxNoteLinked.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			    @Override
+			    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    	if (linkedChangedFromSet > 0) {
+			    		linkedChangedFromSet = 0;
+			    	} else {
+						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED);
+			    	}
+			    }
+			});
 		} else {
 			layoutC.getChildren().addAll(uispinner,labelNote);
 		}
@@ -328,6 +344,22 @@ public class UISpinnerNote extends UIControl {
     
     public Integer uiCtlGetValue() {
     	return intValue;
+    }
+    
+    public void setLinked(Boolean linked) {
+    	if (linked != checkBoxNoteLinked.isSelected()) {
+        	linkedChangedFromSet = 1;
+    		checkBoxNoteLinked.setSelected(linked);
+    	}
+    	uispinner.setDisable(linked);
+    }
+    
+    public Boolean getLinked() {
+    	return checkBoxNoteLinked.isSelected();
+    }
+    
+    public void setNoteIsMain(Boolean main) {
+    	mainNote = main;
     }
 
 /*

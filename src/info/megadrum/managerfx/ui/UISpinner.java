@@ -90,7 +90,7 @@ public class UISpinner extends UIControl {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
 								if (spinnerType == Constants.FX_SPINNER_TYPE_STANDARD) {
-									fireControlChangeEvent(new ControlChangeEvent(this));
+									fireControlChangeEvent(new ControlChangeEvent(this), 0);
 									System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),Integer.valueOf(oldValue) );
 									if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 										if (intValue.intValue() == mdIntValue.intValue()) {
