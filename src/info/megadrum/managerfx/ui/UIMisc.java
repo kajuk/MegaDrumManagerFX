@@ -15,9 +15,10 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class UIMisc {
-//	private VBox layout;
+	private VBox layout;
 	private TitledPane titledPane;
 	private Button buttonGet;
 	private Button buttonSend;
@@ -72,7 +73,7 @@ public class UIMisc {
 		toolBar.getItems().add(buttonSave);
 
 
-		VBox layout = new VBox();
+		layout = new VBox();
 		layout.getChildren().add(toolBar);
 		layout.setStyle("-fx-padding: 0.0em 0.2em 0.0em 0.2em");
 
@@ -152,7 +153,11 @@ public class UIMisc {
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+			//toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
+			//buttonGet.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
+			//buttonSend.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
+			//buttonLoad.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
+			//buttonSave.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
 			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
 		} else {
 			toolBar.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
