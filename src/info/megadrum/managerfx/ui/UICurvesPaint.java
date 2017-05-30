@@ -163,6 +163,11 @@ public class UICurvesPaint extends Pane {
 		}
 		repaint();
 	}
+	
+	public void setYvalue(Integer p, Integer value) {
+		yValues[p] = value;
+		repaint();
+	}
 
 	public void setMdYvalues(int [] values) {
 		for (int i = 0; i < yValues.length; i++ ) {

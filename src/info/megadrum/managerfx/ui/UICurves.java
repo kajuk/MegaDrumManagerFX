@@ -7,6 +7,8 @@ import java.util.Arrays;
 import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -95,6 +97,7 @@ public class UICurves {
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+				setSpinnersFromCurve();
 				testSyncState();
 			}
 		});
@@ -119,7 +122,7 @@ public class UICurves {
 		SpinnerValueFactory<Integer> valueFactory;
 		
 		for (int i = 0; i < 9; i++) {
-			valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 2, 1);
+			valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 255, 2, 1);
 			allSpinners.add(new SpinnerFast<Integer>());
 			allSpinners.get(i).getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
 			//allSpinners.get(i).getEditor().setMinSize(30, 20);
@@ -134,9 +137,23 @@ public class UICurves {
 			GridPane.setHalignment(allSpinners.get(i), HPos.CENTER);
 			GridPane.setValignment(allSpinners.get(i), VPos.CENTER);
 			gridPaneSpinners.getChildren().add(allSpinners.get(i));
+			final Integer sp = i;
+			allSpinners.get(i).getEditor().textProperty().addListener(new ChangeListener<String>() {
+
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					// TODO Auto-generated method stub
+					//System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
+					curvesPaint.setYvalue(sp, Integer.valueOf(newValue));
+					testSyncState();
+					fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+				}
+				
+			});
 		}
 		vBox.getChildren().add(gridPaneSpinners);
 		setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		setSpinnersFromCurve();
 	}
 
 	public Node getUI() {
@@ -164,12 +181,22 @@ public class UICurves {
 		labelCurve.setFont(new Font(controlH*0.4));
 	}
 
+	private void setSpinnersFromCurve() {
+		int [] v;
+		v = new int[9];
+		curvesPaint.getYvalues(v);
+		for (int i = 0; i < 9; i++) {
+			allSpinners.get(i).getValueFactory().setValue(v[i]);
+		}
+	}
+	
 	public void setYvalues(int [] values, Boolean setFromSysex) {
 		curvesPaint.setYvalues(values, setFromSysex);
 		if (setFromSysex) {
 			setSysexReceived(true);
 			testSyncState();
 		}
+		setSpinnersFromCurve();
 	}
 
 	public void setMdYvalues(int [] values) {
