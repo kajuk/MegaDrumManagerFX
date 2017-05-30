@@ -81,6 +81,7 @@ public class UIPadsExtra {
 		}
 		titledPane.setMaxWidth(fullHeight*0.35);
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
+		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
 
 	public void setYvalues(int [] values, Boolean setFromSysex) {
