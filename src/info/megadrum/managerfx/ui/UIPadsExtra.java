@@ -13,9 +13,10 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.text.Font;
 
 public class UIPadsExtra {
-	private TitledPane 	titledPane;
-	private TabPane		tabPane;
-	private UICurves	uiCurves;
+	private TitledPane 		titledPane;
+	private TabPane			tabPane;
+	private UICurves		uiCurves;
+	private UICustomNames	uiCustomNames;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -52,6 +53,9 @@ public class UIPadsExtra {
 			}
 		});
         tabCurves.setContent(uiCurves.getUI());
+        
+        uiCustomNames = new UICustomNames();
+        tabCustomNames.setContent(uiCustomNames.getUI());
         
 		titledPane = new TitledPane();
 		titledPane.setText(title);
