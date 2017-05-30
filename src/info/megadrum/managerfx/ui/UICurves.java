@@ -1,18 +1,26 @@
 package info.megadrum.managerfx.ui;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,6 +28,7 @@ import javafx.scene.text.Font;
 
 public class UICurves {
 	private VBox		vBox;
+	private GridPane	gridPaneSpinners;
 	private ToolBar		toolBarNavigator;
 	private ToolBar		toolBarTop;
 	private Button 		buttonGet;
@@ -37,6 +46,8 @@ public class UICurves {
 	private	Button		buttonPrev;
 	private	Button		buttonNext;
 	private	Button		buttonLast;
+	private ArrayList<SpinnerFast> allSpinners;
+
 	
 	private int			syncState = Constants.SYNC_STATE_UNKNOWN;
 	private Boolean		sysexReceived = false;
@@ -87,13 +98,45 @@ public class UICurves {
 				testSyncState();
 			}
 		});
-		
 		comboBoxCurve.getItems().clear();
 		comboBoxCurve.getItems().addAll(Arrays.asList(Constants.CURVES_LIST));
 		comboBoxCurve.getSelectionModel().select(0);
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
+		allSpinners = new ArrayList<SpinnerFast>();
+		gridPaneSpinners = new GridPane();
+		gridPaneSpinners.setMinHeight(30);
+		gridPaneSpinners.setMaxHeight(30);
+		Pane spacer1 = new Pane();
+		GridPane.setConstraints(spacer1, 0, 0);
+		GridPane.setHalignment(spacer1, HPos.CENTER);
+		GridPane.setValignment(spacer1, VPos.CENTER);
+		gridPaneSpinners.getChildren().add(spacer1);
+		gridPaneSpinners.getColumnConstraints().add(new ColumnConstraints(8));
+		spacer1.setMinWidth(8);
+		spacer1.setMaxWidth(8);
+		SpinnerValueFactory<Integer> valueFactory;
+		
+		for (int i = 0; i < 9; i++) {
+			valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 2, 1);
+			allSpinners.add(new SpinnerFast<Integer>());
+			allSpinners.get(i).getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
+			//allSpinners.get(i).getEditor().setMinSize(30, 20);
+			//allSpinners.get(i).getEditor().setMaxSize(30, 20);
+			allSpinners.get(i).setValueFactory(valueFactory);
+			allSpinners.get(i).setMaxSize(26, 30);
+			allSpinners.get(i).setMinSize(26, 30);
+			allSpinners.get(i).getEditor().setFont(new Font(8));
+			allSpinners.get(i).getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER;");
+			gridPaneSpinners.getColumnConstraints().add(new ColumnConstraints(32));
+			GridPane.setConstraints(allSpinners.get(i), i + 1, 0);
+			GridPane.setHalignment(allSpinners.get(i), HPos.CENTER);
+			GridPane.setValignment(allSpinners.get(i), VPos.CENTER);
+			gridPaneSpinners.getChildren().add(allSpinners.get(i));
+		}
+		vBox.getChildren().add(gridPaneSpinners);
+		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 	}
 
 	public Node getUI() {
@@ -119,7 +162,6 @@ public class UICurves {
 		comboBoxCurve.setMinWidth(controlH*4);
 		comboBoxCurve.setMaxWidth(controlH*4);
 		labelCurve.setFont(new Font(controlH*0.4));
-		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 	}
 
 	public void setYvalues(int [] values, Boolean setFromSysex) {

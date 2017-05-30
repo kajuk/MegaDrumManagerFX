@@ -26,7 +26,7 @@ public class UICurvesPaint extends Pane {
 	private Color tickColor = Color.BLACK;
 	private Color labelsColor = Color.BLACK;
 	private Color hookColor = Color.RED;
-	private static final int xShift = 30;
+	private static final int xShift = 24;
 	private static final int yShift = 4;
 	private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private int [] MdYvalues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
@@ -55,7 +55,8 @@ public class UICurvesPaint extends Pane {
 
 	public UICurvesPaint() {
 		// TODO Auto-generated constructor stub
-		canvas = new Canvas(300, 300);
+		canvas = new Canvas(290, 276);
+		setMinHeight(276);
 		gc = canvas.getGraphicsContext2D();
 		repaint();
 		
