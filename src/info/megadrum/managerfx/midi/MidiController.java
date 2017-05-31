@@ -178,6 +178,8 @@ public class MidiController {
 	}
 	
 	private void processSysex(byte [] buffer) {
+		//TODO
+		//implement comparison of sent and received sysex config 
 		if (buffer[3] == currentSysexType) {
 			if (currentSysexWithId) {
 				if (buffer[4] == currentSysexId) {
@@ -346,6 +348,9 @@ public class MidiController {
 		byte id = sysex[4];
     	midiHandler.sendSysex(sysex);
 		int delayCounter;
+		currentSysexType = sysex[3];
+		currentSysexWithId = false;
+		currentSysexId = id;
 		sysexReceived = false;
 		//System.out.println("sendSysexConfigFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
@@ -364,12 +369,15 @@ public class MidiController {
 				midiHandler.requestConfigCurrent();
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
+				currentSysexWithId = true;
 				midiHandler.requestConfigConfigName(id);
 				break;
 			case Constants.MD_SYSEX_CURVE:
+				currentSysexWithId = true;
 				midiHandler.requestConfigCurve(id);
 				break;
 			case Constants.MD_SYSEX_CUSTOM_NAME:
+				currentSysexWithId = true;
 				midiHandler.requestConfigCustomName(id);
 				break;
 			case Constants.MD_SYSEX_GLOBAL_MISC:
@@ -383,12 +391,14 @@ public class MidiController {
 				midiHandler.requestConfigMisc();
 				break;
 			case Constants.MD_SYSEX_PAD:
+				currentSysexWithId = true;
 				midiHandler.requestConfigPad(id);
 				break;
 			case Constants.MD_SYSEX_PEDAL:
 				midiHandler.requestConfigPedal();
 				break;
 			case Constants.MD_SYSEX_POS:
+				currentSysexWithId = true;
 				midiHandler.requestConfigPos(id);
 				break;
 			// Version is read only

@@ -994,6 +994,7 @@ public class Controller implements MidiRescanEventListener {
 				moduleConfigFull.configGlobalMisc.syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configGlobalMisc.sysexReceived = true;
 				uiGlobalMisc.setControlsFromConfig(configFull.configGlobalMisc, true);
+				updateComboBoxInput();
 				break;
 			case Constants.MD_SYSEX_MCU_TYPE:
 				if (sysex.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
