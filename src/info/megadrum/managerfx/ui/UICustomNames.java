@@ -124,9 +124,11 @@ public class UICustomNames {
 		allSendButtons = new ArrayList<Button>();
 		allSyncStates = new int[Constants.CUSTOM_NAMES_MAX];
 		nameChangedFromSet = new int[Constants.CUSTOM_NAMES_MAX];
+		allCustomNames = new String[Constants.CUSTOM_NAMES_MAX];
+		allMdCustomNames = new String[Constants.CUSTOM_NAMES_MAX];
 		gridPane = new GridPane();
 		gridPane.getColumnConstraints().add(new ColumnConstraints(4));
-		gridPane.getColumnConstraints().add(new ColumnConstraints(16));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(36));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(110));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(1));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(30));
@@ -136,7 +138,7 @@ public class UICustomNames {
 		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
 			nameChangedFromSet[i] = 0;
 			final Integer iFinal = i;
-			allLabels.add(new Label(Integer.toString(i + 1) + ":"));
+			allLabels.add(new Label("Name " + Integer.toString(i + 1) + ":"));
 			GridPane.setConstraints(allLabels.get(i), 1, i);
 			GridPane.setHalignment(allLabels.get(i), HPos.CENTER);
 			GridPane.setValignment(allLabels.get(i), VPos.CENTER);
@@ -169,16 +171,18 @@ public class UICustomNames {
 						text = text.trim();
 						allTextFields.get(iFinal).setText(text);
 						allCustomNames[iFinal] = text;
-						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_TEXT_START + iFinal);
-						testSyncState(iFinal);
 						Platform.runLater( new Runnable() {
 						    @Override
 						    public void run() {
 								allTextFields.get(iFinal).positionCaret(pos + 1);
 						    }
 						});
+		            } else {
+		            	allCustomNames[iFinal] = allTextFields.get(iFinal).getText();
 		            }
-		        }
+					fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_TEXT_START + iFinal);
+					testSyncState(iFinal);
+	        }
 		    });
 
 			allGetButtons.add(new Button("Get"));
@@ -235,7 +239,7 @@ public class UICustomNames {
 		nameChangedFromSet[id] = 1;
 		allTextFields.get(id).setText(config.name);
 		if (setFromSysex) {
-			setSyncState(id, Constants.SYNC_STATE_SYNCED);
+			setSyncState(Constants.SYNC_STATE_SYNCED, id);
 			allMdCustomNames[id] = config.name;
 		}
 	}
@@ -247,9 +251,9 @@ public class UICustomNames {
 	private void testSyncState(int id) {
 		if (allSyncStates[id] != Constants.SYNC_STATE_UNKNOWN) {
 			if (allCustomNames[id].equals(allMdCustomNames[id])) {
-				setSyncState(id, Constants.SYNC_STATE_SYNCED);
+				setSyncState(Constants.SYNC_STATE_SYNCED, id);
 			} else {
-				setSyncState(id, Constants.SYNC_STATE_NOT_SYNCED);
+				setSyncState(Constants.SYNC_STATE_NOT_SYNCED, id);
 			}
 		}
 	}
@@ -275,7 +279,7 @@ public class UICustomNames {
 	}
 
 
-	public ComboBox<String> getComboBoxCurve() {
+	public ComboBox<String> getComboBoxCustomNamesCount() {
 		return comboBoxCustomNamesCount;
 	}
 	

@@ -114,13 +114,17 @@ public class UIPadsExtra {
 	}
 
 	public Button getCustomNamesButtonLoadAll() {
-		return uiCustomNames.getButtonGetAll();
+		return uiCustomNames.getButtonLoadAll();
 	}
 
 	public Button getCustomNamesButtonSaveAll() {
 		return uiCustomNames.getButtonSaveAll();
 	}
 
+	public ComboBox<String> getComboBoxCustomNamesCount() {
+		return uiCustomNames.getComboBoxCustomNamesCount();
+	}
+	
 	public void setYvalues(int [] values, Boolean setFromSysex) {
 		uiCurves.setYvalues(values, setFromSysex);
 	}

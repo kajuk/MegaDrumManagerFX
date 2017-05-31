@@ -22,7 +22,7 @@ public class ConfigFull implements java.io.Serializable {
 	public ConfigCurve [] configCurves;
 	public ConfigCustomName [] configCustomNames;
 	public ConfigConfigName [] configConfigNames;
-	public int customNamesCount;
+	public int customNamesCount = 2;
 	public int configNamesCount;
 	public int configCurrent;
 	public boolean configNameChanged = false;

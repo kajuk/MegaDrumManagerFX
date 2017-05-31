@@ -251,8 +251,39 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
+		uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				switch (uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().getSelectedIndex()) {
+				case 0:
+					configFull.customNamesCount = 2;
+					break;
+				case 1:
+					configFull.customNamesCount = 16;
+					break;
+				case 2:
+				default:
+					configFull.customNamesCount = 32;
+					break;
+				}
+			}
+		});
 		uiPadsExtra.getCustomNamesButtonGetAll().setOnAction(e-> sendAllCustomNamesSysexRequests());
 		uiPadsExtra.getCustomNamesButtonSendAll().setOnAction(e-> sendAllCustomNamesSysex());
+		switch (configFull.customNamesCount) {
+		case 32:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(2);
+			break;
+		case 16:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(1);
+			break;
+		case 2:
+		default:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(0);
+			break;
+		}
 		uiPadsExtra.getCurvesButtonGet().setOnAction(e-> sendSysexCurveRequest());
 		uiPadsExtra.getCurvesButtonSend().setOnAction(e-> sendSysexCurve());
 		uiPadsExtra.getCurvesButtonGetAll().setOnAction(e-> sendAllCurvesSysexRequests());
@@ -950,6 +981,11 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CUSTOM_NAME:
+				Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[pointer]);
+				Utils.copySysexToConfigCustomName(sysex, moduleConfigFull.configCustomNames[pointer]);
+				moduleConfigFull.configCustomNames[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
+				moduleConfigFull.configCustomNames[pointer].sysexReceived = true;
+				uiPadsExtra.setCustomName(configFull.configCustomNames[pointer], pointer, true);
 				break;
 			case Constants.MD_SYSEX_GLOBAL_MISC:
 				Utils.copySysexToConfigGlobalMisc(sysex, configFull.configGlobalMisc);
