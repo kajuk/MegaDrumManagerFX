@@ -70,14 +70,17 @@ public class UIGlobalMisc {
 	private int			valueModuleInputsCount = 18;
 	private int			changedFromSetInputs = 0;
 	private Integer		valueLcdContrast = 50;
-	private int			changedFromLcdContrast= 0;
 	private Integer		valueModuleLcdContrast = 50;
+	private int			changedFromSetLcdContrast= 0;
 	private boolean		valuePadsNamesEn = false;
 	private boolean		valueModulePadsNamesEn = false;
+	private int			changedFromSetPadsNamesEn = 0;
 	private boolean		valueConfigNamesEn = false;
 	private boolean		valueModuleConfigNamesEn = false;
+	private int			changedFromSetConfigNamesEn = 0;
 	private boolean		valueMidi2ForSysex = false;
 	private boolean		valueModuleMidi2ForSysex = false;
+	private int			changedFromSetMidi2ForSysex = 0;
 	private int			syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	protected EventListenerList listenerList = new EventListenerList();
@@ -196,7 +199,11 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valuePadsNamesEn = newValue;
-				fireControlChangeEvent(new ControlChangeEvent(this));
+		    	if (changedFromSetPadsNamesEn > 0 ) {
+		    		changedFromSetPadsNamesEn = 0;
+		    	} else {
+					fireControlChangeEvent(new ControlChangeEvent(this));		    		
+		    	}
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 					if (valuePadsNamesEn == valueModulePadsNamesEn) {
 						labelPadsNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
@@ -223,7 +230,11 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valueConfigNamesEn = newValue;
-				fireControlChangeEvent(new ControlChangeEvent(this));
+		    	if (changedFromSetConfigNamesEn > 0 ) {
+		    		changedFromSetConfigNamesEn = 0;
+		    	} else {
+					fireControlChangeEvent(new ControlChangeEvent(this));		    		
+		    	}
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 					if (valueConfigNamesEn == valueModuleConfigNamesEn) {
 						labelConfigNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
@@ -283,8 +294,8 @@ public class UIGlobalMisc {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// Spinner number validation
-		    	if (changedFromLcdContrast > 0) {
-		    		changedFromLcdContrast--;
+		    	if (changedFromSetLcdContrast > 0) {
+		    		changedFromSetLcdContrast--;
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
 		    	} else {
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
@@ -358,7 +369,11 @@ public class UIGlobalMisc {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	valueMidi2ForSysex = newValue;
-				fireControlChangeEvent(new ControlChangeEvent(this));
+		    	if (changedFromSetMidi2ForSysex > 0 ) {
+		    		changedFromSetMidi2ForSysex = 0;
+		    	} else {
+					fireControlChangeEvent(new ControlChangeEvent(this));		    		
+		    	}
 				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
 					if (valueMidi2ForSysex == valueModuleMidi2ForSysex) {
 						labelMidi2ForSysex.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
@@ -494,12 +509,21 @@ public class UIGlobalMisc {
 		setInputsCount(config.inputs_count, setFromSysex);
 		//spinnerLcdContrast.getEditor().setText(Integer.toString(config.lcd_contrast));
 		if (spinnerLcdContrast.getValueFactory().getValue().intValue() != config.lcd_contrast ) {
-			changedFromLcdContrast = 1;
+			changedFromSetLcdContrast = 1;
 			spinnerLcdContrast.getValueFactory().setValue(config.lcd_contrast);
 		}
-		checkBoxConfigNamesEn.setSelected(config.config_names_en);
-		checkBoxPadsNamesEn.setSelected(config.custom_names_en);
-		checkBoxMidi2ForSysex.setSelected(config.midi2_for_sysex);
+		if (checkBoxConfigNamesEn.isSelected() != config.config_names_en) {
+			changedFromSetConfigNamesEn = 1;
+			checkBoxConfigNamesEn.setSelected(config.config_names_en);			
+		}
+		if (checkBoxPadsNamesEn.isSelected() != config.custom_names_en) {
+			changedFromSetPadsNamesEn = 1;
+			checkBoxPadsNamesEn.setSelected(config.custom_names_en);
+		}
+		if (checkBoxMidi2ForSysex.isSelected() != config.midi2_for_sysex) {
+			changedFromSetMidi2ForSysex = 1;
+			checkBoxMidi2ForSysex.setSelected(config.midi2_for_sysex);
+		}
 	}
 	
 	public void setConfigFromControls(ConfigGlobalMisc config) {
