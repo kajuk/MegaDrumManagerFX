@@ -113,6 +113,7 @@ public class UICustomNames {
 		buttonSendAll = new Button("SendAll");
 		buttonLoadAll = new Button("LoadAll");
 		buttonSaveAll = new Button("SaveAll");
+		//buttonSaveAll.setOnAction(e-> setAllStateUnknown());
 		toolBarTop.getItems().addAll(labelCustomNamesCount, comboBoxCustomNamesCount, buttonGetAll,buttonSendAll, new Separator(),buttonLoadAll,buttonSaveAll);
 
 		vBox = new VBox(1);
@@ -286,6 +287,7 @@ public class UICustomNames {
 	public void setAllStateUnknown() {
 		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
 			setSyncState(Constants.SYNC_STATE_UNKNOWN, i);
+			allTextFields.get(i).setText("");
 		}
 	}
 	

@@ -93,6 +93,10 @@ public class UIPadsExtra {
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
 	
+	public void setAllCustomNamesStatesUnknown() {
+		uiCustomNames.setAllStateUnknown();
+	}
+	
 	public void setCustomName(ConfigCustomName config, int id, Boolean setFromSysex) {
 		uiCustomNames.setCustomName(config, id, setFromSysex);
 	}

@@ -858,6 +858,7 @@ public class Controller implements MidiRescanEventListener {
 		for (int i = 0; i < Constants.CURVES_COUNT; i++) {
 			moduleConfigFull.configCurves[i].sysexReceived = false;
 		}
+		uiPadsExtra.setAllCustomNamesStatesUnknown();
 		
 	}
 	private void openMidiPorts(Boolean toOpen) {
