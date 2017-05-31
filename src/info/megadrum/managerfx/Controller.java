@@ -1,6 +1,5 @@
 package info.megadrum.managerfx;
 
-import java.awt.Color;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import javax.management.OperationsException;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.collections.functors.AndPredicate;
-
-import com.sun.javafx.scene.traversal.TopMostTraversalEngine;
 
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
@@ -79,6 +76,8 @@ public class Controller implements MidiRescanEventListener {
 	private int comboBoxInputChangedFromSet = 0;
 	private int toggleButtonMidiChangedFromSet = 0;
 	private int oldInputsCounts = 0;
+	private Boolean sendNextAllSysexRequestsFlag = false;
+	private Boolean sendSysexReadOnlyRequestFlag = false;
 	
 	private int curvePointer = 0;
 
@@ -96,6 +95,8 @@ public class Controller implements MidiRescanEventListener {
 		initConfigs();
 		createMainMenuBar();
 		uiGlobal = new UIGlobal();
+		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
+		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
 		uiGlobalMisc = new UIGlobalMisc();
 		uiGlobalMisc.getButtonGet().setOnAction(e-> sendSysexGlobalMiscRequest());
 		uiGlobalMisc.getButtonSend().setOnAction(e-> sendSysexGlobalMisc());
@@ -438,6 +439,10 @@ public class Controller implements MidiRescanEventListener {
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
 				uiGlobal.getProgressBarSysex().setVisible(false);
+				if (sendSysexReadOnlyRequestFlag) {
+					sendSysexReadOnlyRequestFlag = false;
+					sendSysexReadOnlyRequest();
+				}
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
@@ -455,6 +460,10 @@ public class Controller implements MidiRescanEventListener {
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
 				uiGlobal.getProgressBarSysex().setVisible(false);
+				if (sendNextAllSysexRequestsFlag) {
+					sendNextAllSysexRequestsFlag = false;
+					sendNextAllSysexRequests();
+				}
 			}
 		});
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
@@ -483,6 +492,7 @@ public class Controller implements MidiRescanEventListener {
 		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
 		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
 		sysexSendList.add(sysex);
+		sendSysexReadOnlyRequestFlag = true;
 		sendSysex();
 	}
 	
@@ -806,30 +816,100 @@ public class Controller implements MidiRescanEventListener {
 		sendSysexRequest();
 	}
 	
+	private void sendAllSysex() {
+		sysexSendList.clear();
+		byte [] sysex;
+		byte i;
+		sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
+		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
+		sysexSendList.add(sysex);
+		sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
+		sysexSendList.add(sysex);		
+		sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		sysexSendList.add(sysex);
+		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
+			sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
+			Utils.copyConfigPadToSysex(configFull.configPads[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+			sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
+			Utils.copyConfigPosToSysex(configFull.configPos[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+
+			if ((i&1) > 0) {
+				sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
+				Utils.copyConfig3rdToSysex(configFull.config3rds[(i-1)/2], sysex, configOptions.chainId, ((i-1)/2));
+				sysexSendList.add(sysex);
+			}
+		}
+		for (i = 0; i < Constants.CURVES_COUNT; i++) {
+			sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];	
+			Utils.copyConfigCurveToSysex(configFull.configCurves[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+		}
+		for (i = 0; i < configFull.customNamesCount; i++) {
+			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];	
+			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+		}
+		sendSysexReadOnlyRequestFlag = true;
+		sendSysex();
+	}
+	
 	private void sendAllSysexRequests() {
 		byte [] typeAndId;
 		byte i;
 		sysexSendList.clear();
-		for (i = 0; i < 32; i++) {
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
+		sysexSendList.add(typeAndId);
+		sendNextAllSysexRequestsFlag = true;
+		sendSysexRequest();
+	}
+	
+	private void sendNextAllSysexRequests() {
+		byte [] typeAndId;
+		byte i;
+		sysexSendList.clear();
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_MISC;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL;
+		sysexSendList.add(typeAndId);
+		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			typeAndId = new byte[2];
 			typeAndId[0] = Constants.MD_SYSEX_PAD;
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
-		}
-		midiController.sendSysexRequestsTaskRecreate();
-		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
-
-			@Override
-			public void handle(WorkerStateEvent event) {
-				// TODO Auto-generated method stub
-				//System.out.println("SendSysexRequestsTask succeeded");
-				uiGlobal.getProgressBarSysex().progressProperty().unbind();
-				uiGlobal.getProgressBarSysex().setProgress(1.0);
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_POS;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+			if ((i&1) > 0) {
+				typeAndId = new byte[2];
+				typeAndId[0] = Constants.MD_SYSEX_3RD;
+				typeAndId[1] = (byte)((i-1)/2);
+				sysexSendList.add(typeAndId);				
 			}
-		});
-		uiGlobal.getProgressBarSysex().setProgress(0.0);
-		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);
-
+		}
+		for (i = 0; i < Constants.CURVES_COUNT; i++) {
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_CURVE;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+		}
+		for (i = 0; i < configFull.customNamesCount; i++) {
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+		}
+		sendSysexRequest();
 	}
 	
 	private void showOptionsWindow() {

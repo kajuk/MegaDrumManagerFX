@@ -90,6 +90,14 @@ public class UIGlobal {
 		return progressBarSysex;
 	}
 	
+	public Button getButtonGetAll() {
+		return buttonGetAll;
+	}
+	
+	public Button getButtonSendAll() {
+		return buttonSendAll;
+	}
+
 	public Node getUI() {
 		return (Node) hBoxPane;
 	}
