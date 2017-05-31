@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import javax.swing.event.EventListenerList;
 
+import info.megadrum.managerfx.data.ConfigCustomName;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -49,6 +50,10 @@ public class UICustomNames {
 	private ArrayList<Button> allGetButtons;
 	private ArrayList<Button> allSendButtons;
 	private int []		allSyncStates;
+	private String []	allCustomNames;
+	private String []	allMdCustomNames;
+	private int []		nameChangedFromSet;
+	
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -118,6 +123,7 @@ public class UICustomNames {
 		allGetButtons = new ArrayList<Button>();
 		allSendButtons = new ArrayList<Button>();
 		allSyncStates = new int[Constants.CUSTOM_NAMES_MAX];
+		nameChangedFromSet = new int[Constants.CUSTOM_NAMES_MAX];
 		gridPane = new GridPane();
 		gridPane.getColumnConstraints().add(new ColumnConstraints(4));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(16));
@@ -128,6 +134,7 @@ public class UICustomNames {
 		gridPane.getColumnConstraints().add(new ColumnConstraints(30));
 		
 		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
+			nameChangedFromSet[i] = 0;
 			final Integer iFinal = i;
 			allLabels.add(new Label(Integer.toString(i + 1) + ":"));
 			GridPane.setConstraints(allLabels.get(i), 1, i);
@@ -145,6 +152,10 @@ public class UICustomNames {
 			allTextFields.get(i).textProperty().addListener(new ChangeListener<String>() {
 		        @Override
 		        public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+		        	if (nameChangedFromSet[iFinal] > 0) {
+		        		nameChangedFromSet[iFinal] = 0;
+		        		allCustomNames[iFinal] = newValue;
+		        	}
 		            if (allTextFields.get(iFinal).getText().length() > 8) {
 						int pos = allTextFields.get(iFinal).getCaretPosition();
 						System.out.printf("Pos = %d\n", pos);
@@ -157,13 +168,15 @@ public class UICustomNames {
 						text = text.substring(0, 8);
 						text = text.trim();
 						allTextFields.get(iFinal).setText(text);
+						allCustomNames[iFinal] = text;
+						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_TEXT_START + iFinal);
+						testSyncState(iFinal);
 						Platform.runLater( new Runnable() {
 						    @Override
 						    public void run() {
 								allTextFields.get(iFinal).positionCaret(pos + 1);
 						    }
 						});
-
 		            }
 		        }
 		    });
@@ -173,12 +186,18 @@ public class UICustomNames {
 			GridPane.setHalignment(allGetButtons.get(i), HPos.CENTER);
 			GridPane.setValignment(allGetButtons.get(i), VPos.CENTER);
 			gridPane.getChildren().add(allGetButtons.get(i));
+			allGetButtons.get(i).setOnAction(e-> {
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_GET_START + iFinal);
+			});
 
 			allSendButtons.add(new Button("Send"));
 			GridPane.setConstraints(allSendButtons.get(i), 6, i);
 			GridPane.setHalignment(allSendButtons.get(i), HPos.CENTER);
 			GridPane.setValignment(allSendButtons.get(i), VPos.CENTER);
 			gridPane.getChildren().add(allSendButtons.get(i));
+			allSendButtons.get(i).setOnAction(e-> {
+				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_SEND_START + iFinal);
+			});
 
 			setSyncState(Constants.SYNC_STATE_UNKNOWN, i);
 		}
@@ -212,7 +231,33 @@ public class UICustomNames {
 		//labelCustomNamesCount.setFont(new Font(controlH*0.4));
 	}
 
-
+	public void setCustomName(ConfigCustomName config, int id, Boolean setFromSysex) {
+		nameChangedFromSet[id] = 1;
+		allTextFields.get(id).setText(config.name);
+		if (setFromSysex) {
+			setSyncState(id, Constants.SYNC_STATE_SYNCED);
+			allMdCustomNames[id] = config.name;
+		}
+	}
+	
+	public void setMdCustomName(ConfigCustomName config, int id) {
+		allMdCustomNames[id] = config.name;
+	}
+	
+	private void testSyncState(int id) {
+		if (allSyncStates[id] != Constants.SYNC_STATE_UNKNOWN) {
+			if (allCustomNames[id].equals(allMdCustomNames[id])) {
+				setSyncState(id, Constants.SYNC_STATE_SYNCED);
+			} else {
+				setSyncState(id, Constants.SYNC_STATE_NOT_SYNCED);
+			}
+		}
+	}
+	
+	public void getCustomName(ConfigCustomName config, int id) {
+		config.name = allCustomNames[id];
+	}
+	
 	public Button getButtonGetAll() {
 		return buttonGetAll;
 	}
@@ -234,6 +279,11 @@ public class UICustomNames {
 		return comboBoxCustomNamesCount;
 	}
 	
+	public void setAllStateUnknown() {
+		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
+			setSyncState(Constants.SYNC_STATE_UNKNOWN, i);
+		}
+	}
 	
 	public void setSyncState(int state, Integer namePointer) {
 		allSyncStates[namePointer] = state;
@@ -253,7 +303,7 @@ public class UICustomNames {
 			color = Constants.SYNC_STATE_SYNCED_COLOR;
 			break;
 		}
-		//labelCustomNamesCount.setTextFill(color);
+		allLabels.get(namePointer).setTextFill(color);
 	}
 
 }

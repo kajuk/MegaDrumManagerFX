@@ -217,6 +217,9 @@ public interface Constants {
 
 	public static final int CONTROL_CHANGE_EVENT_CURVE = 0;
 	public static final int CONTROL_CHANGE_EVENT_CUSTOM_NAME = 1;
+	public static final int CUSTOM_NAME_CHANGE_TEXT_START = 64;
+	public static final int CUSTOM_NAME_CHANGE_GET_START = CUSTOM_NAME_CHANGE_TEXT_START + CUSTOM_NAMES_MAX;
+	public static final int CUSTOM_NAME_CHANGE_SEND_START = CUSTOM_NAME_CHANGE_GET_START + CUSTOM_NAMES_MAX;
 	
 
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"};

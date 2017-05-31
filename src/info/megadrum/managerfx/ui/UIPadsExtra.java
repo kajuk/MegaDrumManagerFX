@@ -2,6 +2,7 @@ package info.megadrum.managerfx.ui;
 
 import javax.swing.event.EventListenerList;
 
+import info.megadrum.managerfx.data.ConfigCustomName;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -55,6 +56,14 @@ public class UIPadsExtra {
         tabCurves.setContent(uiCurves.getUI());
         
         uiCustomNames = new UICustomNames();
+        uiCustomNames.addControlChangeEventListener(new ControlChangeEventListener() {
+			
+			@Override
+			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
+				// TODO Auto-generated method stub
+				fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+			}
+		});
         tabCustomNames.setContent(uiCustomNames.getUI());
         
 		titledPane = new TitledPane();
@@ -82,6 +91,34 @@ public class UIPadsExtra {
 		titledPane.setMaxWidth(fullHeight*0.35);
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
+	}
+	
+	public void setCustomName(ConfigCustomName config, int id, Boolean setFromSysex) {
+		uiCustomNames.setCustomName(config, id, setFromSysex);
+	}
+	
+	public void getCustomName(ConfigCustomName config, int id) {
+		uiCustomNames.getCustomName(config, id);
+	}
+	
+	public void setMdCustomName(ConfigCustomName config, int id) {
+		uiCustomNames.setMdCustomName(config, id);
+	}
+
+	public Button getCustomNamesButtonGetAll() {
+		return uiCustomNames.getButtonGetAll();
+	}
+
+	public Button getCustomNamesButtonSendAll() {
+		return uiCustomNames.getButtonSendAll();
+	}
+
+	public Button getCustomNamesButtonLoadAll() {
+		return uiCustomNames.getButtonGetAll();
+	}
+
+	public Button getCustomNamesButtonSaveAll() {
+		return uiCustomNames.getButtonSaveAll();
 	}
 
 	public void setYvalues(int [] values, Boolean setFromSysex) {

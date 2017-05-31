@@ -236,10 +236,23 @@ public class Controller implements MidiRescanEventListener {
 				if (parameter.intValue() == Constants.CONTROL_CHANGE_EVENT_CURVE) {
 					controlsCurveChanged();
 				} else {
-					
+					if (parameter.intValue() >= Constants.CUSTOM_NAME_CHANGE_TEXT_START) {
+						if (parameter.intValue() < Constants.CUSTOM_NAME_CHANGE_GET_START) {
+							// Custom Name changed
+							controlsCustomNameChanged(parameter - Constants.CUSTOM_NAME_CHANGE_TEXT_START);
+						} else if (parameter.intValue() < Constants.CUSTOM_NAME_CHANGE_SEND_START) {
+							// Get button pressed
+							sendSysexCustomNameRequest(parameter - Constants.CUSTOM_NAME_CHANGE_GET_START);
+						} else {
+							// Send button pressed
+							sendSysexCustomName(parameter - Constants.CUSTOM_NAME_CHANGE_SEND_START);
+						}
+					}
 				}
 			}
 		});
+		uiPadsExtra.getCustomNamesButtonGetAll().setOnAction(e-> sendAllCustomNamesSysexRequests());
+		uiPadsExtra.getCustomNamesButtonSendAll().setOnAction(e-> sendAllCustomNamesSysex());
 		uiPadsExtra.getCurvesButtonGet().setOnAction(e-> sendSysexCurveRequest());
 		uiPadsExtra.getCurvesButtonSend().setOnAction(e-> sendSysexCurve());
 		uiPadsExtra.getCurvesButtonGetAll().setOnAction(e-> sendAllCurvesSysexRequests());
@@ -459,6 +472,58 @@ public class Controller implements MidiRescanEventListener {
 		sendSysexRequest();
 	}
 	
+	private void sendSysexCustomName(int id) {
+		sysexSendList.clear();
+		byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
+		Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[id], sysex, configOptions.chainId, id);
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
+
+	private void controlsCustomNameChanged(int id) {
+		uiPadsExtra.getCustomName(configFull.configCustomNames[id], id);
+		if (configOptions.liveUpdates) {
+			sendSysexCustomName(id);
+		}
+	}
+	
+	private void sendSysexCustomNameRequest(int id) {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
+		typeAndId[1] = (byte)id;
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+	}
+
+	private void sendAllCustomNamesSysex() {
+		sysexSendList.clear();
+		byte [] sysex;
+		byte i;
+		for (i = 0; i < configFull.customNamesCount; i++) {
+			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];	
+			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+			
+		}
+		sendSysex();
+	}
+	
+	private void sendAllCustomNamesSysexRequests() {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		byte i;
+		for (i = 0; i < configFull.customNamesCount; i++) {
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
+			typeAndId[1] = i;
+			sysexSendList.add(typeAndId);
+		}
+		sendSysexRequest();
+	}
+
+
 	private void sendSysexCurve() {
 		sysexSendList.clear();
 		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
