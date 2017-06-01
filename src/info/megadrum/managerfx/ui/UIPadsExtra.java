@@ -16,6 +16,8 @@ import javafx.scene.text.Font;
 public class UIPadsExtra {
 	private TitledPane 		titledPane;
 	private TabPane			tabPane;
+	private Tab 			tabCurves;
+	private	Tab				tabCustomNames;
 	private UICurves		uiCurves;
 	private UICustomNames	uiCustomNames;
 
@@ -38,9 +40,9 @@ public class UIPadsExtra {
 	
 	public UIPadsExtra(String title) {
 		tabPane = new TabPane();
-        Tab tabCurves = new Tab("Custom Curves");
+        tabCurves = new Tab("Custom Curves");
         tabCurves.setClosable(false);
-        Tab tabCustomNames = new Tab("Custom Names");
+        tabCustomNames = new Tab("Custom Names");
         tabCustomNames.setClosable(false);
         tabPane.getTabs().addAll(tabCurves,tabCustomNames);
 
@@ -81,6 +83,23 @@ public class UIPadsExtra {
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
+		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+			titledPane.setFont(new Font(titledPaneFontHeight));
+		} else {
+			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		}
+		tabCurves.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		titledPane.setMaxWidth(fullHeight*0.35);
+		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
+		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
+	}
+	
+/*	
+	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
@@ -92,7 +111,7 @@ public class UIPadsExtra {
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
-	
+*/	
 	public void setAllCustomNamesStatesUnknown() {
 		uiCustomNames.setAllStateUnknown();
 	}

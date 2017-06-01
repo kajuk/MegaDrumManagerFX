@@ -17,6 +17,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class UIInput {
 //	private VBox layout;
@@ -204,6 +205,24 @@ public class UIInput {
 	}
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
+		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			titledPane.setFont(new Font(titledPaneFontHeight));
+		} else {
+			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		}
+		//System.out.println("Responding to scene resize in UIMisc");
+		for (int i = 0; i < allControls.size(); i++) {
+			//allControls.get(i).respondToResize(h/allControls.size(), w);
+			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+        }
+		//titledPane.setMinHeight(h);
+		//titledPane.setMaxHeight(h);
+
+	}
+
+/*	
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.0;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
@@ -219,7 +238,7 @@ public class UIInput {
 		//titledPane.setMaxHeight(h);
 
 	}
-	
+*/	
 	public void setHeadEdgeType(int type) {
 		inputType = type;
 		if (type == Constants.PAD_TYPE_HEAD) {

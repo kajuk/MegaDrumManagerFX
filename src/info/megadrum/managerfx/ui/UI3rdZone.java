@@ -17,6 +17,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class UI3rdZone {
 //	private VBox layout;
@@ -145,11 +146,11 @@ public class UI3rdZone {
 	}
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.0;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
+		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			titledPane.setFont(new Font(titledPaneFontHeight));
+		} else {
+			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
 		}
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {

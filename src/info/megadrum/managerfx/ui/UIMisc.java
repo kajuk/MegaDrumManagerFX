@@ -132,6 +132,7 @@ public class UIMisc {
 		titledPane = new TitledPane();
 		titledPane.setText(title);
 		titledPane.setContent(layout);
+		titledPane.setId("testId");
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
 		setAllStateUnknown();
@@ -148,6 +149,37 @@ public class UIMisc {
 	}
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+		Font buttonFont;
+		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+			buttonFont = new Font(toolBarFontHeight);
+			buttonGet.setFont(buttonFont);
+			buttonSend.setFont(buttonFont);
+			buttonLoad.setFont(buttonFont);
+			buttonSave.setFont(buttonFont);
+			titledPane.setFont(new Font(titledPaneFontHeight));
+		} else {
+			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			buttonGet.setFont(buttonFont);
+			buttonSend.setFont(buttonFont);
+			buttonLoad.setFont(buttonFont);
+			buttonSave.setFont(buttonFont);
+			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		}
+		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
+		//System.out.printf("Misc ControlW = %f\n", controlW);
+		for (int i = 0; i < allControls.size(); i++) {
+			//allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
+			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+        }
+		toolBar.setMinWidth(controlW*1.00);
+		toolBar.setMaxWidth(controlW*1.00);
+		titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+	}
+/*
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
@@ -158,10 +190,12 @@ public class UIMisc {
 			//buttonSend.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
 			//buttonLoad.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
 			//buttonSave.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
+			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");
+			//titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			toolBar.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
 			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
+			//titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
 		}
 		//titledPane.setMaxHeight(h);
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
@@ -177,7 +211,7 @@ public class UIMisc {
 		titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 	}
-	
+*/	
 	public Button getButtonSend() {
 		return buttonSend;
 	}

@@ -20,6 +20,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class UIPedal {
 //	private VBox layout;
@@ -30,6 +31,9 @@ public class UIPedal {
 	private Button 		buttonSave;
 	private ToolBar		toolBar;
 	private TabPane		tabPane;
+	private Tab 		tabMisc;
+	private Tab 		tabLevels;
+	private Tab 		tabNotes;
 
 	private UIComboBox	uiComboBoxMiscType;
 	private UIComboBox	uiComboBoxMiscCurve;
@@ -132,11 +136,11 @@ public class UIPedal {
 		//tabPane.setTabMinHeight(20);
 		vBox1.getChildren().add(tabPane);
 
-        Tab tabMisc = new Tab("Misc");
+        tabMisc = new Tab("Misc");
         tabMisc.setClosable(false);
-        Tab tabLevels = new Tab("Levels");
+        tabLevels = new Tab("Levels");
         tabLevels.setClosable(false);
-        Tab tabNotes = new Tab("Notes");
+        tabNotes = new Tab("Notes");
         tabNotes.setClosable(false);
         tabPane.getTabs().addAll(tabMisc,tabLevels,tabNotes);
         VBox vBoxMisc = new VBox();
@@ -322,6 +326,43 @@ public class UIPedal {
 	}
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+		Font buttonFont;
+		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
+		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+			buttonFont = new Font(toolBarFontHeight);
+			titledPane.setFont(new Font(titledPaneFontHeight));
+		} else {
+			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		}
+		//tabMisc.
+		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		tabLevels.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		tabNotes.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		//tabPane.setStyle("-fx-tab-max-height:10pt");
+		buttonGet.setFont(buttonFont);
+		buttonSend.setFont(buttonFont);
+		buttonLoad.setFont(buttonFont);
+		buttonSave.setFont(buttonFont);
+		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
+		//System.out.println("Responding to scene resize in UIMisc");
+		for (int i = 0; i < allMiscControls.size(); i++ ) {
+			allMiscControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		}
+		for (int i = 0; i < allLevelsControls.size(); i++ ) {
+			allLevelsControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		}
+		for (int i = 0; i < allNotesControls.size(); i++ ) {
+			allNotesControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		}
+		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
+		tabPane.setMinHeight(0);
+	}
+
+/*
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		
 		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double titledPaneFontHeight = toolBarFontHeight*1.4;
@@ -358,7 +399,7 @@ public class UIPedal {
 		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
 		tabPane.setMinHeight(0);
 	}
-	
+*/	
 	public Button getButtonSend() {
 		return buttonSend;
 	}
