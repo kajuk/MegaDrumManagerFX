@@ -161,15 +161,26 @@ public class UICurves {
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
-			toolBarNavigator.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+		Font buttonFont;
+		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
+		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+			buttonFont = new Font(toolBarFontHeight);
 		} else {
-			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
-			toolBarNavigator.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
 		}
+		buttonGet.setFont(buttonFont);
+		buttonSend.setFont(buttonFont);
+		buttonGetAll.setFont(buttonFont);
+		buttonSendAll.setFont(buttonFont);
+		buttonLoad.setFont(buttonFont);
+		buttonSave.setFont(buttonFont);
+		buttonFirst.setFont(buttonFont);
+		buttonPrev.setFont(buttonFont);
+		buttonNext.setFont(buttonFont);
+		buttonLast.setFont(buttonFont);
+		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//toolBarNavigator.setMaxWidth(controlH*15);

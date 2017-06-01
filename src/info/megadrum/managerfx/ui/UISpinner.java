@@ -220,7 +220,7 @@ public class UISpinner extends UIControl {
 			break;
 		case Constants.FX_SPINNER_TYPE_STANDARD:
 		default:
-			we = we*ll*0.25;
+			we = we*ll*0.3;
 			break;
 		}
 		uispinner.getEditor().setFont(new Font(we));			
@@ -229,7 +229,8 @@ public class UISpinner extends UIControl {
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
-    	Double width = w*0.25;
+//    	Double width = w*0.28;
+    	Double width = h*2.6;
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);

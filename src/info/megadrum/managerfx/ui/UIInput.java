@@ -82,7 +82,7 @@ public class UIInput {
 		allControls.add(uiComboBoxName);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
-		uiSpinnerNoteMainNote.setNoteIsMain(null);
+		uiSpinnerNoteMainNote.setNoteIsMain(true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		

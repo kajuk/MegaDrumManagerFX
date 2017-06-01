@@ -359,47 +359,10 @@ public class UIPedal {
 		}
 		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
 		tabPane.setMinHeight(0);
-	}
-
-/*
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.4;
-
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			toolBar.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
-		} else {
-			toolBar.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
-			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
-		}
-		//titledPane.setMaxHeight(h);
-		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		//tabPane.setMinHeight(h - toolBar.getHeight());
-		//tabPane.setMaxHeight(h - toolBar.getHeight());
-		//System.out.printf("Pedal ControlW = %f\n", controlW);
-		//tabPane.setMinWidth(controlW);
-		//tabPane.setMaxWidth(controlW);
 		titledPane.setMinWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		titledPane.setMaxWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-		//tabPane.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
-
-		//System.out.println("Responding to scene resize in UIMisc");
-		for (int i = 0; i < allMiscControls.size(); i++ ) {
-			allMiscControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-		}
-		for (int i = 0; i < allLevelsControls.size(); i++ ) {
-			allLevelsControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-		}
-		for (int i = 0; i < allNotesControls.size(); i++ ) {
-			allNotesControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-		}
-		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
-		tabPane.setMinHeight(0);
 	}
-*/	
+
 	public Button getButtonSend() {
 		return buttonSend;
 	}

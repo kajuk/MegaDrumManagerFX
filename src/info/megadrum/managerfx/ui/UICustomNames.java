@@ -129,12 +129,12 @@ public class UICustomNames {
 		allMdCustomNames = new String[Constants.CUSTOM_NAMES_MAX];
 		gridPane = new GridPane();
 		gridPane.getColumnConstraints().add(new ColumnConstraints(4));
-		gridPane.getColumnConstraints().add(new ColumnConstraints(36));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(40));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(110));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(1));
-		gridPane.getColumnConstraints().add(new ColumnConstraints(30));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(36));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(1));
-		gridPane.getColumnConstraints().add(new ColumnConstraints(30));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(36));
 		
 		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
 			nameChangedFromSet[i] = 0;
@@ -221,15 +221,21 @@ public class UICustomNames {
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		//vBox.setStyle(null);
-		
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
+		Font buttonFont;
+		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
+		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+			buttonFont = new Font(toolBarFontHeight);
 		} else {
-			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
+			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
 		}
+		buttonGetAll.setFont(buttonFont);
+		buttonSendAll.setFont(buttonFont);
+		buttonLoadAll.setFont(buttonFont);
+		buttonSaveAll.setFont(buttonFont);
+		comboBoxCustomNamesCount.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
+		vBox.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//comboBoxCustomNamesCount.setMinWidth(controlH*4);
 		//comboBoxCustomNamesCount.setMaxWidth(controlH*4);

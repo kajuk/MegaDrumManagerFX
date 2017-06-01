@@ -228,37 +228,6 @@ public class UIControl extends Control implements UIControlInterface {
 		setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
     }
 
-/*
-	public void respondToResize(Double h, Double w) {
-		Double wCl0, wCl1, wCl2;
-		wCl0 = (w - padding*2)*0.3;
-		wCl1 = h*4.9 + w*0.02 + 5;
-		if (copyButtonShown) {
-			wCl2 = h;
-		} else {
-			//wCl0 = wCl0*1.2;
-			wCl1 = wCl1*0.7;
-			wCl2 = 0.0;
-		}
-		layout.getColumnConstraints().clear();
-		layout.getColumnConstraints().add(new ColumnConstraints(wCl0));
-		layout.getColumnConstraints().add(new ColumnConstraints(wCl1));
-		layout.getColumnConstraints().add(new ColumnConstraints(wCl2));
-		buttonCopy.setMaxHeight(h/1.2);
-		buttonCopy.setMinHeight(h/1.2);
-		buttonCopy.setMaxWidth(h/1.2);
-		buttonCopy.setMinWidth(h/1.2);
-		buttonCopy.setFont(new Font(h/2.5));
-		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
-        layout.getRowConstraints().clear();
-        layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
-        label.setFont(new Font(h*0.4));
-		//layout.setMaxWidth(w);
-        //uiControl.minHeight(h - padding*2 - 1);
-        //uiControl.respondToResizeControl(h,w);
-	}
-*/
-
 	public void setLabelWidthMultiplier(Double mul) {
 		labelWidthMultiplier = mul;
 		controlWidthMultiplier = 1.0 - mul - 0.05;

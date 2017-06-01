@@ -232,31 +232,6 @@ public class UIPad extends Parent {
 		labelInput.setFont(new Font(controlH*0.4));
 	}
 
-/*	
-	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.4;
-		Double h1,h2,h3;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			toolBarTop.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
-			toolBarNavigator.setStyle("-fx-font-size: " + toolBarFontHeight.toString() + "pt");			
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
-		} else {
-			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
-			toolBarTop.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");			
-			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
-		}
-		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
-		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
-		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight, controlH, controlW);
-		comboBoxInput.setMinWidth(controlH*6);
-		comboBoxInput.setMaxWidth(controlH*6);
-		labelInput.setFont(new Font(controlH*0.4));
-	}
-*/
 	public Node getUI() {
 		return (Node) titledPane;
 	}

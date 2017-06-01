@@ -382,13 +382,9 @@ public class Controller implements MidiRescanEventListener {
 		//controlW= width *0.2;
 		controlW= controlH *8;
 		//System.out.println("Responding to scene resize in Controller");
-		//uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.17, height, controlH, controlW);
 		uiMisc.respondToResize(height, width, height, controlH, controlW);
-		//uiPedal.respondToResize((height)*0.65, sc.getWidth()*0.17, height, controlH, controlW);
 		uiPedal.respondToResize(height, width, height, controlH, controlW);
-		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
 		uiPad.respondToResize(height, width, height, controlH, controlW);
-		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
 		uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
 	}
 
