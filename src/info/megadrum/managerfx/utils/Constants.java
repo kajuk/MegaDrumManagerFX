@@ -184,10 +184,10 @@ public interface Constants {
 	public static final String SYSEX_ERROR_VERIFY_TEXT = "Sysex Verify Error";
 	public static final String MIDI_IS_NOT_OPEN = "MIDI is not open";
 
-	public static final Double FX_TITLEBARS_FONT_MIN_SIZE	= 2.4;
-	public static final Double FX_TOOLBARS_FONT_MIN_SIZE	= 2.0;
-	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.018;
-	public static final Double FX_SUB_TITLEBARS_FONT_SCALE	= 0.016;
+	public static final Double FX_TITLEBARS_FONT_MIN_SIZE	= 4.4;
+	public static final Double FX_TOOLBARS_FONT_MIN_SIZE	= 4.0;
+	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.017;
+	public static final Double FX_SUB_TITLEBARS_FONT_SCALE	= 0.015;
 	public static final Double FX_TOOLBARS_FONT_SCALE		= 0.012;
 	public static final Double FX_TABS_FONT_SCALE			= 0.010;
 	public static final Double FX_COMBOBOX_FONT_SCALE		= 0.009;

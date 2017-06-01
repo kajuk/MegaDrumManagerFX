@@ -230,7 +230,7 @@ public class UISpinner extends UIControl {
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
 //    	Double width = w*0.28;
-    	Double width = h*2.6;
+    	Double width = h*2.8;
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);

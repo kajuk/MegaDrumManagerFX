@@ -190,6 +190,9 @@ public class UICurves {
 		comboBoxCurve.setMinWidth(controlH*4);
 		comboBoxCurve.setMaxWidth(controlH*4);
 		labelCurve.setFont(new Font(controlH*0.4));
+		for (int i = 0; i < 9; i++) {
+			allSpinners.get(i).setStyle("-fx-font-size: 5pt");
+		}
 	}
 
 	private void setSpinnersFromCurve() {

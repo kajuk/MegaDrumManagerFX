@@ -170,7 +170,6 @@ public class UIMisc {
 		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
-			//allControls.get(i).respondToResize((h - toolBar.getHeight())/allControls.size(), w);
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
         }
 		toolBar.setMinWidth(controlW*1.00);

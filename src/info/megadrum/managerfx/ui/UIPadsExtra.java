@@ -86,7 +86,7 @@ public class UIPadsExtra {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
@@ -98,20 +98,6 @@ public class UIPadsExtra {
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
 	
-/*	
-	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.4;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
-		} else {
-			titledPane.setStyle("-fx-font-size: " + Constants.FX_TITLEBARS_FONT_MIN_SIZE.toString() + "pt");						
-		}
-		titledPane.setMaxWidth(fullHeight*0.35);
-		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
-		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
-	}
-*/	
 	public void setAllCustomNamesStatesUnknown() {
 		uiCustomNames.setAllStateUnknown();
 	}
