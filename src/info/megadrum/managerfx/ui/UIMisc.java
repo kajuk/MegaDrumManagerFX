@@ -71,11 +71,12 @@ public class UIMisc {
 		toolBar.getItems().add(new Separator());
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
+		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
 		layout = new VBox();
 		layout.getChildren().add(toolBar);
-		layout.setStyle("-fx-padding: 0.0em 0.2em 0.0em 0.2em");
+		layout.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, false);
 		allControls.add(uiSpinnerNoteOffDelay);
@@ -160,22 +161,21 @@ public class UIMisc {
 			buttonSave.setFont(buttonFont);
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
-			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			buttonGet.setFont(buttonFont);
 			buttonSend.setFont(buttonFont);
 			buttonLoad.setFont(buttonFont);
 			buttonSave.setFont(buttonFont);
 			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
 		}
-		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
         }
-		toolBar.setMinWidth(controlW*1.00);
-		toolBar.setMaxWidth(controlW*1.00);
-		titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
-		titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		//toolBar.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);
+		//toolBar.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);
+		//titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		//titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 	}
 
 	public Button getButtonSend() {

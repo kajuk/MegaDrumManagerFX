@@ -96,7 +96,7 @@ public class UIPad extends Parent {
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
 		vBox = new VBox(1);
-		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		toolBarTop = new ToolBar();
 		buttonGet = new Button("Get");
@@ -108,7 +108,8 @@ public class UIPad extends Parent {
 		buttonCopy = new Button("Copy");
 		buttonDisableOthers = new Button("Disable Others");
 		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave,new Separator(),buttonCopy,buttonDisableOthers);
-
+		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
+		
 		toolBarNavigator = new ToolBar();
 		labelInput = new Label("Input(s):");
 		comboBoxInput = new ComboBox<String>();
@@ -117,6 +118,7 @@ public class UIPad extends Parent {
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
 		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
+		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.01em");
 		
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
 		titledPane = new TitledPane();
@@ -206,7 +208,7 @@ public class UIPad extends Parent {
 			buttonFont = new Font(toolBarFontHeight);
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
-			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
 		}
 		buttonGet.setFont(buttonFont);
@@ -222,8 +224,6 @@ public class UIPad extends Parent {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxInput.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		uiInputLeft.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		uiInputRight.respondToResize(h*0.6, w*0.5, fullHeight, controlH, controlW);
 		ui3rdZone.respondToResize(h*0.0915, w*1.0, fullHeight, controlH, controlW);

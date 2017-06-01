@@ -259,7 +259,7 @@ public class UISpinnerNote extends UIControl {
     private void resizeFont() {
 		Double we = uispinner.getEditor().getWidth();
 		Integer l = maxValue.toString().length();
-		Double ll = (4/(4 + l.doubleValue()))*0.6;
+		Double ll = (16/(16 + l.doubleValue()))*0.37;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		//uispinner.getEditor().setFont(new Font(we));    	
@@ -272,12 +272,12 @@ public class UISpinnerNote extends UIControl {
     	Double checkBoxFontSize = h*0.16;
 		uispinner.setMinHeight(h);
 		uispinner.setMaxHeight(h);
-		uispinner.setMaxWidth(w*0.25);
-		uispinner.setMinWidth(w*0.25);
+		uispinner.setMaxWidth(h*2.8);
+		uispinner.setMinWidth(h*2.8);
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.20));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.28));
 		if (linkedNote) {
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.18));
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.02));			
@@ -298,7 +298,7 @@ public class UISpinnerNote extends UIControl {
 	    	// This is a temp hack
 			checkBoxNoteLinked.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
 			checkBoxNoteLinked.setStyle("-fx-font-size: " + checkBoxFontSize.toString() + "pt");
-	} else {
+		} else {
 			labelNote.setFont(new Font(h*0.35));
 		}
    }

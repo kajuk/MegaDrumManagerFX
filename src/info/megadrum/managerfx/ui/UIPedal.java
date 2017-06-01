@@ -125,11 +125,12 @@ public class UIPedal {
 		toolBar.getItems().add(new Separator());
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
+		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
 		VBox vBox1 = new VBox();
 		vBox1.getChildren().add(toolBar);
-		vBox1.setStyle("-fx-padding: 0.0em 0.2em 0.0em 0.2em");
+		vBox1.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		tabPane = new TabPane();
 		//tabPane.setTabMaxHeight(20);
@@ -336,7 +337,7 @@ public class UIPedal {
 			buttonFont = new Font(toolBarFontHeight);
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
-			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
 		}
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
@@ -347,7 +348,6 @@ public class UIPedal {
 		buttonSend.setFont(buttonFont);
 		buttonLoad.setFont(buttonFont);
 		buttonSave.setFont(buttonFont);
-		toolBar.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.2em");
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
 			allMiscControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);

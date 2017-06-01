@@ -167,7 +167,7 @@ public class Controller implements MidiRescanEventListener {
 				}
 				if (uiPad.isNameChanged()) {
 					uiPad.resetNameChanged();
-					updateComboBoxInput();
+					updateComboBoxInput(true);
 				}
 			}
 		});
@@ -225,7 +225,7 @@ public class Controller implements MidiRescanEventListener {
 		    	}				
 			}
         });
-		updateComboBoxInput();
+		updateComboBoxInput(true);
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null, null);
 		
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
@@ -378,7 +378,7 @@ public class Controller implements MidiRescanEventListener {
 		Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
 		Double width = height*2;
 		Double controlH, controlW;
-		controlH= height *0.039 *0.8;
+		controlH= height *0.035 *0.8;
 		//controlW= width *0.2;
 		controlW= controlH *8;
 		//System.out.println("Responding to scene resize in Controller");
@@ -494,7 +494,7 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void controlsGlobalMiscChanged() {
 		uiGlobalMisc.setConfigFromControls(configFull.configGlobalMisc);
-		updateComboBoxInput();
+		updateComboBoxInput(false);
 		if (configOptions.liveUpdates) {
 			sendSysexGlobalMisc();
 		}
@@ -1070,7 +1070,7 @@ public class Controller implements MidiRescanEventListener {
 				moduleConfigFull.configGlobalMisc.syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configGlobalMisc.sysexReceived = true;
 				uiGlobalMisc.setControlsFromConfig(configFull.configGlobalMisc, true);
-				updateComboBoxInput();
+				updateComboBoxInput(false);
 				break;
 			case Constants.MD_SYSEX_MCU_TYPE:
 				if (sysex.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
@@ -1213,8 +1213,8 @@ public class Controller implements MidiRescanEventListener {
 		return result;
 	}
 	
-	private void updateComboBoxInput() {
-		if (oldInputsCounts != configFull.configGlobalMisc.inputs_count) {
+	private void updateComboBoxInput(Boolean nameChaned) {
+		if ((oldInputsCounts != configFull.configGlobalMisc.inputs_count) || nameChaned ) {
 			oldInputsCounts = configFull.configGlobalMisc.inputs_count;
 			List<String> list;
 			String name;
