@@ -210,7 +210,7 @@ public class UICustomNames {
 		scrollPane.setContent(gridPane);
 		//scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		//scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setMaxHeight(400);
+		//scrollPane.setMaxHeight(400);
 		vBox.getChildren().add(scrollPane);
 		comboBoxCustomNamesCount.getSelectionModel().select(0);
 

@@ -20,6 +20,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -48,11 +49,12 @@ public class UICurves {
 	private	Button		buttonPrev;
 	private	Button		buttonNext;
 	private	Button		buttonLast;
-	private ArrayList<SpinnerFast> allSpinners;
+	private ArrayList<SpinnerFast<Integer>> allSpinners;
 
 	
 	private int			syncState = Constants.SYNC_STATE_UNKNOWN;
 	private Boolean		sysexReceived = false;
+	private static final Double leftSpacer = 16.0;
 	
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -89,6 +91,7 @@ public class UICurves {
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
 		toolBarNavigator.getItems().addAll( labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
+	
 
 		curvesPaint = new UICurvesPaint();
 		curvesPaint.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -104,10 +107,18 @@ public class UICurves {
 		comboBoxCurve.getItems().clear();
 		comboBoxCurve.getItems().addAll(Arrays.asList(Constants.CURVES_LIST));
 		comboBoxCurve.getSelectionModel().select(0);
+		BorderPane borderPane = new BorderPane(curvesPaint);
+		Pane leftPane = new Pane();
+		leftPane.setPrefWidth(leftSpacer);
+		borderPane.setLeft(leftPane);
+		Pane topPane = new Pane();
+		topPane.setPrefHeight(5);
+		borderPane.setTop(topPane);
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
-		allSpinners = new ArrayList<SpinnerFast>();
+		//vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
+		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,borderPane);
+		allSpinners = new ArrayList<SpinnerFast<Integer>>();
 		gridPaneSpinners = new GridPane();
 		gridPaneSpinners.setMinHeight(30);
 		gridPaneSpinners.setMaxHeight(30);
@@ -116,9 +127,9 @@ public class UICurves {
 		GridPane.setHalignment(spacer1, HPos.CENTER);
 		GridPane.setValignment(spacer1, VPos.CENTER);
 		gridPaneSpinners.getChildren().add(spacer1);
-		gridPaneSpinners.getColumnConstraints().add(new ColumnConstraints(8));
-		spacer1.setMinWidth(8);
-		spacer1.setMaxWidth(8);
+		gridPaneSpinners.getColumnConstraints().add(new ColumnConstraints(leftSpacer + 8));
+		spacer1.setMinWidth(leftSpacer + 8);
+		spacer1.setMaxWidth(leftSpacer + 8);
 		SpinnerValueFactory<Integer> valueFactory;
 		
 		for (int i = 0; i < 9; i++) {
@@ -150,6 +161,7 @@ public class UICurves {
 				}
 				
 			});
+			allSpinners.get(i).setStyle("-fx-font-size: 5pt");
 		}
 		vBox.getChildren().add(gridPaneSpinners);
 		setSyncState(Constants.SYNC_STATE_UNKNOWN);
@@ -181,18 +193,15 @@ public class UICurves {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
-		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		toolBarTop.setStyle("-fx-padding: 0.1em 0.1em 0.1em 0.1em");
+		toolBarNavigator.setStyle("-fx-padding: 0.1em 0.1em 0.1em 0.1em");
 		//toolBarNavigator.setMaxWidth(controlH*15);
 		//toolBarNavigator.setMinWidth(controlH*15);
 		//toolBarNavigator.setMinWidth(vBox.getWidth()*0.95);
 		//toolBarNavigator.setMaxWidth(vBox.getWidth()*0.95);
-		comboBoxCurve.setMinWidth(controlH*4);
-		comboBoxCurve.setMaxWidth(controlH*4);
+		comboBoxCurve.setMinWidth(controlH*4.3);
+		comboBoxCurve.setMaxWidth(controlH*4.3);
 		labelCurve.setFont(new Font(controlH*0.4));
-		for (int i = 0; i < 9; i++) {
-			allSpinners.get(i).setStyle("-fx-font-size: 5pt");
-		}
 	}
 
 	private void setSpinnersFromCurve() {

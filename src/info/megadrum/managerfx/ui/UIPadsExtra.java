@@ -44,7 +44,6 @@ public class UIPadsExtra {
         tabCurves.setClosable(false);
         tabCustomNames = new Tab("Custom Names");
         tabCustomNames.setClosable(false);
-        tabPane.getTabs().addAll(tabCurves,tabCustomNames);
 
         uiCurves = new UICurves();
         uiCurves.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -73,9 +72,10 @@ public class UIPadsExtra {
 		titledPane.setContent(tabPane);
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
-		titledPane.setMinWidth(320);
+		//titledPane.setMinWidth(330);
+        tabPane.getTabs().addAll(tabCurves,tabCustomNames);
 		//titledPane.setMinSize(0, 0);
-		//titledPane.setMaxSize(400, 400);
+		titledPane.setMaxSize(380, 500);
 	}
 
 	public Node getUI() {
@@ -86,6 +86,8 @@ public class UIPadsExtra {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
+		Double tabHeaderPadding = -fullHeight*0.0005;
+		Double tabHeaderHeight = fullHeight*0.013;
 		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
@@ -93,7 +95,9 @@ public class UIPadsExtra {
 		}
 		tabCurves.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
-		titledPane.setMaxWidth(fullHeight*0.35);
+		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
+
+		//titledPane.setMaxWidth(fullHeight*0.35);
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
