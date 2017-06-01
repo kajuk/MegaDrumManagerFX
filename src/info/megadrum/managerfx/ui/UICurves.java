@@ -115,7 +115,7 @@ public class UICurves {
 		topPane.setPrefHeight(5);
 		borderPane.setTop(topPane);
 		vBox = new VBox(1);
-		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		//vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,borderPane);
 		allSpinners = new ArrayList<SpinnerFast<Integer>>();
@@ -166,6 +166,8 @@ public class UICurves {
 		vBox.getChildren().add(gridPaneSpinners);
 		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		setSpinnersFromCurve();
+		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
+		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.05em 0.01em");
 	}
 
 	public Node getUI() {
@@ -193,14 +195,13 @@ public class UICurves {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		toolBarTop.setStyle("-fx-padding: 0.1em 0.1em 0.1em 0.1em");
-		toolBarNavigator.setStyle("-fx-padding: 0.1em 0.1em 0.1em 0.1em");
 		//toolBarNavigator.setMaxWidth(controlH*15);
 		//toolBarNavigator.setMinWidth(controlH*15);
 		//toolBarNavigator.setMinWidth(vBox.getWidth()*0.95);
-		//toolBarNavigator.setMaxWidth(vBox.getWidth()*0.95);
-		comboBoxCurve.setMinWidth(controlH*4.3);
-		comboBoxCurve.setMaxWidth(controlH*4.3);
+		toolBarTop.setMaxWidth(vBox.getWidth()*0.995);
+		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.995);
+		comboBoxCurve.setMinWidth(controlH*4.9);
+		comboBoxCurve.setMaxWidth(controlH*4.9);
 		labelCurve.setFont(new Font(controlH*0.4));
 	}
 

@@ -75,7 +75,7 @@ public class UIPadsExtra {
 		//titledPane.setMinWidth(330);
         tabPane.getTabs().addAll(tabCurves,tabCustomNames);
 		//titledPane.setMinSize(0, 0);
-		titledPane.setMaxSize(380, 500);
+		titledPane.setMaxSize(340, 500);
 	}
 
 	public Node getUI() {

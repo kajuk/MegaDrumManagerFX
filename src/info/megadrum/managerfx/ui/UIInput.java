@@ -213,7 +213,6 @@ public class UIInput {
 		}
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allControls.size(); i++) {
-			//allControls.get(i).respondToResize(h/allControls.size(), w);
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
 		//titledPane.setMinHeight(h);
@@ -221,24 +220,6 @@ public class UIInput {
 
 	}
 
-/*	
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double titledPaneFontHeight = toolBarFontHeight*1.0;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//System.out.printf("ToolBar font size = %f\n",fontHeight);
-			titledPane.setStyle("-fx-font-size: " + titledPaneFontHeight.toString() + "pt");			
-		}
-		//System.out.println("Responding to scene resize in UIMisc");
-		for (int i = 0; i < allControls.size(); i++) {
-			//allControls.get(i).respondToResize(h/allControls.size(), w);
-			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
-        }
-		//titledPane.setMinHeight(h);
-		//titledPane.setMaxHeight(h);
-
-	}
-*/	
 	public void setHeadEdgeType(int type) {
 		inputType = type;
 		if (type == Constants.PAD_TYPE_HEAD) {
