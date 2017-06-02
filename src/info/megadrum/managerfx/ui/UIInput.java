@@ -248,9 +248,15 @@ public class UIInput {
 		inputType = type;
 		if (type == Constants.PAD_TYPE_HEAD) {
 			listInputType = Arrays.asList(Constants.PAD_TYPE_HEAD_LIST);
+			for (int i = 0; i < allControls.size(); i++) {
+				allControls.get(i).setButtonCopyToolTip("Copy this setting to All inputs");
+	        }
 		}
 		if (type == Constants.PAD_TYPE_EDGE) {
 			listInputType = Arrays.asList(Constants.PAD_TYPE_EDGE_LIST);
+			for (int i = 0; i < allControls.size(); i++) {
+				allControls.get(i).setButtonCopyToolTip("Copy head/rim setting to All pads");
+	        }
 		}
 		uiComboBoxType.uiCtlSetValuesArray(listInputType);
 	}

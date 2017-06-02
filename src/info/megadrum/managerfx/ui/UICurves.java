@@ -200,8 +200,8 @@ public class UICurves {
 		//toolBarNavigator.setMinWidth(vBox.getWidth()*0.95);
 		toolBarTop.setMaxWidth(vBox.getWidth()*0.995);
 		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.995);
-		comboBoxCurve.setMinWidth(controlH*4.9);
-		comboBoxCurve.setMaxWidth(controlH*4.9);
+		comboBoxCurve.setMinWidth(controlH*5.3);
+		comboBoxCurve.setMaxWidth(controlH*5.3);
 		labelCurve.setFont(new Font(controlH*0.4));
 	}
 

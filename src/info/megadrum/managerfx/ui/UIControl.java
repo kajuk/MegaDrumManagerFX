@@ -118,6 +118,8 @@ public class UIControl extends Control implements UIControlInterface {
 			copyPressed = true;
 			fireControlChangeEvent(new ControlChangeEvent(this), 0);
 		});
+		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
+		buttonCopy.getTooltip().setFont(new Font(14));
 		
 
 		if (debugSizes) {
@@ -260,7 +262,6 @@ public class UIControl extends Control implements UIControlInterface {
 		buttonCopy.setMaxWidth(h/1.2);
 		buttonCopy.setMinWidth(h/1.2);
 		buttonCopy.setFont(new Font(h/2.5));
-		buttonCopy.setTooltip(new Tooltip("Copy this Input setting to all Inputs"));
         layout.getRowConstraints().clear();
         layout.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
         label.setFont(new Font(h*0.5));
@@ -288,4 +289,9 @@ public class UIControl extends Control implements UIControlInterface {
 	public void resetCopyPressed() {
 		copyPressed = false;
 	}
+	
+	public void setButtonCopyToolTip(String tt) {
+		buttonCopy.getTooltip().setText(tt);
+	}
+	
 }
