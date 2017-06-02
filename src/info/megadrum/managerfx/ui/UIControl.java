@@ -117,7 +117,6 @@ public class UIControl extends Control implements UIControlInterface {
 		//label.setStyle("-fx-background-color: grey");
 		layout.getChildren().add(buttonCopy);
 		setLabelWidthMultiplier(labelWidthMultiplier);
-		
 		//setColumnsSizes(120.0, 120.0);  //column 0 and 1 are 120 wid
 	}
 
@@ -260,4 +259,9 @@ public class UIControl extends Control implements UIControlInterface {
         //uiControl.minHeight(h - padding*2 - 1);
         //uiControl.respondToResizeControl(h,w);
 	}
+	
+	public void uiCtlSetDisable(Boolean disable) {
+		layout.setDisable(disable);
+	}
+	
 }

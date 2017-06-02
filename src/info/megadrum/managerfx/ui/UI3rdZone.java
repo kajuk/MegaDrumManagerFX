@@ -35,6 +35,10 @@ public class UI3rdZone {
 	private ArrayList<UIControl> allControls;
 	private ArrayList<Integer> gridColmn;
 	private ArrayList<Integer> gridRow;
+	
+	static private final	Boolean zoneFromPizeo	= false;
+	static private final	Boolean zoneFromSwitch 	= true;
+	private boolean			zoneType = zoneFromPizeo;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -126,6 +130,7 @@ public class UI3rdZone {
 		titledPane.setText("3rd Zone");
 		titledPane.setContent(layout);
 		titledPane.setCollapsible(false);
+		setZoneType(zoneFromPizeo);
 		setAllStateUnknown();
 	}
 
@@ -220,5 +225,18 @@ public class UI3rdZone {
 		config.pressrollNote_linked = uiSpinnerNotePressNote.getLinked();
 		config.dampenedNote = uiSpinnerNoteDampenedNote.uiCtlGetValue();
 		config.threshold = uiSpinnerThreshold.uiCtlGetValue();
+	}
+	
+	public void setZoneType(Boolean zoneSwitchType) {
+		zoneType = zoneSwitchType;
+		if (zoneSwitchType) {
+			uiSliderMidpoint.uiCtlSetDisable(true);
+			uiSpinnerMidpointWidth.uiCtlSetDisable(true);
+			uiSpinnerThreshold.uiCtlSetDisable(false);
+		} else {
+			uiSliderMidpoint.uiCtlSetDisable(false);
+			uiSpinnerMidpointWidth.uiCtlSetDisable(false);
+			uiSpinnerThreshold.uiCtlSetDisable(true);			
+		}
 	}
 }

@@ -247,8 +247,10 @@ public class UIPad extends Parent {
 	public void setControlsFromConfigPad(ConfigPad configPad, Boolean leftInput, Boolean setFromSysex) {
 		if (leftInput) {
 			uiInputLeft.setControlsFromConfigPad(configPad, setFromSysex);			
+			ui3rdZone.getUI().setVisible(configPad.getIntType() > 0);
 		} else {
 			uiInputRight.setControlsFromConfigPad(configPad, setFromSysex);						
+			ui3rdZone.setZoneType(configPad.getIntType() > 0);
 		}
 	}
 
@@ -263,8 +265,10 @@ public class UIPad extends Parent {
 	public void setConfigFromControlsPad(ConfigPad config,Boolean leftInput ) {
 		if (leftInput) {
 			uiInputLeft.setConfigPadFromControls(config);
+			ui3rdZone.getUI().setVisible(config.getIntType() > 0);
 		} else {
 			uiInputRight.setConfigPadFromControls(config);
+			ui3rdZone.setZoneType(config.getIntType() > 0);
 		}
 	}
 	
@@ -311,6 +315,10 @@ public class UIPad extends Parent {
 		ui3rdZone.setMdValuesFromConfig3rd(config);
 	}
 	
+	public void setZoneType(Boolean zoneSwitchType) {
+		ui3rdZone.setZoneType(zoneSwitchType);
+	}
+	
 	public void setInputPair(Integer pair, ConfigPad configPadLeft, ConfigPositional configPosLeft, ConfigPad configPadRight, ConfigPositional configPosRight, Config3rd config3rd) {
 		switchToInputPair(pair);
 		if (pair == 0) {
@@ -323,7 +331,6 @@ public class UIPad extends Parent {
 			setControlsFromConfigPad(configPadRight, false, false);
 			setControlsFromConfigPos(configPosRight, false, false);
 			setControlsFromConfig3rd(config3rd, false);
-			ui3rdZone.getUI().setVisible(true);
 		}
 	}
 	

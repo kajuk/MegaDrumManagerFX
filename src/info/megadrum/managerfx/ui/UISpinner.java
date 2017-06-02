@@ -280,4 +280,5 @@ public class UISpinner extends UIControl {
     public void setSpinnerType(Integer type) {
     	spinnerType = type;
     }
+    
 }
