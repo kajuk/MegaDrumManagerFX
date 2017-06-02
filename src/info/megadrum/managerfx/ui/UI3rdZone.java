@@ -131,6 +131,7 @@ public class UI3rdZone {
 							if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
 								linkedNoteStateChanged();
 							}
+							setMidPointAndThreshold();
 							fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 						}
 					}
@@ -261,6 +262,15 @@ public class UI3rdZone {
 			uiSliderMidpoint.uiCtlSetDisable(false);
 			uiSpinnerMidpointWidth.uiCtlSetDisable(false);
 			uiSpinnerThreshold.uiCtlSetDisable(true);			
+		}
+	}
+	
+	private void setMidPointAndThreshold() {
+		if (zoneType) {
+			uiSliderMidpoint.uiCtlSetValue((uiSpinnerThreshold.uiCtlGetValue()&0xf0)>>4, false);
+			uiSpinnerMidpointWidth.uiCtlSetValue(uiSpinnerThreshold.uiCtlGetValue()&0x0f, false);
+		} else {
+			uiSpinnerThreshold.uiCtlSetValue((uiSliderMidpoint.uiCtlGetValue()<<4) + uiSpinnerMidpointWidth.uiCtlGetValue(), false);
 		}
 	}
 }
