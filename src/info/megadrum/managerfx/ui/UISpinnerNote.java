@@ -277,12 +277,12 @@ public class UISpinnerNote extends UIControl {
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.28));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.26));
 		if (linkedNote) {
-			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.18));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.22));
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.02));			
 		} else {
-			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.19));
+			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.23));
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.01));
 		}
 		layoutC.getRowConstraints().clear();
@@ -293,13 +293,13 @@ public class UISpinnerNote extends UIControl {
 		
 		resizeFont();
 		if (linkedNote) {
-			labelNote.setFont(new Font(h*0.32));			
+			labelNote.setFont(new Font(h*0.50));			
 	    	// Padding setting really should be done via css and on init.
 	    	// This is a temp hack
 			checkBoxNoteLinked.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
 			checkBoxNoteLinked.setStyle("-fx-font-size: " + checkBoxFontSize.toString() + "pt");
 		} else {
-			labelNote.setFont(new Font(h*0.35));
+			labelNote.setFont(new Font(h*0.55));
 		}
    }
     
