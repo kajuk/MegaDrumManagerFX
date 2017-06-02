@@ -130,7 +130,7 @@ public class ConfigPad {
 
 	}
 	
-	public int getIntType() {
+	public int getTypeInt() {
 		int result = 0;
 		if (leftInput) {
 			if (dual) {
@@ -147,6 +147,143 @@ public class ConfigPad {
 				result = 0;
 			}
 		}
-	return result;
+		return result;
 	}
+	
+	public void setValueById(int valueId, int value) {
+		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_NAME:
+			name = value;
+			break;
+		case Constants.INPUT_VALUE_ID_NOTE:
+			note = value;
+			break;
+		case Constants.INPUT_VALUE_ID_ALT_NOTE:
+			altNote = value;
+			break;
+		case Constants.INPUT_VALUE_ID_PRESSROLL_NOTE:
+			pressrollNote = value;
+			break;
+		case Constants.INPUT_VALUE_ID_CHANNEL:
+			channel = value;
+			break;
+		case Constants.INPUT_VALUE_ID_FUNCTION:
+			function = value;
+			break;
+		case Constants.INPUT_VALUE_ID_CURVE:
+			curve = value;
+			break;
+		case Constants.INPUT_VALUE_ID_COMPRESSION:
+			compression = value;
+			break;
+		case Constants.INPUT_VALUE_ID_SHIFT:
+			shift = value;
+			break;
+		case Constants.INPUT_VALUE_ID_XTALK_LEVEL:
+			xtalkLevel = value;
+			break;
+		case Constants.INPUT_VALUE_ID_XTALK_GROUP:
+			xtalkGroup = value;
+			break;
+		case Constants.INPUT_VALUE_ID_THRESHOLD:
+			threshold = value;
+			break;
+		case Constants.INPUT_VALUE_ID_GAIN:
+			gain = value;
+			break;
+		case Constants.INPUT_VALUE_ID_HIGHLEVEL_AUTO:
+			autoLevel = (value > 0);
+			break;
+		case Constants.INPUT_VALUE_ID_HIGHLEVEL:
+			levelMax = value;
+			break;
+		case Constants.INPUT_VALUE_ID_RETRIGGER:
+			retrigger = value;
+			break;
+		case Constants.INPUT_VALUE_ID_DYN_LEVEL:
+			dynLevel = value;
+			break;
+		case Constants.INPUT_VALUE_ID_DYN_TIME:
+			dynTime = value;
+			break;
+		case Constants.INPUT_VALUE_ID_MINSCAN:
+			minScan = value;
+			break;
+		case Constants.INPUT_VALUE_ID_TYPE:
+			setTypeInt(value);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public int getValueById(int valueId) {
+		int value = -1;
+		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_NAME:
+			value = name;
+			break;
+		case Constants.INPUT_VALUE_ID_NOTE:
+			value = note;
+			break;
+		case Constants.INPUT_VALUE_ID_ALT_NOTE:
+			value = altNote;
+			break;
+		case Constants.INPUT_VALUE_ID_PRESSROLL_NOTE:
+			value = pressrollNote;
+			break;
+		case Constants.INPUT_VALUE_ID_CHANNEL:
+			value = channel;
+			break;
+		case Constants.INPUT_VALUE_ID_FUNCTION:
+			value = function;
+			break;
+		case Constants.INPUT_VALUE_ID_CURVE:
+			value = curve;
+			break;
+		case Constants.INPUT_VALUE_ID_COMPRESSION:
+			value = compression;
+			break;
+		case Constants.INPUT_VALUE_ID_SHIFT:
+			value = shift;
+			break;
+		case Constants.INPUT_VALUE_ID_XTALK_LEVEL:
+			value = xtalkLevel;
+			break;
+		case Constants.INPUT_VALUE_ID_XTALK_GROUP:
+			value = xtalkGroup;
+			break;
+		case Constants.INPUT_VALUE_ID_THRESHOLD:
+			value = threshold;
+			break;
+		case Constants.INPUT_VALUE_ID_GAIN:
+			value = gain;
+			break;
+		case Constants.INPUT_VALUE_ID_HIGHLEVEL_AUTO:
+			value = autoLevel?1:0;
+			break;
+		case Constants.INPUT_VALUE_ID_HIGHLEVEL:
+			value = levelMax;
+			break;
+		case Constants.INPUT_VALUE_ID_RETRIGGER:
+			value = retrigger;
+			break;
+		case Constants.INPUT_VALUE_ID_DYN_LEVEL:
+			value = dynLevel;
+			break;
+		case Constants.INPUT_VALUE_ID_DYN_TIME:
+			value = dynTime;
+			break;
+		case Constants.INPUT_VALUE_ID_MINSCAN:
+			value = minScan;
+			break;
+		case Constants.INPUT_VALUE_ID_TYPE:
+			value = getTypeInt();
+			break;
+		default:
+			break;
+		}
+		return value;
+	}
+
 }

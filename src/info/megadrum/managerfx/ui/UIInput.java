@@ -51,6 +51,9 @@ public class UIInput {
 	private List<String>    listInputType;
 	private int				inputType;
 	
+	private Boolean			copyPressed = false;
+	private int				copyPressedValueId = -1;
+	
 	//private ConfigPad			configPad;
 	//private ConfigPositional	configPos;
 		
@@ -161,20 +164,29 @@ public class UIInput {
 		allControls.add(uiComboBoxType);
 	
 		for (int i = 0; i < allControls.size(); i++) {
+			final int iFinal = i;
         	layout.getChildren().add(allControls.get(i).getUI());
+        	allControls.get(i).setValueId(i + Constants.INPUT_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
-					if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
-						linkedNoteStateChanged();
-					} else {
-						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
-							linkedNoteStateChanged();
-						}
+					if (allControls.get(iFinal).isCopyPressed()) {
+						allControls.get(iFinal).resetCopyPressed();
+						copyPressedValueId = allControls.get(iFinal).getValueId();
+						copyPressed = true;
 						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					} else {
+						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
+							linkedNoteStateChanged();
+						} else {
+							if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
+								linkedNoteStateChanged();
+							}
+							fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+						}
 					}
 				}
 			});
@@ -186,6 +198,18 @@ public class UIInput {
 		titledPane.setCollapsible(false);
 		
 		setAllStateUnknown();
+	}
+
+	public int getCopyPressedValueId() {
+		return copyPressedValueId;
+	}
+	
+	public Boolean isCopyPressed() {
+		return copyPressed;
+	}
+	
+	public void resetCopyPressed() {
+		copyPressed = false;
 	}
 
 	public void setAllStateUnknown() {
@@ -261,7 +285,7 @@ public class UIInput {
 		uiComboBoxDynLevel.uiCtlSetMdValue(configPad.dynLevel);
 		uiComboBoxDynTime.uiCtlSetMdValue(configPad.dynTime);
 		uiSpinnerMinScan.uiCtlSetMdValue(configPad.minScan);
-		uiComboBoxType.uiCtlSetMdValue(configPad.getIntType());
+		uiComboBoxType.uiCtlSetMdValue(configPad.getTypeInt());
 	}
 	
 	public void setControlsFromConfigPos(ConfigPositional configPos, Boolean setFromSysex) {
@@ -312,7 +336,7 @@ public class UIInput {
 		uiComboBoxDynLevel.uiCtlSetValue(configPad.dynLevel, setFromSysex);
 		uiComboBoxDynTime.uiCtlSetValue(configPad.dynTime, setFromSysex);
 		uiSpinnerMinScan.uiCtlSetValue(configPad.minScan, setFromSysex);
-		uiComboBoxType.uiCtlSetValue(configPad.getIntType(), setFromSysex);
+		uiComboBoxType.uiCtlSetValue(configPad.getTypeInt(), setFromSysex);
 	}
 	
 	public void setConfigPosFromControls(ConfigPositional configPos) {

@@ -34,4 +34,38 @@ public class ConfigPositional {
 		high = Utils.validateInt(prop.getInt(prefix+"high", high),0,100,high);
 	}	
 
+	public void setValueById(int valueId, int value) {
+		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_POS_LEVEL:
+			level = value;
+			break;
+		case Constants.INPUT_VALUE_ID_POS_LOW:
+			low = value;
+			break;
+		case Constants.INPUT_VALUE_ID_POS_HIGH:
+			high = value;
+			break;
+		default:
+				break;
+		}
+	}
+
+	public int getValueById(int valueId) {
+		int value = -1;
+		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_POS_LEVEL:
+			value = level;
+			break;
+		case Constants.INPUT_VALUE_ID_POS_LOW:
+			value = low;
+			break;
+		case Constants.INPUT_VALUE_ID_POS_HIGH:
+			value = high;
+			break;
+		default:
+				break;
+		}
+		return value;
+	}
+
 }

@@ -2,6 +2,8 @@ package info.megadrum.managerfx.ui;
 
 import javax.swing.event.EventListenerList;
 
+import org.apache.commons.collections.ResettableIterator;
+
 //import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.utils.Constants;
@@ -54,6 +56,8 @@ public class UIControl extends Control implements UIControlInterface {
 	private Double labelWidthMultiplier = 0.4;
 	private Double controlWidthMultiplier;
 	protected final static Boolean debugSizes = false;
+	private int valueId = -1;
+	private Boolean copyPressed = false;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -110,6 +114,11 @@ public class UIControl extends Control implements UIControlInterface {
 		GridPane.setHalignment(buttonCopy, HPos.RIGHT);
 		GridPane.setValignment(buttonCopy, VPos.CENTER);
 		buttonCopy.setVisible(copyButtonShown);
+		buttonCopy.setOnAction(e-> {
+			copyPressed = true;
+			fireControlChangeEvent(new ControlChangeEvent(this), 0);
+		});
+		
 
 		if (debugSizes) {
 			layout.setStyle("-fx-background-color: grey");
@@ -264,4 +273,19 @@ public class UIControl extends Control implements UIControlInterface {
 		layout.setDisable(disable);
 	}
 	
+	public void setValueId(int value) {
+		valueId = value;
+	}
+
+	public int getValueId() {
+		return valueId;
+	}
+	
+	public Boolean isCopyPressed() {
+		return copyPressed;
+	}
+	
+	public void resetCopyPressed() {
+		copyPressed = false;
+	}
 }

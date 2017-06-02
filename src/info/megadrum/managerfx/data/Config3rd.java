@@ -46,5 +46,52 @@ public class Config3rd {
 		dampenedNote = Utils.validateInt(prop.getInt(prefix+"dampenedNote", dampenedNote),0,127,dampenedNote);
 		altNote_linked = prop.getBoolean(prefix+"altNote_linked", altNote_linked);
 		pressrollNote_linked = prop.getBoolean(prefix+"pressrollNote_linked", pressrollNote_linked);				
-	}		
+	}
+	
+	public void setValueById(int valueId, int value) {
+		switch (valueId) {
+		case Constants.THIRD_ZONE_VALUE_ID_NOTE:
+			note = value;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_ALT_NOTE:
+			altNote = value;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE:
+			pressrollNote = value;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_DAMPENED_NOTE:
+			dampenedNote = value;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_THRESHOLD:
+			threshold = value;
+			break;
+		default:
+				break;
+		}
+	}
+
+	public int getValueById(int valueId) {
+		int value = -1;
+		switch (valueId) {
+		case Constants.THIRD_ZONE_VALUE_ID_NOTE:
+			value = note;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_ALT_NOTE:
+			value = altNote;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE:
+			value = pressrollNote;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_DAMPENED_NOTE:
+			value = dampenedNote;
+			break;
+		case Constants.THIRD_ZONE_VALUE_ID_THRESHOLD:
+			value = threshold;
+			break;
+		default:
+				break;
+		}
+		return value;
+	}
+
 }

@@ -225,9 +225,42 @@ public interface Constants {
 	public static final int CUSTOM_NAME_CHANGE_TEXT_START = 64;
 	public static final int CUSTOM_NAME_CHANGE_GET_START = CUSTOM_NAME_CHANGE_TEXT_START + CUSTOM_NAMES_MAX;
 	public static final int CUSTOM_NAME_CHANGE_SEND_START = CUSTOM_NAME_CHANGE_GET_START + CUSTOM_NAMES_MAX;
-	
 
 	public static final String [] PEDAL_TYPES_LIST = {"Pot", "FootContr"};
 	
+	public static final int INPUT_VALUE_ID_MIN				= 100;
+	public static final int INPUT_VALUE_ID_NAME 			= INPUT_VALUE_ID_MIN;
+	public static final int INPUT_VALUE_ID_NOTE 			= INPUT_VALUE_ID_NAME + 1;
+	public static final int INPUT_VALUE_ID_ALT_NOTE			= INPUT_VALUE_ID_NOTE + 1;
+	public static final int INPUT_VALUE_ID_PRESSROLL_NOTE	= INPUT_VALUE_ID_ALT_NOTE + 1;
+	public static final int INPUT_VALUE_ID_CHANNEL 			= INPUT_VALUE_ID_PRESSROLL_NOTE + 1;
+	public static final int INPUT_VALUE_ID_FUNCTION 		= INPUT_VALUE_ID_CHANNEL + 1;
+	public static final int INPUT_VALUE_ID_CURVE			= INPUT_VALUE_ID_FUNCTION + 1;
+	public static final int INPUT_VALUE_ID_COMPRESSION		= INPUT_VALUE_ID_CURVE + 1;
+	public static final int INPUT_VALUE_ID_SHIFT 			= INPUT_VALUE_ID_COMPRESSION + 1;
+	public static final int INPUT_VALUE_ID_XTALK_LEVEL		= INPUT_VALUE_ID_SHIFT + 1;
+	public static final int INPUT_VALUE_ID_XTALK_GROUP		= INPUT_VALUE_ID_XTALK_LEVEL + 1;
+	public static final int INPUT_VALUE_ID_THRESHOLD		= INPUT_VALUE_ID_XTALK_GROUP + 1;
+	public static final int INPUT_VALUE_ID_GAIN 			= INPUT_VALUE_ID_THRESHOLD + 1;
+	public static final int INPUT_VALUE_ID_HIGHLEVEL_AUTO 	= INPUT_VALUE_ID_GAIN + 1;
+	public static final int INPUT_VALUE_ID_HIGHLEVEL 		= INPUT_VALUE_ID_HIGHLEVEL_AUTO + 1;
+	public static final int INPUT_VALUE_ID_RETRIGGER		= INPUT_VALUE_ID_HIGHLEVEL + 1;
+	public static final int INPUT_VALUE_ID_DYN_LEVEL		= INPUT_VALUE_ID_RETRIGGER + 1;
+	public static final int INPUT_VALUE_ID_DYN_TIME			= INPUT_VALUE_ID_DYN_LEVEL + 1;
+	public static final int INPUT_VALUE_ID_MINSCAN 			= INPUT_VALUE_ID_DYN_TIME + 1;
+	public static final int INPUT_VALUE_ID_POS_LEVEL	 	= INPUT_VALUE_ID_MINSCAN + 1;
+	public static final int INPUT_VALUE_ID_POS_LOW			= INPUT_VALUE_ID_POS_LEVEL + 1;
+	public static final int INPUT_VALUE_ID_POS_HIGH			= INPUT_VALUE_ID_POS_LOW + 1;
+	public static final int INPUT_VALUE_ID_TYPE				= INPUT_VALUE_ID_POS_HIGH + 1;
+	public static final int INPUT_VALUE_ID_MAX				= INPUT_VALUE_ID_TYPE;
+	
+	public static final int THIRD_ZONE_VALUE_ID_MIN				= INPUT_VALUE_ID_MAX + 1;
+	public static final int THIRD_ZONE_VALUE_ID_NOTE			= THIRD_ZONE_VALUE_ID_MIN;
+	public static final int THIRD_ZONE_VALUE_ID_ALT_NOTE		= THIRD_ZONE_VALUE_ID_NOTE + 1;
+	public static final int THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE	= THIRD_ZONE_VALUE_ID_ALT_NOTE + 1;
+	public static final int THIRD_ZONE_VALUE_ID_DAMPENED_NOTE	= THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE + 1;
+	public static final int THIRD_ZONE_VALUE_ID_THRESHOLD		= THIRD_ZONE_VALUE_ID_DAMPENED_NOTE + 1;
+	public static final int THIRD_ZONE_VALUE_ID_MAX				= THIRD_ZONE_VALUE_ID_THRESHOLD;
+
 	
 }

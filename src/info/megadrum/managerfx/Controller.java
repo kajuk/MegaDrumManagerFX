@@ -152,14 +152,34 @@ public class Controller implements MidiRescanEventListener {
 				System.out.printf("Input %s control change\n", (parameter == Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT) ? "left" : "right");
 				switch (parameter) {
 				case Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT:
-					controlsInputChanged(inputNumber, true);
+					if (uiPad.isCopyPressed()) {
+						System.out.printf("left copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+						uiPad.resetCopyPressed();
+						copyLeftInputValueToAllOthers();
+						switchToSelectedPair(padPair);
+					} else {
+						controlsInputChanged(inputNumber, true);
+					}
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT:
-					controlsInputChanged(inputNumber + 1, false);
+					if (uiPad.isCopyPressed()) {
+						System.out.printf("right copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+						uiPad.resetCopyPressed();
+						copyPadPairValueToAllOthers();
+					} else {
+						controlsInputChanged(inputNumber + 1, false);						
+					}
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_3RD_INPUT:
 					if (padPair > 0) {
-						controls3rdChanged(padPair);
+						if (uiPad.isCopyPressed()) {
+							System.out.printf("3rd zone copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+							uiPad.resetCopyPressed();
+							copy3rdZoneValueToAllOthers();
+						} else {
+							controlsInputChanged(inputNumber + 1, false);						
+							controls3rdChanged(padPair);
+						}
 					}
 					break;
 				default:
@@ -353,22 +373,6 @@ public class Controller implements MidiRescanEventListener {
 		window.show();
 	}
 
-/*
-	public void respondToResize(Scene sc) {
-		Double height = sc.getHeight() - mainMenuBar.getHeight();
-		Double width = height*2;
-		Double controlH, controlW;
-		controlH= height *0.05;
-		//controlW= width *0.2;
-		controlW= controlH *5;
-		//System.out.println("Responding to scene resize in Controller");
-		//uiMisc.respondToResize((height)*0.45, sc.getWidth()*0.17, height, controlH, controlW);
-		uiMisc.respondToResize(height, width, height, controlH, controlW);
-		//uiPedal.respondToResize((height)*0.65, sc.getWidth()*0.17, height, controlH, controlW);
-		//uiPad.respondToResize((height)*1.33 - 200, sc.getWidth()*0.65, height, controlH, controlW);
-		//uiPad.respondToResize(sc.getHeight() - mainMenuBar.getHeight() - 50, sc.getWidth()*0.6, height);
-	}
-*/	
 	public void respondToResize(Scene sc) {
 		Double mainMenuBarHeight = mainMenuBar.getHeight();
 		Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
@@ -421,6 +425,62 @@ public class Controller implements MidiRescanEventListener {
 		System.out.println("Exiting\n");
 		window.close();
 		System.exit(0);
+	}
+	
+	private void copyLeftInputValueToAllOthers() {
+		int maxInputs = configFull.configGlobalMisc.inputs_count - 1;
+		int valueId = uiPad.getCopyPressedValueId();
+		int currentInput = 0;
+		if (padPair > 0) {
+			currentInput = (padPair*2) - 1;
+		}
+		int value = configFull.configPads[currentInput].getValueById(valueId);
+		for (int i = 0; i < maxInputs; i++) {
+			if (i != currentInput) {
+				if (((i&1) > 0) || (valueId != Constants.INPUT_VALUE_ID_TYPE)) {
+					if ((valueId >= Constants.INPUT_VALUE_ID_POS_LEVEL) && (valueId <= Constants.INPUT_VALUE_ID_POS_HIGH)) {
+						value = configFull.configPos[currentInput].getValueById(valueId);
+						configFull.configPos[i].setValueById(valueId, value);					
+					} else {
+						configFull.configPads[i].setValueById(valueId, value);					
+					}
+				}
+			}
+		}
+	}
+	
+	private void copyPadPairValueToAllOthers() {
+		int maxPair = (configFull.configGlobalMisc.inputs_count/2) - 1;
+		int valueId = uiPad.getCopyPressedValueId();
+		int currentPair = padPair - 1;
+		int valueLeft = configFull.configPads[currentPair*2  + 1].getValueById(valueId);
+		int valueRight = configFull.configPads[currentPair*2 + 2].getValueById(valueId);
+		//ui
+		for (int i = 0; i < maxPair; i++) {
+			if (i != currentPair) {
+				if ((valueId >= Constants.INPUT_VALUE_ID_POS_LEVEL) && (valueId <= Constants.INPUT_VALUE_ID_POS_HIGH)) {
+					valueLeft = configFull.configPos[currentPair*2 + 1].getValueById(valueId);
+					valueRight = configFull.configPos[currentPair*2 + 2].getValueById(valueId);
+					configFull.configPos[i*2 + 1].setValueById(valueId, valueLeft);			
+					configFull.configPos[i*2 + 2].setValueById(valueId, valueRight);			
+				} else {
+					configFull.configPads[i*2 + 1].setValueById(valueId, valueLeft);					
+					configFull.configPads[i*2 + 2].setValueById(valueId, valueRight);					
+				}
+			}
+		}
+	}
+	
+	private void copy3rdZoneValueToAllOthers() {
+		int max3rd = (configFull.configGlobalMisc.inputs_count/2) - 1;
+		int valueId = uiPad.getCopyPressedValueId();
+		int current3rd = padPair - 1;
+		int value = configFull.config3rds[current3rd].getValueById(valueId);
+		for (int i = 0; i < max3rd; i++) {
+			if (i != current3rd) {
+				configFull.config3rds[i].setValueById(valueId, value);
+			}
+		}
 	}
 	
 	private void sendSysex() {
@@ -1244,17 +1304,19 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void switchToSelectedPair(Integer newPadPair) {
-		if (padPair == 0) {
-			uiPad.setConfigFromControlsPad(configFull.configPads[0], true);			
-			uiPad.setConfigPosFromControlsPad(configFull.configPos[0], true);			
-		} else {
-			uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 1], true);
-			uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 1], true);
-			uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 2], false);
-			uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 2], false);
-			uiPad.setConfig3rdFromControlsPad(configFull.config3rds[padPair - 1]);
-		}		
-		padPair = newPadPair;
+		if (padPair != newPadPair) {
+			if (padPair == 0) {
+				uiPad.setConfigFromControlsPad(configFull.configPads[0], true);			
+				uiPad.setConfigPosFromControlsPad(configFull.configPos[0], true);			
+			} else {
+				uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 1], true);
+				uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 1], true);
+				uiPad.setConfigFromControlsPad(configFull.configPads[((padPair-1)*2) + 2], false);
+				uiPad.setConfigPosFromControlsPad(configFull.configPos[((padPair-1)*2) + 2], false);
+				uiPad.setConfig3rdFromControlsPad(configFull.config3rds[padPair - 1]);
+			}		
+			padPair = newPadPair;
+		}
 		if (padPair == 0) {
 			uiPad.setAllStatesUnknown(moduleConfigFull.configPads[0].sysexReceived, false, false);
 			if (moduleConfigFull.configPads[0].sysexReceived) {

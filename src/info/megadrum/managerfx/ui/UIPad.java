@@ -67,6 +67,9 @@ public class UIPad extends Parent {
 	private Integer		padPair;
 	private Boolean		nameChanged = false;
 	//private Integer		controlsCha
+	private Boolean			copyPressed = false;
+	private int				copyPressedValueId = -1;
+
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -136,6 +139,11 @@ public class UIPad extends Parent {
 				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
 					nameChanged = true;
 				}
+				if (uiInputLeft.isCopyPressed()) {
+					copyPressed = true;
+					copyPressedValueId = uiInputLeft.getCopyPressedValueId();
+					uiInputLeft.resetCopyPressed();
+				}
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT);
 			}
 		});
@@ -146,6 +154,11 @@ public class UIPad extends Parent {
 				// TODO Auto-generated method stub
 				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
 					nameChanged = true;
+				}
+				if (uiInputRight.isCopyPressed()) {
+					copyPressed = true;
+					copyPressedValueId = uiInputRight.getCopyPressedValueId();
+					uiInputRight.resetCopyPressed();
 				}
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT);
 			}
@@ -158,11 +171,28 @@ public class UIPad extends Parent {
 				if (parameter == Constants.CONTROL_CHANGE_EVENT_NAME) {
 					nameChanged = true;
 				}
+				if (ui3rdZone.isCopyPressed()) {
+					copyPressed = true;
+					copyPressedValueId = ui3rdZone.getCopyPressedValueId();
+					ui3rdZone.resetCopyPressed();
+				}
 				fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_3RD_INPUT);
 			}
 		});
     	
     	setAllStatesUnknown(false, false, false);
+	}
+
+	public int getCopyPressedValueId() {
+		return copyPressedValueId;
+	}
+	
+	public Boolean isCopyPressed() {
+		return copyPressed;
+	}
+	
+	public void resetCopyPressed() {
+		copyPressed = false;
 	}
 	
 	public Boolean isNameChanged() {
@@ -247,10 +277,10 @@ public class UIPad extends Parent {
 	public void setControlsFromConfigPad(ConfigPad configPad, Boolean leftInput, Boolean setFromSysex) {
 		if (leftInput) {
 			uiInputLeft.setControlsFromConfigPad(configPad, setFromSysex);			
-			ui3rdZone.getUI().setVisible(configPad.getIntType() > 0);
+			ui3rdZone.getUI().setVisible(configPad.getTypeInt() > 0);
 		} else {
 			uiInputRight.setControlsFromConfigPad(configPad, setFromSysex);						
-			ui3rdZone.setZoneType(configPad.getIntType() > 0);
+			ui3rdZone.setZoneType(configPad.getTypeInt() > 0);
 		}
 	}
 
@@ -265,10 +295,10 @@ public class UIPad extends Parent {
 	public void setConfigFromControlsPad(ConfigPad config,Boolean leftInput ) {
 		if (leftInput) {
 			uiInputLeft.setConfigPadFromControls(config);
-			ui3rdZone.getUI().setVisible(config.getIntType() > 0);
+			ui3rdZone.getUI().setVisible(config.getTypeInt() > 0);
 		} else {
 			uiInputRight.setConfigPadFromControls(config);
-			ui3rdZone.setZoneType(config.getIntType() > 0);
+			ui3rdZone.setZoneType(config.getTypeInt() > 0);
 		}
 	}
 	

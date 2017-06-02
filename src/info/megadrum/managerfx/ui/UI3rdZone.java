@@ -40,6 +40,9 @@ public class UI3rdZone {
 	static private final	Boolean zoneFromSwitch 	= true;
 	private boolean			zoneType = zoneFromPizeo;
 
+	private Boolean			copyPressed = false;
+	private int				copyPressedValueId = -1;
+
 	protected EventListenerList listenerList = new EventListenerList();
 	
 	public void addControlChangeEventListener(ControlChangeEventListener listener) {
@@ -104,23 +107,32 @@ public class UI3rdZone {
 
 	
 		for (int i = 0; i < allControls.size(); i++) {
+			final int iFinal = i;
 			GridPane.setConstraints(allControls.get(i).getUI(), gridColmn.get(i), gridRow.get(i));
 			GridPane.setHalignment(allControls.get(i).getUI(), HPos.LEFT);
 			GridPane.setValignment(allControls.get(i).getUI(), VPos.CENTER);
         	layout.getChildren().add(allControls.get(i).getUI());
+        	allControls.get(i).setValueId(i + Constants.THIRD_ZONE_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 					// TODO Auto-generated method stub
-					if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
-						linkedNoteStateChanged();
-					} else {
-						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
-							linkedNoteStateChanged();
-						}
+					if (allControls.get(iFinal).isCopyPressed()) {
+						allControls.get(iFinal).resetCopyPressed();
+						copyPressedValueId = allControls.get(iFinal).getValueId();
+						copyPressed = true;
 						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+					} else {
+						if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_LINKED) {
+							linkedNoteStateChanged();
+						} else {
+							if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
+								linkedNoteStateChanged();
+							}
+							fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+						}
 					}
 				}
 			});
@@ -132,6 +144,18 @@ public class UI3rdZone {
 		titledPane.setCollapsible(false);
 		setZoneType(zoneFromPizeo);
 		setAllStateUnknown();
+	}
+
+	public int getCopyPressedValueId() {
+		return copyPressedValueId;
+	}
+	
+	public Boolean isCopyPressed() {
+		return copyPressed;
+	}
+	
+	public void resetCopyPressed() {
+		copyPressed = false;
 	}
 
 	public void setAllStateUnknown() {

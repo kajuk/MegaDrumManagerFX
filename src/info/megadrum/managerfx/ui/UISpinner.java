@@ -212,7 +212,7 @@ public class UISpinner extends UIControl {
     private void resizeFont() {
 		Double we = uispinner.getEditor().getWidth();
 		Integer l = maxValue.toString().length();
-		Double ll = (16/(16 + l.doubleValue()))*1.1;
+		Double ll = (16/(16 + l.doubleValue()))*1.0;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		switch (spinnerType) {
 		case Constants.FX_SPINNER_TYPE_SYSEX:
