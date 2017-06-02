@@ -1,6 +1,5 @@
 package info.megadrum.managerfx.ui;
 
-import info.megadrum.managerfx.ui.UISpinner.IncrementHandler;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
@@ -27,7 +26,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 
 public class UISpinnerNote extends UIControl {
-	private Spinner<Integer> uispinner;
+	private SpinnerFast<Integer> uispinner;
 	private SpinnerValueFactory<Integer> valueFactory;
 	private Integer 	minValue;
 	private Integer 	maxValue;
@@ -73,7 +72,7 @@ public class UISpinnerNote extends UIControl {
 		step = s;
 		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, intValue, step);
 
-		uispinner = new Spinner<Integer>();
+		uispinner = new SpinnerFast<Integer>();
 		uispinner.setValueFactory(valueFactory);
 		uispinner.setEditable(true);
 		//uispinner.seton
@@ -122,26 +121,6 @@ public class UISpinnerNote extends UIControl {
 			}
 	    });
 		
-		uispinner.getEditor().setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case UP:
-                    uispinner.increment(1);
-                    break;
-                case DOWN:
-                    uispinner.decrement(1);
-                    break;
-			default:
-				break;
-            }
-        });
-		
-	    IncrementHandler handler = new IncrementHandler();
-	    uispinner.addEventFilter(MouseEvent.MOUSE_PRESSED, handler);
-	    uispinner.addEventFilter(MouseEvent.MOUSE_RELEASED, evt -> {
-	        if (evt.getButton() == MouseButton.PRIMARY) {
-	            handler.stop();
-	        }
-	    });
 	    
 	    layoutC = new GridPane();
 	    labelNote = new Label("");
@@ -183,79 +162,6 @@ public class UISpinnerNote extends UIControl {
 		initControl(layoutC);
 	}
 
-    class IncrementHandler implements EventHandler<MouseEvent> {
-
-        private Spinner<?> spinner;
-        private boolean increment;
-        private long startTimestamp;
-
-        private static final long DELAY = 1000l * 1000L * 750L; // 0.75 sec
-        private Node button;
-
-        private final AnimationTimer timer = new AnimationTimer() {
-
-            @Override
-            public void handle(long now) {
-                if (now - startTimestamp >= DELAY) {
-                    // trigger updates every frame once the initial delay is over
-                    if (increment) {
-                        spinner.increment();
-                    } else {
-                        spinner.decrement();
-                    }
-                }
-            }
-        };
-
-        @Override
-        public void handle(MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                Spinner<?> source = (Spinner<?>) event.getSource();
-                Node node = event.getPickResult().getIntersectedNode();
-
-                Boolean increment = null;
-                // find which kind of button was pressed and if one was pressed
-                while (increment == null && node != source) {
-                    if (node.getStyleClass().contains("increment-arrow-button")) {
-                        increment = Boolean.TRUE;
-                    } else if (node.getStyleClass().contains("decrement-arrow-button")) {
-                        increment = Boolean.FALSE;
-                    } else {
-                        node = node.getParent();
-                    }
-                }
-                if (increment != null) {
-                    event.consume();
-                    source.requestFocus();
-                    spinner = source;
-                    this.increment = increment;
-
-                    // timestamp to calculate the delay
-                    startTimestamp = System.nanoTime();
-
-                    button = node;
-
-                    // update for css styling
-                    node.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
-
-                    // first value update
-                    timer.handle(startTimestamp + DELAY);
-
-                    // trigger timer for more updates later
-                    timer.start();
-                }
-            }
-        }
-        public void stop() {
-            timer.stop();
-            if (button != null) {
-            	button.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), false);
-            	button = null;
-            	spinner = null;
-            }
-        }
-
-    }
     private void resizeFont() {
 		Double we = uispinner.getEditor().getWidth();
 		Integer l = maxValue.toString().length();
