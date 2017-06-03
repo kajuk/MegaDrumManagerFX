@@ -1,5 +1,6 @@
 package info.megadrum.managerfx;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -9,9 +10,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.management.OperationsException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.collections.functors.AndPredicate;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
@@ -39,6 +43,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -88,6 +93,7 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigFull [] fullConfigs;
 	private String [] configFileNames;
 	private FileManager fileManager;
+	private File file;
 	private int padPair = 0;
 	private int comboBoxInputChangedFromSet = 0;
 	private int toggleButtonMidiChangedFromSet = 0;
@@ -111,6 +117,7 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
+		loadConfig();
 		uiGlobal = new UIGlobal();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
@@ -390,6 +397,10 @@ public class Controller implements MidiRescanEventListener {
 		window.setWidth(1200);
 		window.setHeight(800);
 		window.show();
+		//Setting position works only after Stage is shown
+		window.setX(configOptions.mainWindowPosition.getX());
+		window.setY(configOptions.mainWindowPosition.getY());
+
 	}
 
 	public void respondToResize(Scene sc) {
@@ -510,9 +521,50 @@ public class Controller implements MidiRescanEventListener {
 				);
 		
 	}
-	
+
+	private void loadConfig() {
+		//copyAllToConfigFull();
+		configOptions  = fileManager.loadLastOptions(configOptions);
+		System.out.println("ToDo!!");
+		//showChangeNotificationIfNeeded();
+		//comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
+		//comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
+		//showMidiWarningIfNeeded();
+		//if (configOptions.autoOpenPorts) {
+		//	midiController.;
+		//	tglbtnMidi.setSelected(midi_handler.isMidiOpen());
+		//}
+		//midiController.chainId = configOptions.chainId;
+		//comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		//updateInputsCountControls();
+		if (!configOptions.configFullPaths[configOptions.lastConfig].equals("")) {
+			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
+			loadAllFromConfigFull();
+		}
+		//updateGlobalMiscControls();
+		window.setX(configOptions.mainWindowPosition.getX());
+		window.setY(configOptions.mainWindowPosition.getY());
+		//window.setX(300.0);
+		//window.setY(1200.0);
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			//framesDetached[i].setLocation(configOptions.framesPositions[i]);
+			//viewMenus[i].setConfigOptions(configOptions);
+		}
+		//tglbtnLiveUpdates.setSelected(configOptions.interactive);
+		//checkBoxAutoResize.setSelected(configOptions.autoResize);
+	}
+
 	private void closeProgram() {
 		System.out.println("Exiting\n");
+		midiController.closeAllPorts();
+		Point2D position = new Point2D(window.getX(), window.getY());
+		configOptions.mainWindowPosition = position;
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			//configOptions.framesPositions[i] = framesDetached[i].getLocation(); 
+		}
+		if (configOptions.saveOnExit) {
+			fileManager.saveLastOptions(configOptions);
+		}
 		window.close();
 		System.exit(0);
 	}

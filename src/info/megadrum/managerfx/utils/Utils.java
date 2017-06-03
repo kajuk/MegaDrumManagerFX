@@ -1253,6 +1253,16 @@ public class Utils {
 		}
 	}
 	
+	public static Double validateDouble(Double value, Double min, Double max, Double fallBack){
+		//returns value if min <= value <= max
+		//otherwise returns fallBack
+		if ((value>=min) && (value<=max)) {
+			return value;
+		} else {
+			return fallBack;
+		}
+	}
+	
 	public static short validateShort(short value, int min, int max, short fallBack){
 		//returns value if min <= value <= max
 		//otherwise returns fallBack

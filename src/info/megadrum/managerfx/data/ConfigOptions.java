@@ -1,12 +1,11 @@
 package info.megadrum.managerfx.data;
 
-import java.awt.Point;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
+import javafx.geometry.Point2D;
 
 public class ConfigOptions implements java.io.Serializable {
 	/**
@@ -34,9 +33,9 @@ public class ConfigOptions implements java.io.Serializable {
 	//public int inputsCount = 56;
 	public int sysexDelay = 30;
 	public String LookAndFeelName = "";
-	public Point mainWindowPosition = new Point(10,10);
+	public Point2D mainWindowPosition = new Point2D(10,10);
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
-	public Point [] framesPositions = { new Point(10,10), new Point(210,10), new Point(410,10), new Point(610,10), new Point(810,10)};
+	public Point2D [] framesPositions = { new Point2D(10,10), new Point2D(210,10), new Point2D(410,10), new Point2D(610,10), new Point2D(810,10)};
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
 	public int mcuType = 0;
 	public int version = 0;
@@ -81,11 +80,11 @@ public class ConfigOptions implements java.io.Serializable {
 		//prop.setProperty("inputsCount", inputsCount);
 		prop.setProperty("sysexDelay", sysexDelay);
 		prop.setProperty("LookAndFeelName", LookAndFeelName);
-		prop.setProperty("mainWindowPositionX", mainWindowPosition.x);
-		prop.setProperty("mainWindowPositionY", mainWindowPosition.y);
+		prop.setProperty("mainWindowPositionX", mainWindowPosition.getX());
+		prop.setProperty("mainWindowPositionY", mainWindowPosition.getY());
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", framesPositions[i].x);
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].y);
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", framesPositions[i].getX());
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].getY());
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
 		prop.setProperty("autoResize", autoResize);
@@ -121,14 +120,14 @@ public class ConfigOptions implements java.io.Serializable {
 		//inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),18,56,inputsCount);
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
 		LookAndFeelName = prop.getString("LookAndFeelName", LookAndFeelName);
-		mainWindowPosition = new Point(
-				Utils.validateInt(prop.getInt("mainWindowPositionX", 0),0,1600,0),
-				Utils.validateInt(prop.getInt("mainWindowPositionY", 0),0,600,0)
+		mainWindowPosition = new Point2D(
+				Utils.validateDouble(prop.getDouble("mainWindowPositionX", 0.0),0.0,1600.0,0.0),
+				Utils.validateDouble(prop.getDouble("mainWindowPositionY", 0.0),0.0,600.0,0.0)
 				);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			framesPositions[i] = new Point (
-					Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"X", 0),0,1600,0),
-							Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"Y", 0),0,600,0)
+			framesPositions[i] = new Point2D (
+					Utils.validateDouble(prop.getDouble("framesPositions"+ ((Integer)i).toString()+"X", 0.0),0.0,1600.0,0.0),
+					Utils.validateDouble(prop.getDouble("framesPositions"+ ((Integer)i).toString()+"Y", 0.0),0.0,600.0,0.0)
 					);
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
