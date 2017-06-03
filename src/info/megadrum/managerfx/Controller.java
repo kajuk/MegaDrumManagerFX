@@ -15,6 +15,7 @@ import org.apache.commons.collections.functors.AndPredicate;
 
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.data.FileManager;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
@@ -84,6 +85,9 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigOptions configOptions;
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
+	private ConfigFull [] fullConfigs;
+	private String [] configFileNames;
+	private FileManager fileManager;
 	private int padPair = 0;
 	private int comboBoxInputChangedFromSet = 0;
 	private int toggleButtonMidiChangedFromSet = 0;
@@ -103,12 +107,15 @@ public class Controller implements MidiRescanEventListener {
 			closeProgram();
 		});
 
+		fileManager = new FileManager(window);
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
 		uiGlobal = new UIGlobal();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
+		uiGlobal.getButtonLoadAll().setOnAction(e-> load_all());
+		uiGlobal.getButtonSaveAll().setOnAction(e-> save_all());
 		uiGlobalMisc = new UIGlobalMisc();
 		uiGlobalMisc.getButtonGet().setOnAction(e-> sendSysexGlobalMiscRequest());
 		uiGlobalMisc.getButtonSend().setOnAction(e-> sendSysexGlobalMisc());
@@ -419,7 +426,9 @@ public class Controller implements MidiRescanEventListener {
 		menuItemAllSettingsSend = new MenuItem("Send to MD");
 		menuItemAllSettingsSend.setOnAction(e-> sendAllSysex());
 		menuItemAllSettingsLoad = new MenuItem("Load from file");
+		menuItemAllSettingsLoad.setOnAction(e-> load_all());
 		menuItemAllSettingsSave = new MenuItem("Save to file");
+		menuItemAllSettingsSave.setOnAction(e-> save_all());
 		menuLoadFromMdSlot = new Menu("Load from MD Slot:");
 		menuSaveToMdSlot = new Menu("Save to MD Slot:");
 		menuAllSettings.getItems().addAll(menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
@@ -1312,6 +1321,12 @@ public class Controller implements MidiRescanEventListener {
 		}
 	}
 	private void initConfigs() {
+		fullConfigs = new ConfigFull[Constants.CONFIGS_COUNT];
+		configFileNames = new String[Constants.CONFIGS_COUNT];
+		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
+			fullConfigs[i-1] = new ConfigFull();
+			configFileNames[i-1] = new String();
+		}
 		configOptions = new ConfigOptions();
 		configFull = new ConfigFull(); 
 		moduleConfigFull = new ConfigFull();
@@ -1438,6 +1453,10 @@ public class Controller implements MidiRescanEventListener {
 			uiPadsExtra.testCurveSyncState();
 		}
 	}
+
+	private void loadAllFromConfigFull() {
+		System.out.println("loading all from config");
+	}
 	
 	private void load_all() {
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
@@ -1446,7 +1465,8 @@ public class Controller implements MidiRescanEventListener {
 
 	private void save_all() {
 		fileManager.save_all(configFull, configOptions);
-		updateGlobalMiscControls();
+		System.out.println("Saved all config");
+		//updateGlobalMiscControls();
 	}
 	
 

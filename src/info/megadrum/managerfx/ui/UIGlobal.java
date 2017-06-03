@@ -98,6 +98,14 @@ public class UIGlobal {
 		return buttonSendAll;
 	}
 
+	public Button getButtonLoadAll() {
+		return buttonLoadAll;
+	}
+	
+	public Button getButtonSaveAll() {
+		return buttonSaveAll;
+	}
+
 	public Node getUI() {
 		return (Node) hBoxPane;
 	}
