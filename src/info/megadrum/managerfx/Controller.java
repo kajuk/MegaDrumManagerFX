@@ -22,6 +22,7 @@ import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
+import info.megadrum.managerfx.ui.SpinnerFast;
 import info.megadrum.managerfx.ui.UIPadsExtra;
 import info.megadrum.managerfx.ui.UIGlobal;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
@@ -56,9 +57,20 @@ public class Controller implements MidiRescanEventListener {
 	private Scene scene1;
 	private MenuBar mainMenuBar;
 	private Menu mainMenu, viewMenu, aboutMenu;
-	private Menu allSettingsMenu, miscMenu, hihatMenu, allPadMenu, selectedPadMenu,customCurvesMenu;
-	private Menu loadFromMdSlotMenu, saveToMdSlotMenu;
-	private MenuItem firmwareUpgradeMenu, optionsMenu, exitMenu;
+	private Menu menuAllSettings, menuGlobalMisc, menuMisc, menuHiHat, menuAllPads,
+				menuSelectedPad, menuCustomCurves, menuItemCustomNames;
+	private MenuItem menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
+				menuItemAllSettingsSave;
+	private Menu menuLoadFromMdSlot, menuSaveToMdSlot;
+	private ArrayList<MenuItem> allMenuItemsLoadFromSlot, allMenuItemsSaveSlot;
+	private MenuItem menuItemGlobalMiscGet, menuItemGlobalMiscSend;
+	private MenuItem menuItemMiscGet, menuItemMiscSend;
+	private MenuItem menuItemHiHatGet, menuItemHiHatSend;
+	private MenuItem menuItemAllPadsGet, menuItemAllPadsSend;
+	private MenuItem menuItemSelectedPadGet, menuItemSelectedPadSend;
+	private MenuItem menuItemCustomCurvesGet, menuItemCustomCurvesSend;
+	private MenuItem menuItemCustomNamesGet, menuItemCustomNamesSend;
+	private MenuItem firmwareUpgradeMenuItem, optionsMenuItem, exitMenuItem;
 	private UIOptions optionsWindow;
 	private UIGlobal uiGlobal;
 	private UIGlobalMisc uiGlobalMisc;
@@ -400,24 +412,34 @@ public class Controller implements MidiRescanEventListener {
 		aboutMenu = new Menu("About");
 		
 		mainMenuBar.getMenus().addAll(mainMenu,viewMenu,aboutMenu);
-		allSettingsMenu = new Menu("All Settings");
-		miscMenu = new Menu("Misc Settings");
-		hihatMenu = new Menu("HiHat Pedal Settings");
-		allPadMenu = new Menu("All Pads Settings");
-		selectedPadMenu = new Menu("Selected Pad Settings");
-		customCurvesMenu = new Menu("Custom Curves");
-		firmwareUpgradeMenu = new MenuItem("Firmware Upgrade");
-		optionsMenu = new MenuItem("Options");
-		optionsMenu.setOnAction(e-> { 
+		menuAllSettings = new Menu("All Settings");
+		menuItemAllSettingsGet = new MenuItem("Get from MD");
+		menuItemAllSettingsGet.setOnAction(e-> sendAllSysexRequests());
+		menuItemAllSettingsSend = new MenuItem("Send to MD");
+		menuItemAllSettingsSend.setOnAction(e-> sendAllSysex());
+		menuItemAllSettingsLoad = new MenuItem("Load from file");
+		menuItemAllSettingsSave = new MenuItem("Save to file");
+		menuLoadFromMdSlot = new Menu("Load from MD Slot:");
+		menuSaveToMdSlot = new Menu("Save to MD Slot:");
+		menuAllSettings.getItems().addAll(menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
+				menuItemAllSettingsSave, menuLoadFromMdSlot, menuSaveToMdSlot);
+		menuMisc = new Menu("Misc Settings");
+		menuHiHat = new Menu("HiHat Pedal Settings");
+		menuAllPads = new Menu("All Pads Settings");
+		menuSelectedPad = new Menu("Selected Pad Settings");
+		menuCustomCurves = new Menu("Custom Curves");
+		firmwareUpgradeMenuItem = new MenuItem("Firmware Upgrade");
+		optionsMenuItem = new MenuItem("Options");
+		optionsMenuItem.setOnAction(e-> { 
 			showOptionsWindow();
 		});
-		exitMenu = new MenuItem("Exit");
-		exitMenu.setOnAction(e-> closeProgram());
+		exitMenuItem = new MenuItem("Exit");
+		exitMenuItem.setOnAction(e-> closeProgram());
 		
-		mainMenu.getItems().addAll(allSettingsMenu,miscMenu,
-				hihatMenu,allPadMenu,selectedPadMenu,customCurvesMenu,
-				new SeparatorMenuItem(), firmwareUpgradeMenu, new SeparatorMenuItem(), optionsMenu,
-				new SeparatorMenuItem(),exitMenu
+		mainMenu.getItems().addAll(menuAllSettings,menuMisc,
+				menuHiHat,menuAllPads,menuSelectedPad,menuCustomCurves,
+				new SeparatorMenuItem(), firmwareUpgradeMenuItem, new SeparatorMenuItem(), optionsMenuItem,
+				new SeparatorMenuItem(),exitMenuItem
 				);
 	}
 	
