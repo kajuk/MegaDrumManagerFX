@@ -21,6 +21,7 @@ public class UIComboBox extends UIControl {
 	private HBox layout;
 	private Boolean comboBoxWide = false;
 	private List<String> listValues;
+	private int maxStringLength;
 
 	public UIComboBox(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -93,11 +94,24 @@ public class UIComboBox extends UIControl {
     	}
     	comboBox.setMinWidth(width);
     	comboBox.setMaxWidth(width);
-		Double fontSize = h*0.325;
+		Double fontSize;
+    	if (maxStringLength > 16) {
+    		fontSize = h*0.26;    		
+    	} else if (maxStringLength > 8) {
+    		fontSize = h*0.31;    		
+    	} else {
+    		fontSize = h*0.425;    		    		
+    	}
 		comboBox.setStyle("-fx-font-size: " + fontSize.toString() + "pt");			
     }
     
     public void uiCtlSetValuesArray(List<String> list) {
+    	maxStringLength = 0;
+    	for (int i = 0; i < list.size(); i++) {
+    		if (list.get(i).length() > maxStringLength) {
+    			maxStringLength = list.get(i).length();
+    		}
+    	}
     	int s = comboBox.getSelectionModel().getSelectedIndex();
     	comboBox.getItems().clear();
     	comboBox.getItems().addAll(list);

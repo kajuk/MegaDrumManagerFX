@@ -177,7 +177,6 @@ public class UICurves {
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
 		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
@@ -195,14 +194,13 @@ public class UICurves {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		//toolBarNavigator.setMaxWidth(controlH*15);
-		//toolBarNavigator.setMinWidth(controlH*15);
-		//toolBarNavigator.setMinWidth(vBox.getWidth()*0.95);
 		toolBarTop.setMaxWidth(vBox.getWidth()*0.995);
 		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.995);
 		comboBoxCurve.setMinWidth(controlH*5.3);
 		comboBoxCurve.setMaxWidth(controlH*5.3);
 		labelCurve.setFont(new Font(controlH*0.4));
+		labelCurve.setMinWidth(controlH*2);
+		labelCurve.setMaxWidth(controlH*2);
 	}
 
 	private void setSpinnersFromCurve() {
