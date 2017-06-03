@@ -499,6 +499,7 @@ public class Controller implements MidiRescanEventListener {
 				new SeparatorMenuItem(), firmwareUpgradeMenuItem, new SeparatorMenuItem(), optionsMenuItem,
 				new SeparatorMenuItem(),exitMenuItem
 				);
+		
 	}
 	
 	private void closeProgram() {
@@ -1437,4 +1438,16 @@ public class Controller implements MidiRescanEventListener {
 			uiPadsExtra.testCurveSyncState();
 		}
 	}
+	
+	private void load_all() {
+		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
+		loadAllFromConfigFull();
+	}
+
+	private void save_all() {
+		fileManager.save_all(configFull, configOptions);
+		updateGlobalMiscControls();
+	}
+	
+
 }

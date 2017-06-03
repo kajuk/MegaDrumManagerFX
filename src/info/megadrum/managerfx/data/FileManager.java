@@ -14,9 +14,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Properties;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConversionException;
@@ -25,93 +22,22 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
-
-class ConfigFileFilter extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || f.getName().toLowerCase().endsWith(".mds");
-    }
-    
-    public String getDescription() {
-        return "MegaDrum full config files (*.mds)";
-    }
-}
-
-class SysexFileFilter extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || f.getName().toLowerCase().endsWith(".syx");
-    }
-    
-    public String getDescription() {
-        return "Sysex files (*.syx)";
-    }
-}
-
-class BinFileFilter extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || f.getName().toLowerCase().endsWith(".bin");
-    }
-    
-    public String getDescription() {
-        return "Firmware files (*.bin)";
-    }
-}
-
-class BinFileFilterSTM32a extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32a_")));
-    }
-    
-    public String getDescription() {
-        return "STM32a firmware files (*.bin)";
-    }
-}
-
-class BinFileFilterSTM32b extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32b_")));
-    }
-    
-    public String getDescription() {
-        return "STM32b firmware files (*.bin)";
-    }
-}
-
-class BinFileFilterSTM32c extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32c_")));
-    }
-    
-    public String getDescription() {
-        return "STM32c firmware files (*.bin)";
-    }
-}
-
-class BinFileFilterSTM32d extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32d_")));
-    }
-    
-    public String getDescription() {
-        return "STM32d firmware files (*.bin)";
-    }
-}
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class FileManager {
-	private JFileChooser fileChooser;
-	private JFrame parent;
+	private FileChooser fileChooser;
+	private Stage parent;
 	private File file = null;
-	private ConfigFileFilter configFileFilter;
-	private SysexFileFilter sysexFileFilter;
+	//private ConfigFileFilter configFileFilter;
 	//private BinFileFilter binFileFilter;
 	//private Properties prop;
 	private PropertiesConfiguration fullConfig;
 	//private CombinedConfiguration cc;
 	
-	public FileManager (JFrame parentFrame) {
-		fileChooser = new JFileChooser();
-		parent = parentFrame;
-		configFileFilter = new ConfigFileFilter();
-		sysexFileFilter = new SysexFileFilter();
+	public FileManager (Stage parentWindow) {
+		fileChooser = new FileChooser();
+		parent = parentWindow;
 		//binFileFilter = new BinFileFilter();
 		//prop = new Properties();
 		//fullConfig = new PropertiesConfiguration();
@@ -138,15 +64,17 @@ public class FileManager {
 	}
 	
 	public void save_all(ConfigFull config, ConfigOptions options) {
-		int returnVal;
-		fileChooser.setFileFilter(configFileFilter);
+		FileChooser.ExtensionFilter configFileFilter = new FileChooser.ExtensionFilter("MegaDrum full config files (*.mds)", "*.mds");
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(configFileFilter);
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.configFullPaths[options.lastConfig]));
+			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]));
 		}
-		fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
-		returnVal = fileChooser.showSaveDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fileChooser.getSelectedFile();
+		//fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
+		fileChooser.setInitialFileName(options.configFileNames[options.lastConfig]);
+		//returnVal = fileChooser.showSaveDialog(parent);
+		file = fileChooser.showSaveDialog(parent);
+		if(file != null) {
 			if (!(file.getName().toLowerCase().endsWith(".mds"))) {
 				file = new File(file.getAbsolutePath() + ".mds");
 			}
@@ -182,15 +110,17 @@ public class FileManager {
 	}	
 
 	public void load_all(ConfigFull config, ConfigOptions options) {
-		int returnVal;
+		FileChooser.ExtensionFilter configFileFilter = new FileChooser.ExtensionFilter("MegaDrum full config files (*.mds)", "*.mds");
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(configFileFilter);
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.configFullPaths[options.lastConfig]));
+			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]));
 		}
-		fileChooser.setFileFilter(configFileFilter);
-		fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
-		returnVal = fileChooser.showOpenDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fileChooser.getSelectedFile();
+		//fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
+		fileChooser.setInitialFileName(options.configFileNames[options.lastConfig]);
+		//returnVal = fileChooser.showSaveDialog(parent);
+		file = fileChooser.showOpenDialog(parent);
+		if (file != null) {
 			if (file.exists()) {
 				loadConfigFull(config,file,options);
 				options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
@@ -198,29 +128,43 @@ public class FileManager {
 			}
 		}
 	}
-	
+
+
 	public File selectFirmwareFile(ConfigOptions options) {
-		int returnVal;
-		file = null;
+		FileChooser.ExtensionFilter extensionFilter;
 		if (!options.lastFullPathFirmware.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastFullPathFirmware));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathFirmware));
 		}
-		fileChooser.setFileFilter(new BinFileFilter());
+		extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(extensionFilter);
 		if (options.mcuType == 4) {
-			fileChooser.setFileFilter(new BinFileFilterSTM32a());
+			extensionFilter = new FileChooser.ExtensionFilter("STM32a firmware files (*.bin)", "megadrumstm32a_*");
+			fileChooser.getExtensionFilters().clear();
+			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 5) {
-			fileChooser.setFileFilter(new BinFileFilterSTM32b());
+			extensionFilter = new FileChooser.ExtensionFilter("STM32b firmware files (*.bin)", "megadrumstm32b_*");
+			fileChooser.getExtensionFilters().clear();
+			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 6) {
-			fileChooser.setFileFilter(new BinFileFilterSTM32c());
+			extensionFilter = new FileChooser.ExtensionFilter("STM32c firmware files (*.bin)", "megadrumstm32c_*");
+			fileChooser.getExtensionFilters().clear();
+			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 7) {
-			fileChooser.setFileFilter(new BinFileFilterSTM32d());
+			extensionFilter = new FileChooser.ExtensionFilter("STM32d firmware files (*.bin)", "megadrumstm32d_*");
+			fileChooser.getExtensionFilters().clear();
+			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
-		returnVal = fileChooser.showOpenDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fileChooser.getSelectedFile();
+		if (options.mcuType == 8) {
+			extensionFilter = new FileChooser.ExtensionFilter("STM32e firmware files (*.bin)", "megadrumstm32e_*");
+			fileChooser.getExtensionFilters().clear();
+			fileChooser.getExtensionFilters().add(extensionFilter);
+		}
+		file = fileChooser.showOpenDialog(parent);
+		if (file != null) {
 			options.lastFullPathFirmware = file.getAbsolutePath();
 		}
 		return file;
@@ -278,14 +222,15 @@ public class FileManager {
 	}
 		
 	public void saveSysex(byte [] sysex, ConfigOptions options) {
-		int returnVal;
-		fileChooser.setFileFilter(sysexFileFilter);
+		FileChooser.ExtensionFilter sysexFileFilter = new FileChooser.ExtensionFilter("Sysex files (*.syx)", "*.syx");
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(sysexFileFilter);
+		
 		if (!options.lastFullPathSysex.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastFullPathSysex));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex));
 		}
-		returnVal = fileChooser.showSaveDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fileChooser.getSelectedFile();
+		file = fileChooser.showSaveDialog(parent);
+		if (file != null) {
 			if (!(file.getName().toLowerCase().endsWith(".syx"))) {
 				file = new File(file.getAbsolutePath() + ".syx");
 			}
@@ -311,14 +256,15 @@ public class FileManager {
 	}
 
 	public void loadSysex(byte [] sysex, ConfigOptions options) {
-		int returnVal;
+		FileChooser.ExtensionFilter sysexFileFilter = new FileChooser.ExtensionFilter("Sysex files (*.syx)", "*.syx");
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(sysexFileFilter);
+		
 		if (!options.lastFullPathSysex.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastFullPathSysex));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex));
 		}
-		fileChooser.setFileFilter(sysexFileFilter);
-		returnVal = fileChooser.showOpenDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fileChooser.getSelectedFile();
+		file = fileChooser.showOpenDialog(parent);
+		if (file != null) {
 			options.lastFullPathSysex = file.getAbsolutePath();
 			if (file.exists()) {
 				FileInputStream fis;
