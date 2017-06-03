@@ -68,7 +68,7 @@ public class FileManager {
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(configFileFilter);
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
-			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]));
+			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]).getParentFile());
 		}
 		//fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
 		fileChooser.setInitialFileName(options.configFileNames[options.lastConfig]);
@@ -114,7 +114,7 @@ public class FileManager {
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(configFileFilter);
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
-			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]));
+			fileChooser.setInitialDirectory(new File(options.configFullPaths[options.lastConfig]).getParentFile());
 		}
 		//fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
 		fileChooser.setInitialFileName(options.configFileNames[options.lastConfig]);
@@ -133,7 +133,7 @@ public class FileManager {
 	public File selectFirmwareFile(ConfigOptions options) {
 		FileChooser.ExtensionFilter extensionFilter;
 		if (!options.lastFullPathFirmware.equals("")) {
-			fileChooser.setInitialDirectory(new File(options.lastFullPathFirmware));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathFirmware).getParentFile());
 		}
 		extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 		fileChooser.getExtensionFilters().clear();
@@ -227,7 +227,7 @@ public class FileManager {
 		fileChooser.getExtensionFilters().add(sysexFileFilter);
 		
 		if (!options.lastFullPathSysex.equals("")) {
-			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex).getParentFile());
 		}
 		file = fileChooser.showSaveDialog(parent);
 		if (file != null) {
@@ -261,7 +261,7 @@ public class FileManager {
 		fileChooser.getExtensionFilters().add(sysexFileFilter);
 		
 		if (!options.lastFullPathSysex.equals("")) {
-			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex));
+			fileChooser.setInitialDirectory(new File(options.lastFullPathSysex).getParentFile());
 		}
 		file = fileChooser.showOpenDialog(parent);
 		if (file != null) {
