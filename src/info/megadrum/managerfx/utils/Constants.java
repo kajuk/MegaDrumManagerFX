@@ -24,6 +24,7 @@ public interface Constants {
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;
 	public static final int Error_Read = 0x23;
+	public static final String MD_MANAGER_CONFIG = System.getProperty("user.home") + System.getProperty("file.separator") + "megadrummanager.cfg";
 	public static final int PADS_COUNT = 55;
 	public static final int CURVES_COUNT = 16;
 	public static final int CUSTOM_NAMES_MAX = 32;
