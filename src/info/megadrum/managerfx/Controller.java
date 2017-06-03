@@ -58,7 +58,7 @@ public class Controller implements MidiRescanEventListener {
 	private MenuBar mainMenuBar;
 	private Menu mainMenu, viewMenu, aboutMenu;
 	private Menu menuAllSettings, menuGlobalMisc, menuMisc, menuHiHat, menuAllPads,
-				menuSelectedPad, menuCustomCurves, menuItemCustomNames;
+				menuSelectedPad, menuCustomCurves, menuCustomNames;
 	private MenuItem menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
 				menuItemAllSettingsSave;
 	private Menu menuLoadFromMdSlot, menuSaveToMdSlot;
@@ -412,6 +412,7 @@ public class Controller implements MidiRescanEventListener {
 		aboutMenu = new Menu("About");
 		
 		mainMenuBar.getMenus().addAll(mainMenu,viewMenu,aboutMenu);
+
 		menuAllSettings = new Menu("All Settings");
 		menuItemAllSettingsGet = new MenuItem("Get from MD");
 		menuItemAllSettingsGet.setOnAction(e-> sendAllSysexRequests());
@@ -423,11 +424,68 @@ public class Controller implements MidiRescanEventListener {
 		menuSaveToMdSlot = new Menu("Save to MD Slot:");
 		menuAllSettings.getItems().addAll(menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
 				menuItemAllSettingsSave, menuLoadFromMdSlot, menuSaveToMdSlot);
+
+		menuGlobalMisc = new Menu("Global Misc Settings");
+		menuItemGlobalMiscGet = new MenuItem("Get from MD");
+		menuItemGlobalMiscGet.setOnAction(e-> sendSysexGlobalMiscRequest());
+		menuItemGlobalMiscSend = new MenuItem("Send to MD");
+		menuItemGlobalMiscSend.setOnAction(e-> sendSysexGlobalMisc());
+		menuGlobalMisc.getItems().addAll(menuItemGlobalMiscGet, menuItemGlobalMiscSend);
+
 		menuMisc = new Menu("Misc Settings");
+		menuItemMiscGet = new MenuItem("Get from MD");
+		menuItemMiscGet.setOnAction(e-> sendSysexMiscRequest());
+		menuItemMiscSend = new MenuItem("Send to MD");
+		menuItemMiscSend.setOnAction(e-> sendSysexMisc());
+		menuMisc.getItems().addAll(menuItemMiscGet, menuItemMiscSend);
+
 		menuHiHat = new Menu("HiHat Pedal Settings");
+		menuItemHiHatGet = new MenuItem("Get from MD");
+		menuItemHiHatGet.setOnAction(e-> sendSysexPedalRequest());
+		menuItemHiHatSend = new MenuItem("Send to MD");
+		menuItemHiHatSend.setOnAction(e-> sendSysexPedal());
+		menuHiHat.getItems().addAll(menuItemHiHatGet, menuItemHiHatSend);
+		
 		menuAllPads = new Menu("All Pads Settings");
+		menuItemAllPadsGet = new MenuItem("Get from MD");
+		menuItemAllPadsGet.setOnAction(e-> sendAllInputsSysexRequests());
+		menuItemAllPadsSend = new MenuItem("Send to MD");
+		menuItemAllPadsSend.setOnAction(e-> sendAllInputsSysex());
+		menuAllPads.getItems().addAll(menuItemAllPadsGet, menuItemAllPadsSend);
+
 		menuSelectedPad = new Menu("Selected Pad Settings");
-		menuCustomCurves = new Menu("Custom Curves");
+		menuItemSelectedPadGet = new MenuItem("Get from MD");
+		menuItemSelectedPadGet.setOnAction(e-> {
+			if (padPair == 0) {
+				sendSysexInputRequest(0);
+			} else {
+				sendSysexPairRequest(padPair);
+			}
+		});
+		menuItemSelectedPadSend = new MenuItem("Send to MD");
+		menuItemSelectedPadSend.setOnAction(e-> {
+			if (padPair == 0) {
+				sendSysexInput(0, true);
+			} else {
+				sendSysexPair(padPair);
+			}
+		});
+		menuSelectedPad.getItems().addAll(menuItemSelectedPadGet, menuItemSelectedPadSend);
+
+		menuCustomCurves = new Menu("All Custom Curves");
+		menuItemCustomCurvesGet = new MenuItem("Get from MD");
+		menuItemCustomCurvesGet.setOnAction(e-> sendAllCurvesSysexRequests());
+		menuItemCustomCurvesSend = new MenuItem("Send to MD");
+		menuItemCustomCurvesSend.setOnAction(e-> sendAllCurvesSysex());
+		menuCustomCurves.getItems().addAll(menuItemCustomCurvesGet, menuItemCustomCurvesSend);
+
+		menuCustomNames = new Menu("All Custom Names");
+		menuItemCustomNamesGet = new MenuItem("Get from MD");
+		menuItemCustomNamesGet.setOnAction(e-> sendAllCustomNamesSysexRequests());
+		menuItemCustomNamesSend = new MenuItem("Send to MD");
+		menuItemCustomNamesSend.setOnAction(e-> sendAllCustomNamesSysex());
+		menuCustomNames.getItems().addAll(menuItemCustomNamesGet, menuItemCustomNamesSend);
+
 		firmwareUpgradeMenuItem = new MenuItem("Firmware Upgrade");
 		optionsMenuItem = new MenuItem("Options");
 		optionsMenuItem.setOnAction(e-> { 
@@ -436,8 +494,8 @@ public class Controller implements MidiRescanEventListener {
 		exitMenuItem = new MenuItem("Exit");
 		exitMenuItem.setOnAction(e-> closeProgram());
 		
-		mainMenu.getItems().addAll(menuAllSettings,menuMisc,
-				menuHiHat,menuAllPads,menuSelectedPad,menuCustomCurves,
+		mainMenu.getItems().addAll(menuAllSettings, menuGlobalMisc, menuMisc,
+				menuHiHat,menuAllPads,menuSelectedPad,menuCustomCurves, menuCustomNames,
 				new SeparatorMenuItem(), firmwareUpgradeMenuItem, new SeparatorMenuItem(), optionsMenuItem,
 				new SeparatorMenuItem(),exitMenuItem
 				);
