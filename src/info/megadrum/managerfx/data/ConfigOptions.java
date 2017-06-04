@@ -34,6 +34,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public int sysexDelay = 30;
 	public String LookAndFeelName = "";
 	public Point2D mainWindowPosition = new Point2D(10,10);
+	public Point2D mainWindowSize = new Point2D(1000,600);
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 	public Point2D [] framesPositions = { new Point2D(10,10), new Point2D(210,10), new Point2D(410,10), new Point2D(610,10), new Point2D(810,10)};
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
@@ -82,6 +83,8 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("LookAndFeelName", LookAndFeelName);
 		prop.setProperty("mainWindowPositionX", mainWindowPosition.getX());
 		prop.setProperty("mainWindowPositionY", mainWindowPosition.getY());
+		prop.setProperty("mainWindowSizeX", mainWindowSize.getX());
+		prop.setProperty("mainWindowSizeY", mainWindowSize.getY());
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", framesPositions[i].getX());
 			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].getY());
@@ -121,8 +124,12 @@ public class ConfigOptions implements java.io.Serializable {
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
 		LookAndFeelName = prop.getString("LookAndFeelName", LookAndFeelName);
 		mainWindowPosition = new Point2D(
-				Utils.validateDouble(prop.getDouble("mainWindowPositionX", 0.0),0.0,1600.0,0.0),
-				Utils.validateDouble(prop.getDouble("mainWindowPositionY", 0.0),0.0,600.0,0.0)
+				Utils.validateDouble(prop.getDouble("mainWindowPositionX", 0.0),0.0,1920.0,0.0),
+				Utils.validateDouble(prop.getDouble("mainWindowPositionY", 0.0),0.0,800.0,0.0)
+				);
+		mainWindowSize = new Point2D(
+				Utils.validateDouble(prop.getDouble("mainWindowSizeX", 0.0),0.0,3200.0,0.0),
+				Utils.validateDouble(prop.getDouble("mainWindowSizeY", 0.0),0.0,2000.0,0.0)
 				);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			framesPositions[i] = new Point2D (

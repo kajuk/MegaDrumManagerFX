@@ -419,14 +419,10 @@ public class Controller implements MidiRescanEventListener {
 		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
 		});
-		window.setWidth(1200);
-		window.setHeight(800);
+		//window.setWidth(1200);
+		//window.setHeight(800);
 		loadConfig();
 		window.show();
-		//Setting position works only after Stage is shown
-		window.setX(configOptions.mainWindowPosition.getX());
-		window.setY(configOptions.mainWindowPosition.getY());
-
 	}
 
 	public void respondToResize(Scene sc) {
@@ -556,7 +552,6 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getComboBoxFile().getItems().clear();
 		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
 		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
-		//comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		//showMidiWarningIfNeeded();
 		//if (configOptions.autoOpenPorts) {
 		//	midiController.;
@@ -568,8 +563,11 @@ public class Controller implements MidiRescanEventListener {
 		//updateGlobalMiscControls();
 		window.setX(configOptions.mainWindowPosition.getX());
 		window.setY(configOptions.mainWindowPosition.getY());
-		//window.setX(300.0);
-		//window.setY(1200.0);
+		window.setWidth(configOptions.mainWindowSize.getX());
+		//System.out.printf("Setting height to %f\n", configOptions.mainWindowSize.getY());
+		window.setHeight(configOptions.mainWindowSize.getY());
+		//System.out.printf("Height after setting is %f\n", window.getHeight());
+		
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			//framesDetached[i].setLocation(configOptions.framesPositions[i]);
 			//viewMenus[i].setConfigOptions(configOptions);
@@ -581,8 +579,10 @@ public class Controller implements MidiRescanEventListener {
 	private void closeProgram() {
 		System.out.println("Exiting\n");
 		midiController.closeAllPorts();
-		Point2D position = new Point2D(window.getX(), window.getY());
-		configOptions.mainWindowPosition = position;
+		Point2D point2d = new Point2D(window.getX(), window.getY());
+		configOptions.mainWindowPosition = point2d;
+		point2d = new Point2D(window.getWidth(), window.getHeight());
+		configOptions.mainWindowSize = point2d;
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			//configOptions.framesPositions[i] = framesDetached[i].getLocation(); 
 		}
