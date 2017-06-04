@@ -158,31 +158,32 @@ public class UICustomNames {
 		        	if (nameChangedFromSet[iFinal] > 0) {
 		        		nameChangedFromSet[iFinal] = 0;
 		        		allCustomNames[iFinal] = newValue;
+		        	} else {
+			            if (allTextFields.get(iFinal).getText().length() > 8) {
+							int pos = allTextFields.get(iFinal).getCaretPosition();
+							System.out.printf("Pos = %d\n", pos);
+							
+//			                String s = allTextFields.get(iFinal).getText().substring(0, 8);
+//			                allTextFields.get(iFinal).setText(s);
+							String text = allTextFields.get(iFinal).getText();
+							text = text.trim();
+							text += "        ";
+							text = text.substring(0, 8);
+							text = text.trim();
+							allTextFields.get(iFinal).setText(text);
+							allCustomNames[iFinal] = text;
+							Platform.runLater( new Runnable() {
+							    @Override
+							    public void run() {
+									allTextFields.get(iFinal).positionCaret(pos + 1);
+							    }
+							});
+			            } else {
+			            	allCustomNames[iFinal] = allTextFields.get(iFinal).getText();
+			            }
+						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_TEXT_START + iFinal);
+						testSyncState(iFinal);
 		        	}
-		            if (allTextFields.get(iFinal).getText().length() > 8) {
-						int pos = allTextFields.get(iFinal).getCaretPosition();
-						System.out.printf("Pos = %d\n", pos);
-						
-//		                String s = allTextFields.get(iFinal).getText().substring(0, 8);
-//		                allTextFields.get(iFinal).setText(s);
-						String text = allTextFields.get(iFinal).getText();
-						text = text.trim();
-						text += "        ";
-						text = text.substring(0, 8);
-						text = text.trim();
-						allTextFields.get(iFinal).setText(text);
-						allCustomNames[iFinal] = text;
-						Platform.runLater( new Runnable() {
-						    @Override
-						    public void run() {
-								allTextFields.get(iFinal).positionCaret(pos + 1);
-						    }
-						});
-		            } else {
-		            	allCustomNames[iFinal] = allTextFields.get(iFinal).getText();
-		            }
-					fireControlChangeEvent(new ControlChangeEvent(this), Constants.CUSTOM_NAME_CHANGE_TEXT_START + iFinal);
-					testSyncState(iFinal);
 	        }
 		    });
 

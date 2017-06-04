@@ -50,6 +50,7 @@ public class UICurves {
 	private	Button		buttonNext;
 	private	Button		buttonLast;
 	private ArrayList<SpinnerFast<Integer>> allSpinners;
+	private Integer[]	changedFromSetSpinners;
 
 	
 	private int			syncState = Constants.SYNC_STATE_UNKNOWN;
@@ -131,8 +132,11 @@ public class UICurves {
 		spacer1.setMinWidth(leftSpacer + 8);
 		spacer1.setMaxWidth(leftSpacer + 8);
 		SpinnerValueFactory<Integer> valueFactory;
+		changedFromSetSpinners = new Integer[9];
 		
 		for (int i = 0; i < 9; i++) {
+			final int iFinal = i;
+			changedFromSetSpinners[i] = 0;
 			valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 255, 2, 1);
 			allSpinners.add(new SpinnerFast<Integer>());
 			allSpinners.get(i).getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
@@ -157,7 +161,11 @@ public class UICurves {
 					//System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
 					curvesPaint.setYvalue(sp, Integer.valueOf(newValue));
 					testSyncState();
-					fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+					if (changedFromSetSpinners[iFinal] > 0) {
+						changedFromSetSpinners[iFinal] = 0;
+					} else {
+						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
+					}
 				}
 				
 			});
@@ -219,6 +227,9 @@ public class UICurves {
 		if (setFromSysex) {
 			setSysexReceived(true);
 			testSyncState();
+		}
+		for (int i=0; i< 9; i++) {
+			changedFromSetSpinners[i] = 1;
 		}
 		setSpinnersFromCurve();
 	}

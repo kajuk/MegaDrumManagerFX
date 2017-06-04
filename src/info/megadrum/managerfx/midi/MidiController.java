@@ -90,7 +90,7 @@ public class MidiController {
 			try {
 		        final int max = typesAndIds.size();
 		        for (int i = 0; i < max; i++) {
-					System.out.printf("Sending Sysex request %d with type = %d and id = %d\n", i, typesAndIds.get(i)[0], typesAndIds.get(i)[1]);
+					//System.out.printf("Sending Sysex request %d with type = %d and id = %d\n", i, typesAndIds.get(i)[0], typesAndIds.get(i)[1]);
 		        	sendSysexRequestFromThread(typesAndIds.get(i)[0],typesAndIds.get(i)[1], maxRetries,retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
