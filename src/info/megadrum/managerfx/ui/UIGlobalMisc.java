@@ -581,4 +581,8 @@ public class UIGlobalMisc {
 		return checkBoxLiveUpdates;
 	}
 	
+	public TextField geTextFieldSlotName() {
+		return textSlotName;
+	}
+	
 }

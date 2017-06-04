@@ -38,6 +38,7 @@ import info.megadrum.managerfx.ui.UIPad;
 import info.megadrum.managerfx.ui.UIPedal;
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
@@ -412,9 +413,9 @@ public class Controller implements MidiRescanEventListener {
 		window.setScene(scene1);
 		window.setMinWidth(1000);
 		window.sizeToScene();
-		scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
-			respondToResize(scene1);
-		});
+		//scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
+		//	respondToResize(scene1);
+		//});
 
 		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
@@ -422,29 +423,77 @@ public class Controller implements MidiRescanEventListener {
 		//window.setWidth(1200);
 		//window.setHeight(800);
 		loadConfig();
+		window.setWidth(Region.USE_PREF_SIZE);
 		window.show();
 	}
 
+	private boolean resizeFromResize = false;
 	public void respondToResize(Scene sc) {
-		Double mainMenuBarHeight = mainMenuBar.getHeight();
-		Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
-		Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
-		//System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
-		//Double height = sc.getHeight();
-		Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
-		Double width = height*2;
-		Double controlH, controlW;
-		controlH= height *0.035 *0.8;
-		//controlW= width *0.2;
-		controlW= controlH *8;
-		//System.out.println("Responding to scene resize in Controller");
-		uiMisc.respondToResize(height, width, height, controlH, controlW);
-		uiPedal.respondToResize(height, width, height, controlH, controlW);
-		uiPad.respondToResize(height, width, height, controlH, controlW);
-		uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
+		if (resizeFromResize) {
+			resizeFromResize = false;
+		} else {
+			//resizeFromResize = true;
+			Double mainMenuBarHeight = mainMenuBar.getHeight();
+			Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
+			Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
+			//System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
+			//Double height = sc.getHeight();
+			Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
+			Double width = height*2;
+			Double controlH, controlW;
+			controlH= height *0.035 *0.8;
+			//controlW= width *0.2;
+			controlW= controlH *8;
+			//System.out.println("Responding to scene resize in Controller");
+			uiMisc.respondToResize(height, width, height, controlH, controlW);
+			uiPedal.respondToResize(height, width, height, controlH, controlW);
+			uiPad.respondToResize(height, width, height, controlH, controlW);
+			uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
+			//window.setWidth(controlH*40 + 350);
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Platform.runLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							//resizeFromResize = true;
+							//window.sizeToScene();											
+						}
+					});
+				}
+			}, 1);
+		}
 	}
 
-	public void createMainMenuBar() {
+	private void reCreateSlotsMenuItems() {
+		allMenuItemsLoadFromSlot.clear();
+		for (int i = 0; i < configFull.configNamesCount; i++) {
+			if (configFull.configGlobalMisc.config_names_en) {
+				allMenuItemsLoadFromSlot.add(new MenuItem(Integer.toString(i + 1) + " " + configFull.configConfigNames[i].name));				
+			} else {
+				allMenuItemsLoadFromSlot.add(new MenuItem(Integer.toString(i + 1)));
+			}
+		}
+		menuLoadFromMdSlot.getItems().clear();
+		menuLoadFromMdSlot.getItems().addAll(allMenuItemsLoadFromSlot);
+		allMenuItemsSaveSlot.clear();
+		for (int i = 0; i < configFull.configNamesCount; i++) {
+			if (configFull.configGlobalMisc.config_names_en) {
+				allMenuItemsSaveSlot.add(new MenuItem(Integer.toString(i + 1) + " " + configFull.configConfigNames[i].name));				
+			} else {
+				allMenuItemsSaveSlot.add(new MenuItem(Integer.toString(i + 1)));
+			}
+		}
+		menuSaveToMdSlot.getItems().clear();
+		menuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
+	}
+	
+	private void createMainMenuBar() {
 		mainMenuBar = new MenuBar();
 		mainMenuBar.setStyle("-fx-font-size: 10 pt");
 		mainMenu = new Menu("Main");
@@ -463,7 +512,10 @@ public class Controller implements MidiRescanEventListener {
 		menuItemAllSettingsSave = new MenuItem("Save to file");
 		menuItemAllSettingsSave.setOnAction(e-> save_all());
 		menuLoadFromMdSlot = new Menu("Load from MD Slot:");
+		allMenuItemsLoadFromSlot = new ArrayList<MenuItem>();
 		menuSaveToMdSlot = new Menu("Save to MD Slot:");
+		allMenuItemsSaveSlot = new ArrayList<MenuItem>();
+		reCreateSlotsMenuItems();
 		menuAllSettings.getItems().addAll(menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
 				menuItemAllSettingsSave, menuLoadFromMdSlot, menuSaveToMdSlot);
 
@@ -1131,6 +1183,14 @@ public class Controller implements MidiRescanEventListener {
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
 		}
+		if (configFull.configGlobalMisc.config_names_en) {
+			for (i = 0; i < configFull.configNamesCount; i++) {
+				typeAndId = new byte[2];
+				typeAndId[0] = Constants.MD_SYSEX_CONFIG_NAME;
+				typeAndId[1] = i;
+				sysexSendList.add(typeAndId);
+			}
+		}
 		sendSysexRequest();
 	}
 	
@@ -1246,6 +1306,8 @@ public class Controller implements MidiRescanEventListener {
 					uiGlobalMisc.setConfigsCount(b);
 					configFull.configNamesCount = b;
 					configFull.configCountSysexReceived = true;
+					reCreateSlotsMenuItems();
+					
 					//TODO
 /*
 					setSysexOk();
@@ -1268,11 +1330,22 @@ public class Controller implements MidiRescanEventListener {
 					b = (int)sysex[4];
 					uiGlobalMisc.setConfigCurrent(b);
 					configFull.configCurrentSysexReceived = true;
+					if (configFull.configCurrent == pointer) {
+						uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
+					}
 					//TODO
 					//setSysexOk();
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
+				Utils.copySysexToConfigConfigName(sysex, configFull.configConfigNames[pointer]);
+				Utils.copySysexToConfigConfigName(sysex, moduleConfigFull.configConfigNames[pointer]);
+				configFull.configConfigNames[pointer].sysexReceived = true;
+			    //System.out.printf("sysexReceived for ConfigName id %d set to true\n", buffer[4]);
+				reCreateSlotsMenuItems();
+				if (configFull.configCurrent == pointer) {
+					uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
+				}
 				break;
 			case Constants.MD_SYSEX_CURVE:
 				Utils.copySysexToConfigCurve(sysex, configFull.configCurves[pointer]);
