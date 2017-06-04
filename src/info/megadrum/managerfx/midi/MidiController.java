@@ -64,7 +64,7 @@ public class MidiController {
 		            updateProgress(i, max);
 		        }
 			} catch (Exception e) {
-				System.out.printf("Thread exception text = %s\n", e.getMessage());				
+				System.out.printf("Sysex Send thread exception text = %s\n", e.getMessage());				
 			}
 			//System.out.println("thread finished");
 			return null;
@@ -100,7 +100,7 @@ public class MidiController {
 		            updateProgress(i, max);
 		        }
 			} catch (Exception e) {
-				System.out.printf("Thread exception text = %s\n", e.getMessage());				
+				System.out.printf("Sysex request thread exception text = %s\n", e.getMessage());				
 			}
 			//System.out.println("thread finished");
 			return null;

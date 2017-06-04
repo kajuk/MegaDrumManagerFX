@@ -3,6 +3,7 @@ package info.megadrum.managerfx;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -890,7 +891,8 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
-		loadConfigAfterLoadSlot = configOptions.liveUpdates;
+		//loadConfigAfterLoadSlot = configOptions.liveUpdates;
+		loadConfigAfterLoadSlot = true;
 		System.out.println("Load from slot to do");
 	}
 	
@@ -902,23 +904,60 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[1] = (byte)slot;
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
-		Utils.delayMs(500);
-		sysexSendList.clear();
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
-		sysexSendList.add(typeAndId);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						sysexSendList.clear();
+						byte [] typeAndIdFinal = new byte[2];
+						typeAndIdFinal[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+						sysexSendList.add(typeAndIdFinal);
+						sendSysexRequest();				
+					}
+				});
+			}
+		}, 2000);
 		System.out.println("Save slot to do");
-		
 	}
 	
+	private void sendSysexConfigName(int id) {
+		byte [] sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];
+		Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[id], sysex, configOptions.chainId, id);
+		System.out.printf("Config name to save in slot = %s\n", configFull.configConfigNames[id].name);
+		sysexSendList.clear();
+		sysexSendList.add(sysex);
+		sendSysex();
+	}
+
 	private void sendSysexSaveToSlotRequest(int slot) {
-		if (loadConfigAfterLoadSlot != configOptions.liveUpdates) {
-			saveToSlot = slot;
-			saveToSlotAfterSendAll = true;
-			sendAllSysex();
-		} else {
-			sendSysexSaveToSlotOnlyRequest(slot);
-		}
+		System.out.printf("Saving to slot %d\n", slot + 1);
+		configFull.configConfigNames[slot].name = (uiGlobalMisc.getTextFieldSlotName().getText() + "            ").substring(0, 12);
+		sendSysexConfigName(slot);
+		//Utils.copyConfigConfigNameToSysex(null, null, i, i);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						saveToSlot = slot;
+						saveToSlotAfterSendAll = true;
+						sendAllSysex();
+					}
+				});
+			}
+		}, 200);
 	}
 	
 	private void controlsCurveChanged() {
@@ -1204,6 +1243,11 @@ public class Controller implements MidiRescanEventListener {
 			sysexSendList.add(sysex);
 			
 		}
+		for (i = 0; i < configFull.configNamesCount; i++) {
+			sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];	
+			Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[i], sysex, configOptions.chainId, i);
+			sysexSendList.add(sysex);
+		}
 		sendSysexReadOnlyRequestFlag = true;
 		sendSysex();
 	}
@@ -1407,7 +1451,7 @@ public class Controller implements MidiRescanEventListener {
 					b = (int)sysex[4];
 					uiGlobalMisc.setConfigCurrent(b);
 					configFull.configCurrentSysexReceived = true;
-					uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
+					uiGlobalMisc.getTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
 					//TODO
 					//setSysexOk();
 				}
