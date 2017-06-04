@@ -473,21 +473,29 @@ public class Controller implements MidiRescanEventListener {
 	private void reCreateSlotsMenuItems() {
 		allMenuItemsLoadFromSlot.clear();
 		for (int i = 0; i < configFull.configNamesCount; i++) {
+			final int iFinal = i;
 			if (configFull.configGlobalMisc.config_names_en) {
 				allMenuItemsLoadFromSlot.add(new MenuItem(Integer.toString(i + 1) + " " + configFull.configConfigNames[i].name));				
 			} else {
 				allMenuItemsLoadFromSlot.add(new MenuItem(Integer.toString(i + 1)));
 			}
+			allMenuItemsLoadFromSlot.get(i).setOnAction(e-> {
+				sendSysexLoadFromSlotRequest(iFinal);
+			});
 		}
 		menuLoadFromMdSlot.getItems().clear();
 		menuLoadFromMdSlot.getItems().addAll(allMenuItemsLoadFromSlot);
 		allMenuItemsSaveSlot.clear();
 		for (int i = 0; i < configFull.configNamesCount; i++) {
+			final int iFinal = i;
 			if (configFull.configGlobalMisc.config_names_en) {
 				allMenuItemsSaveSlot.add(new MenuItem(Integer.toString(i + 1) + " " + configFull.configConfigNames[i].name));				
 			} else {
 				allMenuItemsSaveSlot.add(new MenuItem(Integer.toString(i + 1)));
 			}
+			allMenuItemsSaveSlot.get(i).setOnAction(e-> {
+				sendSysexSaveToSlotRequest(iFinal);
+			});
 		}
 		menuSaveToMdSlot.getItems().clear();
 		menuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
@@ -845,6 +853,28 @@ public class Controller implements MidiRescanEventListener {
 		Utils.copyConfigCurveToSysex(configFull.configCurves[curvePointer], sysex, configOptions.chainId, curvePointer);
 		sysexSendList.add(sysex);
 		sendSysex();
+	}
+	
+	private void sendSysexLoadFromSlotRequest(int slot) {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_LOAD;
+		typeAndId[1] = (byte)slot;
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+		System.out.println("Load from slot to do");
+	}
+	
+	private void sendSysexSaveToSlotRequest(int slot) {
+		sysexSendList.clear();
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_SAVE;
+		typeAndId[1] = (byte)slot;
+		sysexSendList.add(typeAndId);
+		sendSysexRequest();
+		System.out.println("Save slot to do");
 	}
 	
 	private void controlsCurveChanged() {

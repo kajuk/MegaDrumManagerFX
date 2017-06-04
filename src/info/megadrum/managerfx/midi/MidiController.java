@@ -285,6 +285,12 @@ public class MidiController {
 			case Constants.MD_SYSEX_VERSION:
 				midiHandler.requestVersion();
 				break;
+			case Constants.MD_SYSEX_CONFIG_LOAD:
+				midiHandler.requestLoadFromSlot(id);
+				break;
+			case Constants.MD_SYSEX_CONFIG_SAVE:
+				midiHandler.requestSaveToSlot(id);
+				break;
 			default:
 				break;
 			}
