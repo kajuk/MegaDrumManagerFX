@@ -102,6 +102,7 @@ public class Controller implements MidiRescanEventListener {
 	private int oldInputsCounts = 0;
 	private Boolean sendNextAllSysexRequestsFlag = false;
 	private Boolean sendSysexReadOnlyRequestFlag = false;
+	private Boolean loadConfigAfterLoadSlot = false;
 	
 	private int curvePointer = 0;
 
@@ -746,6 +747,10 @@ public class Controller implements MidiRescanEventListener {
 					sendNextAllSysexRequestsFlag = false;
 					sendNextAllSysexRequests();
 				}
+				if (loadConfigAfterLoadSlot) {
+					loadConfigAfterLoadSlot = false;
+					sendAllSysexRequests();
+				}
 			}
 		});
 		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
@@ -879,7 +884,9 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
-		if (configOptions.liveUpdates) {
+		loadConfigAfterLoadSlot = configOptions.liveUpdates;
+//		loadConfigAfterLoadSlot = true;
+/*		if (configOptions.liveUpdates) {
 			Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				
@@ -894,9 +901,9 @@ public class Controller implements MidiRescanEventListener {
 						}
 					});
 				}
-			}, 400);
+			}, 1000);
 
-		}
+		}*/
 		System.out.println("Load from slot to do");
 	}
 	
@@ -1255,6 +1262,9 @@ public class Controller implements MidiRescanEventListener {
 				sysexSendList.add(typeAndId);
 			}
 		}
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+		sysexSendList.add(typeAndId);
 		sendSysexRequest();
 	}
 	
