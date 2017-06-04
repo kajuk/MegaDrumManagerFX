@@ -294,6 +294,7 @@ public class MidiController {
 			case Constants.MD_SYSEX_CONFIG_SAVE:
 				//No response for Load from/Save to
 				// so faking sysex received
+				sysexReceived = true;
 				midiHandler.requestSaveToSlot(id);
 				break;
 			default:

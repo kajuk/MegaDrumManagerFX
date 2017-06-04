@@ -103,6 +103,8 @@ public class Controller implements MidiRescanEventListener {
 	private Boolean sendNextAllSysexRequestsFlag = false;
 	private Boolean sendSysexReadOnlyRequestFlag = false;
 	private Boolean loadConfigAfterLoadSlot = false;
+	private Boolean saveToSlotAfterSendAll = false;
+	private int saveToSlot = 0;
 	
 	private int curvePointer = 0;
 
@@ -726,6 +728,10 @@ public class Controller implements MidiRescanEventListener {
 					sendSysexReadOnlyRequestFlag = false;
 					sendSysexReadOnlyRequest();
 				}
+				if (saveToSlotAfterSendAll) {
+					saveToSlotAfterSendAll = false;
+					sendSysexSaveToSlotOnlyRequest(saveToSlot);
+				}
 			}
 		});
 		midiController.sendSysexConfigs(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
@@ -885,29 +891,10 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
 		loadConfigAfterLoadSlot = configOptions.liveUpdates;
-//		loadConfigAfterLoadSlot = true;
-/*		if (configOptions.liveUpdates) {
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					Platform.runLater(new Runnable() {
-						
-						@Override
-						public void run() {
-							sendAllSysexRequests();
-						}
-					});
-				}
-			}, 1000);
-
-		}*/
 		System.out.println("Load from slot to do");
 	}
 	
-	private void sendSysexSaveToSlotRequest(int slot) {
+	private void sendSysexSaveToSlotOnlyRequest(int slot) {
 		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
@@ -915,7 +902,23 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[1] = (byte)slot;
 		sysexSendList.add(typeAndId);
 		sendSysexRequest();
+		Utils.delayMs(500);
+		sysexSendList.clear();
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+		sysexSendList.add(typeAndId);
 		System.out.println("Save slot to do");
+		
+	}
+	
+	private void sendSysexSaveToSlotRequest(int slot) {
+		if (loadConfigAfterLoadSlot != configOptions.liveUpdates) {
+			saveToSlot = slot;
+			saveToSlotAfterSendAll = true;
+			sendAllSysex();
+		} else {
+			sendSysexSaveToSlotOnlyRequest(slot);
+		}
 	}
 	
 	private void controlsCurveChanged() {
