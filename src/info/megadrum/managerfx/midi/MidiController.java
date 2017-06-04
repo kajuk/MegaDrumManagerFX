@@ -90,7 +90,7 @@ public class MidiController {
 			try {
 		        final int max = typesAndIds.size();
 		        for (int i = 0; i < max; i++) {
-					//System.out.printf("Sending Sysex request with id = %d\n", typesAndIds.get(i)[1]);
+					System.out.printf("Sending Sysex request %d with type = %d and id = %d\n", i, typesAndIds.get(i)[0], typesAndIds.get(i)[1]);
 		        	sendSysexRequestFromThread(typesAndIds.get(i)[0],typesAndIds.get(i)[1], maxRetries,retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
@@ -286,9 +286,14 @@ public class MidiController {
 				midiHandler.requestVersion();
 				break;
 			case Constants.MD_SYSEX_CONFIG_LOAD:
+				//No response for Load from/Save to
+				// so faking sysex received
+				sysexReceived = true;
 				midiHandler.requestLoadFromSlot(id);
 				break;
 			case Constants.MD_SYSEX_CONFIG_SAVE:
+				//No response for Load from/Save to
+				// so faking sysex received
 				midiHandler.requestSaveToSlot(id);
 				break;
 			default:

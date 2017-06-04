@@ -632,7 +632,7 @@ public class Controller implements MidiRescanEventListener {
 			//framesDetached[i].setLocation(configOptions.framesPositions[i]);
 			//viewMenus[i].setConfigOptions(configOptions);
 		}
-		//tglbtnLiveUpdates.setSelected(configOptions.interactive);
+		uiGlobalMisc.getCheckBoxLiveUpdates().setSelected(configOptions.liveUpdates);
 		//checkBoxAutoResize.setSelected(configOptions.autoResize);
 	}
 
@@ -856,13 +856,47 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexLoadFromSlotRequest(int slot) {
+		setAllStatesUnknown();
 		sysexSendList.clear();
 		byte [] typeAndId;
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_LOAD;
 		typeAndId[1] = (byte)slot;
 		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_VERSION;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_MCU_TYPE;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_COUNT;
+		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+		sysexSendList.add(typeAndId);
 		sendSysexRequest();
+		if (configOptions.liveUpdates) {
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Platform.runLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							sendAllSysexRequests();
+						}
+					});
+				}
+			}, 400);
+
+		}
 		System.out.println("Load from slot to do");
 	}
 	
@@ -1360,9 +1394,7 @@ public class Controller implements MidiRescanEventListener {
 					b = (int)sysex[4];
 					uiGlobalMisc.setConfigCurrent(b);
 					configFull.configCurrentSysexReceived = true;
-					if (configFull.configCurrent == pointer) {
-						uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
-					}
+					uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
 					//TODO
 					//setSysexOk();
 				}
@@ -1374,7 +1406,7 @@ public class Controller implements MidiRescanEventListener {
 			    //System.out.printf("sysexReceived for ConfigName id %d set to true\n", buffer[4]);
 				reCreateSlotsMenuItems();
 				if (configFull.configCurrent == pointer) {
-					uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
+					//uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
 				}
 				break;
 			case Constants.MD_SYSEX_CURVE:
