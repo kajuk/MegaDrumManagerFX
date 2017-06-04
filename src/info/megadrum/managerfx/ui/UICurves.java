@@ -167,7 +167,7 @@ public class UICurves {
 		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		setSpinnersFromCurve();
 		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
-		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.05em 0.01em");
+		toolBarNavigator.setStyle("-fx-padding: 0.0em 0.0em 0.15em 0.01em");
 	}
 
 	public Node getUI() {
@@ -178,10 +178,12 @@ public class UICurves {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+		if (fullHeight > 600) {
+			buttonFont = new Font(600*Constants.FX_TOOLBARS_FONT_SCALE);
+		} else if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
 		} else {
-			buttonFont = new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE);
+			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 		}
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);

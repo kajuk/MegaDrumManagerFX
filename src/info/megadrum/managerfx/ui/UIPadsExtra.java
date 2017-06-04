@@ -98,6 +98,8 @@ public class UIPadsExtra {
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
 
 		//titledPane.setMaxWidth(fullHeight*0.35);
+		//uiCurves.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
+		//uiCustomNames.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
 		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
 		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
 	}
