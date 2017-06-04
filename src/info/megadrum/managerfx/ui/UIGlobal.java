@@ -105,6 +105,18 @@ public class UIGlobal {
 	public Button getButtonSaveAll() {
 		return buttonSaveAll;
 	}
+	
+	public ComboBox<String> getComboBoxFile() {
+		return comboBoxFile;
+	}
+
+	public Button getButtonPrevFile() {
+		return buttonPrevFile;
+	}
+	
+	public Button getButtonNextFile() {
+		return buttonNextFile;
+	}
 
 	public Node getUI() {
 		return (Node) hBoxPane;

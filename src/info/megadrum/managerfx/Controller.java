@@ -96,6 +96,7 @@ public class Controller implements MidiRescanEventListener {
 	private File file;
 	private int padPair = 0;
 	private int comboBoxInputChangedFromSet = 0;
+	private int comboBoxFileChangedFromSet = 0;
 	private int toggleButtonMidiChangedFromSet = 0;
 	private int oldInputsCounts = 0;
 	private Boolean sendNextAllSysexRequestsFlag = false;
@@ -117,12 +118,36 @@ public class Controller implements MidiRescanEventListener {
 		initMidi();
 		initConfigs();
 		createMainMenuBar();
-		loadConfig();
 		uiGlobal = new UIGlobal();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
 		uiGlobal.getButtonLoadAll().setOnAction(e-> load_all());
 		uiGlobal.getButtonSaveAll().setOnAction(e-> save_all());
+		uiGlobal.getComboBoxFile().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+		    	if (comboBoxFileChangedFromSet > 0) {
+		    		comboBoxFileChangedFromSet--;
+		    	} else {
+					configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
+					fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
+					loadAllFromConfigFull();
+		    	}				
+			}
+        });
+		uiGlobal.getButtonPrevFile().setOnAction(e-> {
+			if (configOptions.lastConfig>0) {
+				uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig - 1);
+			}			
+		});
+		uiGlobal.getButtonNextFile().setOnAction(e-> {
+			if (configOptions.lastConfig<(Constants.CONFIGS_COUNT-1)) {
+				uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig + 1);
+			}			
+		});
+
+		
 		uiGlobalMisc = new UIGlobalMisc();
 		uiGlobalMisc.getButtonGet().setOnAction(e-> sendSysexGlobalMiscRequest());
 		uiGlobalMisc.getButtonSend().setOnAction(e-> sendSysexGlobalMisc());
@@ -396,6 +421,7 @@ public class Controller implements MidiRescanEventListener {
 		});
 		window.setWidth(1200);
 		window.setHeight(800);
+		loadConfig();
 		window.show();
 		//Setting position works only after Stage is shown
 		window.setX(configOptions.mainWindowPosition.getX());
@@ -527,7 +553,9 @@ public class Controller implements MidiRescanEventListener {
 		configOptions  = fileManager.loadLastOptions(configOptions);
 		System.out.println("ToDo!!");
 		//showChangeNotificationIfNeeded();
-		//comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
+		uiGlobal.getComboBoxFile().getItems().clear();
+		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
+		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
 		//comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		//showMidiWarningIfNeeded();
 		//if (configOptions.autoOpenPorts) {
@@ -537,10 +565,6 @@ public class Controller implements MidiRescanEventListener {
 		//midiController.chainId = configOptions.chainId;
 		//comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		//updateInputsCountControls();
-		if (!configOptions.configFullPaths[configOptions.lastConfig].equals("")) {
-			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
-			loadAllFromConfigFull();
-		}
 		//updateGlobalMiscControls();
 		window.setX(configOptions.mainWindowPosition.getX());
 		window.setY(configOptions.mainWindowPosition.getY());
@@ -1375,9 +1399,9 @@ public class Controller implements MidiRescanEventListener {
 	private void initConfigs() {
 		fullConfigs = new ConfigFull[Constants.CONFIGS_COUNT];
 		configFileNames = new String[Constants.CONFIGS_COUNT];
-		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
-			fullConfigs[i-1] = new ConfigFull();
-			configFileNames[i-1] = new String();
+		for (Integer i = 0;i < Constants.CONFIGS_COUNT;i++) {
+			fullConfigs[i] = new ConfigFull();
+			configFileNames[i] = new String();
 		}
 		configOptions = new ConfigOptions();
 		configFull = new ConfigFull(); 
@@ -1507,11 +1531,46 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void loadAllFromConfigFull() {
-		System.out.println("loading all from config");
+		byte [] sysex = new byte[256];
+
+		Utils.copyConfigGlobalMiscToSysex(fullConfigs[configOptions.lastConfig].configGlobalMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigGlobalMisc(sysex, configFull.configGlobalMisc);
+
+		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
+
+		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);		
+
+		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
+			Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPad(sysex, configFull.configPads[i]);
+			configFull.configPads[i].altNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].altNote_linked;
+			configFull.configPads[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote_linked;
+			Utils.copyConfigPosToSysex(fullConfigs[configOptions.lastConfig].configPos[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPos(sysex, configFull.configPos[i]);
+		}
+		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
+			Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);
+			configFull.config3rds[i].altNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked;
+			configFull.config3rds[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked;
+		}				
+		
+		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
+			Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCurve(sysex, configFull.configCurves[i]);					
+		}
+		for (int i=0; i < (Constants.CUSTOM_NAMES_MAX); i++) {
+			Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[i]);					
+		}
+		switchToSelectedPair(padPair);
 	}
 	
 	private void load_all() {
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
+		
 		loadAllFromConfigFull();
 	}
 
