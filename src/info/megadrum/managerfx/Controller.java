@@ -465,7 +465,7 @@ public class Controller implements MidiRescanEventListener {
 					});
 				}
 			};
-			timerResizeDelay = 100;
+			timerResizeDelay = 50;
 			timerResize.schedule(timerTaskResize, timerResizeDelay);
 		}
 	}

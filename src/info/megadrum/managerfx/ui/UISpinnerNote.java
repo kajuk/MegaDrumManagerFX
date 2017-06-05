@@ -26,7 +26,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 
 public class UISpinnerNote extends UIControl {
-	private SpinnerFast<Integer> uispinner;
+	private SpinnerFast<Integer> spinnerFast;
 	private SpinnerValueFactory<Integer> valueFactory;
 	private Integer 	minValue;
 	private Integer 	maxValue;
@@ -72,14 +72,14 @@ public class UISpinnerNote extends UIControl {
 		step = s;
 		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, intValue, step);
 
-		uispinner = new SpinnerFast<Integer>();
-		uispinner.setValueFactory(valueFactory);
-		uispinner.setEditable(true);
+		spinnerFast = new SpinnerFast<Integer>();
+		spinnerFast.setValueFactory(valueFactory);
+		spinnerFast.setEditable(true);
 		//uispinner.seton
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
 		//uispinner.set
-		uispinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+		spinnerFast.getEditor().textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -90,10 +90,10 @@ public class UISpinnerNote extends UIControl {
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
 		    	} else {
 		            if (!newValue.matches("\\d*")) {
-		            	uispinner.getEditor().setText(intValue.toString());
+		            	spinnerFast.getEditor().setText(intValue.toString());
 		            } else {
 						if (newValue.matches("")) {
-							uispinner.getEditor().setText(intValue.toString());
+							spinnerFast.getEditor().setText(intValue.toString());
 						} else {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
@@ -129,9 +129,9 @@ public class UISpinnerNote extends UIControl {
 	    //HBox.setHgrow(labelNote, Priority.ALWAYS);
 	    layoutC.setAlignment(Pos.CENTER_LEFT);
 	    
-		GridPane.setConstraints(uispinner, 0, 0);
-		GridPane.setHalignment(uispinner, HPos.LEFT);
-		GridPane.setValignment(uispinner, VPos.CENTER);
+		GridPane.setConstraints(spinnerFast, 0, 0);
+		GridPane.setHalignment(spinnerFast, HPos.LEFT);
+		GridPane.setValignment(spinnerFast, VPos.CENTER);
 
 		GridPane.setConstraints(labelNote, 1, 0);
 		GridPane.setHalignment(labelNote, HPos.CENTER);
@@ -142,7 +142,7 @@ public class UISpinnerNote extends UIControl {
 		GridPane.setValignment(checkBoxNoteLinked, VPos.CENTER);
 
 		if (linkedNote) {
-			layoutC.getChildren().addAll(uispinner,labelNote,checkBoxNoteLinked);		
+			layoutC.getChildren().addAll(spinnerFast,labelNote,checkBoxNoteLinked);		
 			checkBoxNoteLinked.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			    @Override
 			    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -154,7 +154,7 @@ public class UISpinnerNote extends UIControl {
 			    }
 			});
 		} else {
-			layoutC.getChildren().addAll(uispinner,labelNote);
+			layoutC.getChildren().addAll(spinnerFast,labelNote);
 		}
 
 		//initControl(uispinner);
@@ -163,23 +163,26 @@ public class UISpinnerNote extends UIControl {
 	}
 
     private void resizeFont(Double h) {
-		Double we = h*2;
+		Double we = h*2.2;
 		Integer l = maxValue.toString().length();
 		Double ll = (16/(16 + l.doubleValue()))*0.32;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		//uispinner.getEditor().setFont(new Font(we));    	
-		uispinner.getEditor().setFont(new Font(we));    	
+		spinnerFast.getEditor().setFont(new Font(we));
+		//rootPane.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
+		//layout.setStyle("-fx-font-size: 3pt");
     }
 
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
+	  	Double spinnerButtonsFontSize = h*0.3;
     	Double checkBoxFontSize = h*0.16;
-		uispinner.setMinHeight(h);
-		uispinner.setMaxHeight(h);
-		uispinner.setMaxWidth(h*2.8);
-		uispinner.setMinWidth(h*2.8);
+		spinnerFast.setMinHeight(h);
+		spinnerFast.setMaxHeight(h);
+		spinnerFast.setMaxWidth(h*2.8);
+		spinnerFast.setMinWidth(h*2.8);
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
@@ -194,9 +197,8 @@ public class UISpinnerNote extends UIControl {
 		layoutC.getRowConstraints().clear();
 		layoutC.getRowConstraints().add(new RowConstraints(h-padding*2 - 1));
 
-		// Spinner buttons width seems to be fixed and not adjustable
-		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
-		
+		// Spinner buttons size is actually controlled by -fx-font-size on the spinner
+		spinnerFast.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");		
 		resizeFont(h);
 		if (linkedNote) {
 			labelNote.setFont(new Font(h*0.50));			
@@ -246,8 +248,8 @@ public class UISpinnerNote extends UIControl {
         	updateSyncStateConditional();
     	}
     	valueFactory.setValue(n);
-    	uispinner.getEditor().setText(intValue.toString());
-		resizeFont(uispinner.getHeight());
+    	spinnerFast.getEditor().setText(intValue.toString());
+		resizeFont(spinnerFast.getHeight());
 		changeNoteName();
     }
     
@@ -260,7 +262,7 @@ public class UISpinnerNote extends UIControl {
         	linkedChangedFromSet = 1;
     		checkBoxNoteLinked.setSelected(linked);
     	}
-    	uispinner.setDisable(linked);
+    	spinnerFast.setDisable(linked);
     }
     
     public Boolean getLinked() {

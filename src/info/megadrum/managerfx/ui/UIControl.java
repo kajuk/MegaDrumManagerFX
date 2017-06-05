@@ -39,9 +39,9 @@ public class UIControl extends Control implements UIControlInterface {
 		return super.createDefaultSkin();
 	}
 
-	private GridPane layout;
+	protected GridPane layout;
 	protected Label label;
-	private Pane rootPane;
+	protected Pane rootPane;
 	protected Integer intValue = 0;
 	protected Integer mdIntValue = 0;
 	protected Integer syncState = Constants.SYNC_STATE_UNKNOWN;

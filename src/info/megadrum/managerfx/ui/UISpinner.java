@@ -24,7 +24,8 @@ public class UISpinner extends UIControl {
 	private SpinnerFast<Integer> spinnerFast;
 	private Integer minValue;
 	private Integer maxValue;
-	private Integer lastHeight = 10;
+	private Double lastHeight = 10.0;
+	private Double lastWidth = 10.0;
 	private Integer spinnerType = Constants.FX_SPINNER_TYPE_STANDARD;
 	//private Integer initValue;
 	//private Integer currentValue;
@@ -122,7 +123,7 @@ public class UISpinner extends UIControl {
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		switch (spinnerType) {
 		case Constants.FX_SPINNER_TYPE_SYSEX:
-			we = 13.0;
+			we = 16.0;
 			break;
 		case Constants.FX_SPINNER_TYPE_STANDARD:
 		default:
@@ -131,14 +132,17 @@ public class UISpinner extends UIControl {
 		}
 		spinnerFast.getEditor().setFont(new Font(we));
 		//System.out.printf("Setting spinner %s font to %f\n", label.getText(), we);
+		//layout.setStyle("-fx-font-size: 3pt");
     }
 
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
-    	lastHeight = hashCode();
+    	Double spinnerButtonsFontSize = h*0.3;
+    	lastHeight = h;
+    	lastWidth = w;
 //    	Double width = w*0.28;
-    	Double width = h*3.5;
+    	Double width = h*3.0;
 		spinnerFast.setMinHeight(h);
 		spinnerFast.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);
@@ -155,9 +159,10 @@ public class UISpinner extends UIControl {
 		//System.out.printf("Setting spinner %s width to %f\n", label.getText(), width);
 		spinnerFast.setMaxWidth(width);
 		spinnerFast.setMinWidth(width);
+		// Spinner buttons size is actually controlled by -fx-font-size on the spinner
+		spinnerFast.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");
 		resizeFont(h);
-		// Spinner buttons width seems to be fixed and not adjustable
-		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
+		
     }
 /*
     @Override
