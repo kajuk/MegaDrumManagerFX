@@ -258,6 +258,14 @@ public class UICurves {
 		return buttonSendAll;
 	}
 
+	public Button getButtonLoad() {
+		return buttonLoad;
+	}
+
+	public Button getButtonSave() {
+		return buttonSave;
+	}
+
 	public Button getButtonFirst() {
 		return buttonFirst;
 	}

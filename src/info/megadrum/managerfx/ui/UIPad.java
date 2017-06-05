@@ -402,6 +402,14 @@ public class UIPad extends Parent {
 		return buttonSend;
 	}
 
+	public Button getButtonLoad() {
+		return buttonLoad;
+	}
+
+	public Button getButtonSave() {
+		return buttonSave;
+	}
+
 	public Button getButtonGetAll() {
 		return buttonGetAll;
 	}

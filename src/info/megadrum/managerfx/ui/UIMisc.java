@@ -178,14 +178,22 @@ public class UIMisc {
 		//titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 	}
 
-	public Button getButtonSend() {
-		return buttonSend;
-	}
-
 	public Button getButtonGet() {
 		return buttonGet;
 	}
 	
+	public Button getButtonSend() {
+		return buttonSend;
+	}
+
+	public Button getButtonLoad() {
+		return buttonLoad;
+	}
+	
+	public Button getButtonSave() {
+		return buttonSave;
+	}
+
 	public void setControlsFromConfig(ConfigMisc config, Boolean setFromSysex) {
 		uiSpinnerNoteOffDelay.uiCtlSetValue(config.getNoteOff()*10, setFromSysex);
 		uiSpinnerPressrollTimeout.uiCtlSetValue(config.pressroll, setFromSysex);

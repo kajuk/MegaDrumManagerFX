@@ -364,14 +364,22 @@ public class UIPedal {
 		titledPane.setMaxWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 	}
 
+	public Button getButtonGet() {
+		return buttonGet;
+	}
+
 	public Button getButtonSend() {
 		return buttonSend;
 	}
 
-	public Button getButtonGet() {
-		return buttonGet;
+	public Button getButtonLoad() {
+		return buttonLoad;
 	}
 	
+	public Button getButtonSave() {
+		return buttonSave;
+	}
+
 	public void setControlsFromConfig(ConfigPedal config, Boolean setFromSysex) {
 		uiComboBoxMiscType.uiCtlSetValue(config.type ? 1:0, setFromSysex);
 		uiComboBoxMiscCurve.uiCtlSetValue(config.curve, setFromSysex);

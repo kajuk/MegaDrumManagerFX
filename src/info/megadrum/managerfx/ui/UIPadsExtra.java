@@ -176,6 +176,14 @@ public class UIPadsExtra {
 		return uiCurves.getButtonSendAll();
 	}
 
+	public Button getCurvesButtonLoad() {
+		return uiCurves.getButtonLoad();
+	}
+
+	public Button getCurvesButtonSave() {
+		return uiCurves.getButtonSave();
+	}
+
 	public ComboBox<String> getCurvesComboBox() {
 		return uiCurves.getComboBoxCurve();
 	}
