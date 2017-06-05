@@ -95,6 +95,7 @@ public class UIOptions {
         allMidiControls = new ArrayList<UIControl>();
         allMiscControls = new ArrayList<UIControl>();
         uiCheckBoxSamePort = new UICheckBox("Use same In/Out", false);
+        uiCheckBoxSamePort.setIgnoreSyncState();
         uiCheckBoxSamePort.addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -133,6 +134,7 @@ public class UIOptions {
         allMidiControls.add(uiComboBoxChainId);
 
         uiCheckBoxEnableMidiThru = new UICheckBox("Enable MIDI Thru", false);
+        uiCheckBoxEnableMidiThru.setIgnoreSyncState();
         allMidiControls.add(uiCheckBoxEnableMidiThru);
 
         uiComboBoxMidiThru = new UIComboBox("MIDI Thru", false);
@@ -147,6 +149,7 @@ public class UIOptions {
         allMidiControls.add(uiComboBoxMidiThru);
 
         uiCheckBoxInitPortsStartup = new UICheckBox("Init Ports on Startup", false);
+        uiCheckBoxInitPortsStartup.setIgnoreSyncState();
         allMidiControls.add(uiCheckBoxInitPortsStartup);
 
         uiSpinnerSysexTimeout = new UISpinner("Sysex Timeout", 10, 100, 30, 1, false);
@@ -165,6 +168,7 @@ public class UIOptions {
         midiLayout.setAlignment(Pos.TOP_CENTER);
         
     	uiCheckBoxSaveOnExit = new UICheckBox("Save Options on Exit", false);
+    	uiCheckBoxSaveOnExit.setIgnoreSyncState();
         allMiscControls.add(uiCheckBoxSaveOnExit);
 
         for (int i = 0; i < allMiscControls.size(); i++) {

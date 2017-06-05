@@ -15,6 +15,7 @@ public class UICheckBox extends UIControl{
 	
 	private CheckBox checkBox;
 	private HBox layout;
+	private Boolean ignoreSyncState = false;
 
 	public UICheckBox(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -31,21 +32,25 @@ public class UICheckBox extends UIControl{
 		checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	//checkBox.setSelected(!newValue);
-				//System.out.printf("%s: new value = %s, old value = %s\n",label.getText(),(newValue ? "true" : "false"),(oldValue ? "true" : "false") );
-	    		//System.out.println("Checkbox changed");
-		    	if (changedFromSet > 0) {
-		    		changedFromSet = 0;
+		    	if (ignoreSyncState) {
+		    		setSyncState(Constants.SYNC_STATE_SYNCED);
 		    	} else {
-			    	booleanValue = newValue;
-					fireControlChangeEvent(new ControlChangeEvent(this), 0);
-					if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-						if (booleanValue == mdBooleanValue) {
-							setSyncState(Constants.SYNC_STATE_SYNCED);						
-						} else {
-							setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+			    	//checkBox.setSelected(!newValue);
+					//System.out.printf("%s: new value = %s, old value = %s\n",label.getText(),(newValue ? "true" : "false"),(oldValue ? "true" : "false") );
+		    		//System.out.println("Checkbox changed");
+			    	if (changedFromSet > 0) {
+			    		changedFromSet = 0;
+			    	} else {
+				    	booleanValue = newValue;
+						fireControlChangeEvent(new ControlChangeEvent(this), 0);
+						if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+							if (booleanValue == mdBooleanValue) {
+								setSyncState(Constants.SYNC_STATE_SYNCED);						
+							} else {
+								setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+							}
 						}
-					}
+			    	}
 		    	}
 		    }
 		});
@@ -96,4 +101,7 @@ public class UICheckBox extends UIControl{
     	checkBox.selectedProperty().addListener(listener);
     }
 
+    public void setIgnoreSyncState() {
+    	ignoreSyncState = true;
+    }
 }
