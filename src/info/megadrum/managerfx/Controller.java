@@ -87,6 +87,9 @@ public class Controller implements MidiRescanEventListener {
 	private UIPad uiPad;
 	private UIPadsExtra uiPadsExtra;
 	//private ProgressBar tempProgressBar;
+	private Timer 		timerResize;
+	private TimerTask	timerTaskResize;
+	private int			timerResizeDelay = 200;
 	
 	private MidiController midiController;
 	private ConfigOptions configOptions;
@@ -416,7 +419,7 @@ public class Controller implements MidiRescanEventListener {
 		
 		window.setScene(scene1);
 		window.setMinWidth(1000);
-		window.sizeToScene();
+		//window.sizeToScene();
 		//scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
 		//	respondToResize(scene1);
 		//});
@@ -424,10 +427,7 @@ public class Controller implements MidiRescanEventListener {
 		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
 		});
-		//window.setWidth(1200);
-		//window.setHeight(800);
 		loadConfig();
-		window.setWidth(Region.USE_PREF_SIZE);
 		window.show();
 	}
 
@@ -436,41 +436,57 @@ public class Controller implements MidiRescanEventListener {
 		if (resizeFromResize) {
 			resizeFromResize = false;
 		} else {
-			//resizeFromResize = true;
-			Double mainMenuBarHeight = mainMenuBar.getHeight();
-			Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
-			Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
-			//System.out.printf("menuBar = %f, global = %f, globalMisc = %f\n", mainMenuBarHeight,globalBarHeight,globalMiscBarHeight);
-			//Double height = sc.getHeight();
-			Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
-			Double width = height*2;
-			Double controlH, controlW;
-			controlH= height *0.035 *0.8;
-			//controlW= width *0.2;
-			controlW= controlH *8;
-			//System.out.println("Responding to scene resize in Controller");
-			uiMisc.respondToResize(height, width, height, controlH, controlW);
-			uiPedal.respondToResize(height, width, height, controlH, controlW);
-			uiPad.respondToResize(height, width, height, controlH, controlW);
-			uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
-			//window.setWidth(controlH*40 + 350);
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
+			if (timerResize != null) {
+				timerResize.cancel();
+			}
+			timerResize = new Timer();
+			timerTaskResize = new TimerTask() {
 				
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					Platform.runLater(new Runnable() {
 						
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
 							//resizeFromResize = true;
-							//window.sizeToScene();											
+							Double mainMenuBarHeight = mainMenuBar.getHeight();
+							Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
+							Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
+							Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
+							Double width = height*2;
+							Double controlH, controlW;
+							controlH= height *0.035 *0.8;
+							controlW= controlH *8;
+							uiMisc.respondToResize(height, width, height, controlH, controlW);
+							uiPedal.respondToResize(height, width, height, controlH, controlW);
+							uiPad.respondToResize(height, width, height, controlH, controlW);
+							uiPadsExtra.respondToResize(height, width, height, controlH, controlW);							
 						}
 					});
 				}
-			}, 1);
+			};
+			timerResizeDelay = 100;
+			timerResize.schedule(timerTaskResize, timerResizeDelay);
+		}
+	}
+
+	public void XrespondToResize(Scene sc) {
+		if (resizeFromResize) {
+			resizeFromResize = false;
+		} else {
+			//resizeFromResize = true;
+			Double mainMenuBarHeight = mainMenuBar.getHeight();
+			Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
+			Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
+			Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
+			Double width = height*2;
+			Double controlH, controlW;
+			controlH= height *0.035 *0.8;
+			controlW= controlH *8;
+			uiMisc.respondToResize(height, width, height, controlH, controlW);
+			uiPedal.respondToResize(height, width, height, controlH, controlW);
+			uiPad.respondToResize(height, width, height, controlH, controlW);
+			uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
 		}
 	}
 

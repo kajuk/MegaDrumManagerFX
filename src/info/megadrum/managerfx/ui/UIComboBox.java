@@ -100,7 +100,7 @@ public class UIComboBox extends UIControl {
     	} else if (maxStringLength > 8) {
     		fontSize = h*0.31;    		
     	} else {
-    		fontSize = h*0.425;    		    		
+    		fontSize = h*0.39;    		    		
     	}
 		comboBox.setStyle("-fx-font-size: " + fontSize.toString() + "pt");			
     }

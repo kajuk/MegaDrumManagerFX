@@ -21,9 +21,10 @@ import javafx.scene.text.Font;
 
 
 public class UISpinner extends UIControl {
-	private SpinnerFast<Integer> uispinner;
+	private SpinnerFast<Integer> spinnerFast;
 	private Integer minValue;
 	private Integer maxValue;
+	private Integer lastHeight = 10;
 	private Integer spinnerType = Constants.FX_SPINNER_TYPE_STANDARD;
 	//private Integer initValue;
 	//private Integer currentValue;
@@ -64,13 +65,13 @@ public class UISpinner extends UIControl {
 		step = s;
 		valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, intValue, step);
 
-		uispinner = new SpinnerFast<Integer>();
-		uispinner.setValueFactory(valueFactory);
-		uispinner.setEditable(true);
+		spinnerFast = new SpinnerFast<Integer>();
+		spinnerFast.setValueFactory(valueFactory);
+		spinnerFast.setEditable(true);
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
 		//uispinner.set
-		uispinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+		spinnerFast.getEditor().textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -81,10 +82,10 @@ public class UISpinner extends UIControl {
 		    	} else {
 		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
 		            if (!newValue.matches("\\d*")) {
-		            	uispinner.getEditor().setText(intValue.toString());
+		            	spinnerFast.getEditor().setText(intValue.toString());
 		            } else {
 						if (newValue.matches("")) {
-							uispinner.getEditor().setText(intValue.toString());
+							spinnerFast.getEditor().setText(intValue.toString());
 						} else {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
@@ -110,12 +111,12 @@ public class UISpinner extends UIControl {
 		
 	    layout = new HBox();
 	    layout.setAlignment(Pos.CENTER_LEFT);
-	    layout.getChildren().addAll(uispinner);
+	    layout.getChildren().addAll(spinnerFast);
 		initControl(layout);
 	}
     
-    private void resizeFont() {
-		Double we = uispinner.getEditor().getWidth();
+    private void resizeFont(Double h) {
+		Double we = h*2.2;
 		Integer l = maxValue.toString().length();
 		Double ll = (16/(16 + l.doubleValue()))*1.0;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
@@ -128,16 +129,18 @@ public class UISpinner extends UIControl {
 			we = we*ll*0.3;
 			break;
 		}
-		uispinner.getEditor().setFont(new Font(we));			
+		spinnerFast.getEditor().setFont(new Font(we));
+		//System.out.printf("Setting spinner %s font to %f\n", label.getText(), we);
     }
-    
+
     @Override
     public void respondToResize(Double h, Double w) {
     	super.respondToResize(h, w);
+    	lastHeight = hashCode();
 //    	Double width = w*0.28;
     	Double width = h*3.5;
-		uispinner.setMinHeight(h);
-		uispinner.setMaxHeight(h);
+		spinnerFast.setMinHeight(h);
+		spinnerFast.setMaxHeight(h);
 		//uispinner.setMaxWidth(h*2 + 30.0);
 		//uispinner.setMinWidth(h*2 + 30.0);
 		switch (spinnerType) {
@@ -149,11 +152,12 @@ public class UISpinner extends UIControl {
 			//width = w*0.25;
 			break;
 		}
-		uispinner.setMaxWidth(width);
-		uispinner.setMinWidth(width);
+		//System.out.printf("Setting spinner %s width to %f\n", label.getText(), width);
+		spinnerFast.setMaxWidth(width);
+		spinnerFast.setMinWidth(width);
+		resizeFont(h);
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
-		resizeFont();
     }
 /*
     @Override
@@ -174,8 +178,8 @@ public class UISpinner extends UIControl {
         	updateSyncStateConditional();
     	}
     	valueFactory.setValue(n);
-    	uispinner.getEditor().setText(intValue.toString());
-		resizeFont();
+    	spinnerFast.getEditor().setText(intValue.toString());
+		resizeFont(spinnerFast.getHeight());
     }
     
    public Integer uiCtlGetValue() {

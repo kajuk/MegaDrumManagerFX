@@ -162,10 +162,10 @@ public class UISpinnerNote extends UIControl {
 		initControl(layoutC);
 	}
 
-    private void resizeFont() {
-		Double we = uispinner.getEditor().getWidth();
+    private void resizeFont(Double h) {
+		Double we = h*2;
 		Integer l = maxValue.toString().length();
-		Double ll = (16/(16 + l.doubleValue()))*0.37;
+		Double ll = (16/(16 + l.doubleValue()))*0.32;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		//uispinner.getEditor().setFont(new Font(we));    	
@@ -197,7 +197,7 @@ public class UISpinnerNote extends UIControl {
 		// Spinner buttons width seems to be fixed and not adjustable
 		//uispinner.setStyle("-fx-body-color: ladder(#444, yellow 0%, red 100%)");
 		
-		resizeFont();
+		resizeFont(h);
 		if (linkedNote) {
 			labelNote.setFont(new Font(h*0.50));			
 	    	// Padding setting really should be done via css and on init.
@@ -247,7 +247,7 @@ public class UISpinnerNote extends UIControl {
     	}
     	valueFactory.setValue(n);
     	uispinner.getEditor().setText(intValue.toString());
-		resizeFont();
+		resizeFont(uispinner.getHeight());
 		changeNoteName();
     }
     
