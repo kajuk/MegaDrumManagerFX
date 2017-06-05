@@ -13,7 +13,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.text.Font;
 
-public class UIPadsExtra {
+public class UIPadsExtra extends UIPanel {
 	private TitledPane 		titledPane;
 	private TabPane			tabPane;
 	private Tab 			tabCurves;

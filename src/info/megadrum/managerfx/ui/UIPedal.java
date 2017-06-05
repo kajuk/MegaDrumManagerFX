@@ -22,7 +22,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIPedal {
+public class UIPedal extends UIPanel {
 //	private VBox layout;
 	private TitledPane 	titledPane;
 	private Button 		buttonGet;

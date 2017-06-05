@@ -30,6 +30,7 @@ import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
 import info.megadrum.managerfx.ui.SpinnerFast;
 import info.megadrum.managerfx.ui.UIPadsExtra;
+import info.megadrum.managerfx.ui.UIPanel;
 import info.megadrum.managerfx.ui.UIGlobal;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
@@ -53,8 +54,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -79,13 +83,22 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem menuItemCustomCurvesGet, menuItemCustomCurvesSend;
 	private MenuItem menuItemCustomNamesGet, menuItemCustomNamesSend;
 	private MenuItem firmwareUpgradeMenuItem, optionsMenuItem, exitMenuItem;
+	
+	private RadioMenuItem rbMiscHide;
+	private RadioMenuItem rbMiscShow;
+	private RadioMenuItem rbMiscDetach;
+	private RadioMenuItem rbPedalHide;
+	private RadioMenuItem rbPedalShow;
+	private RadioMenuItem rbPedalDetach;
 	private UIOptions optionsWindow;
+	private HBox hBoxUIviews;
 	private UIGlobal uiGlobal;
 	private UIGlobalMisc uiGlobalMisc;
 	private UIMisc uiMisc;
 	private UIPedal uiPedal;
 	private UIPad uiPad;
 	private UIPadsExtra uiPadsExtra;
+	private ArrayList<UIPanel>	allPanels;
 	//private ProgressBar tempProgressBar;
 	private Timer 		timerResize;
 	private TimerTask	timerTaskResize;
@@ -410,15 +423,21 @@ public class Controller implements MidiRescanEventListener {
 		layout1VBox.getChildren().add(uiGlobal.getUI());
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		
-		HBox layout2HBox = new HBox(5);
+		hBoxUIviews = new HBox(5);
 		Button button = new Button("b");
 		//layout2HBox.getChildren().add(button);
-		layout2HBox.getChildren().add(uiMisc.getUI());
-		layout2HBox.getChildren().add(uiPedal.getUI());
-		layout2HBox.getChildren().add(uiPad.getUI());
-		layout2HBox.getChildren().add(uiPadsExtra.getUI());
+		hBoxUIviews.getChildren().add(uiMisc.getUI());
+		hBoxUIviews.getChildren().add(uiPedal.getUI());
+		hBoxUIviews.getChildren().add(uiPad.getUI());
+		hBoxUIviews.getChildren().add(uiPadsExtra.getUI());
 
-		layout1VBox.getChildren().add(layout2HBox);
+		allPanels = new ArrayList<UIPanel>();
+		allPanels.add(uiMisc);
+		allPanels.add(uiPedal);
+		allPanels.add(uiPad);
+		allPanels.add(uiPadsExtra);
+		
+		layout1VBox.getChildren().add(hBoxUIviews);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
 		layout1VBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 		//scene1 = new Scene(layout1, 300,500);
@@ -633,8 +652,60 @@ public class Controller implements MidiRescanEventListener {
 				new SeparatorMenuItem(),exitMenuItem
 				);
 		
+		Menu menuViewMisc = new Menu("Misc");
+		
+		ToggleGroup tgMisc = new ToggleGroup();
+		rbMiscHide = new RadioMenuItem("Hide");
+		rbMiscHide.setToggleGroup(tgMisc);
+		rbMiscHide.setOnAction(e-> {
+			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
+			uiMisc.setViewState(Constants.PANEL_HIDE);
+			showPanels();
+			});
+		rbMiscShow = new RadioMenuItem("Show");
+		rbMiscShow.setToggleGroup(tgMisc);
+		rbMiscShow.setOnAction(e-> {
+			uiMisc.setViewState(Constants.PANEL_SHOW);
+			showPanels();
+			});
+		rbMiscDetach = new RadioMenuItem("Detach");
+		rbMiscDetach.setToggleGroup(tgMisc);
+		menuViewMisc.getItems().addAll(rbMiscHide, rbMiscShow, rbMiscDetach);
+		rbMiscShow.setSelected(true);
+		viewMenu.getItems().add(menuViewMisc);
+		
+		Menu menuViewPedal = new Menu("Pedal");
+		
+		ToggleGroup tgPedal = new ToggleGroup();
+		rbPedalHide = new RadioMenuItem("Hide");
+		rbPedalHide.setToggleGroup(tgPedal);
+		rbPedalHide.setOnAction(e-> {
+			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
+			uiPedal.setViewState(Constants.PANEL_HIDE);
+			showPanels();
+			});
+		rbPedalShow = new RadioMenuItem("Show");
+		rbPedalShow.setToggleGroup(tgPedal);
+		rbPedalShow.setOnAction(e-> {
+			uiPedal.setViewState(Constants.PANEL_SHOW);
+			showPanels();
+			});
+		rbPedalDetach = new RadioMenuItem("Detach");
+		rbPedalDetach.setToggleGroup(tgPedal);
+		menuViewPedal.getItems().addAll(rbPedalHide, rbPedalShow, rbPedalDetach);
+		rbPedalShow.setSelected(true);
+		viewMenu.getItems().add(menuViewPedal);
 	}
 
+	private void showPanels() {
+		hBoxUIviews.getChildren().clear();
+		for (int i = 0; i < allPanels.size(); i++) {
+			if (allPanels.get(i).getViewState() == Constants.PANEL_SHOW) {
+				hBoxUIviews.getChildren().add(allPanels.get(i).getUI());
+			}
+		}
+	}
+	
 	private void loadConfig() {
 		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);

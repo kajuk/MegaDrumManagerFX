@@ -28,7 +28,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIPad extends Parent {
+public class UIPad extends UIPanel {
 
 	private TitledPane		titledPane;
 

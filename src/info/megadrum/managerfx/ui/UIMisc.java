@@ -17,7 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIMisc {
+public class UIMisc extends UIPanel {
 	private VBox layout;
 	private TitledPane titledPane;
 	private Button buttonGet;
