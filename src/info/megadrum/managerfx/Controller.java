@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.management.OperationsException;
+import javax.rmi.CORBA.Util;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -443,8 +444,6 @@ public class Controller implements MidiRescanEventListener {
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		
 		hBoxUIviews = new HBox(5);
-		Button button = new Button("b");
-		//layout2HBox.getChildren().add(button);
 		//hBoxUIviews.getChildren().add(uiMisc.getUI());
 		//hBoxUIviews.getChildren().add(uiPedal.getUI());
 		//hBoxUIviews.getChildren().add(uiPad.getUI());
@@ -461,14 +460,6 @@ public class Controller implements MidiRescanEventListener {
 		allWindows.add(null);
 		allWindows.add(null);
 		allWindows.add(null);
-/*		windowMisc = new Stage();
-		windowMisc.setTitle("Misc");
-		allWindows.add(windowMisc);
-		windowPedal = new Stage();
-		windowMisc.setTitle("Misc");
-		allWindows.add(windowMisc);
-*/		
-		showPanels();
 		layout1VBox.getChildren().add(hBoxUIviews);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
 		layout1VBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
@@ -481,6 +472,7 @@ public class Controller implements MidiRescanEventListener {
 		
 		window.setScene(scene1);
 		window.setMinWidth(1000);
+		window.setMinHeight(150);
 		//window.sizeToScene();
 		//scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
 		//	respondToResize(scene1);
@@ -490,6 +482,7 @@ public class Controller implements MidiRescanEventListener {
 			respondToResize(scene1);
 		});
 		loadConfig();
+		showPanels();
 		window.show();
 	}
 
@@ -519,10 +512,18 @@ public class Controller implements MidiRescanEventListener {
 							Double controlH, controlW;
 							controlH= height *0.035 *0.8;
 							controlW= controlH *8;
-							uiMisc.respondToResize(height, width, height, controlH, controlW);
-							uiPedal.respondToResize(height, width, height, controlH, controlW);
-							uiPad.respondToResize(height, width, height, controlH, controlW);
-							uiPadsExtra.respondToResize(height, width, height, controlH, controlW);							
+							if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+								uiMisc.respondToResize(height, width, height, controlH, controlW);
+							}
+							if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+								uiPedal.respondToResize(height, width, height, controlH, controlW);
+							}
+							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+								uiPad.respondToResize(height, width, height, controlH, controlW);
+							}
+							if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+								uiPadsExtra.respondToResize(height, width, height, controlH, controlW);							
+							}
 						}
 					});
 				}
@@ -836,6 +837,7 @@ public class Controller implements MidiRescanEventListener {
 						//scenePane.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 						scenePane.getChildren().add(allPanels.get(i).getTopLayout());
 						Scene scene = new Scene(scenePane);
+						//scene.seto
 						windowUI.setScene(scene);
 						windowUI.sizeToScene();
 						allWindows.add(i, windowUI);
@@ -870,6 +872,19 @@ public class Controller implements MidiRescanEventListener {
 				break;
 			}
 		}
+		// This is a hack to repaint hBoxUIviews
+		// after a UI has been removed from it.
+		hBoxUIviews.setVisible(false);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				hBoxUIviews.setVisible(true);				
+			}
+		}, 50);
+		respondToResize(scene1);
 	}
 	
 	private void loadConfig() {
