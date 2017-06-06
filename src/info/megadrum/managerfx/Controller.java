@@ -883,7 +883,7 @@ public class Controller implements MidiRescanEventListener {
 				// TODO Auto-generated method stub
 				hBoxUIviews.setVisible(true);				
 			}
-		}, 50);
+		}, 100);
 		respondToResize(scene1);
 	}
 	
