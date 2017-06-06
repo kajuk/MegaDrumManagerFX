@@ -90,6 +90,15 @@ public class Controller implements MidiRescanEventListener {
 	private RadioMenuItem rbPedalHide;
 	private RadioMenuItem rbPedalShow;
 	private RadioMenuItem rbPedalDetach;
+	private RadioMenuItem rbPadsHide;
+	private RadioMenuItem rbPadsShow;
+	private RadioMenuItem rbPadsDetach;
+	private RadioMenuItem rbPadsExtraHide;
+	private RadioMenuItem rbPadsExtraShow;
+	private RadioMenuItem rbPadsExtraDetach;
+	private RadioMenuItem rbMidiLogHide;
+	private RadioMenuItem rbMidiLogShow;
+	private RadioMenuItem rbMidiLogDetach;
 	private UIOptions optionsWindow;
 	private HBox hBoxUIviews;
 	private UIGlobal uiGlobal;
@@ -695,6 +704,73 @@ public class Controller implements MidiRescanEventListener {
 		menuViewPedal.getItems().addAll(rbPedalHide, rbPedalShow, rbPedalDetach);
 		rbPedalShow.setSelected(true);
 		viewMenu.getItems().add(menuViewPedal);
+
+		Menu menuViewPads = new Menu("Pads");
+		
+		ToggleGroup tgPads = new ToggleGroup();
+		rbPadsHide = new RadioMenuItem("Hide");
+		rbPadsHide.setToggleGroup(tgPads);
+		rbPadsHide.setOnAction(e-> {
+			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
+			uiPad.setViewState(Constants.PANEL_HIDE);
+			showPanels();
+			});
+		rbPadsShow = new RadioMenuItem("Show");
+		rbPadsShow.setToggleGroup(tgPads);
+		rbPadsShow.setOnAction(e-> {
+			uiPad.setViewState(Constants.PANEL_SHOW);
+			showPanels();
+			});
+		rbPadsDetach = new RadioMenuItem("Detach");
+		rbPadsDetach.setToggleGroup(tgPads);
+		menuViewPads.getItems().addAll(rbPadsHide, rbPadsShow, rbPadsDetach);
+		rbPadsShow.setSelected(true);
+		viewMenu.getItems().add(menuViewPads);
+
+		Menu menuViewPadsExtra = new Menu("PadsExtra");
+		
+		ToggleGroup tgPadsExtra = new ToggleGroup();
+		rbPadsExtraHide = new RadioMenuItem("Hide");
+		rbPadsExtraHide.setToggleGroup(tgPadsExtra);
+		rbPadsExtraHide.setOnAction(e-> {
+			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
+			uiPadsExtra.setViewState(Constants.PANEL_HIDE);
+			showPanels();
+			});
+		rbPadsExtraShow = new RadioMenuItem("Show");
+		rbPadsExtraShow.setToggleGroup(tgPadsExtra);
+		rbPadsExtraShow.setOnAction(e-> {
+			uiPadsExtra.setViewState(Constants.PANEL_SHOW);
+			showPanels();
+			});
+		rbPadsExtraDetach = new RadioMenuItem("Detach");
+		rbPadsExtraDetach.setToggleGroup(tgPadsExtra);
+		menuViewPadsExtra.getItems().addAll(rbPadsExtraHide, rbPadsExtraShow, rbPadsExtraDetach);
+		rbPadsExtraShow.setSelected(true);
+		viewMenu.getItems().add(menuViewPadsExtra);
+
+		Menu menuViewMidiLog = new Menu("MidiLog");
+		
+		ToggleGroup tgMidiLog = new ToggleGroup();
+		rbMidiLogHide = new RadioMenuItem("Hide");
+		rbMidiLogHide.setToggleGroup(tgMidiLog);
+		rbMidiLogHide.setOnAction(e-> {
+			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
+			//uiPad.setViewState(Constants.PANEL_HIDE);
+			showPanels();
+			});
+		rbMidiLogShow = new RadioMenuItem("Show");
+		rbMidiLogShow.setToggleGroup(tgMidiLog);
+		rbMidiLogShow.setOnAction(e-> {
+			//uiPad.setViewState(Constants.PANEL_SHOW);
+			showPanels();
+			});
+		rbMidiLogDetach = new RadioMenuItem("Detach");
+		rbMidiLogDetach.setToggleGroup(tgMidiLog);
+		menuViewMidiLog.getItems().addAll(rbMidiLogHide, rbMidiLogShow, rbMidiLogDetach);
+		rbMidiLogShow.setSelected(true);
+		viewMenu.getItems().add(menuViewMidiLog);
+
 	}
 
 	private void showPanels() {
