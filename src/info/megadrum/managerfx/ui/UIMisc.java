@@ -137,6 +137,7 @@ public class UIMisc extends UIPanel {
 		titledPane.setCollapsible(false);
 		titledPane.setAlignment(Pos.CENTER);
 		setAllStateUnknown();
+		topLayout = titledPane;
 	}
 
 	public void setAllStateUnknown() {

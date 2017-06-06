@@ -308,6 +308,7 @@ public class UIPedal extends UIPanel {
 		titledPane.setAlignment(Pos.CENTER);
 		//tabPane.setStyle("-fx-background-color: red");
 		setAllStateUnknown();
+		topLayout = titledPane;
 	}
 
 	public void setAllStateUnknown() {

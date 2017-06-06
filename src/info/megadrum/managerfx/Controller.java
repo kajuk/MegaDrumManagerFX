@@ -104,10 +104,16 @@ public class Controller implements MidiRescanEventListener {
 	private UIGlobal uiGlobal;
 	private UIGlobalMisc uiGlobalMisc;
 	private UIMisc uiMisc;
+	private Stage windowMisc;
 	private UIPedal uiPedal;
+	private Stage windowPedal;
 	private UIPad uiPad;
+	private Stage windowPad;
 	private UIPadsExtra uiPadsExtra;
+	private Stage windowPadsExtra;
+	private Stage windowMidiLog;
 	private ArrayList<UIPanel>	allPanels;
+	private ArrayList<Stage> allWindows;
 	//private ProgressBar tempProgressBar;
 	private Timer 		timerResize;
 	private TimerTask	timerTaskResize;
@@ -446,6 +452,18 @@ public class Controller implements MidiRescanEventListener {
 		allPanels.add(uiPad);
 		allPanels.add(uiPadsExtra);
 		
+		allWindows = new ArrayList<Stage>();
+		allWindows.add(null);
+		allWindows.add(null);
+		allWindows.add(null);
+		allWindows.add(null);
+/*		windowMisc = new Stage();
+		windowMisc.setTitle("Misc");
+		allWindows.add(windowMisc);
+		windowPedal = new Stage();
+		windowMisc.setTitle("Misc");
+		allWindows.add(windowMisc);
+*/		
 		layout1VBox.getChildren().add(hBoxUIviews);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
 		layout1VBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
@@ -679,6 +697,10 @@ public class Controller implements MidiRescanEventListener {
 			});
 		rbMiscDetach = new RadioMenuItem("Detach");
 		rbMiscDetach.setToggleGroup(tgMisc);
+		rbMiscDetach.setOnAction(e-> {
+			uiMisc.setViewState(Constants.PANEL_DETACH);
+			showPanels();
+			});
 		menuViewMisc.getItems().addAll(rbMiscHide, rbMiscShow, rbMiscDetach);
 		rbMiscShow.setSelected(true);
 		viewMenu.getItems().add(menuViewMisc);
@@ -701,6 +723,10 @@ public class Controller implements MidiRescanEventListener {
 			});
 		rbPedalDetach = new RadioMenuItem("Detach");
 		rbPedalDetach.setToggleGroup(tgPedal);
+		rbPedalDetach.setOnAction(e-> {
+			uiPedal.setViewState(Constants.PANEL_DETACH);
+			showPanels();
+			});
 		menuViewPedal.getItems().addAll(rbPedalHide, rbPedalShow, rbPedalDetach);
 		rbPedalShow.setSelected(true);
 		viewMenu.getItems().add(menuViewPedal);
@@ -723,6 +749,10 @@ public class Controller implements MidiRescanEventListener {
 			});
 		rbPadsDetach = new RadioMenuItem("Detach");
 		rbPadsDetach.setToggleGroup(tgPads);
+		rbPadsDetach.setOnAction(e-> {
+			uiPad.setViewState(Constants.PANEL_DETACH);
+			showPanels();
+			});
 		menuViewPads.getItems().addAll(rbPadsHide, rbPadsShow, rbPadsDetach);
 		rbPadsShow.setSelected(true);
 		viewMenu.getItems().add(menuViewPads);
@@ -745,6 +775,10 @@ public class Controller implements MidiRescanEventListener {
 			});
 		rbPadsExtraDetach = new RadioMenuItem("Detach");
 		rbPadsExtraDetach.setToggleGroup(tgPadsExtra);
+		rbPadsExtraDetach.setOnAction(e-> {
+			uiPadsExtra.setViewState(Constants.PANEL_DETACH);
+			showPanels();
+			});
 		menuViewPadsExtra.getItems().addAll(rbPadsExtraHide, rbPadsExtraShow, rbPadsExtraDetach);
 		rbPadsExtraShow.setSelected(true);
 		viewMenu.getItems().add(menuViewPadsExtra);
@@ -767,6 +801,10 @@ public class Controller implements MidiRescanEventListener {
 			});
 		rbMidiLogDetach = new RadioMenuItem("Detach");
 		rbMidiLogDetach.setToggleGroup(tgMidiLog);
+		rbMidiLogDetach.setOnAction(e-> {
+			//uiPad.setViewState(Constants.PANEL_DETACH);
+			showPanels();
+			});
 		menuViewMidiLog.getItems().addAll(rbMidiLogHide, rbMidiLogShow, rbMidiLogDetach);
 		rbMidiLogShow.setSelected(true);
 		viewMenu.getItems().add(menuViewMidiLog);
@@ -777,7 +815,29 @@ public class Controller implements MidiRescanEventListener {
 		hBoxUIviews.getChildren().clear();
 		for (int i = 0; i < allPanels.size(); i++) {
 			if (allPanels.get(i).getViewState() == Constants.PANEL_SHOW) {
+				if (allWindows.get(i) != null) {
+					if (allWindows.get(i).isShowing()) {
+						allWindows.get(i).close();
+					}
+				}
 				hBoxUIviews.getChildren().add(allPanels.get(i).getUI());
+			}
+			if (allPanels.get(i).getViewState() == Constants.PANEL_DETACH) {
+				hBoxUIviews.getChildren().remove(allPanels.get(i).getUI());
+				if (allWindows.get(i) == null) {
+					Stage window = new Stage();
+					Scene scene = new Scene(allPanels.get(i).getTopLayout());
+					window.setScene(scene);
+					allWindows.add(i, window);
+				}
+				allWindows.get(i).show();
+			}
+			if (allPanels.get(i).getViewState() == Constants.PANEL_HIDE) {
+				if (allWindows.get(i) != null) {
+					if (allWindows.get(i).isShowing()) {
+						allWindows.get(i).close();
+					}
+				}
 			}
 		}
 	}

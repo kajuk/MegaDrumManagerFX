@@ -260,6 +260,7 @@ public class UIPad extends UIPanel {
 		comboBoxInput.setMinWidth(controlH*6);
 		comboBoxInput.setMaxWidth(controlH*6);
 		labelInput.setFont(new Font(controlH*0.4));
+		topLayout = titledPane;
 	}
 
 	public Node getUI() {
