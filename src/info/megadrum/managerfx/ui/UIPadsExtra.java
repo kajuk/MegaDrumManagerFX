@@ -67,11 +67,8 @@ public class UIPadsExtra extends UIPanel {
 		});
         tabCustomNames.setContent(uiCustomNames.getUI());
         tabPane.getTabs().addAll(tabCurves,tabCustomNames);
-        vBoxAll = new VBox(1);
         vBoxAll.getChildren().add(tabPane);
 		setDetached(false);
-		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
-		vBoxAll.setAlignment(Pos.TOP_CENTER);
 		vBoxAll.setMaxHeight(440);
 		//vBoxAll.setMaxSize(340, 440);
 		//titledPane.setMaxSize(300, 500);

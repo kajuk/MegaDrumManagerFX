@@ -43,6 +43,9 @@ public class UIPanel {
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");
 		buttonSave = new Button("Save");
+        vBoxAll = new VBox(1);
+		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+		vBoxAll.setAlignment(Pos.TOP_CENTER);
 	}
 	
 	public void setViewState(int state) {

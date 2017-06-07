@@ -91,8 +91,6 @@ public class UIPad extends UIPanel {
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
 		hBox.setAlignment(Pos.TOP_CENTER);
-		vBoxAll = new VBox(1);
-		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		toolBarTop = new ToolBar();
 		buttonGetAll = new Button("GetAll");
@@ -253,14 +251,6 @@ public class UIPad extends UIPanel {
 		labelInput.setFont(new Font(controlH*0.4));
 	}
 
-	public void switchToInputPairWithConfig(Integer pair, ConfigPad configLeft, ConfigPad configRight) {
-		if (pair == 0) {
-			
-		} else {
-			
-		}
-	}
-		
 	public void setControlsFromConfigPad(ConfigPad configPad, Boolean leftInput, Boolean setFromSysex) {
 		if (leftInput) {
 			uiInputLeft.setControlsFromConfigPad(configPad, setFromSysex);			
