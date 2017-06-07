@@ -883,9 +883,9 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysex() {
-		midiController.sendSysexConfigsTaskRecreate();
+		midiController.sendSysexTaskRecreate();
 		uiGlobal.getProgressBarSysex().setVisible(true);
-		midiController.addSendSysexConfigsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+		midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
@@ -904,13 +904,13 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
-		midiController.sendSysexConfigs(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
+		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
 	
 	private void sendSysexRequest() {
-		midiController.sendSysexRequestsTaskRecreate();
+		midiController.sendSysexTaskRecreate();
 		uiGlobal.getProgressBarSysex().setVisible(true);
-		midiController.addSendSysexRequestsTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+		midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
@@ -929,7 +929,7 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
-		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 15, 50);		
+		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 15, 50);		
 	}
 
 	private void sendSysexReadOnlyRequest() {
