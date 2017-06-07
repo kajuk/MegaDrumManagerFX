@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.collections.functors.AndPredicate;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
@@ -90,21 +91,6 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem menuItemCustomNamesGet, menuItemCustomNamesSend;
 	private MenuItem firmwareUpgradeMenuItem, optionsMenuItem, exitMenuItem;
 	
-	private RadioMenuItem rbMiscHide;
-	private RadioMenuItem rbMiscShow;
-	private RadioMenuItem rbMiscDetach;
-	private RadioMenuItem rbPedalHide;
-	private RadioMenuItem rbPedalShow;
-	private RadioMenuItem rbPedalDetach;
-	private RadioMenuItem rbPadsHide;
-	private RadioMenuItem rbPadsShow;
-	private RadioMenuItem rbPadsDetach;
-	private RadioMenuItem rbPadsExtraHide;
-	private RadioMenuItem rbPadsExtraShow;
-	private RadioMenuItem rbPadsExtraDetach;
-	private RadioMenuItem rbMidiLogHide;
-	private RadioMenuItem rbMidiLogShow;
-	private RadioMenuItem rbMidiLogDetach;
 	private UIOptions optionsWindow;
 	private HBox hBoxUIviews;
 	private UIGlobal uiGlobal;
@@ -119,7 +105,7 @@ public class Controller implements MidiRescanEventListener {
 	private Stage windowPadsExtra;
 	private Stage windowMidiLog;
 	private ArrayList<UIPanel>	allPanels;
-	private ArrayList<Stage> allWindows;
+	//private ArrayList<Stage> allWindows;
 	//private ProgressBar tempProgressBar;
 	private Timer 		timerResize;
 	private TimerTask	timerTaskResize;
@@ -165,6 +151,12 @@ public class Controller implements MidiRescanEventListener {
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
 		initMidi();
 		initConfigs();
+		allPanels = new ArrayList<UIPanel>();
+		allPanels.add(uiMisc);
+		allPanels.add(uiPedal);
+		allPanels.add(uiPad);
+		allPanels.add(uiPadsExtra);
+		
 		createMainMenuBar();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
@@ -450,17 +442,6 @@ public class Controller implements MidiRescanEventListener {
 		//hBoxUIviews.getChildren().add(uiPad.getUI());
 		//hBoxUIviews.getChildren().add(uiPadsExtra.getUI());
 		
-		allPanels = new ArrayList<UIPanel>();
-		allPanels.add(uiMisc);
-		allPanels.add(uiPedal);
-		allPanels.add(uiPad);
-		allPanels.add(uiPadsExtra);
-		
-		allWindows = new ArrayList<Stage>();
-		allWindows.add(null);
-		allWindows.add(null);
-		allWindows.add(null);
-		allWindows.add(null);
 		layout1VBox.getChildren().add(hBoxUIviews);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
 		layout1VBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
@@ -511,8 +492,22 @@ public class Controller implements MidiRescanEventListener {
 							Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
 							Double width = height*2;
 							Double controlH, controlW;
-							controlH= height *0.035 *0.8;
-							controlW= controlH *8;
+							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+								controlH= height *0.028;
+							} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+								controlH= height *0.028 *1.55;
+								height = height * 1.2;
+							} else if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+								controlH= height *0.028 *2.4;							
+								height = height * 1.2;
+							} else if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+								controlH= height *0.028 *2.4;							
+								height = height * 1.2;
+							} else {
+								controlH= height *0.028 *2.4;							
+								height = height * 1.2;
+							}
+							controlW = controlH*8;
 							if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
 								uiMisc.respondToResize(height, width, height, controlH, controlW);
 							}
@@ -674,139 +669,44 @@ public class Controller implements MidiRescanEventListener {
 		
 		Menu menuViewMisc = new Menu("Misc");
 		
-		ToggleGroup tgMisc = new ToggleGroup();
-		rbMiscHide = new RadioMenuItem("Hide");
-		rbMiscHide.setToggleGroup(tgMisc);
-		rbMiscHide.setOnAction(e-> {
-			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
-			uiMisc.setViewState(Constants.PANEL_HIDE);
-			showPanels();
-			});
-		uiMisc.setRadioMenuItemHide(rbMiscHide);
-		rbMiscShow = new RadioMenuItem("Show");
-		rbMiscShow.setToggleGroup(tgMisc);
-		rbMiscShow.setOnAction(e-> {
-			uiMisc.setViewState(Constants.PANEL_SHOW);
-			showPanels();
-			});
-		rbMiscDetach = new RadioMenuItem("Detach");
-		rbMiscDetach.setToggleGroup(tgMisc);
-		rbMiscDetach.setOnAction(e-> {
-			uiMisc.setViewState(Constants.PANEL_DETACH);
-			showPanels();
-			});
-		menuViewMisc.getItems().addAll(rbMiscHide, rbMiscShow, rbMiscDetach);
-		rbMiscShow.setSelected(true);
+		menuViewMisc.getItems().addAll(uiMisc.getRadioMenuItemHide(), uiMisc.getRadioMenuItemShow(), uiMisc.getRadioMenuItemDetach());
 		viewMenu.getItems().add(menuViewMisc);
 		
 		Menu menuViewPedal = new Menu("Pedal");
 		
-		ToggleGroup tgPedal = new ToggleGroup();
-		rbPedalHide = new RadioMenuItem("Hide");
-		rbPedalHide.setToggleGroup(tgPedal);
-		rbPedalHide.setOnAction(e-> {
-			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
-			uiPedal.setViewState(Constants.PANEL_HIDE);
-			showPanels();
-			});
-		uiPedal.setRadioMenuItemHide(rbPedalHide);
-		rbPedalShow = new RadioMenuItem("Show");
-		rbPedalShow.setToggleGroup(tgPedal);
-		rbPedalShow.setOnAction(e-> {
-			uiPedal.setViewState(Constants.PANEL_SHOW);
-			showPanels();
-			});
-		rbPedalDetach = new RadioMenuItem("Detach");
-		rbPedalDetach.setToggleGroup(tgPedal);
-		rbPedalDetach.setOnAction(e-> {
-			uiPedal.setViewState(Constants.PANEL_DETACH);
-			showPanels();
-			});
-		menuViewPedal.getItems().addAll(rbPedalHide, rbPedalShow, rbPedalDetach);
-		rbPedalShow.setSelected(true);
+		menuViewPedal.getItems().addAll(uiPedal.getRadioMenuItemHide(), uiPedal.getRadioMenuItemShow(), uiPedal.getRadioMenuItemDetach());
 		viewMenu.getItems().add(menuViewPedal);
 
 		Menu menuViewPads = new Menu("Pads");
 		
-		ToggleGroup tgPads = new ToggleGroup();
-		rbPadsHide = new RadioMenuItem("Hide");
-		rbPadsHide.setToggleGroup(tgPads);
-		rbPadsHide.setOnAction(e-> {
-			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
-			uiPad.setViewState(Constants.PANEL_HIDE);
-			showPanels();
-			});
-		uiPad.setRadioMenuItemHide(rbPadsHide);
-		rbPadsShow = new RadioMenuItem("Show");
-		rbPadsShow.setToggleGroup(tgPads);
-		rbPadsShow.setOnAction(e-> {
-			uiPad.setViewState(Constants.PANEL_SHOW);
-			showPanels();
-			});
-		rbPadsDetach = new RadioMenuItem("Detach");
-		rbPadsDetach.setToggleGroup(tgPads);
-		rbPadsDetach.setOnAction(e-> {
-			uiPad.setViewState(Constants.PANEL_DETACH);
-			showPanels();
-			});
-		menuViewPads.getItems().addAll(rbPadsHide, rbPadsShow, rbPadsDetach);
-		rbPadsShow.setSelected(true);
+		menuViewPads.getItems().addAll(uiPad.getRadioMenuItemHide(), uiPad.getRadioMenuItemShow(), uiPad.getRadioMenuItemDetach());
 		viewMenu.getItems().add(menuViewPads);
 
 		Menu menuViewPadsExtra = new Menu("PadsExtra");
 		
-		ToggleGroup tgPadsExtra = new ToggleGroup();
-		rbPadsExtraHide = new RadioMenuItem("Hide");
-		rbPadsExtraHide.setToggleGroup(tgPadsExtra);
-		rbPadsExtraHide.setOnAction(e-> {
-			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
-			uiPadsExtra.setViewState(Constants.PANEL_HIDE);
-			showPanels();
-			});
-		uiPadsExtra.setRadioMenuItemHide(rbPadsExtraHide);
-		rbPadsExtraShow = new RadioMenuItem("Show");
-		rbPadsExtraShow.setToggleGroup(tgPadsExtra);
-		rbPadsExtraShow.setOnAction(e-> {
-			uiPadsExtra.setViewState(Constants.PANEL_SHOW);
-			showPanels();
-			});
-		rbPadsExtraDetach = new RadioMenuItem("Detach");
-		rbPadsExtraDetach.setToggleGroup(tgPadsExtra);
-		rbPadsExtraDetach.setOnAction(e-> {
-			uiPadsExtra.setViewState(Constants.PANEL_DETACH);
-			showPanels();
-			});
-		menuViewPadsExtra.getItems().addAll(rbPadsExtraHide, rbPadsExtraShow, rbPadsExtraDetach);
-		rbPadsExtraShow.setSelected(true);
+		menuViewPadsExtra.getItems().addAll(uiPadsExtra.getRadioMenuItemHide(), uiPadsExtra.getRadioMenuItemShow(), uiPadsExtra.getRadioMenuItemDetach());
 		viewMenu.getItems().add(menuViewPadsExtra);
 
 		Menu menuViewMidiLog = new Menu("MidiLog");
-		
-		ToggleGroup tgMidiLog = new ToggleGroup();
-		rbMidiLogHide = new RadioMenuItem("Hide");
-		rbMidiLogHide.setToggleGroup(tgMidiLog);
-		rbMidiLogHide.setOnAction(e-> {
-			//hBoxUIviews.getChildren().remove(uiMisc.getUI());
-			//uiPad.setViewState(Constants.PANEL_HIDE);
-			showPanels();
-			});
-		//uiMidiLog.setRadioMenuItemHide(rbMidiLogHide);
-		rbMidiLogShow = new RadioMenuItem("Show");
-		rbMidiLogShow.setToggleGroup(tgMidiLog);
-		rbMidiLogShow.setOnAction(e-> {
-			//uiPad.setViewState(Constants.PANEL_SHOW);
-			showPanels();
-			});
-		rbMidiLogDetach = new RadioMenuItem("Detach");
-		rbMidiLogDetach.setToggleGroup(tgMidiLog);
-		rbMidiLogDetach.setOnAction(e-> {
-			//uiPad.setViewState(Constants.PANEL_DETACH);
-			showPanels();
-			});
-		menuViewMidiLog.getItems().addAll(rbMidiLogHide, rbMidiLogShow, rbMidiLogDetach);
-		rbMidiLogShow.setSelected(true);
+		// TODO
 		viewMenu.getItems().add(menuViewMidiLog);
 
+		for (int i = 0; i < allPanels.size(); i++) {
+			final int iFinal = i;
+			allPanels.get(i).getRadioMenuItemShow().setSelected(true);
+			allPanels.get(i).getRadioMenuItemHide().setOnAction(e-> {
+				allPanels.get(iFinal).setViewState(Constants.PANEL_HIDE);
+				showPanels();
+			});
+			allPanels.get(i).getRadioMenuItemShow().setOnAction(e-> {
+				allPanels.get(iFinal).setViewState(Constants.PANEL_SHOW);
+				showPanels();
+			});
+			allPanels.get(i).getRadioMenuItemDetach().setOnAction(e-> {
+				allPanels.get(iFinal).setViewState(Constants.PANEL_DETACH);
+				showPanels();
+			});
+		}
 	}
 
 	private void showPanels() {
@@ -818,51 +718,45 @@ public class Controller implements MidiRescanEventListener {
 				if (!allPanels.get(i).isDetached()) {
 					allPanels.get(i).setDetached(true);
 					//hBoxUIviews.getChildren().remove(allPanels.get(i).getUI());
-					//if (allWindows.get(i) == null) {
-						Stage windowUI = new Stage();
-						VBox scenePane = new VBox();
-						scenePane.setAlignment(Pos.TOP_CENTER);
-						//scenePane.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
-						scenePane.getChildren().add(allPanels.get(i).getTopLayout());
-						Scene scene = new Scene(scenePane);
-						//scene.seto
-						windowUI.setScene(scene);
-						windowUI.sizeToScene();
-						windowUI.setTitle(allPanels.get(i).getTitle());
-						allWindows.add(i, windowUI);
-						windowUI.setOnCloseRequest(e-> {
-							scenePane.getChildren().clear();
-							allPanels.get(iFinal).setViewState(Constants.PANEL_HIDE);
-							allPanels.get(iFinal).selectRadioMenuItemHide();
-							allPanels.get(iFinal).setDetached(false);
-						});
-						scene.heightProperty().addListener(e-> {
-							respondToResizeDetached(scene, allPanels.get(iFinal));
-						});
-						scene.widthProperty().addListener(e-> {
-							respondToResizeDetached(scene, allPanels.get(iFinal));
-						});
-					//}
-					allWindows.get(i).show();
+					VBox scenePane = new VBox();
+					scenePane.setAlignment(Pos.TOP_CENTER);
+					//scenePane.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
+					scenePane.getChildren().add(allPanels.get(i).getTopLayout());
+					Scene scene = new Scene(scenePane);
+					//scene.seto
+					allPanels.get(i).getWindow().setScene(scene);
+					allPanels.get(i).getWindow().sizeToScene();
+					allPanels.get(i).getWindow().setOnCloseRequest(e-> {
+						scenePane.getChildren().clear();
+						allPanels.get(iFinal).setViewState(Constants.PANEL_HIDE);
+						allPanels.get(iFinal).selectRadioMenuItemHide();
+						allPanels.get(iFinal).setDetached(false);
+					});
+					scene.heightProperty().addListener(e-> {
+						respondToResizeDetached(scene, allPanels.get(iFinal));
+					});
+					scene.widthProperty().addListener(e-> {
+						respondToResizeDetached(scene, allPanels.get(iFinal));
+					});
+					allPanels.get(i).getWindow().show();
+				} else {
+					allPanels.get(i).getWindow().toFront();
 				}
 				break;
 			case Constants.PANEL_HIDE:
-				allPanels.get(i).setDetached(false);
-				if (allWindows.get(i) != null) {
-					if (allWindows.get(i).isShowing()) {
-						allWindows.get(i).close();
-						allWindows.get(i).setScene(null);
-					}
+				if (allPanels.get(i).getWindow().isShowing()) {
+					allPanels.get(i).getWindow().close();
+					allPanels.get(i).getWindow().setScene(null);
 				}
+				allPanels.get(i).setDetached(false);
 				break;
 			case Constants.PANEL_SHOW:
 			default:
-				allPanels.get(i).setDetached(false);
-				if (allWindows.get(i) != null) {
-					if (allWindows.get(i).isShowing()) {
-						allWindows.get(i).close();
-					}
+				if (allPanels.get(i).getWindow().isShowing()) {
+					allPanels.get(i).getWindow().close();
+					allPanels.get(i).getWindow().setScene(null);
 				}
+				allPanels.get(i).setDetached(false);
 				hBoxUIviews.getChildren().add(allPanels.get(i).getUI());
 				break;
 			}

@@ -177,14 +177,15 @@ public class UI3rdZone {
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
-		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPane.setFont(new Font(titledPaneFontHeight));
-		} else {
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		//System.out.println("Responding to scene resize in UIMisc");
+		//titledPane.setFont(new Font(titledPaneFontHeight));
+		//Changing title font dynamically makes TitledPane header height different
+		// between left and right panels
+		// Use static size for now in UI3rdZone as well
+		titledPane.setFont(new Font(9.0));
 		for (int i = 0; i < allControls.size(); i++) {
-			//allControls.get(i).respondToResize((h*2)/allControls.size(), w/2);
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
 		//titledPane.setMinHeight(h);

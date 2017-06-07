@@ -235,7 +235,7 @@ public class UIInput {
 		}
 		//titledPane.setFont(new Font(titledPaneFontHeight));
 		//Changing title font dynamically makes TitledPane header height different
-		// between left and right panel
+		// between left and right panels
 		// Use static size for now
 		titledPane.setFont(new Font(9.0));
 /*

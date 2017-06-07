@@ -7,7 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class UIPanel {
 
@@ -15,16 +17,30 @@ public class UIPanel {
 	protected TitledPane 	titledPane;
 	protected VBox 		vBoxAll;
 	//protected Parent topLayout;
-	protected RadioMenuItem radioMenuItemHide;
+	//protected RadioMenuItem radioMenuItemHide;
 	protected Button 		buttonGet;
 	protected Button 		buttonSend;
 	protected Button 		buttonLoad;
 	protected Button 		buttonSave;
 	protected Boolean detached = false;
 	protected String	panelTitle;
+	protected ToggleGroup	toggleGroup;
+	protected RadioMenuItem rbHide;
+	protected RadioMenuItem rbShow;
+	protected RadioMenuItem rbDetach;
+	protected Stage			windowDetached;
 
 	public UIPanel (String title) {
 		panelTitle = title;
+		ToggleGroup toggleGroup = new ToggleGroup();
+		rbHide = new RadioMenuItem("Hide");
+		rbHide.setToggleGroup(toggleGroup);
+		rbShow = new RadioMenuItem("Show");
+		rbShow.setToggleGroup(toggleGroup);
+		rbDetach = new RadioMenuItem("Detach");
+		rbDetach.setToggleGroup(toggleGroup);
+		windowDetached = new Stage();
+		windowDetached.setTitle(title);
 	}
 	
 	public void setViewState(int state) {
@@ -57,12 +73,12 @@ public class UIPanel {
 		}
 	}
 	
-	public void setRadioMenuItemHide(RadioMenuItem rm) {
-		radioMenuItemHide = rm;
+	public Stage getWindow() {
+		return windowDetached;
 	}
 	
 	public void selectRadioMenuItemHide() {
-		radioMenuItemHide.setSelected(true);
+		rbHide.setSelected(true);
 	}
 	
 	public void setDetached(Boolean d) {
@@ -101,5 +117,16 @@ public class UIPanel {
 		return buttonSave;
 	}
 
+	public RadioMenuItem getRadioMenuItemHide() {
+		return rbHide;
+	}
+
+	public RadioMenuItem getRadioMenuItemShow() {
+		return rbShow;
+	}
+
+	public RadioMenuItem getRadioMenuItemDetach() {
+		return rbDetach;
+	}
 
 }
