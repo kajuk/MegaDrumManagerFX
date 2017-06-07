@@ -1,6 +1,7 @@
 package info.megadrum.managerfx.midi;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.rmi.CORBA.Util;
 import javax.sound.midi.MidiDevice;
@@ -66,7 +67,8 @@ public class MidiController {
 			} catch (Exception e) {
 				System.out.printf("Sysex Send thread exception text = %s\n", e.getMessage());				
 			}
-			//System.out.println("thread finished");
+			sendingSysex = false;
+			System.out.println("Send Sysex Config thread finished");
 			return null;
 		}
 		
@@ -102,7 +104,8 @@ public class MidiController {
 			} catch (Exception e) {
 				System.out.printf("Sysex request thread exception text = %s\n", e.getMessage());				
 			}
-			//System.out.println("thread finished");
+			sendingSysex = false;
+			System.out.println("Send Sysex Request thread finished");
 			return null;
 		}
 		
@@ -189,7 +192,6 @@ public class MidiController {
 				sysexReceived = true;
 			}
 		}
-		sendingSysex = false;		
 		//System.out.printf("Received sysex with id = %d\n", buffer[4]);
 		fireMidiEventWithBuffer(new MidiEvent(this), buffer);
 	}
@@ -331,25 +333,22 @@ public class MidiController {
 	
 	public void sendSysexRequests(List<byte[]> typesAndIdsList, ProgressBar progressBar, Integer maxRetries, Integer retryDelay) {
 		sendSysexConfigResult = "";
-		sendingSysex = true;
 		sysexReceived = false;
 		sendSysexConfigRetries = maxRetries;
 		sysexTimedOut = false;
-
-		if (midiHandler.isMidiOpen()) {
+		
+		if (midiHandler.isMidiOpen() && (!sendingSysex)) {
+			sendingSysex = true;
 			sendSysexRequestsTask.setParameters(typesAndIdsList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexRequestsTask.progressProperty());
-			//System.out.printf("Starting thread with number of sysexes = %d\n", typesAndIdsList.size());midiEventOccurred
 			Platform.runLater(new Runnable() {
 				
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
-					new Thread(sendSysexRequestsTask).start();
-					
+					System.out.printf("Starting Sysex Request thread with number of sysexes = %d\n", typesAndIdsList.size());
+					new Thread(sendSysexRequestsTask).start();						
 				}
 			});
-			
 		} else {
 			progressBar.setVisible(false);
 		}
@@ -451,16 +450,22 @@ public class MidiController {
 	
 	public void sendSysexConfigs(List<byte[]> sysexSendList, ProgressBar progressBar, Integer maxRetries, Integer retryDelay) {
 		sendSysexConfigResult = "";
-		sendingSysex = true;
 		sysexReceived = false;
 		sendSysexConfigRetries = maxRetries;
 		sysexTimedOut = false;
 
-		if (midiHandler.isMidiOpen()) {
+		if (midiHandler.isMidiOpen() && (!sendingSysex)) {
+			sendingSysex = true;
 			sendSysexConfigsTask.setParameters(sysexSendList,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexConfigsTask.progressProperty());
-			//System.out.printf("Starting thread with number of sysexes = %d\n", sysexSendList.size());
-			new Thread(sendSysexConfigsTask).start();
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					System.out.printf("Starting Sysex Config thread with number of sysexes = %d\n", sysexSendList.size());
+					new Thread(sendSysexConfigsTask).start();
+				}
+			});
 		} else {
 			progressBar.setVisible(false);
 		}
@@ -476,5 +481,9 @@ public class MidiController {
 	
 	public void closeAllPorts() {
 		midiHandler.closeAllPorts();
+	}
+	
+	public Boolean isSendingSysex() {
+		return sendingSysex;
 	}
 }

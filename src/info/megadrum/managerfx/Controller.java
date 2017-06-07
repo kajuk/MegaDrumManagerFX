@@ -133,6 +133,7 @@ public class Controller implements MidiRescanEventListener {
 	private int curvePointer = 0;
 
 	private List<byte[]> sysexSendList;
+	private List<byte[]> sysexSendConfigQueue;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -763,7 +764,7 @@ public class Controller implements MidiRescanEventListener {
 		}
 		// This is a hack to repaint hBoxUIviews
 		// after a UI has been removed from it.
-		hBoxUIviews.setVisible(false);
+/*		hBoxUIviews.setVisible(false);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			
@@ -772,7 +773,7 @@ public class Controller implements MidiRescanEventListener {
 				// TODO Auto-generated method stub
 				hBoxUIviews.setVisible(true);				
 			}
-		}, 100);
+		}, 100);*/
 		respondToResize(scene1);
 	}
 	
@@ -928,7 +929,7 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
-		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
+		midiController.sendSysexRequests(sysexSendList, uiGlobal.getProgressBarSysex(), 15, 50);		
 	}
 
 	private void sendSysexReadOnlyRequest() {
@@ -1540,6 +1541,7 @@ public class Controller implements MidiRescanEventListener {
 	private void initMidi() {
 		midiController = new MidiController();
 		sysexSendList = new ArrayList<>();
+		sysexSendConfigQueue = new ArrayList<>();
 		midiController.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
