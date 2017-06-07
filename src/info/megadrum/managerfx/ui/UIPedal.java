@@ -329,7 +329,8 @@ public class UIPedal extends UIPanel {
 
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
-		Double controlH = (h/((allNotesControls.size() + 3)))*1.0;
+		Double controlH = (h/((allNotesControls.size() + 2)))*1.0;
+		hideTttle = true;
 		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
@@ -339,13 +340,17 @@ public class UIPedal extends UIPanel {
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -fullHeight*0.0005;
 		Double tabHeaderHeight = fullHeight*0.013;
-		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
-			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
+		if (hideTttle) {
+			titledPaneFontHeight = 0.0;
+			hideTttle = false;
+		}
+		titledPane.setFont(new Font(titledPaneFontHeight));
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabLevels.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabNotes.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

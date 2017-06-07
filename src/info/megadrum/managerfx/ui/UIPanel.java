@@ -12,6 +12,8 @@ public class UIPanel {
 	protected Parent topLayout;
 	protected RadioMenuItem radioMenuItemHide;
 	protected Boolean detached = false;
+	protected Boolean hideTttle = false;
+
 
 	public void setViewState(int state) {
 		viewSate = state;

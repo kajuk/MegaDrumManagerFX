@@ -70,7 +70,6 @@ public class UIPad extends UIPanel {
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
 
-
 	protected EventListenerList listenerList = new EventListenerList();
 	
 	public void addControlChangeEventListener(ControlChangeEventListener listener) {
@@ -122,7 +121,7 @@ public class UIPad extends UIPanel {
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
 		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
-		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.01em");
+		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.5em");
 		
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
 		titledPane = new TitledPane();
@@ -233,8 +232,9 @@ public class UIPad extends UIPanel {
 
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.2);
-		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 5))*1.04;
-		respondToResize(h, w, h*1, controlH, controlW*1.01);
+		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 4))*1.04;
+		hideTttle = true;
+		respondToResize(h, w, h, controlH, controlW*1.01);
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
@@ -244,11 +244,15 @@ public class UIPad extends UIPanel {
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
 		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
-			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
+		if (hideTttle) {
+			titledPaneFontHeight = 0.0;
+			hideTttle = false;
+		}
+		titledPane.setFont(new Font(titledPaneFontHeight));
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
 		buttonGetAll.setFont(buttonFont);

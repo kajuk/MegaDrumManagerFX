@@ -152,7 +152,8 @@ public class UIMisc extends UIPanel {
 
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
-		Double controlH = (h/((allControls.size() + 2)))*1.04;
+		Double controlH = (h/((allControls.size() + 1)))*1.04;
+		hideTttle = true;
 		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
 	
@@ -160,21 +161,21 @@ public class UIMisc extends UIPanel {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
+		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
-			buttonGet.setFont(buttonFont);
-			buttonSend.setFont(buttonFont);
-			buttonLoad.setFont(buttonFont);
-			buttonSave.setFont(buttonFont);
-			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
-			buttonGet.setFont(buttonFont);
-			buttonSend.setFont(buttonFont);
-			buttonLoad.setFont(buttonFont);
-			buttonSave.setFont(buttonFont);
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
+		if (hideTttle) {
+			titledPaneFontHeight = 0.0;
+			hideTttle = false;
+		}
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		buttonGet.setFont(buttonFont);
+		buttonSend.setFont(buttonFont);
+		buttonLoad.setFont(buttonFont);
+		buttonSave.setFont(buttonFont);
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
