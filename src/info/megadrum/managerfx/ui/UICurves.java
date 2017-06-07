@@ -159,7 +159,7 @@ public class UICurves {
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 					// TODO Auto-generated method stub
-					//System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
+					System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
 					curvesPaint.setYvalue(sp, Integer.valueOf(newValue));
 					testSyncState();
 					if (changedFromSetSpinners[iFinal] > 0) {
@@ -230,8 +230,13 @@ public class UICurves {
 			setSysexReceived(true);
 			testSyncState();
 		}
+		int [] v;
+		v = new int[9];
+		curvesPaint.getYvalues(v);
 		for (int i=0; i< 9; i++) {
-			changedFromSetSpinners[i] = 1;
+			//if (values[i] != v[i]) {
+				changedFromSetSpinners[i] = 1;
+			//}
 		}
 		setSpinnersFromCurve();
 	}

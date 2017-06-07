@@ -257,8 +257,12 @@ public class MidiController {
 				break;
 			case Constants.MD_SYSEX_PAD:
 				currentSysexWithId = true;
-				currentSysexId = (byte)(id + 1);
-				midiHandler.requestConfigPad(id + 1);
+				if (sysex.length > 2) {
+					currentSysexId = (byte)(id);
+				} else {
+					currentSysexId = (byte)(id + 1);
+				}
+				midiHandler.requestConfigPad(currentSysexId);
 				break;
 			case Constants.MD_SYSEX_PEDAL:
 				midiHandler.requestConfigPedal();
@@ -317,7 +321,7 @@ public class MidiController {
 				
 				@Override
 				public void run() {
-					System.out.printf("Starting Sysex Config thread with number of sysexes = %d\n", sysexSendList.size());
+					System.out.printf("Starting Sysex thread with number of sysexes = %d\n", sysexSendList.size());
 					new Thread(sendSysexTask).start();
 				}
 			});
