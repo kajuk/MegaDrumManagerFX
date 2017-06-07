@@ -225,7 +225,7 @@ public class UIInput {
 	}
 
 	public Node getUI() {
-		return (Node) titledPane;
+		return titledPane;
 	}
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
@@ -233,7 +233,11 @@ public class UIInput {
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		titledPane.setFont(new Font(titledPaneFontHeight));
+		//titledPane.setFont(new Font(titledPaneFontHeight));
+		//Changing title font dynamically makes TitledPane header height different
+		// between left and right panel
+		// Use static size for now
+		titledPane.setFont(new Font(9.0));
 /*
 		if (inputType == Constants.PAD_TYPE_HEAD) {
 			System.out.printf("Head title font size = %f\n", titledPaneFontHeight );
