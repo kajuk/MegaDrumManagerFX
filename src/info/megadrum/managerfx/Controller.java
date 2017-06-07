@@ -48,6 +48,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -821,6 +822,7 @@ public class Controller implements MidiRescanEventListener {
 					//if (allWindows.get(i) == null) {
 						Stage windowUI = new Stage();
 						VBox scenePane = new VBox();
+						scenePane.setAlignment(Pos.TOP_CENTER);
 						//scenePane.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 						scenePane.getChildren().add(allPanels.get(i).getTopLayout());
 						Scene scene = new Scene(scenePane);

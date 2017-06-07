@@ -230,18 +230,18 @@ public class UIInput {
 
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
-		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPane.setFont(new Font(titledPaneFontHeight));
-		} else {
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		//System.out.println("Responding to scene resize in UIMisc");
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		if (inputType == Constants.PAD_TYPE_HEAD) {
+			System.out.printf("Head title font size = %f\n", titledPaneFontHeight );
+		} else {
+			System.out.printf("Rim title font size = %f\n", titledPaneFontHeight );			
+		}
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
-		//titledPane.setMinHeight(h);
-		//titledPane.setMaxHeight(h);
-
 	}
 
 	public void setHeadEdgeType(int type) {
@@ -383,6 +383,10 @@ public class UIInput {
 		configPad.dynTime = uiComboBoxDynTime.uiCtlGetValue();
 		configPad.minScan = uiSpinnerMinScan.uiCtlGetValue();
 		configPad.setTypeInt(uiComboBoxType.uiCtlGetValue());
+	}
+	
+	public int getVerticalControlsCount() {
+		return allControls.size();
 	}
 
 }

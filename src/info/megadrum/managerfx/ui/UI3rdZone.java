@@ -273,4 +273,8 @@ public class UI3rdZone {
 			uiSpinnerThreshold.uiCtlSetValue((uiSliderMidpoint.uiCtlGetValue()<<4) + uiSpinnerMidpointWidth.uiCtlGetValue(), false);
 		}
 	}
+	
+	public int getVerticalControlsCount() {
+		return gridRow.size();
+	}
 }

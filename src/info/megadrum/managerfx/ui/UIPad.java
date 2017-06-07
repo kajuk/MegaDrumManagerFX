@@ -98,6 +98,7 @@ public class UIPad extends UIPanel {
 		uiInputRight.setHeadEdgeType(Constants.PAD_TYPE_EDGE);
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
+		hBox.setAlignment(Pos.TOP_CENTER);
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
@@ -181,6 +182,7 @@ public class UIPad extends UIPanel {
 		});
     	
     	setAllStatesUnknown(false, false, false);
+		topLayout = titledPane;
 	}
 
 	public int getCopyPressedValueId() {
@@ -229,6 +231,12 @@ public class UIPad extends UIPanel {
 		}
 	}
 
+	public void respondToResizeDetached(Double h, Double w) {
+		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.2);
+		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 5))*1.04;
+		respondToResize(h, w, h*1, controlH, controlW*1.01);
+	}
+
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
@@ -260,7 +268,6 @@ public class UIPad extends UIPanel {
 		comboBoxInput.setMinWidth(controlH*6);
 		comboBoxInput.setMaxWidth(controlH*6);
 		labelInput.setFont(new Font(controlH*0.4));
-		topLayout = titledPane;
 	}
 
 	public Node getUI() {
