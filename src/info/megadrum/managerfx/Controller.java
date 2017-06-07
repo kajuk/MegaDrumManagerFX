@@ -902,23 +902,6 @@ public class Controller implements MidiRescanEventListener {
 					saveToSlotAfterSendAll = false;
 					sendSysexSaveToSlotOnlyRequest(saveToSlot);
 				}
-			}
-		});
-		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
-	}
-	
-	private void sendSysexRequest() {
-		midiController.sendSysexTaskRecreate();
-		uiGlobal.getProgressBarSysex().setVisible(true);
-		midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
-
-			@Override
-			public void handle(WorkerStateEvent event) {
-				// TODO Auto-generated method stub
-				//System.out.println("SendSysexRequestsTask succeeded");
-				uiGlobal.getProgressBarSysex().progressProperty().unbind();
-				uiGlobal.getProgressBarSysex().setProgress(1.0);
-				uiGlobal.getProgressBarSysex().setVisible(false);
 				if (sendNextAllSysexRequestsFlag) {
 					sendNextAllSysexRequestsFlag = false;
 					sendNextAllSysexRequests();
@@ -929,9 +912,9 @@ public class Controller implements MidiRescanEventListener {
 				}
 			}
 		});
-		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 15, 50);		
+		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
 	}
-
+	
 	private void sendSysexReadOnlyRequest() {
 		sysexSendList.clear();
 		byte [] typeAndId;
@@ -947,7 +930,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();		
+		sendSysex();		
 	}
 	
 	private void sendSysexGlobalMisc() {
@@ -973,7 +956,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 	
 	private void sendSysexCustomName(int id) {
@@ -998,7 +981,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
 		typeAndId[1] = (byte)id;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendAllCustomNamesSysex() {
@@ -1024,7 +1007,7 @@ public class Controller implements MidiRescanEventListener {
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
 		}
-		sendSysexRequest();
+		sendSysex();
 	}
 
 
@@ -1059,9 +1042,9 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
 		//loadConfigAfterLoadSlot = configOptions.liveUpdates;
 		loadConfigAfterLoadSlot = true;
+		sendSysex();
 		System.out.println("Load from slot to do");
 	}
 	
@@ -1072,7 +1055,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_SAVE;
 		typeAndId[1] = (byte)slot;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			
@@ -1088,7 +1071,7 @@ public class Controller implements MidiRescanEventListener {
 						byte [] typeAndIdFinal = new byte[2];
 						typeAndIdFinal[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 						sysexSendList.add(typeAndIdFinal);
-						sendSysexRequest();				
+						sendSysex();				
 					}
 				});
 			}
@@ -1143,7 +1126,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CURVE;
 		typeAndId[1] = (byte)curvePointer;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendAllCurvesSysex() {
@@ -1169,7 +1152,7 @@ public class Controller implements MidiRescanEventListener {
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
 		}
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendSysexMisc() {
@@ -1193,7 +1176,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_MISC;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendSysexPedal() {
@@ -1217,7 +1200,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_PEDAL;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 	
 	private void sendSysexInput(Integer input, Boolean leftInput) {
@@ -1293,7 +1276,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_POS;
 		typeAndId[1] = input.byteValue();
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendSysexPairRequest(Integer pair) {
@@ -1323,7 +1306,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_3RD;
 		typeAndId[1] = (byte)(pair - 1);
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 
 	private void sendAllInputsSysex() {
@@ -1369,7 +1352,7 @@ public class Controller implements MidiRescanEventListener {
 				
 			}
 		}
-		sendSysexRequest();
+		sendSysex();
 	}
 	
 	private void sendAllSysex() {
@@ -1429,7 +1412,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
 		sysexSendList.add(typeAndId);
 		sendNextAllSysexRequestsFlag = true;
-		sendSysexRequest();
+		sendSysex();
 	}
 	
 	private void sendNextAllSysexRequests() {
@@ -1481,7 +1464,7 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 		sysexSendList.add(typeAndId);
-		sendSysexRequest();
+		sendSysex();
 	}
 	
 	private void showOptionsWindow() {
