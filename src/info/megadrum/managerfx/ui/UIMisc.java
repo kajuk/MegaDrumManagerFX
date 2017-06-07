@@ -150,6 +150,12 @@ public class UIMisc extends UIPanel {
 		return (Node) titledPane;
 	}
 
+	public void respondToResizeDetached(Double h, Double w) {
+		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
+		Double controlH = (h/((allControls.size() + 2)))*1.04;
+		respondToResize(h, w, h*1.6, controlH, controlW);
+	}
+	
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;

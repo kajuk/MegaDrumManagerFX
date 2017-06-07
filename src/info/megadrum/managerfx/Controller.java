@@ -533,24 +533,11 @@ public class Controller implements MidiRescanEventListener {
 		}
 	}
 
-	public void XrespondToResize(Scene sc) {
-		if (resizeFromResize) {
-			resizeFromResize = false;
-		} else {
-			//resizeFromResize = true;
-			Double mainMenuBarHeight = mainMenuBar.getHeight();
-			Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
-			Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
-			Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
-			Double width = height*2;
-			Double controlH, controlW;
-			controlH= height *0.035 *0.8;
-			controlW= controlH *8;
-			uiMisc.respondToResize(height, width, height, controlH, controlW);
-			uiPedal.respondToResize(height, width, height, controlH, controlW);
-			uiPad.respondToResize(height, width, height, controlH, controlW);
-			uiPadsExtra.respondToResize(height, width, height, controlH, controlW);
-		}
+	public void respondToResizeDetached(Scene sc, UIPanel uiPanel) {
+		System.out.println("Detached resize");
+		Double height = sc.getHeight();
+		Double width = sc.getWidth();
+		uiPanel.respondToResizeDetached(height, width);
 	}
 
 	private void reCreateSlotsMenuItems() {
@@ -846,6 +833,12 @@ public class Controller implements MidiRescanEventListener {
 							allPanels.get(iFinal).setViewState(Constants.PANEL_HIDE);
 							allPanels.get(iFinal).selectRadioMenuItemHide();
 							allPanels.get(iFinal).setDetached(false);
+						});
+						scene.heightProperty().addListener(e-> {
+							respondToResizeDetached(scene, allPanels.get(iFinal));
+						});
+						scene.widthProperty().addListener(e-> {
+							respondToResizeDetached(scene, allPanels.get(iFinal));
 						});
 					//}
 					allWindows.get(i).show();

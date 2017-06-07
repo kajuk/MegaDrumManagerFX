@@ -327,6 +327,11 @@ public class UIPedal extends UIPanel {
 		return (Node) titledPane;
 	}
 
+	public void respondToResizeDetached(Double h, Double w) {
+		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
+		Double controlH = (h/((allNotesControls.size() + 3)))*1.0;
+		respondToResize(h, w, h*1.6, controlH, controlW);
+	}
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;

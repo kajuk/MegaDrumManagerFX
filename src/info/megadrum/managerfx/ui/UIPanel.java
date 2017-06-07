@@ -25,6 +25,12 @@ public class UIPanel {
 		return null;
 	}
 	
+	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	}
+	
+	public void respondToResizeDetached(Double h, Double w) {
+	}
+
 	public Parent getTopLayout() {
 		return topLayout;
 	}
