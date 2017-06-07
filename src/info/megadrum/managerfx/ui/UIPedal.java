@@ -109,10 +109,6 @@ public class UIPedal extends UIPanel {
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
 		allNotesControls = new ArrayList<UIControl>();
-		buttonGet = new Button("Get");
-		buttonSend = new Button("Send");
-		buttonLoad = new Button("Load");
-		buttonSave = new Button("Save");
 		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);
 		toolBar.getItems().add(buttonSend);

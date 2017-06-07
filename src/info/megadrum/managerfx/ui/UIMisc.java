@@ -55,10 +55,6 @@ public class UIMisc extends UIPanel {
 	public UIMisc(String title) {
 		super(title);
 		allControls = new ArrayList<UIControl>();
-		buttonGet = new Button("Get");
-		buttonSend = new Button("Send");
-		buttonLoad = new Button("Load");
-		buttonSave = new Button("Save");
 		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);
 		toolBar.getItems().add(buttonSend);

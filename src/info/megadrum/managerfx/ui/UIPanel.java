@@ -16,8 +16,6 @@ public class UIPanel {
 	protected int	viewSate = Constants.PANEL_SHOW;
 	protected TitledPane 	titledPane;
 	protected VBox 		vBoxAll;
-	//protected Parent topLayout;
-	//protected RadioMenuItem radioMenuItemHide;
 	protected Button 		buttonGet;
 	protected Button 		buttonSend;
 	protected Button 		buttonLoad;
@@ -41,6 +39,10 @@ public class UIPanel {
 		rbDetach.setToggleGroup(toggleGroup);
 		windowDetached = new Stage();
 		windowDetached.setTitle(title);
+		buttonGet = new Button("Get");
+		buttonSend = new Button("Send");
+		buttonLoad = new Button("Load");
+		buttonSave = new Button("Save");
 	}
 	
 	public void setViewState(int state) {

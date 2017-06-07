@@ -95,12 +95,8 @@ public class UIPad extends UIPanel {
 		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		toolBarTop = new ToolBar();
-		buttonGet = new Button("Get");
-		buttonSend = new Button("Send");
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
-		buttonLoad = new Button("Load");
-		buttonSave = new Button("Save");
 		buttonCopy = new Button("Copy");
 		buttonDisableOthers = new Button("Disable Others");
 		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave,new Separator(),buttonCopy,buttonDisableOthers);
