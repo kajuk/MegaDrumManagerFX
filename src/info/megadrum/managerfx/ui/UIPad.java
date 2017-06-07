@@ -30,9 +30,6 @@ import javafx.scene.text.Font;
 
 public class UIPad extends UIPanel {
 
-	private TitledPane		titledPane;
-
-	private VBox		vBox;
 	private UIInput 	uiInputLeft;
 	private UIInput 	uiInputRight;
 	private UI3rdZone	ui3rdZone;
@@ -89,7 +86,7 @@ public class UIPad extends UIPanel {
 	}
 
 	public UIPad(String title) {
-		// TODO Auto-generated constructor stub
+		super(title);
 		HBox hBox = new HBox(5);
 		uiInputLeft = new UIInput("Head/Bow");
 		uiInputLeft.setHeadEdgeType(Constants.PAD_TYPE_HEAD);
@@ -98,8 +95,8 @@ public class UIPad extends UIPanel {
 		ui3rdZone = new UI3rdZone();
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
 		hBox.setAlignment(Pos.TOP_CENTER);
-		vBox = new VBox(1);
-		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+		vBoxAll = new VBox(1);
+		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		toolBarTop = new ToolBar();
 		buttonGet = new Button("Get");
@@ -123,12 +120,7 @@ public class UIPad extends UIPanel {
 		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
 		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.5em");
 		
-		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
-		titledPane = new TitledPane();
-		titledPane.setText(title);
-		titledPane.setContent(vBox);
-		titledPane.setCollapsible(false);
-		titledPane.setAlignment(Pos.CENTER);
+		vBoxAll.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
 		reCreateNamesArray();
 		switchToInputPair(0);
     	uiInputLeft.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -180,8 +172,8 @@ public class UIPad extends UIPanel {
 			}
 		});
     	
+		setDetached(false);
     	setAllStatesUnknown(false, false, false);
-		topLayout = titledPane;
 	}
 
 	public int getCopyPressedValueId() {
@@ -233,7 +225,6 @@ public class UIPad extends UIPanel {
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.2);
 		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 4))*1.04;
-		hideTttle = true;
 		respondToResize(h, w, h, controlH, controlW*1.01);
 	}
 
@@ -248,9 +239,8 @@ public class UIPad extends UIPanel {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		if (hideTttle) {
+		if (detached) {
 			titledPaneFontHeight = 0.0;
-			hideTttle = false;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		buttonGet.setFont(buttonFont);
@@ -274,10 +264,6 @@ public class UIPad extends UIPanel {
 		labelInput.setFont(new Font(controlH*0.4));
 	}
 
-	public Node getUI() {
-		return (Node) titledPane;
-	}
-	
 	public void switchToInputPairWithConfig(Integer pair, ConfigPad configLeft, ConfigPad configRight) {
 		if (pair == 0) {
 			

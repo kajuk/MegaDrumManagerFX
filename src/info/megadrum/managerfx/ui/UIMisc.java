@@ -18,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIMisc extends UIPanel {
-	private VBox layout;
-	private TitledPane titledPane;
 	private Button buttonGet;
 	private Button buttonSend;
 	private Button buttonLoad;
@@ -59,7 +57,7 @@ public class UIMisc extends UIPanel {
 	}
 	
 	public UIMisc(String title) {
-		
+		super(title);
 		allControls = new ArrayList<UIControl>();
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
@@ -74,9 +72,9 @@ public class UIMisc extends UIPanel {
 		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
-		layout = new VBox();
-		layout.getChildren().add(toolBar);
-		layout.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+		vBoxAll = new VBox();
+		vBoxAll.getChildren().add(toolBar);
+		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		uiSpinnerNoteOffDelay = new UISpinner("Note Off Delay", 20, 2000, 200, 20, false);
 		allControls.add(uiSpinnerNoteOffDelay);
@@ -118,7 +116,7 @@ public class UIMisc extends UIPanel {
 		allControls.add(uiCheckBoxAltNoteChoking);
 	
 		for (int i = 0; i < allControls.size(); i++) {
-        	layout.getChildren().add(allControls.get(i).getUI());
+        	vBoxAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -130,14 +128,8 @@ public class UIMisc extends UIPanel {
 			});
         }
 
-		titledPane = new TitledPane();
-		titledPane.setText(title);
-		titledPane.setContent(layout);
-		titledPane.setId("testId");
-		titledPane.setCollapsible(false);
-		titledPane.setAlignment(Pos.CENTER);
+		setDetached(false);
 		setAllStateUnknown();
-		topLayout = titledPane;
 	}
 
 	public void setAllStateUnknown() {
@@ -146,14 +138,9 @@ public class UIMisc extends UIPanel {
 		}
 	}
 	
-	public Node getUI() {
-		return (Node) titledPane;
-	}
-
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
 		Double controlH = (h/((allControls.size() + 1)))*1.04;
-		hideTttle = true;
 		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
 	
@@ -167,9 +154,8 @@ public class UIMisc extends UIPanel {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		if (hideTttle) {
+		if (detached) {
 			titledPaneFontHeight = 0.0;
-			hideTttle = false;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		buttonGet.setFont(buttonFont);

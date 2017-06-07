@@ -23,8 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIPedal extends UIPanel {
-//	private VBox layout;
-	private TitledPane 	titledPane;
 	private Button 		buttonGet;
 	private Button 		buttonSend;
 	private Button 		buttonLoad;
@@ -110,7 +108,7 @@ public class UIPedal extends UIPanel {
 	}
 	
 	public UIPedal(String title) {
-		
+		super(title);
 		listHiHatInputs = new ArrayList<String>(Arrays.asList("2", "4", "6", "8"));
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
@@ -128,14 +126,14 @@ public class UIPedal extends UIPanel {
 		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
-		VBox vBox1 = new VBox();
-		vBox1.getChildren().add(toolBar);
-		vBox1.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+		vBoxAll = new VBox();
+		vBoxAll.getChildren().add(toolBar);
+		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 
 		tabPane = new TabPane();
 		//tabPane.setTabMaxHeight(20);
 		//tabPane.setTabMinHeight(20);
-		vBox1.getChildren().add(tabPane);
+		vBoxAll.getChildren().add(tabPane);
 
         tabMisc = new Tab("Misc");
         tabMisc.setClosable(false);
@@ -301,14 +299,8 @@ public class UIPedal extends UIPanel {
 			});
         }
 		
-		titledPane = new TitledPane();
-		titledPane.setText(title);
-		titledPane.setContent(vBox1);
-		titledPane.setCollapsible(false);
-		titledPane.setAlignment(Pos.CENTER);
-		//tabPane.setStyle("-fx-background-color: red");
+		setDetached(false);
 		setAllStateUnknown();
-		topLayout = titledPane;
 	}
 
 	public void setAllStateUnknown() {
@@ -323,14 +315,9 @@ public class UIPedal extends UIPanel {
 		}
 	}
 	
-	public Node getUI() {
-		return (Node) titledPane;
-	}
-
 	public void respondToResizeDetached(Double h, Double w) {
 		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
 		Double controlH = (h/((allNotesControls.size() + 2)))*1.0;
-		hideTttle = true;
 		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
@@ -346,9 +333,8 @@ public class UIPedal extends UIPanel {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		if (hideTttle) {
-			titledPaneFontHeight = 0.0;
-			hideTttle = false;
+		if (detached) {
+			//titledPaneFontHeight = 0.0;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

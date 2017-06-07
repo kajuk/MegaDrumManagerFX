@@ -818,7 +818,7 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.PANEL_DETACH:
 				if (!allPanels.get(i).isDetached()) {
 					allPanels.get(i).setDetached(true);
-					hBoxUIviews.getChildren().remove(allPanels.get(i).getUI());
+					//hBoxUIviews.getChildren().remove(allPanels.get(i).getUI());
 					//if (allWindows.get(i) == null) {
 						Stage windowUI = new Stage();
 						VBox scenePane = new VBox();
@@ -829,6 +829,7 @@ public class Controller implements MidiRescanEventListener {
 						//scene.seto
 						windowUI.setScene(scene);
 						windowUI.sizeToScene();
+						windowUI.setTitle(allPanels.get(i).getTitle());
 						allWindows.add(i, windowUI);
 						windowUI.setOnCloseRequest(e-> {
 							scenePane.getChildren().clear();

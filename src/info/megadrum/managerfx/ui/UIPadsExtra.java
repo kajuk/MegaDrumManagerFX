@@ -11,10 +11,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIPadsExtra extends UIPanel {
-	private TitledPane 		titledPane;
 	private TabPane			tabPane;
 	private Tab 			tabCurves;
 	private	Tab				tabCustomNames;
@@ -39,6 +39,7 @@ public class UIPadsExtra extends UIPanel {
 	}
 	
 	public UIPadsExtra(String title) {
+		super(title);
 		tabPane = new TabPane();
         tabCurves = new Tab("Custom Curves");
         tabCurves.setClosable(false);
@@ -66,21 +67,11 @@ public class UIPadsExtra extends UIPanel {
 			}
 		});
         tabCustomNames.setContent(uiCustomNames.getUI());
-        
-		titledPane = new TitledPane();
-		titledPane.setText(title);
-		titledPane.setContent(tabPane);
-		titledPane.setCollapsible(false);
-		titledPane.setAlignment(Pos.CENTER);
-		//titledPane.setMinWidth(330);
         tabPane.getTabs().addAll(tabCurves,tabCustomNames);
-		//titledPane.setMinSize(0, 0);
+        vBoxAll = new VBox(1);
+        vBoxAll.getChildren().add(tabPane);
+		setDetached(false);
 		titledPane.setMaxSize(340, 500);
-		topLayout = titledPane;
-	}
-
-	public Node getUI() {
-		return (Node) titledPane;
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {

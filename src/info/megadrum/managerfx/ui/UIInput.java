@@ -234,11 +234,13 @@ public class UIInput {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
+/*
 		if (inputType == Constants.PAD_TYPE_HEAD) {
 			System.out.printf("Head title font size = %f\n", titledPaneFontHeight );
 		} else {
 			System.out.printf("Rim title font size = %f\n", titledPaneFontHeight );			
 		}
+*/
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
         }
