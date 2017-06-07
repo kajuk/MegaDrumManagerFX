@@ -535,7 +535,6 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	public void respondToResizeDetached(Scene sc, UIPanel uiPanel) {
-		System.out.println("Detached resize");
 		Double height = sc.getHeight();
 		Double width = sc.getWidth();
 		uiPanel.respondToResizeDetached(height, width);

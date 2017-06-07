@@ -23,10 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIPedal extends UIPanel {
-	private Button 		buttonGet;
-	private Button 		buttonSend;
-	private Button 		buttonLoad;
-	private Button 		buttonSave;
 	private ToolBar		toolBar;
 	private TabPane		tabPane;
 	private Tab 		tabMisc;
@@ -320,6 +316,7 @@ public class UIPedal extends UIPanel {
 		Double controlH = (h/((allNotesControls.size() + 2)))*1.0;
 		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
+	
 	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
@@ -332,9 +329,6 @@ public class UIPedal extends UIPanel {
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
-		}
-		if (detached) {
-			//titledPaneFontHeight = 0.0;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
@@ -359,22 +353,6 @@ public class UIPedal extends UIPanel {
 		tabPane.setMinHeight(0);
 		titledPane.setMinWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		titledPane.setMaxWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-	}
-
-	public Button getButtonGet() {
-		return buttonGet;
-	}
-
-	public Button getButtonSend() {
-		return buttonSend;
-	}
-
-	public Button getButtonLoad() {
-		return buttonLoad;
-	}
-	
-	public Button getButtonSave() {
-		return buttonSave;
 	}
 
 	public void setControlsFromConfig(ConfigPedal config, Boolean setFromSysex) {

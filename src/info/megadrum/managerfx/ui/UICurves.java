@@ -116,7 +116,8 @@ public class UICurves {
 		topPane.setPrefHeight(5);
 		borderPane.setTop(topPane);
 		vBox = new VBox(1);
-		//vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		vBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
+		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
 		//vBox.getChildren().addAll(toolBarTop,toolBarNavigator,curvesPaint);
 		vBox.getChildren().addAll(toolBarTop,toolBarNavigator,borderPane);
 		allSpinners = new ArrayList<SpinnerFast<Integer>>();
@@ -172,6 +173,7 @@ public class UICurves {
 			allSpinners.get(i).setStyle("-fx-font-size: 5pt");
 		}
 		vBox.getChildren().add(gridPaneSpinners);
+		vBox.setAlignment(Pos.TOP_CENTER);
 		setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		setSpinnersFromCurve();
 		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");

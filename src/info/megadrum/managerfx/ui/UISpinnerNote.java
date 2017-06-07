@@ -165,7 +165,7 @@ public class UISpinnerNote extends UIControl {
     private void resizeFont(Double h) {
 		Double we = h*2.2;
 		Integer l = maxValue.toString().length();
-		Double ll = (16/(16 + l.doubleValue()))*0.32;
+		Double ll = (16/(16 + l.doubleValue()))*0.31;
 		we = we*ll;
 		//uispinner.getEditor().setFont(new Font(h*0.4));
 		//uispinner.getEditor().setFont(new Font(we));    	
@@ -186,7 +186,7 @@ public class UISpinnerNote extends UIControl {
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
-		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.26));
+		layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.265));
 		if (linkedNote) {
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.22));
 			layoutC.getColumnConstraints().add(new ColumnConstraints(w*0.02));			
@@ -224,8 +224,8 @@ public class UISpinnerNote extends UIControl {
 			labelNote.setText(note_text);
 			labelNote.setTooltip(new Tooltip("Note = " + note_text));
 		} else {
-			labelNote.setText("Disbld");
-			labelNote.setTooltip(new Tooltip("Note Disabled"));
+			labelNote.setText("Disabled");
+			labelNote.setTooltip(new Tooltip("Input is Disabled"));
 		}		
     }
     

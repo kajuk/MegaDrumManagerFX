@@ -4,6 +4,7 @@ import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
@@ -15,6 +16,10 @@ public class UIPanel {
 	protected VBox 		vBoxAll;
 	//protected Parent topLayout;
 	protected RadioMenuItem radioMenuItemHide;
+	protected Button 		buttonGet;
+	protected Button 		buttonSend;
+	protected Button 		buttonLoad;
+	protected Button 		buttonSave;
 	protected Boolean detached = false;
 	protected String	panelTitle;
 
@@ -76,8 +81,25 @@ public class UIPanel {
 		return detached;
 	}
 	
-	public String getTitle() {
+	public final String getTitle() {
 		return panelTitle;
 	}
 	
+	public final Button getButtonGet() {
+		return buttonGet;
+	}
+
+	public final Button getButtonSend() {
+		return buttonSend;
+	}
+
+	public final Button getButtonLoad() {
+		return buttonLoad;
+	}
+	
+	public final Button getButtonSave() {
+		return buttonSave;
+	}
+
+
 }

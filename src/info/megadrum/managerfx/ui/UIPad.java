@@ -35,12 +35,8 @@ public class UIPad extends UIPanel {
 	private UI3rdZone	ui3rdZone;
 	private ToolBar		toolBarNavigator;
 	private ToolBar		toolBarTop;
-	private Button 		buttonGet;
-	private Button 		buttonSend;
 	private Button 		buttonGetAll;
 	private Button 		buttonSendAll;
-	private Button 		buttonLoad;
-	private Button 		buttonSave;
 	private Button 		buttonCopy;
 	private Button 		buttonDisableOthers;
 	
@@ -239,9 +235,6 @@ public class UIPad extends UIPanel {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		if (detached) {
-			titledPaneFontHeight = 0.0;
-		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
@@ -392,22 +385,6 @@ public class UIPad extends UIPanel {
 		reCreateNamesArray();
 	}
 	
-	public Button getButtonGet() {
-		return buttonGet;
-	}
-
-	public Button getButtonSend() {
-		return buttonSend;
-	}
-
-	public Button getButtonLoad() {
-		return buttonLoad;
-	}
-
-	public Button getButtonSave() {
-		return buttonSave;
-	}
-
 	public Button getButtonGetAll() {
 		return buttonGetAll;
 	}

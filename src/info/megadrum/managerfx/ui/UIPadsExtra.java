@@ -55,8 +55,7 @@ public class UIPadsExtra extends UIPanel {
 				fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 			}
 		});
-        tabCurves.setContent(uiCurves.getUI());
-        
+        tabCurves.setContent(uiCurves.getUI());        
         uiCustomNames = new UICustomNames();
         uiCustomNames.addControlChangeEventListener(new ControlChangeEventListener() {
 			
@@ -71,7 +70,17 @@ public class UIPadsExtra extends UIPanel {
         vBoxAll = new VBox(1);
         vBoxAll.getChildren().add(tabPane);
 		setDetached(false);
-		titledPane.setMaxSize(340, 500);
+		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+		vBoxAll.setAlignment(Pos.TOP_CENTER);
+		vBoxAll.setMaxHeight(440);
+		//vBoxAll.setMaxSize(340, 440);
+		//titledPane.setMaxSize(300, 500);
+	}
+
+	public void respondToResizeDetached(Double h, Double w) {
+		Double controlW = w*0.01;
+		Double controlH = h*0.06;
+		respondToResize(h, w, h*1.6, controlH, controlW);
 	}
 
 	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
@@ -84,6 +93,11 @@ public class UIPadsExtra extends UIPanel {
 			titledPane.setFont(new Font(titledPaneFontHeight));
 		} else {
 			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		}
+		if (detached) {
+			vBoxAll.setMaxWidth(w);
+		} else {
+			vBoxAll.setMaxWidth(360);
 		}
 		tabCurves.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
