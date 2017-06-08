@@ -16,20 +16,23 @@ public class MidiLevelBar extends Pane {
 	final public int barTypeChokeOn = barType3rd + 1;
 	final public int barTypeChokeOff = barTypeChokeOn + 1;
 	final public int barTypeHiHat = barTypeChokeOff + 1;
-	final private Double barRatio = 0.8;
-	final private Double barStartRatio = (1-barRatio)*0.5;
+	final private Double barHeightRatio = 0.9;
+	final private Double barHeightPadRatio = (1-barHeightRatio)*0.5;
+	final private Double barWidthRatio = 0.9;
+	final private Double barWidthPadRatio =  (1-barWidthRatio)*0.5;
 	
 	private int barType = barTypeUnknown;
 	final public Color [] barColors = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, Color.DARKGREY, Color.LIGHTGREY, Color.BROWN};
 	private Color bgColor = Color.LIGHTGREY;
 	private Color bgBarColor = Color.WHITE;
+	private Color fontColor = Color.BLACK;
 	private Color barColor = barColors[barTypeUnknown];
 	private Double barWidth = 16.0;
 	private Double barHeight = 300.0;
 	private Double fontSize = 6.0;
-	private int barInterval = 0;
-	private int barLevel = 0;
-	private int barNote = 0;
+	private Integer barInterval = 0;
+	private Integer barLevel = 0;
+	private Integer barNote = 0;
 	
 	public MidiLevelBar(Double w, Double h) {
 		respondToResiz(w, h);
@@ -59,16 +62,36 @@ public class MidiLevelBar extends Pane {
 		gc = canvas.getGraphicsContext2D();
 
 		gc.setFill(bgColor);
-		gc.fillRect(0, 0, barWidth, barHeight);
+		gc.fillRect(0 + barWidth*barWidthPadRatio , 0, barWidth*barWidthRatio, barHeight);
 		gc.setFill(bgBarColor);
-		gc.fillRect(0, barHeight - barHeight*barRatio - barHeight*barStartRatio , barWidth, barHeight*barRatio);
-		Double barFillHeight = ((barHeight*barRatio)*barLevel)/127;
+		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barHeight*barHeightRatio - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barHeight*barHeightRatio);
+		Double barFillHeight = ((barHeight*barHeightRatio)*barLevel)/127;
 		gc.setFill(barColors[barType]);
-		gc.fillRect(0, barHeight - barFillHeight - barHeight*barStartRatio , barWidth, barFillHeight);
-/*		
-		fontSize = barWidth*0.5;
+		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barFillHeight - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barFillHeight);
+		fontSize = barWidth*0.4;
 		Font font = new Font(fontSize);
 		gc.setFont(font);
+		Double textX;
+		textX = (barWidth - barWidth*0.25*barLevel.toString().length())*0.5;
+		gc.setFill(fontColor);
+		gc.fillText(barLevel.toString(), textX, barHeight - barHeight*barHeightPadRatio - barHeight*barHeightRatio*0.5);
+
+		if (barType == barTypeHiHat) {
+			
+		} else {
+			textX = (barWidth - barWidth*0.25*barNote.toString().length())*0.5;
+			gc.setFill(fontColor);
+			gc.fillText(barNote.toString(), textX, barHeight - barHeight*barHeightPadRatio*0.5);
+			String msText = barInterval.toString();
+			if (barInterval > 999) {
+				msText = ">1s";
+			}
+			textX = (barWidth - barWidth*0.25*msText.length())*0.5;
+			gc.setFill(fontColor);
+			gc.fillText(msText, textX, barHeight*barHeightPadRatio*0.25 + fontSize);
+		}
+
+		/*		
 		gc.setStroke(gridColor);
 		for (int i = 0; i < 9; i++) {
 			gc.setStroke(gridColor);
