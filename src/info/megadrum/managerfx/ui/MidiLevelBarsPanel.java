@@ -1,19 +1,27 @@
 package info.megadrum.managerfx.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 class BarData {
@@ -47,6 +55,11 @@ public class MidiLevelBarsPanel extends Pane {
 	private Label labelTopHiHat;
 	private Label labelBottom;
 	private ComboBox<String> comboBoxBarCount;
+	private Pane paneBarCount, paneHead, paneRim, pane3rd, paneChokeOn, paneChokeOff, paneUnknown;
+	private Label labelBarCount, labelHead, labelRim, label3rd, labelChokeOn, labelChokeOff, labelUnknown;
+	private List<Pane> panesRight;
+	private List<Label> labelsRight;
+	private Button buttonClear;
 	
 	
 	public MidiLevelBarsPanel() {
@@ -65,6 +78,7 @@ public class MidiLevelBarsPanel extends Pane {
 		paneRight = new Pane();
 		paneRight.setStyle("-fx-background-color: lightgreen");
 		paneBars = new Pane();
+		//paneBars.setBackground(new Background(new BackgroundFill(Color.RED, null, getInsets())));
 		paneBars.setStyle("-fx-background-color: orange");
 		hBoxRoot = new HBox();
 		hBoxRoot.setStyle("-fx-background-color: yellow");
@@ -91,6 +105,63 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxBottom.getChildren().add(labelBottom);
 		hBoxBottom.setStyle("-fx-background-color: red");
 		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
+
+		panesRight = new ArrayList<Pane>();
+		labelsRight = new ArrayList<Label>();
+		comboBoxBarCount = new ComboBox<String>();
+		comboBoxBarCount.getItems().addAll("16","20","24","28","32","36","40","48");
+		comboBoxBarCount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				barsCount = Integer.valueOf(newValue);
+				//respondToResize(width, height);
+				//updateBars();
+				//updateHiHatBar();
+				//reAddAllBars();
+			}
+			
+		});
+		paneBarCount = new Pane();
+		paneBarCount.getChildren().add(comboBoxBarCount);		
+		paneHead = new Pane();
+		paneHead.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barTypeHead],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		paneRim = new Pane();
+		paneRim.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barTypeRim],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		pane3rd = new Pane();
+		pane3rd.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barType3rd],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		paneChokeOn = new Pane();
+		paneChokeOn.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barTypeChokeOn],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		paneChokeOff = new Pane();
+		paneChokeOff.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barTypeChokeOff],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		paneUnknown = new Pane();
+		paneUnknown.setBackground(new Background(new BackgroundFill(
+				MidiLevelBar.barColors[MidiLevelBar.barTypeUnknown],
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		panesRight.addAll(Arrays.asList(paneBarCount, paneHead, paneRim, pane3rd, paneChokeOn, paneChokeOff, paneUnknown));
+
+		labelBarCount = new Label("Bar count");
+		labelHead = new Label("Head hit");
+		labelRim = new Label("Rim hit");
+		label3rd = new Label("3rd zone hit");
+		labelChokeOn = new Label("Choke on");
+		labelChokeOff = new Label("Choke Off");
+		labelUnknown = new Label("Unknown");
+		labelsRight.addAll(Arrays.asList(labelBarCount, labelHead, labelRim, label3rd, labelChokeOn, labelChokeOff, labelUnknown));
+		
+		
+		buttonClear = new Button("Clear");
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -100,13 +171,16 @@ public class MidiLevelBarsPanel extends Pane {
 		setMaxSize(width, height);
 		barsTotalWidth = width*0.8;
 		vBoxLeft.setMinSize(barsTotalWidth, height);
-		paneRight.setMinSize(width - barsTotalWidth, height);
+		Double paneRightWidth = width - barsTotalWidth;
+		paneRight.setMinSize(paneRightWidth, height);
+		paneRight.setMaxSize(paneRightWidth, height);
 		barHeight = height*0.9;
 		barWidth = barsTotalWidth/(barsCount + 2);
 		Double smallBarsHeight = (height - barHeight)*0.5;
 		gridPaneTop.getColumnConstraints().clear();
-		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*0.28 + barWidth*barsCount));
-		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*1.5));
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.94));
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.06));
+		//gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*1.5));
 		gridPaneTop.setMinSize(barsTotalWidth, smallBarsHeight);
 		gridPaneTop.setMaxSize(barsTotalWidth, smallBarsHeight);
 		hBoxBottom.setMinSize(barsTotalWidth, smallBarsHeight);
@@ -117,8 +191,32 @@ public class MidiLevelBarsPanel extends Pane {
 		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
 		
 		labelTop.setFont(new Font((height - barHeight)*0.4));
-		labelTopHiHat.setFont(new Font((height - barHeight)*0.45));
+		//labelTopHiHat.setFont(new Font((height - barHeight)*0.4*(60.0/(60.0 + barsCount))));
+		labelTopHiHat.setFont(new Font((height - barHeight)*0.3));
 		labelBottom.setFont(new Font((height - barHeight)*0.4));
+		
+		paneRight.getChildren().clear();
+		Double rowHight = (height*0.5)/panesRight.size();
+		Double paneHeight = rowHight*0.8;
+		Double paneWidth = paneRightWidth*0.4;
+		Double yPos = rowHight - paneHeight;
+		comboBoxBarCount.setMinSize(paneWidth, paneHeight);
+		comboBoxBarCount.setMaxSize(paneWidth, paneHeight);
+		comboBoxBarCount.setStyle("-fx-font-size: " + Double.valueOf(paneHeight*0.3).toString() + "pt");			
+
+		for (int i = 0; i < panesRight.size(); i++) {
+			panesRight.get(i).setMinSize(paneWidth, paneHeight);
+			panesRight.get(i).setMaxSize(paneWidth, paneHeight);
+			labelsRight.get(i).setFont(new Font(paneHeight*0.6));
+			panesRight.get(i).setLayoutX(0);
+			panesRight.get(i).setLayoutY(yPos);
+			labelsRight.get(i).setLayoutX(paneWidth);
+			labelsRight.get(i).setLayoutY(yPos + paneHeight*0.3 );
+			yPos += rowHight;
+		}
+		paneRight.getChildren().addAll(panesRight);
+		paneRight.getChildren().addAll(labelsRight);
+		
 		updateBars();
 		updateHiHatBar();
 		reAddAllBars();

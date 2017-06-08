@@ -24,7 +24,7 @@ public class MidiLevelBar extends VBox {
 	final private Double barWidthPadRatio =  (1-barWidthRatio)*0.5;
 	
 	private int barType = barTypeUnknown;
-	final public Color [] barColors = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, Color.DARKGREY, Color.LIGHTGREY, Color.BROWN};
+	final static public Color [] barColors = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, Color.DARKGREY, Color.LIGHTGREY, Color.BROWN};
 	private Color bgColor = Color.LIGHTGREY;
 	private Color bgBarColor = Color.WHITE;
 	private Color fontColor = Color.BLACK;
