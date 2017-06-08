@@ -3,9 +3,14 @@ package info.megadrum.managerfx.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,14 +37,16 @@ public class MidiLevelBarsPanel extends Pane {
 	private Double barWidth = 10.0;
 	private Double barHeight = 180.0 ;
 	private int barsCount = 16;
-	private HBox hBoxTop;
+	private GridPane gridPaneTop;
 	private HBox hBoxBottom;
 	private VBox vBoxLeft;
-	private VBox vBoxRight;
+	private Pane paneRight;
 	private Pane paneBars;
 	private HBox hBoxRoot;
 	private Label labelTop;
+	private Label labelTopHiHat;
 	private Label labelBottom;
+	private ComboBox<String> comboBoxBarCount;
 	
 	
 	public MidiLevelBarsPanel() {
@@ -52,10 +59,11 @@ public class MidiLevelBarsPanel extends Pane {
 			midiLevelBars.add(hmlb);
 			barDatas[i] = new BarData();
 		}
-		hBoxTop = new HBox();
+		gridPaneTop = new GridPane();
 		hBoxBottom = new HBox();
 		vBoxLeft = new VBox();
-		vBoxRight = new VBox();
+		paneRight = new Pane();
+		paneRight.setStyle("-fx-background-color: lightgreen");
 		paneBars = new Pane();
 		paneBars.setStyle("-fx-background-color: orange");
 		hBoxRoot = new HBox();
@@ -63,20 +71,26 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxRoot.setPadding(new Insets(0, 0, 0, 0));
 		getChildren().add(hBoxRoot);
 		vBoxLeft.setPadding(new Insets(0, 0, 0, 0));
-		vBoxRight.setPadding(new Insets(0, 0, 0, 0));
-		hBoxRoot.getChildren().addAll(vBoxLeft, vBoxRight);
-		hBoxTop.setPadding(new Insets(0, 0, 0, 0));
+		paneRight.setPadding(new Insets(0, 0, 0, 0));
+		hBoxRoot.getChildren().addAll(vBoxLeft, paneRight);
+		gridPaneTop.setPadding(new Insets(0, 0, 0, 0));
 		labelTop = new Label("hits intervals (milliseconds)");
-		hBoxTop.setAlignment(Pos.CENTER);
-		hBoxTop.getChildren().add(labelTop);
-		hBoxTop.setStyle("-fx-background-color: red");
+		GridPane.setConstraints(labelTop, 0, 0);
+		GridPane.setHalignment(labelTop, HPos.CENTER);
+		GridPane.setValignment(labelTop, VPos.CENTER);
+		labelTopHiHat = new Label("HiHat");
+		GridPane.setConstraints(labelTopHiHat, 1, 0);
+		GridPane.setHalignment(labelTopHiHat, HPos.CENTER);
+		GridPane.setValignment(labelTopHiHat, VPos.CENTER);
+		gridPaneTop.getChildren().addAll(labelTop, labelTopHiHat);
+		gridPaneTop.setStyle("-fx-background-color: red");
 		paneBars.setPadding(new Insets(0, 0, 0, 0));
 		hBoxBottom.setPadding(new Insets(0, 0, 0, 0));
 		labelBottom = new Label("note numbers");
 		hBoxBottom.setAlignment(Pos.CENTER);
 		hBoxBottom.getChildren().add(labelBottom);
 		hBoxBottom.setStyle("-fx-background-color: red");
-		vBoxLeft.getChildren().addAll(hBoxTop,paneBars,hBoxBottom);
+		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -86,20 +100,24 @@ public class MidiLevelBarsPanel extends Pane {
 		setMaxSize(width, height);
 		barsTotalWidth = width*0.8;
 		vBoxLeft.setMinSize(barsTotalWidth, height);
-		vBoxRight.setMinSize(width - barsTotalWidth, height);
+		paneRight.setMinSize(width - barsTotalWidth, height);
 		barHeight = height*0.9;
 		barWidth = barsTotalWidth/(barsCount + 2);
 		Double smallBarsHeight = (height - barHeight)*0.5;
-		hBoxTop.setMinSize(barsTotalWidth, smallBarsHeight);
-		hBoxTop.setMaxSize(barsTotalWidth, smallBarsHeight);
+		gridPaneTop.getColumnConstraints().clear();
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*0.28 + barWidth*barsCount));
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*1.5));
+		gridPaneTop.setMinSize(barsTotalWidth, smallBarsHeight);
+		gridPaneTop.setMaxSize(barsTotalWidth, smallBarsHeight);
 		hBoxBottom.setMinSize(barsTotalWidth, smallBarsHeight);
 		hBoxBottom.setMaxSize(barsTotalWidth, smallBarsHeight);
 		paneBars.setMinSize(barsTotalWidth, barHeight);
 		paneBars.setMaxSize(barsTotalWidth, barHeight);
 		vBoxLeft.getChildren().clear();
-		vBoxLeft.getChildren().addAll(hBoxTop,paneBars,hBoxBottom);
+		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
 		
 		labelTop.setFont(new Font((height - barHeight)*0.4));
+		labelTopHiHat.setFont(new Font((height - barHeight)*0.45));
 		labelBottom.setFont(new Font((height - barHeight)*0.4));
 		updateBars();
 		updateHiHatBar();
