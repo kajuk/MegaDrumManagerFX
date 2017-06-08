@@ -17,7 +17,7 @@ class BarData {
 
 public class MidiLevelBarsPanel extends Pane {
 
-	public final static int maxBars = 32;
+	public final static int maxBars = 48;
 	private List<MidiLevelBar> midiLevelBars;
 	private BarData [] barDatas;
 	private int barDataPointer = 0;
@@ -28,7 +28,7 @@ public class MidiLevelBarsPanel extends Pane {
 	private Double barsTotalWidth;
 	private Double barWidth = 10.0;
 	private Double barHeight = 180.0 ;
-	private int barsCount = 16;
+	private int barsCount = 48;
 	private HBox hBoxTop;
 	private HBox hBoxBottom;
 	private VBox vBoxLeft;

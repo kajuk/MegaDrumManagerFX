@@ -287,6 +287,12 @@ public class Controller implements MidiRescanEventListener {
 					uiPad.resetNameChanged();
 					updateComboBoxInput(true);
 				}
+				tempMidiLevelBarsPanel.addNewBarData(
+						configFull.configPads[0].channel,
+						configFull.configPads[0].note,
+						configFull.configPads[0].altNote,
+						50);
+				tempMidiLevelBarsPanel.setHiHatLevel(configFull.configPads[0].pressrollNote);
 			}
 		});
 

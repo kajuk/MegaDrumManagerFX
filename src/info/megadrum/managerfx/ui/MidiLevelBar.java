@@ -85,22 +85,22 @@ public class MidiLevelBar extends Pane {
 			String hhText = "Open";
 			textW = getTextWidth(font, hhText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(hhText, textX, barHeight*barHeightPadRatio*0.25 + fontSize);
+			gc.fillText(hhText, textX, barHeight*barHeightPadRatio*0.10 + fontSize);
 			hhText = "Clsd";
 			textW = getTextWidth(font, hhText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(hhText, textX, barHeight - barHeight*barHeightPadRatio*0.5);
+			gc.fillText(hhText, textX, barHeight - barHeight*barHeightPadRatio*0.3);
 		} else {
 			textW = getTextWidth(font, barNote.toString());
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(barNote.toString(), textX, barHeight - barHeight*barHeightPadRatio*0.5);
+			gc.fillText(barNote.toString(), textX, barHeight - barHeight*barHeightPadRatio*0.3);
 			String msText = barInterval.toString();
 			if (barInterval > 999) {
 				msText = ">1s";
 			}
 			textW = getTextWidth(font, msText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(msText, textX, barHeight*barHeightPadRatio*0.25 + fontSize);
+			gc.fillText(msText, textX, barHeight*barHeightPadRatio*0.10 + fontSize);
 		}
 
 	}
