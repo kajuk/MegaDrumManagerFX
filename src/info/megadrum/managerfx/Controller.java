@@ -778,7 +778,7 @@ public class Controller implements MidiRescanEventListener {
 				hBoxUIviews.setVisible(true);				
 			}
 		}, 100);*/
-		tempMidiLevelBar.setParameters(1, 0, 88, 63);
+		tempMidiLevelBar.setParameters(MidiLevelBar.barTypeHiHat, 0, 88, 63);
 		//VBox vB = new VBox(1);
 		//vB.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 		//vB.getChildren().add(tempMidiLevelBar);

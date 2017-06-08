@@ -5,17 +5,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class MidiLevelBar extends Pane {
 	private Canvas canvas;
 	private GraphicsContext gc;
-	final public int barTypeUnknown = 0;
-	final public int barTypeHead = barTypeUnknown + 1;
-	final public int barTypeRim = barTypeHead + 1;
-	final public int barType3rd = barTypeRim + 1;
-	final public int barTypeChokeOn = barType3rd + 1;
-	final public int barTypeChokeOff = barTypeChokeOn + 1;
-	final public int barTypeHiHat = barTypeChokeOff + 1;
+	final static public int barTypeUnknown = 0;
+	final static public int barTypeHead = barTypeUnknown + 1;
+	final static public int barTypeRim = barTypeHead + 1;
+	final static public int barType3rd = barTypeRim + 1;
+	final static public int barTypeChokeOn = barType3rd + 1;
+	final static public int barTypeChokeOff = barTypeChokeOn + 1;
+	final static public int barTypeHiHat = barTypeChokeOff + 1;
 	final private Double barHeightRatio = 0.9;
 	final private Double barHeightPadRatio = (1-barHeightRatio)*0.5;
 	final private Double barWidthRatio = 0.9;
@@ -68,50 +69,43 @@ public class MidiLevelBar extends Pane {
 		Double barFillHeight = ((barHeight*barHeightRatio)*barLevel)/127;
 		gc.setFill(barColors[barType]);
 		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barFillHeight - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barFillHeight);
+
 		fontSize = barWidth*0.4;
 		Font font = new Font(fontSize);
+		Double textX, textW;
 		gc.setFont(font);
-		Double textX;
-		textX = (barWidth - barWidth*0.25*barLevel.toString().length())*0.5;
+		textW = getTextWidth(font, barLevel.toString());
+		textX = (barWidth - textW)*0.5;
 		gc.setFill(fontColor);
 		gc.fillText(barLevel.toString(), textX, barHeight - barHeight*barHeightPadRatio - barHeight*barHeightRatio*0.5);
 
 		if (barType == barTypeHiHat) {
-			
+			String hhText = "Open";
+			textW = getTextWidth(font, hhText);
+			textX = (barWidth - textW)*0.5;
+			gc.fillText(hhText, textX, barHeight*barHeightPadRatio*0.25 + fontSize);
+			hhText = "Clsd";
+			textW = getTextWidth(font, hhText);
+			textX = (barWidth - textW)*0.5;
+			gc.fillText(hhText, textX, barHeight - barHeight*barHeightPadRatio*0.5);
 		} else {
-			textX = (barWidth - barWidth*0.25*barNote.toString().length())*0.5;
-			gc.setFill(fontColor);
+			textW = getTextWidth(font, barNote.toString());
+			textX = (barWidth - textW)*0.5;
 			gc.fillText(barNote.toString(), textX, barHeight - barHeight*barHeightPadRatio*0.5);
 			String msText = barInterval.toString();
 			if (barInterval > 999) {
 				msText = ">1s";
 			}
-			textX = (barWidth - barWidth*0.25*msText.length())*0.5;
-			gc.setFill(fontColor);
+			textW = getTextWidth(font, msText);
+			textX = (barWidth - textW)*0.5;
 			gc.fillText(msText, textX, barHeight*barHeightPadRatio*0.25 + fontSize);
 		}
 
-		/*		
-		gc.setStroke(gridColor);
-		for (int i = 0; i < 9; i++) {
-			gc.setStroke(gridColor);
-			gc.strokeLine((i*32) + xShift, yShift, (i*32) + xShift, yShift + 256);
-			gc.strokeLine(xShift, (i*32) + yShift, xShift + 256, (i*32) + yShift);
-			gc.setStroke(tickColor);
-			gc.strokeLine((i*32) + xShift, yShift + 256, (i*32) + xShift, yShift + 256 + 4);
-			gc.strokeLine(xShift - 4, (i*32) + yShift, xShift, (i*32) + yShift);
-			gc.setFill(labelsColor);
-			gc.fillText("P" + ((Integer)(i+1)).toString(), (i*32) + xShift - 5, yShift + 256 + 12);
-			if (i > 0) {
-				if (i < 8) {
-					gc.fillText(((Integer)(256-i*32)).toString(), xShift - 20, (i*32) + yShift + 4);					
-				} else {
-					gc.fillText(((Integer)(2)).toString(), xShift - 20, (i*32) + yShift + 4);
-				}
-			} else {
-				gc.fillText(((Integer)(255)).toString(), xShift - 20, (i*32) + yShift + 4);					
-			}
-		}
-*/	
+	}
+	
+	private Double getTextWidth(Font font, String s) {
+		Text text = new Text(s);
+		text.setFont(font);
+		return text.getLayoutBounds().getWidth();		
 	}
 }
