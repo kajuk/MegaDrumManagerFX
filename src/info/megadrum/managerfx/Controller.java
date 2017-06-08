@@ -30,6 +30,7 @@ import info.megadrum.managerfx.midi.MidiRescanEvent;
 import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
+import info.megadrum.managerfx.ui.MidiLevelBar;
 import info.megadrum.managerfx.ui.SpinnerFast;
 import info.megadrum.managerfx.ui.UIPadsExtra;
 import info.megadrum.managerfx.ui.UIPanel;
@@ -134,6 +135,8 @@ public class Controller implements MidiRescanEventListener {
 
 	private List<byte[]> sysexSendList;
 	private List<byte[]> sysexSendConfigQueue;
+
+	MidiLevelBar tempMidiLevelBar;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -152,6 +155,7 @@ public class Controller implements MidiRescanEventListener {
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
 		initMidi();
 		initConfigs();
+		tempMidiLevelBar = new MidiLevelBar(20.0, 300.0);
 		allPanels = new ArrayList<UIPanel>();
 		allPanels.add(uiMisc);
 		allPanels.add(uiPedal);
@@ -774,6 +778,11 @@ public class Controller implements MidiRescanEventListener {
 				hBoxUIviews.setVisible(true);				
 			}
 		}, 100);*/
+		tempMidiLevelBar.setParameters(1, 0, 0, 63);
+		VBox vB = new VBox(1);
+		vB.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
+		vB.getChildren().add(tempMidiLevelBar);
+		hBoxUIviews.getChildren().add(vB);
 		respondToResize(scene1);
 	}
 	
