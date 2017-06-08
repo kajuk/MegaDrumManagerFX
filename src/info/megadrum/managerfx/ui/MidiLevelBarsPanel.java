@@ -36,7 +36,7 @@ public class MidiLevelBarsPanel extends Pane {
 	private HBox hBoxBottom;
 	private VBox vBoxLeft;
 	private VBox vBoxRight;
-	private HBox hBoxBars;
+	private Pane paneBars;
 	private HBox hBoxRoot;
 	private Label labelTop;
 	private Label labelBottom;
@@ -56,8 +56,8 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxBottom = new HBox();
 		vBoxLeft = new VBox();
 		vBoxRight = new VBox();
-		hBoxBars = new HBox();
-		hBoxBars.setStyle("-fx-background-color: orange");
+		paneBars = new Pane();
+		paneBars.setStyle("-fx-background-color: orange");
 		hBoxRoot = new HBox();
 		hBoxRoot.setStyle("-fx-background-color: yellow");
 		hBoxRoot.setPadding(new Insets(0, 0, 0, 0));
@@ -70,13 +70,13 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxTop.setAlignment(Pos.CENTER);
 		hBoxTop.getChildren().add(labelTop);
 		hBoxTop.setStyle("-fx-background-color: red");
-		hBoxBars.setPadding(new Insets(0, 0, 0, 0));
+		paneBars.setPadding(new Insets(0, 0, 0, 0));
 		hBoxBottom.setPadding(new Insets(0, 0, 0, 0));
 		labelBottom = new Label("note numbers");
 		hBoxBottom.setAlignment(Pos.CENTER);
 		hBoxBottom.getChildren().add(labelBottom);
 		hBoxBottom.setStyle("-fx-background-color: red");
-		vBoxLeft.getChildren().addAll(hBoxTop,hBoxBars,hBoxBottom);
+		vBoxLeft.getChildren().addAll(hBoxTop,paneBars,hBoxBottom);
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -88,16 +88,16 @@ public class MidiLevelBarsPanel extends Pane {
 		vBoxLeft.setMinSize(barsTotalWidth, height);
 		vBoxRight.setMinSize(width - barsTotalWidth, height);
 		barHeight = height*0.9;
-		barWidth = barsTotalWidth/(barsCount + 2.5);
+		barWidth = barsTotalWidth/(barsCount + 2);
 		Double smallBarsHeight = (height - barHeight)*0.5;
 		hBoxTop.setMinSize(barsTotalWidth, smallBarsHeight);
 		hBoxTop.setMaxSize(barsTotalWidth, smallBarsHeight);
 		hBoxBottom.setMinSize(barsTotalWidth, smallBarsHeight);
 		hBoxBottom.setMaxSize(barsTotalWidth, smallBarsHeight);
-		hBoxBars.setMinSize(barsTotalWidth, barHeight);
-		hBoxBars.setMaxSize(barsTotalWidth, barHeight);
+		paneBars.setMinSize(barsTotalWidth, barHeight);
+		paneBars.setMaxSize(barsTotalWidth, barHeight);
 		vBoxLeft.getChildren().clear();
-		vBoxLeft.getChildren().addAll(hBoxTop,hBoxBars,hBoxBottom);
+		vBoxLeft.getChildren().addAll(hBoxTop,paneBars,hBoxBottom);
 		
 		labelTop.setFont(new Font((height - barHeight)*0.4));
 		labelBottom.setFont(new Font((height - barHeight)*0.4));
@@ -131,7 +131,7 @@ public class MidiLevelBarsPanel extends Pane {
 		if (pointerData < 0) {
 			pointerData += maxBars;
 		}
-		hBoxBars.getChildren().clear();
+		paneBars.getChildren().clear();
 		int pointerBar =  maxBars - barsCount;
 		for (int i= 0; i < barsCount; i++) {
 			int type = barDatas[pointerData].type;
@@ -140,16 +140,9 @@ public class MidiLevelBarsPanel extends Pane {
 			int interval = barDatas[pointerData].interval;
 			midiLevelBars.get(pointerBar).setParameters(type, interval, note, level, false);
 			midiLevelBars.get(pointerBar).respondToResize(barWidth, barHeight);
-/*
-			if (i == 0) {
-				midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.5));
-			} else {
-				//midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, 0));				
-				midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.5));
-			}
-*/			
-			midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.1));
-			hBoxBars.getChildren().add(midiLevelBars.get(pointerBar));
+			midiLevelBars.get(pointerBar).setLayoutX(barWidth*0.1 + i*barWidth);
+			midiLevelBars.get(pointerBar).setLayoutY(0);
+			paneBars.getChildren().add(midiLevelBars.get(pointerBar));
 			pointerBar++;
 			pointerData++;
 			if (pointerData >= maxBars) {
@@ -158,8 +151,9 @@ public class MidiLevelBarsPanel extends Pane {
 		}
 		hhMidiLevelBar.setParameters(MidiLevelBar.barTypeHiHat, 0, 0, lastHiHatLevel, false);
 		hhMidiLevelBar.respondToResize(barWidth, barHeight);
-		hhMidiLevelBar.setPadding(new Insets(0, 0, 0, barWidth*0.6));
-		hBoxBars.getChildren().add(hhMidiLevelBar);
+		hhMidiLevelBar.setLayoutX(barWidth*0.6 + barsCount*barWidth);
+		hhMidiLevelBar.setLayoutY(0);
+		paneBars.getChildren().add(hhMidiLevelBar);
 	}
 	
 	public void addNewBarData(int type, int note, int level, int interval) {
