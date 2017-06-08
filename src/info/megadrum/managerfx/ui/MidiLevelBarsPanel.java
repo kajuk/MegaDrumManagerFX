@@ -28,7 +28,7 @@ public class MidiLevelBarsPanel extends Pane {
 	private Double barsTotalWidth;
 	private Double barWidth = 10.0;
 	private Double barHeight = 180.0 ;
-	private int barsCount = 48;
+	private int barsCount = 16;
 	private HBox hBoxTop;
 	private HBox hBoxBottom;
 	private VBox vBoxLeft;
@@ -81,7 +81,6 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxBars.setMinSize(barsTotalWidth, barHeight);
 		hBoxBars.setMaxSize(barsTotalWidth, barHeight);
 		
-		barWidth = barsTotalWidth/(barsCount + 2);
 		updateBars();
 		updateHiHatBar();
 		reAddAllBars();
@@ -121,11 +120,15 @@ public class MidiLevelBarsPanel extends Pane {
 			int interval = barDatas[pointerData].interval;
 			midiLevelBars.get(pointerBar).setParameters(type, interval, note, level, false);
 			midiLevelBars.get(pointerBar).respondToResize(barWidth, barHeight);
+/*
 			if (i == 0) {
 				midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.5));
 			} else {
-				midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, 0));				
+				//midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, 0));				
+				midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.5));
 			}
+*/			
+			midiLevelBars.get(pointerBar).setPadding(new Insets(0, 0, 0, barWidth*0.5));
 			hBoxBars.getChildren().add(midiLevelBars.get(pointerBar));
 			pointerBar++;
 			pointerData++;
@@ -135,7 +138,7 @@ public class MidiLevelBarsPanel extends Pane {
 		}
 		hhMidiLevelBar.setParameters(MidiLevelBar.barTypeHiHat, 0, 0, lastHiHatLevel, false);
 		hhMidiLevelBar.respondToResize(barWidth, barHeight);
-		hhMidiLevelBar.setPadding(new Insets(0, 0, 0, barWidth*0.5));
+		hhMidiLevelBar.setPadding(new Insets(0, 0, 0, barWidth));
 		hBoxBars.getChildren().add(hhMidiLevelBar);
 	}
 	

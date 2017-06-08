@@ -3,11 +3,12 @@ package info.megadrum.managerfx.ui;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class MidiLevelBar extends Pane {
+public class MidiLevelBar extends VBox {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	final static public int barTypeUnknown = 0;
@@ -74,33 +75,38 @@ public class MidiLevelBar extends Pane {
 
 		fontSize = barWidth*0.4;
 		Font font = new Font(fontSize);
-		Double textX, textW;
+		Double textX, textW, textY;
 		gc.setFont(font);
 		textW = getTextWidth(font, barLevel.toString());
 		textX = (barWidth - textW)*0.5;
+		textY = barHeight - barHeight*barHeightPadRatio - barHeight*barHeightRatio*0.5;
 		gc.setFill(fontColor);
-		gc.fillText(barLevel.toString(), textX, barHeight - barHeight*barHeightPadRatio - barHeight*barHeightRatio*0.5);
+		gc.fillText(barLevel.toString(), textX, textY);
 
 		if (barType == barTypeHiHat) {
 			String hhText = "Open";
 			textW = getTextWidth(font, hhText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(hhText, textX, barHeight*barHeightPadRatio*0.10 + fontSize);
+			textY = barHeight*barHeightPadRatio*0.5 + fontSize*0.3;
+			gc.fillText(hhText, textX, textY);
 			hhText = "Clsd";
 			textW = getTextWidth(font, hhText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(hhText, textX, barHeight - barHeight*barHeightPadRatio*0.3);
+			textY = barHeight - barHeight*barHeightPadRatio*0.5 + fontSize*0.3;
+			gc.fillText(hhText, textX, textY);
 		} else {
-			textW = getTextWidth(font, barNote.toString());
-			textX = (barWidth - textW)*0.5;
-			gc.fillText(barNote.toString(), textX, barHeight - barHeight*barHeightPadRatio*0.3);
 			String msText = barInterval.toString();
 			if (barInterval > 999) {
 				msText = ">1s";
 			}
 			textW = getTextWidth(font, msText);
 			textX = (barWidth - textW)*0.5;
-			gc.fillText(msText, textX, barHeight*barHeightPadRatio*0.10 + fontSize);
+			textY = barHeight*barHeightPadRatio*0.5 + fontSize*0.3;
+			gc.fillText(msText, textX, textY);
+			textW = getTextWidth(font, barNote.toString());
+			textX = (barWidth - textW)*0.5;
+			textY = barHeight - barHeight*barHeightPadRatio*0.5 + fontSize*0.3;
+			gc.fillText(barNote.toString(), textX, textY);
 		}
 
 	}
