@@ -31,27 +31,29 @@ public class MidiLevelBar extends Pane {
 	private Double barWidth = 16.0;
 	private Double barHeight = 300.0;
 	private Double fontSize = 6.0;
-	private Integer barInterval = 0;
+	private Integer barInterval = 1000;
 	private Integer barLevel = 0;
 	private Integer barNote = 0;
 	
 	public MidiLevelBar(Double w, Double h) {
-		respondToResiz(w, h);
+		respondToResize(w, h);
 	}
 	
-	public void respondToResiz(Double w, Double h) {
+	public void respondToResize(Double w, Double h) {
 		barWidth = w;
 		barHeight = h;
 		fontSize = w*0.5;
 		rePaint();
 	}
 
-	public void setParameters (int type, int interval, int note, int level) {
-		barType = type;
-		barInterval = interval;
-		barNote = note;
-		barLevel = level;
-		rePaint();
+	public void setParameters (int type, int interval, int note, int level, Boolean repaint) {
+		barType = ((type>=barTypeUnknown) && (type<=barTypeHiHat))?type:barTypeUnknown;
+		barInterval = ((interval > -1) && (interval < 1001))?interval:1000;
+		barNote = ((note > -1) && (note < 128))?note:0;
+		barLevel = ((level > -1) && (level < 128))?level:0;
+		if (repaint) {
+			rePaint();
+		}
 	}
 	
 	private void rePaint() {

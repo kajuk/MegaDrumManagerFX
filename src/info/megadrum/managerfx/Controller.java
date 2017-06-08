@@ -31,6 +31,7 @@ import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.ui.ControlChangeEvent;
 import info.megadrum.managerfx.ui.ControlChangeEventListener;
 import info.megadrum.managerfx.ui.MidiLevelBar;
+import info.megadrum.managerfx.ui.MidiLevelBarsPanel;
 import info.megadrum.managerfx.ui.SpinnerFast;
 import info.megadrum.managerfx.ui.UIPadsExtra;
 import info.megadrum.managerfx.ui.UIPanel;
@@ -136,7 +137,7 @@ public class Controller implements MidiRescanEventListener {
 	private List<byte[]> sysexSendList;
 	private List<byte[]> sysexSendConfigQueue;
 
-	MidiLevelBar tempMidiLevelBar;
+	MidiLevelBarsPanel tempMidiLevelBarsPanel;
 	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -155,7 +156,8 @@ public class Controller implements MidiRescanEventListener {
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
 		initMidi();
 		initConfigs();
-		tempMidiLevelBar = new MidiLevelBar(20.0, 300.0);
+		tempMidiLevelBarsPanel = new MidiLevelBarsPanel();
+		
 		allPanels = new ArrayList<UIPanel>();
 		allPanels.add(uiMisc);
 		allPanels.add(uiPedal);
@@ -525,6 +527,7 @@ public class Controller implements MidiRescanEventListener {
 							if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
 								uiPadsExtra.respondToResize(height, width, height, controlH, controlW);							
 							}
+							tempMidiLevelBarsPanel.respondToResize(width*0.5, height*0.5);
 						}
 					});
 				}
@@ -716,6 +719,7 @@ public class Controller implements MidiRescanEventListener {
 
 	private void showPanels() {
 		hBoxUIviews.getChildren().clear();
+		hBoxUIviews.getChildren().add(tempMidiLevelBarsPanel);
 		for (int i = 0; i < allPanels.size(); i++) {
 			final int iFinal = i;
 			switch (allPanels.get(i).getViewState()) {
@@ -778,11 +782,9 @@ public class Controller implements MidiRescanEventListener {
 				hBoxUIviews.setVisible(true);				
 			}
 		}, 100);*/
-		tempMidiLevelBar.setParameters(MidiLevelBar.barTypeHiHat, 0, 88, 63);
 		//VBox vB = new VBox(1);
 		//vB.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 		//vB.getChildren().add(tempMidiLevelBar);
-		hBoxUIviews.getChildren().add(tempMidiLevelBar);
 		respondToResize(scene1);
 	}
 	
