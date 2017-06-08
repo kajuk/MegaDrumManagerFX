@@ -3,7 +3,10 @@ package info.megadrum.managerfx.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
@@ -114,12 +117,25 @@ public class MidiLevelBarsPanel extends Pane {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
+				System.out.println("AAAAA");
 				barsCount = Integer.valueOf(newValue);
-				//respondToResize(width, height);
-				//updateBars();
-				//updateHiHatBar();
-				//reAddAllBars();
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						Platform.runLater(new Runnable() {
+							
+							@Override
+							public void run() {
+								//updateBars();
+								respondToResize(width, height);						
+								//updateHiHatBar();
+								//reAddAllBars();
+							}
+						});
+					}
+				}, 200);
 			}
 			
 		});
