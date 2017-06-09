@@ -16,6 +16,7 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
@@ -63,6 +64,7 @@ public class MidiLevelBarsPanel extends Pane {
 	private List<Pane> panesRight;
 	private List<Label> labelsRight;
 	private Button buttonClear;
+	private List<Slider> slidersPos;
 	
 	private long prevTime = 0;
 	
@@ -192,7 +194,10 @@ public class MidiLevelBarsPanel extends Pane {
 		Pane paneButton = new Pane();
 		paneButton.getChildren().add(buttonClear);
 		panesRight.add(paneButton);
-		//reAddAllBars();
+		slidersPos = new ArrayList<Slider>();
+		for (int i = 0; i < 7; i++) {
+			slidersPos.add(new Slider(0, 127, 63));
+		}
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -235,10 +240,11 @@ public class MidiLevelBarsPanel extends Pane {
 		comboBoxBarCount.setMaxSize(paneWidth, paneHeight);
 		comboBoxBarCount.setStyle("-fx-font-size: " + Double.valueOf(paneHeight*0.3).toString() + "pt");			
 
+		Font fontOnTheRight = new Font(paneHeight*0.6);
 		for (int i = 0; i < panesRight.size(); i++) {
 			panesRight.get(i).setMinSize(paneWidth, paneHeight);
 			panesRight.get(i).setMaxSize(paneWidth, paneHeight);
-			labelsRight.get(i).setFont(new Font(paneHeight*0.6));
+			labelsRight.get(i).setFont(fontOnTheRight);
 			panesRight.get(i).setLayoutX(0);
 			panesRight.get(i).setLayoutY(yPos);
 			labelsRight.get(i).setLayoutX(paneWidth);
@@ -249,6 +255,29 @@ public class MidiLevelBarsPanel extends Pane {
 		paneRight.getChildren().addAll(labelsRight);
 		
 		buttonClear.setFont(new Font(paneHeight*0.6));
+		
+		Label labelLastPos = new Label("Last Positional");
+		labelLastPos.setFont(fontOnTheRight);
+		labelLastPos.setLayoutX((paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelLastPos.getText()))*0.5);
+		labelLastPos.setLayoutY(panesRight.size()*rowHight + paneHeight*0.5);
+		Label labelCenter = new Label("Center");
+		labelCenter.setFont(fontOnTheRight);
+		labelCenter.setLayoutX(0);
+		labelCenter.setLayoutY(panesRight.size()*rowHight + paneHeight);
+		Label labelRim = new Label("Rim");
+		labelRim.setFont(fontOnTheRight);
+		labelRim.setLayoutX(paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelRim.getText()));
+		labelRim.setLayoutY(panesRight.size()*rowHight + paneHeight);
+		paneRight.getChildren().addAll(labelLastPos, labelCenter, labelRim);
+		
+		for (int i = 0; i < slidersPos.size(); i++) {
+			slidersPos.get(i).setMinSize(paneRightWidth, paneHeight);
+			slidersPos.get(i).setMaxSize(paneRightWidth, paneHeight);
+			
+			slidersPos.get(i).setLayoutX(0);
+			slidersPos.get(i).setLayoutY((panesRight.size() + 1)*rowHight + i*paneHeight + paneHeight);
+		}
+		paneRight.getChildren().addAll(slidersPos);
 		updateBars();
 		updateHiHatBar();
 		reAddAllBars();
@@ -302,6 +331,13 @@ public class MidiLevelBarsPanel extends Pane {
 		hhMidiLevelBar.setLayoutX(barWidth*0.6 + barsCount*barWidth);
 		hhMidiLevelBar.setLayoutY(0);
 		paneBars.getChildren().add(hhMidiLevelBar);
+	}
+	
+	public void addNewPositional(Integer pos) {
+		for (int i = (slidersPos.size() - 1); i > 0; i--) {
+			slidersPos.get(i).setValue(slidersPos.get(i - 1).getValue());
+		}
+		slidersPos.get(0).setValue(pos);
 	}
 	
 	public void addNewBarData(int type, int note, int level) {

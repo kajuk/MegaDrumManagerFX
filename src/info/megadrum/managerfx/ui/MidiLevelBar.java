@@ -111,7 +111,7 @@ public class MidiLevelBar extends VBox {
 
 	}
 	
-	private Double getTextWidth(Font font, String s) {
+	public static Double getTextWidth(Font font, String s) {
 		Text text = new Text(s);
 		text.setFont(font);
 		return text.getLayoutBounds().getWidth();		

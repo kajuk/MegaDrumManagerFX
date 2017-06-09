@@ -45,6 +45,9 @@ public class MidiController {
 	private byte [] sysexToCompare;
 
 	private List<byte[]> sysexSendListLocal;
+//	private List<byte[]> receivedSysexList;
+//	private List<byte[]> receivedShortMidiList;
+	private List<byte[]> receivedMidiDataList;
 	//private List<byte[]> sysexSendList;
 	//private List<byte[]> sysexRequestsList;
 
@@ -120,27 +123,24 @@ public class MidiController {
 	public MidiController() {
 		midiHandler = new Midi_handler();
 		
+		//receivedShortMidiList = new ArrayList<>();
+		//receivedSysexList = new ArrayList<>();
+		receivedMidiDataList = new ArrayList<>();
+		
 		midiHandler.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
-				Platform.runLater(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						if (!isInFirmwareUpgrade) {
-							midiHandler.getMidi();
-							if (midiHandler.isSysexReceived()) {
-								midiHandler.resetSysexReceived();
-								processSysex(midiHandler.getBufferIn());						
-							} else if (midiHandler.getBufferIn() != null) {
-								processShortMidi(midiHandler.getBufferIn());
-							}
-							midiHandler.resetBufferIn();
-						}
-						
+				if (!isInFirmwareUpgrade) {
+					midiHandler.getMidi();
+					if (midiHandler.isSysexReceived()) {
+						midiHandler.resetSysexReceived();
+						processSysex(midiHandler.getBufferIn());						
+						midiHandler.resetBufferIn();
+					} else if (midiHandler.getBufferIn() != null) {
+						processShortMidi(midiHandler.getBufferIn());
+						midiHandler.resetBufferIn();
 					}
-				});
+				}
 			}
 
 			@Override
@@ -189,11 +189,19 @@ public class MidiController {
 			}
 		}
 		//System.out.printf("Received sysex with id = %d\n", buffer[4]);
-		fireMidiEventWithBuffer(new MidiEvent(this), buffer);
+		//fireMidiEventWithBuffer(new MidiEvent(this), buffer);
+		receivedMidiDataList.add(buffer);
+		fireMidiEvent(new MidiEvent(this));
 	}
 
 	private void processShortMidi(byte [] buffer) {
-		fireMidiEventWithBuffer(new MidiEvent(this), buffer);
+		//fireMidiEventWithBuffer(new MidiEvent(this), buffer);
+		receivedMidiDataList.add(buffer);
+		fireMidiEvent(new MidiEvent(this));
+	}
+	
+	public List<byte[]> getMidiDataList() {
+		return receivedMidiDataList;
 	}
 	
 	public String [] getMidiInList() {

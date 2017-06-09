@@ -1555,23 +1555,21 @@ public class Controller implements MidiRescanEventListener {
 		midiController.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
-				// TODO Auto-generated method stub
-/*				if (!upgradeDialog.isVisible()) {
-					sendSysexEnabled = false;
-					midiController.getMidi();
-					if (midiController.sysexReceived) {
-						midiController.sysexReceived = false;
-						if (compareSysexToConfigIsOn) {
-							compareSysexToConfig(midiController.bufferIn);
+				System.out.println("Received MidiEvent");
+				byte [] buffer = new byte[midiController.getMidiDataList().get(0).length];
+				System.arraycopy(midiController.getMidiDataList().get(0), 0, buffer, 0, buffer.length);
+				midiController.getMidiDataList().remove(0);
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						if (buffer.length > 3) {
+							processSysex(buffer);
 						} else {
-							decodeSysex(midiController.bufferIn);						
+							processShortMidi(buffer);
 						}
-					} else if (midiController.bufferIn != null) {
-						decodeShortMidi(midiController.bufferIn);
 					}
-					midiController.bufferIn = null;
-				}
-*/				
+				});
 			}
 
 			@Override
@@ -1599,6 +1597,7 @@ public class Controller implements MidiRescanEventListener {
 			break;
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
+			System.out.printf("MIDI Short = %02x %02x %02x\n", buffer[0], buffer[1], buffer[2]);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
 				type = MidiLevelBar.barTypeUnknown;
 				for (int i = 0; i< configFull.configPads.length;i++) {
@@ -1630,7 +1629,7 @@ public class Controller implements MidiRescanEventListener {
 				tempMidiLevelBarsPanel.setHiHatLevel(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
-				//panelMidiLog.showNewPositional(127 - buffer[2]);
+				tempMidiLevelBarsPanel.addNewPositional(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];
