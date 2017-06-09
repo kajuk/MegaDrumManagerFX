@@ -1791,7 +1791,7 @@ public class Controller implements MidiRescanEventListener {
 					}
 				} else {
 					if ((((pointer - 1)/2) + 1) == padPair) {
-						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], ((pointer+1)&1) > 0, true);
+						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], ((pointer+1)&1) == 0, true);
 					}
 				}
 				break;
