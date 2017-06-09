@@ -175,10 +175,23 @@ public class MidiLevelBarsPanel extends Pane {
 		labelChokeOn = new Label("Choke on");
 		labelChokeOff = new Label("Choke Off");
 		labelUnknown = new Label("Unknown");
-		labelsRight.addAll(Arrays.asList(labelBarCount, labelHead, labelRim, label3rd, labelChokeOn, labelChokeOff, labelUnknown));
+		Label labelBlank = new Label();
+		labelsRight.addAll(Arrays.asList(labelBarCount, labelHead, labelRim,
+				label3rd, labelChokeOn, labelChokeOff, labelUnknown, labelBlank));
 		
-		
-		buttonClear = new Button("Clear");
+		buttonClear = new Button("Clear Bars");
+		buttonClear.setOnAction(e-> {
+			for (int i = 0; i < maxBars; i++) {
+				barDatas[i].type = MidiLevelBar.barTypeUnknown;
+				barDatas[i].note = 0;
+				barDatas[i].level = 0;
+				barDatas[i].interval = 0;
+				updateBars();
+			}
+		});
+		Pane paneButton = new Pane();
+		paneButton.getChildren().add(buttonClear);
+		panesRight.add(paneButton);
 		//reAddAllBars();
 	}
 	
@@ -235,6 +248,7 @@ public class MidiLevelBarsPanel extends Pane {
 		paneRight.getChildren().addAll(panesRight);
 		paneRight.getChildren().addAll(labelsRight);
 		
+		buttonClear.setFont(new Font(paneHeight*0.6));
 		updateBars();
 		updateHiHatBar();
 		reAddAllBars();
