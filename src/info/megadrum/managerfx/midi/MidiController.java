@@ -161,7 +161,7 @@ public class MidiController {
 	}
 
 	private void processShortMidi(byte [] buffer) {
-		
+		fireMidiEventWithBuffer(new MidiEvent(this), buffer);
 	}
 	
 	public String [] getMidiInList() {

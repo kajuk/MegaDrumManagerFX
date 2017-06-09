@@ -10,16 +10,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.management.OperationsException;
-import javax.rmi.CORBA.Util;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.collections.functors.AndPredicate;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.w3c.dom.css.ElementCSSInlineStyle;
-
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.data.FileManager;
@@ -287,12 +277,14 @@ public class Controller implements MidiRescanEventListener {
 					uiPad.resetNameChanged();
 					updateComboBoxInput(true);
 				}
+				/*
 				tempMidiLevelBarsPanel.addNewBarData(
 						configFull.configPads[0].channel,
 						configFull.configPads[0].note,
 						configFull.configPads[0].altNote,
 						50);
 				tempMidiLevelBarsPanel.setHiHatLevel(configFull.configPads[0].pressrollNote);
+				*/
 			}
 		});
 
@@ -1568,9 +1560,78 @@ public class Controller implements MidiRescanEventListener {
 			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
 				// TODO Auto-generated method stub
 				//System.out.println("Received MidiEvent with buffer");
-				processSysex(buffer);
+				if (buffer.length > 3) {
+					processSysex(buffer);
+				} else {
+					processShortMidi(buffer);
+				}
 			}
 		});		
+	}
+	
+	private void processShortMidi(byte [] buffer) {
+		//panelMidiLog.addRawMidi(buffer);
+		int type = MidiLevelBar.barTypeUnknown;
+		switch (buffer.length) {
+		case 1:
+			//shortMessage.setMessage(buf[0]);
+			break;
+		case 2:
+			//shortMessage.setMessage(buf[0], buf[1],0);
+			break;
+		default:
+			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
+			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
+				type = MidiLevelBar.barTypeUnknown;
+				for (int i = 0; i< configFull.configPads.length;i++) {
+					if ((buffer[1]==configFull.configPads[i].note) ||
+							(buffer[1]==configFull.configPads[i].altNote) ||
+							(buffer[1]==configFull.configPads[i].pressrollNote)) {
+						if (i==0) {
+							type = MidiLevelBar.barTypeHead;
+						} else {
+							type = ((i&0x01)==1)?MidiLevelBar.barTypeHead:MidiLevelBar.barTypeRim;
+						}
+					}
+					if ((i&0x01) == 1) {
+						if ((buffer[1]==configFull.config3rds[(i-1)/2].note) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].altNote) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].pressrollNote) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].dampenedNote)) {
+							type = MidiLevelBar.barType3rd;
+						}						
+					}
+				}
+				tempMidiLevelBarsPanel.addNewBarData(type, buffer[1], buffer[2]);
+			}
+			if ((buffer[0]&0xf0) == 0xa0) {
+				tempMidiLevelBarsPanel.addNewBarData((buffer[2]>0)?MidiLevelBar.barTypeChokeOn:MidiLevelBar.barTypeChokeOff,
+						buffer[1], buffer[2]);
+			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
+				tempMidiLevelBarsPanel.setHiHatLevel(127 - buffer[2]);
+			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
+				//panelMidiLog.showNewPositional(127 - buffer[2]);
+			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
+				int id = buffer[2];
+				if (id > 0x3f) {
+					id = (id - 0x40)*2 + 1; 
+				} else {
+					id--;
+				}
+				if (id > 0) {
+					id = (id - 1)/2 + 1;
+				} else {
+					id = 0;
+				}
+				if (configFull.configMisc.send_triggered_in) {
+					//controlsPads.switchAndShowPad(id);
+				}
+			}
+			break;
+		}		
 	}
 	
 	private void processSysex(byte [] sysex) {

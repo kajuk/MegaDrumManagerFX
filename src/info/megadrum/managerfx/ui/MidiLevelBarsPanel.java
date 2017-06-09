@@ -64,6 +64,7 @@ public class MidiLevelBarsPanel extends Pane {
 	private List<Label> labelsRight;
 	private Button buttonClear;
 	
+	private long prevTime = 0;
 	
 	public MidiLevelBarsPanel() {
 		super();
@@ -178,6 +179,7 @@ public class MidiLevelBarsPanel extends Pane {
 		
 		
 		buttonClear = new Button("Clear");
+		//reAddAllBars();
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -288,11 +290,20 @@ public class MidiLevelBarsPanel extends Pane {
 		paneBars.getChildren().add(hhMidiLevelBar);
 	}
 	
-	public void addNewBarData(int type, int note, int level, int interval) {
+	public void addNewBarData(int type, int note, int level) {
+		int timeDiff;
+		long currentTime;
+		long diffTime;
+		currentTime = System.nanoTime();
+		diffTime = currentTime - prevTime;
+		timeDiff = (int)(diffTime/1000000);
+		//System.out.printf("Current = %25d , Previous = %25d , Diff = %10d\n", currentTime, prevTime, diffTime);
+		prevTime = currentTime;
+
 		barDatas[barDataPointer].type = type;
 		barDatas[barDataPointer].note = note;
 		barDatas[barDataPointer].level = level;
-		barDatas[barDataPointer].interval = interval;
+		barDatas[barDataPointer].interval = timeDiff;
 		barDataPointer++;
 		if (barDataPointer >= maxBars) {
 			barDataPointer = 0;
