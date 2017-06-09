@@ -155,6 +155,21 @@ public class MidiController {
 		//TODO
 		//implement comparison of sent and received sysex config
 		if (compareSysex) {
+			if (buffer[3] == Constants.MD_SYSEX_GLOBAL_MISC) {
+				/*
+				#define GL_BF_AUTO_LOAD_CONFIG	0
+				#define GL_BF_CUSTOM_NAMES_EN	1
+				#define GL_BF_CONFIG_NAMES_EN	2
+				#define GL_BF_ENCODERS_ALT		3
+				#define GL_BF_ONE_ENCODER		4
+				#define GL_BF_MIDI2_SYSEX_ONLY	5
+				 */
+				// Ignore bits 0, 3 and 4 missmattch;
+				buffer[8] = (byte)(buffer[8]&0xfe);
+				buffer[9] = (byte)(buffer[9]&0xf6);
+				sysexToCompare[8] = (byte)(sysexToCompare[8]&0xfe);
+				sysexToCompare[9] = (byte)(sysexToCompare[9]&0xf6);
+			}
 			if (Arrays.equals(buffer, sysexToCompare)) {
 				sysexReceived = true;
 				System.out.println("Received sysex is equal");
