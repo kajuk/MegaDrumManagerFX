@@ -203,6 +203,8 @@ public class UI3rdZone {
 		uiSpinnerNotePressNote.uiCtlSetMdValue(config.pressrollNote);
 		uiSpinnerNoteDampenedNote.uiCtlSetMdValue(config.dampenedNote);
 		uiSpinnerThreshold.uiCtlSetMdValue(config.threshold);		
+		uiSliderMidpoint.uiCtlSetMdValue((config.threshold&0xf0)>>4);
+		uiSpinnerMidpointWidth.uiCtlSetMdValue(config.threshold&0x0f);
 	}
 
 	private void linkedNoteStateChanged() {
