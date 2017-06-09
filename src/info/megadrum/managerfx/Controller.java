@@ -125,7 +125,7 @@ public class Controller implements MidiRescanEventListener {
 	private int curvePointer = 0;
 
 	private List<byte[]> sysexSendList;
-	private List<byte[]> sysexSendConfigQueue;
+	private List<byte[]> sysexLastChanged;
 
 	MidiLevelBarsPanel tempMidiLevelBarsPanel;
 	
@@ -891,37 +891,55 @@ public class Controller implements MidiRescanEventListener {
 		}
 	}
 	
+	private void sendSysexLastChanged() {
+		sysexSendList.addAll(sysexLastChanged);
+		sysexLastChanged.clear();
+		sendSysex();
+		System.out.println("Sending last sysex config");			
+	}
+	
 	private void sendSysex() {
-		midiController.sendSysexTaskRecreate();
-		uiGlobal.getProgressBarSysex().setVisible(true);
-		midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
+		if (midiController.isSendingSysex()) {
+			sysexLastChanged.clear();
+			sysexLastChanged.addAll(sysexSendList);
+			sysexSendList.clear();
+			System.out.println("Still sending previus sysex");			
+		} else {
+			midiController.sendSysexTaskRecreate();
+			uiGlobal.getProgressBarSysex().setVisible(true);
+			midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
 
-			@Override
-			public void handle(WorkerStateEvent event) {
-				// TODO Auto-generated method stub
-				//System.out.println("SendSysexConfigsTask succeeded");
-				uiGlobal.getProgressBarSysex().progressProperty().unbind();
-				uiGlobal.getProgressBarSysex().setProgress(1.0);
-				uiGlobal.getProgressBarSysex().setVisible(false);
-				if (sendSysexReadOnlyRequestFlag) {
-					sendSysexReadOnlyRequestFlag = false;
-					sendSysexReadOnlyRequest();
+				@Override
+				public void handle(WorkerStateEvent event) {
+					// TODO Auto-generated method stub
+					//System.out.println("SendSysexConfigsTask succeeded");
+					uiGlobal.getProgressBarSysex().progressProperty().unbind();
+					uiGlobal.getProgressBarSysex().setProgress(1.0);
+					uiGlobal.getProgressBarSysex().setVisible(false);
+					if (sysexLastChanged.size() > 0) {
+						sendSysexLastChanged();
+					} else {
+						if (sendSysexReadOnlyRequestFlag) {
+							sendSysexReadOnlyRequestFlag = false;
+							sendSysexReadOnlyRequest();
+						}
+						if (saveToSlotAfterSendAll) {
+							saveToSlotAfterSendAll = false;
+							sendSysexSaveToSlotOnlyRequest(saveToSlot);
+						}
+						if (sendNextAllSysexRequestsFlag) {
+							sendNextAllSysexRequestsFlag = false;
+							sendNextAllSysexRequests();
+						}
+						if (loadConfigAfterLoadSlot) {
+							loadConfigAfterLoadSlot = false;
+							sendAllSysexRequests();
+						}
+					}
 				}
-				if (saveToSlotAfterSendAll) {
-					saveToSlotAfterSendAll = false;
-					sendSysexSaveToSlotOnlyRequest(saveToSlot);
-				}
-				if (sendNextAllSysexRequestsFlag) {
-					sendNextAllSysexRequestsFlag = false;
-					sendNextAllSysexRequests();
-				}
-				if (loadConfigAfterLoadSlot) {
-					loadConfigAfterLoadSlot = false;
-					sendAllSysexRequests();
-				}
-			}
-		});
-		midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
+			});
+			midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
+		}
 	}
 	
 	private void sendSysexReadOnlyRequest() {
@@ -1533,7 +1551,7 @@ public class Controller implements MidiRescanEventListener {
 	private void initMidi() {
 		midiController = new MidiController();
 		sysexSendList = new ArrayList<>();
-		sysexSendConfigQueue = new ArrayList<>();
+		sysexLastChanged = new ArrayList<>();
 		midiController.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {

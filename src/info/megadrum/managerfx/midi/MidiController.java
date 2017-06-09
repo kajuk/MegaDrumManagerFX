@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.midi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,7 @@ public class MidiController {
 	private Boolean compareSysex = false;
 	private byte [] sysexToCompare;
 
+	private List<byte[]> sysexSendListLocal;
 	//private List<byte[]> sysexSendList;
 	//private List<byte[]> sysexRequestsList;
 
@@ -334,13 +336,15 @@ public class MidiController {
 
 		if (midiHandler.isMidiOpen() && (!sendingSysex)) {
 			sendingSysex = true;
-			sendSysexTask.setParameters(sysexSendList,maxRetries,retryDelay);
+			sysexSendListLocal = new ArrayList<>(sysexSendList);
+			sysexSendList.clear();
+			sendSysexTask.setParameters(sysexSendListLocal,maxRetries,retryDelay);
 			progressBar.progressProperty().bind(sendSysexTask.progressProperty());
 			Platform.runLater(new Runnable() {
 				
 				@Override
 				public void run() {
-					System.out.printf("Starting Sysex thread with number of sysexes = %d\n", sysexSendList.size());
+					System.out.printf("Starting Sysex thread with number of sysexes = %d\n", sysexSendListLocal.size());
 					new Thread(sendSysexTask).start();
 				}
 			});
