@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.midi;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +9,8 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
 import javax.swing.event.EventListenerList;
+
+import org.apache.commons.collections.functors.IfClosure;
 
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
@@ -37,6 +40,8 @@ public class MidiController {
 	private boolean currentSysexWithId;
 	private Integer sendSysexConfigRetries = 1;
 	private String sendSysexConfigResult = "";
+	private Boolean compareSysex = false;
+	private byte [] sysexToCompare;
 
 	//private List<byte[]> sysexSendList;
 	//private List<byte[]> sysexRequestsList;
@@ -146,14 +151,24 @@ public class MidiController {
 	
 	private void processSysex(byte [] buffer) {
 		//TODO
-		//implement comparison of sent and received sysex config 
-		if (buffer[3] == currentSysexType) {
-			if (currentSysexWithId) {
-				if (buffer[4] == currentSysexId) {
-					sysexReceived = true;					
-				}
-			} else {
+		//implement comparison of sent and received sysex config
+		if (compareSysex) {
+			if (Arrays.equals(buffer, sysexToCompare)) {
 				sysexReceived = true;
+				System.out.println("Received sysex is equal");
+			} else {
+				System.out.println("Received sysex is NOT equal");
+			}
+			compareSysex = false;
+		} else {
+			if (buffer[3] == currentSysexType) {
+				if (currentSysexWithId) {
+					if (buffer[4] == currentSysexId) {
+						sysexReceived = true;					
+					}
+				} else {
+					sysexReceived = true;
+				}
 			}
 		}
 		//System.out.printf("Received sysex with id = %d\n", buffer[4]);
@@ -202,13 +217,13 @@ public class MidiController {
 	}
 	
 	public void sendSysexFromThread(byte [] sysex, Integer maxRetries, Integer retryDelay) {
+		//System.out.println("sendSysexConfigFromThread called\n");
 		sendSysexConfigRetries = maxRetries;
 		byte type;
 		byte id;
 		if (sysex.length > 2) {
 			type = sysex[3];
 			id = sysex[4];
-	    	midiHandler.sendSysex(sysex);
 		} else {
 			type = sysex[0];
 			id = sysex[1];
@@ -218,8 +233,12 @@ public class MidiController {
 		currentSysexWithId = false;
 		currentSysexId = id;
 		sysexReceived = false;
-		//System.out.println("sendSysexConfigFromThread called\n");
 		while (sendSysexConfigRetries > 0) {
+			if (sysex.length > 2) {
+				sysexToCompare = Arrays.copyOf(sysex, sysex.length);
+				compareSysex = true;
+		    	midiHandler.sendSysex(sysex);
+			}
 			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
 			delayCounter = retryDelay;
