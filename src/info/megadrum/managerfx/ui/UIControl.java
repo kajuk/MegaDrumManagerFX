@@ -209,10 +209,10 @@ public class UIControl extends Control implements UIControlInterface {
 		boolean valuesAreEqual = false;
 		switch (valueType) {
 		case Constants.VALUE_TYPE_BOOLEAN:
-			valuesAreEqual = (booleanValue == mdBooleanValue);
+			valuesAreEqual = (booleanValue.booleanValue() == mdBooleanValue.booleanValue());
 			break;
 		case Constants.VALUE_TYPE_INT:
-			valuesAreEqual = (intValue == mdIntValue);
+			valuesAreEqual = (intValue.intValue() == mdIntValue.intValue());
 			break;
 		default:
 			break;
