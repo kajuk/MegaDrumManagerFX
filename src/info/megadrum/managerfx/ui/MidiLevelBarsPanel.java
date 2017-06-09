@@ -13,6 +13,8 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -36,7 +38,33 @@ class BarData {
 }
 
 class HitsPane extends Pane {
+	private Canvas canvas;
+	private GraphicsContext gc;
+	private Double canvasWidth;
+	private Double canvasHeight;
+	private Double paddingY, paddingX; 
 	
+	public HitsPane() {
+		canvas = new Canvas();		
+		getChildren().clear();
+		getChildren().add(canvas);
+	}
+	
+	public void respondToResize(Double w, Double h) {
+		canvasWidth = w*0.96;
+		canvasHeight = h*0.96;
+		paddingX = (w - canvasWidth)*0.5;
+		paddingY = (h - canvasHeight)*0.5;
+		canvas.setWidth(canvasWidth);
+		canvas.setHeight(canvasHeight);
+		canvas.setLayoutX(paddingX);
+		canvas.setLayoutY(paddingY);
+		
+		gc = canvas.getGraphicsContext2D();
+		gc.setFill(Color.WHITE);
+		gc.fillRect(0, 0, canvasWidth, canvasHeight);
+
+	}
 }
 
 public class MidiLevelBarsPanel extends Pane {
@@ -95,7 +123,7 @@ public class MidiLevelBarsPanel extends Pane {
 		//paneBars.setBackground(new Background(new BackgroundFill(Color.RED, null, getInsets())));
 		paneBars.setStyle("-fx-background-color: orange");
 		paneHits = new HitsPane();
-		paneHits.setStyle("-fx-background-color: white");
+		paneHits.setStyle("-fx-background-color: blue");
 		paneHits.setPadding(new Insets(0, 0, 0, 0));
 		hBoxRoot = new HBox();
 		hBoxRoot.setStyle("-fx-background-color: yellow");
@@ -240,6 +268,7 @@ public class MidiLevelBarsPanel extends Pane {
 		paneBars.setMaxSize(barsTotalWidth, barHeight);
 		paneHits.setMinSize(paneHitsWidth, paneHitsHeight);
 		paneHits.setMaxSize(paneHitsWidth, paneHitsHeight);
+		paneHits.respondToResize(paneHitsWidth, paneHitsHeight);
 		//vBoxLeft.getChildren().clear();
 		//vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom,paneHits);
 		
