@@ -198,7 +198,7 @@ public class Controller implements MidiRescanEventListener {
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				//System.out.println("aaaaaaaaaaaaaaaaaaaaa");
-				controlsGlobalMiscChanged();
+				controlsChangedGlobalMisc();
 			}
 		});
 		uiGlobalMisc.getToggleButtonMidi().setOnAction(e-> openMidiPorts(uiGlobalMisc.getToggleButtonMidi().isSelected()));
@@ -212,7 +212,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
-				controlsMiscChanged();
+				controlsChangedMisc();
 			}
 		});
 
@@ -225,7 +225,7 @@ public class Controller implements MidiRescanEventListener {
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
-				controlsPedalChanged();
+				controlsChangedPedal();
 			}
 		});
 		uiPad.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -246,7 +246,7 @@ public class Controller implements MidiRescanEventListener {
 						copyLeftInputValueToAllOthers();
 						switchToSelectedPair(padPair);
 					} else {
-						controlsInputChanged(inputNumber, true);
+						controlsChangedInput(inputNumber, true);
 					}
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT:
@@ -255,7 +255,7 @@ public class Controller implements MidiRescanEventListener {
 						uiPad.resetCopyPressed();
 						copyPadPairValueToAllOthers();
 					} else {
-						controlsInputChanged(inputNumber + 1, false);						
+						controlsChangedInput(inputNumber + 1, false);						
 					}
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_3RD_INPUT:
@@ -265,8 +265,8 @@ public class Controller implements MidiRescanEventListener {
 							uiPad.resetCopyPressed();
 							copy3rdZoneValueToAllOthers();
 						} else {
-							controlsInputChanged(inputNumber + 1, false);						
-							controls3rdChanged(padPair);
+							controlsChangedInput(inputNumber + 1, false);						
+							controlsChanged3rd(padPair);
 						}
 					}
 					break;
@@ -352,12 +352,12 @@ public class Controller implements MidiRescanEventListener {
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
 				// TODO Auto-generated method stub
 				if (parameter.intValue() == Constants.CONTROL_CHANGE_EVENT_CURVE) {
-					controlsCurveChanged();
+					controlsChangedCurve();
 				} else {
 					if (parameter.intValue() >= Constants.CUSTOM_NAME_CHANGE_TEXT_START) {
 						if (parameter.intValue() < Constants.CUSTOM_NAME_CHANGE_GET_START) {
 							// Custom Name changed
-							controlsCustomNameChanged(parameter - Constants.CUSTOM_NAME_CHANGE_TEXT_START);
+							controlsChangedCustomName(parameter - Constants.CUSTOM_NAME_CHANGE_TEXT_START);
 						} else if (parameter.intValue() < Constants.CUSTOM_NAME_CHANGE_SEND_START) {
 							// Get button pressed
 							sendSysexCustomNameRequest(parameter - Constants.CUSTOM_NAME_CHANGE_GET_START);
@@ -951,7 +951,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 	
-	private void controlsGlobalMiscChanged() {
+	private void controlsChangedGlobalMisc() {
 		uiGlobalMisc.setConfigFromControls(configFull.configGlobalMisc);
 		updateComboBoxInput(false);
 		if (configOptions.liveUpdates) {
@@ -976,7 +976,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 
-	private void controlsCustomNameChanged(int id) {
+	private void controlsChangedCustomName(int id) {
 		uiPadsExtra.getCustomName(configFull.configCustomNames[id], id);
 		if (configOptions.liveUpdates) {
 			sendSysexCustomName(id);
@@ -1121,7 +1121,7 @@ public class Controller implements MidiRescanEventListener {
 		}, 200);
 	}
 	
-	private void controlsCurveChanged() {
+	private void controlsChangedCurve() {
 		uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
 		if (configOptions.liveUpdates) {
 			sendSysexCurve();
@@ -1172,7 +1172,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 
-	private void controlsMiscChanged() {
+	private void controlsChangedMisc() {
 		uiMisc.setConfigFromControls(configFull.configMisc);
 		if (configOptions.liveUpdates) {
 			sendSysexMisc();
@@ -1196,7 +1196,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 
-	private void controlsPedalChanged() {
+	private void controlsChangedPedal() {
 		uiPedal.setConfigFromControls(configFull.configPedal);
 		if (configOptions.liveUpdates) {
 			sendSysexPedal();
@@ -1249,7 +1249,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 
-	private void controlsInputChanged(Integer input, Boolean leftInput) {
+	private void controlsChangedInput(Integer input, Boolean leftInput) {
 		uiPad.setConfigFromControlsPad(configFull.configPads[input], leftInput);
 		// Needs implementation for Positional on Atmega644 and Atmega1284
 		uiPad.setConfigPosFromControlsPad(configFull.configPos[input], leftInput);
@@ -1266,7 +1266,7 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 	
-	private void controls3rdChanged(Integer pair) {
+	private void controlsChanged3rd(Integer pair) {
 		uiPad.setConfig3rdFromControlsPad(configFull.config3rds[pair - 1]);
 		if (configOptions.liveUpdates) {
 			sendSysex3rd(pair);
