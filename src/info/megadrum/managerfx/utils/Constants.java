@@ -3,6 +3,8 @@ package info.megadrum.managerfx.utils;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections.functors.IfClosure;
+
 import javafx.scene.paint.Color;
 
 public interface Constants {
@@ -36,7 +38,9 @@ public interface Constants {
 	public static final byte MD_SYSEX_MISC = (byte)0x01;
 	public static final byte MD_SYSEX_MISC_SIZE = 17;
 	public static final byte MD_SYSEX_PEDAL = (byte)0x02;
-	public static final byte MD_SYSEX_PEDAL_SIZE = 95;
+	public static final boolean OLD_PEDAL = true;
+	public static final byte MD_SYSEX_PEDAL_SIZE = 79;
+	//public static final byte MD_SYSEX_PEDAL_SIZE = 95;
 	public static final byte MD_SYSEX_PAD = (byte)0x03;
 	public static final byte MD_SYSEX_PAD_SIZE = 34;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;

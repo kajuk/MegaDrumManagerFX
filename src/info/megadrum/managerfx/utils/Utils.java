@@ -716,12 +716,14 @@ public class Utils {
 			if (config.chickCurve != (flags&0x0f)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (config.semiOpenLevel2 != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.halfOpenLevel2 != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				if (config.semiOpenLevel2 != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				if (config.halfOpenLevel2 != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			if (config.bowSemiOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -731,15 +733,17 @@ public class Utils {
 			if (config.bellSemiOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (config.bowSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.edgeSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.bellSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				if (config.bowSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				if (config.edgeSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				if (config.bellSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			if (config.bowHalfOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -749,15 +753,17 @@ public class Utils {
 			if (config.bellHalfOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (config.bowHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.edgeHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.bellHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				if (config.bowHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				if (config.edgeHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				if (config.bellHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			if (config.bowSemiClosedNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -866,12 +872,14 @@ public class Utils {
 			config.chickCurve = (flags&0x0f);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.semiOpenLevel2 = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.halfOpenLevel2 = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				config.semiOpenLevel2 = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.halfOpenLevel2 = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			config.bowSemiOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -881,15 +889,17 @@ public class Utils {
 			config.bellSemiOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.bowSemiOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.edgeSemiOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.bellSemiOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				config.bowSemiOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.edgeSemiOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.bellSemiOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			config.bowHalfOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -899,15 +909,17 @@ public class Utils {
 			config.bellHalfOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.bowHalfOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.edgeHalfOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.bellHalfOpen2Note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
+			if (!Constants.OLD_PEDAL) {
+				config.bowHalfOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.edgeHalfOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.bellHalfOpen2Note = sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
 			config.bowSemiClosedNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -1014,12 +1026,14 @@ public class Utils {
 		sysex_byte = byte2sysex(flags);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.semiOpenLevel2);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.halfOpenLevel2);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
+		if (!Constants.OLD_PEDAL) {
+			sysex_byte = byte2sysex((byte)config.semiOpenLevel2);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = byte2sysex((byte)config.halfOpenLevel2);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
 		sysex_byte = byte2sysex((byte)config.bowSemiOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
@@ -1029,15 +1043,17 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.bellSemiOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.bowSemiOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.edgeSemiOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.bellSemiOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
+		if (!Constants.OLD_PEDAL) {
+			sysex_byte = byte2sysex((byte)config.bowSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = byte2sysex((byte)config.edgeSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = byte2sysex((byte)config.bellSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
 		sysex_byte = byte2sysex((byte)config.bowHalfOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
@@ -1047,15 +1063,17 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.bellHalfOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.bowHalfOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.edgeHalfOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.bellHalfOpen2Note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
+		if (!Constants.OLD_PEDAL) {
+			sysex_byte = byte2sysex((byte)config.bowHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = byte2sysex((byte)config.edgeHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = byte2sysex((byte)config.bellHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
 		sysex_byte = byte2sysex((byte)config.bowSemiClosedNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
