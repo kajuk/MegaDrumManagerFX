@@ -35,6 +35,10 @@ class BarData {
 	public int interval = 1000;
 }
 
+class HitsPane extends Pane {
+	
+}
+
 public class MidiLevelBarsPanel extends Pane {
 
 	public final static int maxBars = 48;
@@ -48,12 +52,16 @@ public class MidiLevelBarsPanel extends Pane {
 	private Double barsTotalWidth;
 	private Double barWidth = 10.0;
 	private Double barHeight = 180.0 ;
+	private Double barsTotalHeight;
+	private Double paneHitsHeight;
+	private Double paneHitsWidth;
 	private int barsCount = 16;
 	private GridPane gridPaneTop;
 	private HBox hBoxBottom;
 	private VBox vBoxLeft;
 	private Pane paneRight;
 	private Pane paneBars;
+	private HitsPane paneHits;
 	private HBox hBoxRoot;
 	private Label labelTop;
 	private Label labelTopHiHat;
@@ -86,6 +94,9 @@ public class MidiLevelBarsPanel extends Pane {
 		paneBars = new Pane();
 		//paneBars.setBackground(new Background(new BackgroundFill(Color.RED, null, getInsets())));
 		paneBars.setStyle("-fx-background-color: orange");
+		paneHits = new HitsPane();
+		paneHits.setStyle("-fx-background-color: white");
+		paneHits.setPadding(new Insets(0, 0, 0, 0));
 		hBoxRoot = new HBox();
 		hBoxRoot.setStyle("-fx-background-color: yellow");
 		hBoxRoot.setPadding(new Insets(0, 0, 0, 0));
@@ -110,7 +121,7 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxBottom.setAlignment(Pos.CENTER);
 		hBoxBottom.getChildren().add(labelBottom);
 		hBoxBottom.setStyle("-fx-background-color: red");
-		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
+		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom,paneHits);
 
 		panesRight = new ArrayList<Pane>();
 		labelsRight = new ArrayList<Label>();
@@ -198,6 +209,7 @@ public class MidiLevelBarsPanel extends Pane {
 		for (int i = 0; i < 7; i++) {
 			slidersPos.add(new Slider(0, 127, 63));
 		}
+		comboBoxBarCount.getSelectionModel().select((barsCount - 16)/4);
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -210,9 +222,12 @@ public class MidiLevelBarsPanel extends Pane {
 		Double paneRightWidth = width - barsTotalWidth;
 		paneRight.setMinSize(paneRightWidth, height);
 		paneRight.setMaxSize(paneRightWidth, height);
-		barHeight = height*0.9;
+		barsTotalHeight = height*0.7;
+		paneHitsHeight = height - barsTotalHeight;
+		paneHitsWidth = barsTotalWidth;
+		barHeight = barsTotalHeight*0.9;
 		barWidth = barsTotalWidth/(barsCount + 2);
-		Double smallBarsHeight = (height - barHeight)*0.5;
+		Double smallBarsHeight = (barsTotalHeight - barHeight)*0.5;
 		gridPaneTop.getColumnConstraints().clear();
 		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.94));
 		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.06));
@@ -223,22 +238,23 @@ public class MidiLevelBarsPanel extends Pane {
 		hBoxBottom.setMaxSize(barsTotalWidth, smallBarsHeight);
 		paneBars.setMinSize(barsTotalWidth, barHeight);
 		paneBars.setMaxSize(barsTotalWidth, barHeight);
-		vBoxLeft.getChildren().clear();
-		vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom);
+		paneHits.setMinSize(paneHitsWidth, paneHitsHeight);
+		paneHits.setMaxSize(paneHitsWidth, paneHitsHeight);
+		//vBoxLeft.getChildren().clear();
+		//vBoxLeft.getChildren().addAll(gridPaneTop,paneBars,hBoxBottom,paneHits);
 		
-		labelTop.setFont(new Font((height - barHeight)*0.4));
-		//labelTopHiHat.setFont(new Font((height - barHeight)*0.4*(60.0/(60.0 + barsCount))));
-		labelTopHiHat.setFont(new Font((height - barHeight)*0.3));
-		labelBottom.setFont(new Font((height - barHeight)*0.4));
+		labelTop.setFont(new Font((barsTotalHeight - barHeight)*0.4));
+		labelTopHiHat.setFont(new Font((barsTotalHeight - barHeight)*0.3));
+		labelBottom.setFont(new Font((barsTotalHeight - barHeight)*0.4));
 		
 		paneRight.getChildren().clear();
-		Double rowHight = (height*0.5)/panesRight.size();
+		Double rowHight = (height*0.35)/panesRight.size();
 		Double paneHeight = rowHight*0.8;
 		Double paneWidth = paneRightWidth*0.4;
 		Double yPos = rowHight - paneHeight;
 		comboBoxBarCount.setMinSize(paneWidth, paneHeight);
 		comboBoxBarCount.setMaxSize(paneWidth, paneHeight);
-		comboBoxBarCount.setStyle("-fx-font-size: " + Double.valueOf(paneHeight*0.3).toString() + "pt");			
+		comboBoxBarCount.setStyle("-fx-font-size: " + Double.valueOf(paneHeight*0.45).toString() + "pt");			
 
 		Font fontOnTheRight = new Font(paneHeight*0.6);
 		for (int i = 0; i < panesRight.size(); i++) {
