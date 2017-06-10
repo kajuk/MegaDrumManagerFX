@@ -94,13 +94,13 @@ public interface Constants {
 			"Sticks1", "Sticks2", "Sticks3", "HndClap1", "HndClap2", "HndClap3",
 			"FngrSnap", "Mtronome" 
 	};
-	public static final Color MIDI_NOTE_ON_COLOR		= Color.web("0x007f00");
-	public static final Color MIDI_NOTE_OFF_COLOR		= Color.web("0x2fbf2f");
-	public static final Color MIDI_AFTERTOUCH_COLOR		= Color.web("0x007f7f");
-	public static final Color MIDI_CC_COLOR				= Color.web("0x7f7f00");
-	public static final Color MIDI_PC_COLOR				= Color.web("0x7f007f");
-	public static final Color MIDI_CH_PR_COLOR			= Color.web("0x00007f");
-	public static final Color MIDI_PITCH_COLOR			= Color.web("0x7f0000");
+	public static final String MIDI_NOTE_ON_COLOR		= "#007f00";
+	public static final String MIDI_NOTE_OFF_COLOR		= "#2fbf2f";
+	public static final String MIDI_AFTERTOUCH_COLOR	= "#007f7f";
+	public static final String MIDI_CC_COLOR			= "#7f7f00";
+	public static final String MIDI_PC_COLOR			= "#7f007f";
+	public static final String MIDI_CH_PR_COLOR			= "#00007f";
+	public static final String MIDI_PITCH_COLOR			= "#7f0000";
 	
 	public static final int SYNC_STATE_UNKNOWN				= 0;
 	public static final Color SYNC_STATE_UNKNOWN_COLOR		= Color.BLUE;

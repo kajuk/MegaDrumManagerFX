@@ -88,6 +88,7 @@ public class MidiRaw extends VBox {
 		String note = "";
 		String name = "";
 		String time = "";
+		String fontColor = "black";
 		Double timeDiff;
 		
 		timeDiff = (Double)((double)(System.nanoTime() - prevTime)/1000000000);
@@ -102,11 +103,11 @@ public class MidiRaw extends VBox {
 			//shortMessage.setMessage(buf[0], buf[1],0);
 			switch (buffer[0]&0xf0) {			
 			case 0xc0:
-				//fontColor = Constants.MIDI_PC_COLOR;
+				fontColor = Constants.MIDI_PC_COLOR;
 				name = "Program Change";
 				break;
 			case 0xd0:
-				//fontColor = Constants.MIDI_CH_PR_COLOR;
+				fontColor = Constants.MIDI_CH_PR_COLOR;
 				name = "Channel Pressure";
 				break;
 			default:
@@ -122,37 +123,37 @@ public class MidiRaw extends VBox {
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			switch (buffer[0]&0xf0) {
 			case 0x80:
-				//fontColor = Constants.MIDI_NOTE_OFF_COLOR;
+				fontColor = Constants.MIDI_NOTE_OFF_COLOR;
 				name = "Note Off";
 				break;
 			case 0x90:
 				if (buffer[2] == 0) {
-					//fontColor = Constants.MIDI_NOTE_OFF_COLOR;
+					fontColor = Constants.MIDI_NOTE_OFF_COLOR;
 					name = "Note Off";
 				} else {
 					name = "Note On";
-					//fontColor = Constants.MIDI_NOTE_ON_COLOR;
+					fontColor = Constants.MIDI_NOTE_ON_COLOR;
 				}
 				break;
 			case 0xa0:
-				//fontColor = Constants.MIDI_AFTERTOUCH_COLOR;
+				fontColor = Constants.MIDI_AFTERTOUCH_COLOR;
 				name = "Aftertouch";
 				break;
 			case 0xb0:
-				//fontColor = Constants.MIDI_CC_COLOR;
+				fontColor = Constants.MIDI_CC_COLOR;
 				name = "CC: ";
 				name += getControlChangeType(buffer[1]&0x7f);
 				break;
 			case 0xc0:
-				//fontColor = Constants.MIDI_PC_COLOR;
+				fontColor = Constants.MIDI_PC_COLOR;
 				name = "Program Change";
 				break;
 			case 0xd0:
-				//fontColor = Constants.MIDI_CH_PR_COLOR;
+				fontColor = Constants.MIDI_CH_PR_COLOR;
 				name = "Channel Pressure";
 				break;
 			case 0xe0:
-				//fontColor = Constants.MIDI_PITCH_COLOR;
+				fontColor = Constants.MIDI_PITCH_COLOR;
 				name = "Pitch Wheel";
 				break;
 			default:
@@ -168,7 +169,7 @@ public class MidiRaw extends VBox {
 		}
 		
 		//textArea.appendText(String.format(formatString, time, ch, d1, d2, d3, note, name ));
-		stringAllHtml += String.format("<p>" + formatString + "</p>", time, ch, d1, d2, d3, note, name );
+		stringAllHtml += String.format("<p style=color:" + fontColor + ">" + formatString + "</p>", time, ch, d1, d2, d3, note, name );
 		webEngine.loadContent(htmlHead.toString() + stringAllHtml + htmlTail.toString());
 	}
 
