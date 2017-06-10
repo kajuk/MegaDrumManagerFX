@@ -362,9 +362,11 @@ public class MidiLevelBarsPanel extends Pane {
 		Double paneHeight = rowHight*0.8;
 		Double paneWidth = paneRightWidth*0.4;
 		Double yPos = rowHight - paneHeight;
+		Double comboBoxBarCountFontSize = paneHeight*0.4;
+		comboBoxBarCountFontSize = (comboBoxBarCountFontSize > 10.0)?10.0:comboBoxBarCountFontSize;
 		comboBoxBarCount.setMinSize(paneWidth, paneHeight);
 		comboBoxBarCount.setMaxSize(paneWidth, paneHeight);
-		comboBoxBarCount.setStyle("-fx-font-size: " + Double.valueOf(paneHeight*0.45).toString() + "pt");			
+		comboBoxBarCount.setStyle("-fx-font-size: " + comboBoxBarCountFontSize.toString() + "pt");			
 
 		Font fontOnTheRight = new Font(paneHeight*0.6);
 		for (int i = 0; i < panesRight.size(); i++) {

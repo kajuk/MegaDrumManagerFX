@@ -29,14 +29,14 @@ public class UIMidiLog extends UIPanel{
 	}
 
 	public void respondToResizeDetached(Double w, Double h) {
-		respondToResize(w, h);
+		respondToResize(w, h - 5);
 	}
 
 	public void respondToResize (Double w, Double h) {
 		Double titledPaneFontHeight = h*1.4*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = h*1.4*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -h*0.0008;
-		Double tabHeaderHeight = h*0.019;
+		Double tabHeaderPadding = -h*0.0005;
+		Double tabHeaderHeight = h*0.016;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
@@ -47,7 +47,7 @@ public class UIMidiLog extends UIPanel{
 		tabRaw.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
 
-		panelVisual.respondToResize(w, h*0.95);
+		panelVisual.respondToResize(w, h*0.965 - 5);
 		//panelRaw.respondToResize(w, h);
 	}
 
