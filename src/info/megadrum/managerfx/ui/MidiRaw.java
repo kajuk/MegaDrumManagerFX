@@ -6,15 +6,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
 
 public class MidiRaw extends VBox {
-	private TextArea textArea;
 	private Text textHeader;
-	private ScrollPane scrollPane;
+	private WebView webView;
+	private WebEngine webEngine;
+	
 	private long prevTime = 0;
 	private Double width, height;
 	private String formatStringHeader;
 	private String formatString;
+	private String stringAllHtml;
+	private StringBuilder htmlHead;
+	private StringBuilder htmlTail;
 	
 	private VBox vBoxRoot;
 	private VBox vBoxHeader;
@@ -26,22 +34,36 @@ public class MidiRaw extends VBox {
 		vBoxHeader.getChildren().add(textHeader);
 		textHeader.setStyle("-fx-border-width: 1px; -fx-border-color: grey");
 
-		textArea = new TextArea();
-		textArea.setStyle("-fx-font-family: monospace");
-		textArea.setEditable(false);
+		webView = new WebView();
+		stringAllHtml = new String();
+		webEngine = webView.getEngine();
+        htmlHead= new StringBuilder().append("<html>");  
+        htmlHead.append("<head>");  
+        htmlHead.append("   <script language=\"javascript\" type=\"text/javascript\">");  
+        htmlHead.append("       function toBottom(){");  
+        htmlHead.append("           window.scrollTo(0, document.body.scrollHeight);");  
+        htmlHead.append("       }");  
+        htmlHead.append("   </script>"); 
+        htmlHead.append("   <style>"); 
+        htmlHead.append("   	body {");
+        htmlHead.append("  			font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;");
+        htmlHead.append("  			font-size:14px;");
+        htmlHead.append("  			white-space:pre;");
+        htmlHead.append("  			line-height: 0.3;");
+        htmlHead.append("   	}");
+        htmlHead.append("   </style>");         
+        htmlHead.append("</head>");  
+        htmlHead.append("<body onload='toBottom()'>");  
+        htmlTail = new StringBuilder().append("</body></html>");  
 
-		formatStringHeader = "%-16s %-5s %-6s %-6s %-6s %-6s   %-30s\n";
-		formatString = "%-9s %-2s  %-4s %-4s %-4s %-5s %-30s\n";
+		formatStringHeader = "%-16s %-5s %-6s %-6s %-6s   %-6s   %-30s\n";
+		formatString = "%-10s %-3s %-5s %-5s %-5s %-5s %-30s\n";
 		textHeader.setText(String.format(formatStringHeader,
 				"   Time delta", "Ch #", "Data1", "Data2", "Data3", "Note", "MIDI Message Name"));
-		scrollPane = new ScrollPane();
-		scrollPane.setContent(textArea);
-		//vBoxRoot = new VBox(3);
-		getChildren().addAll(vBoxHeader, textArea);
+		getChildren().addAll(vBoxHeader, webView);
 		prevTime = System.nanoTime();
 		//setStyle("-fx-background-color: lightgreen");
-		textHeader.setFont(new Font(12.0));
-		textArea.setFont(new Font(12.0));
+		textHeader.setFont(new Font(14.0));
 		vBoxHeader.setMinHeight(16);
 		vBoxHeader.setMaxHeight(16);
 	}
@@ -51,12 +73,9 @@ public class MidiRaw extends VBox {
 		height = h;
 		setMinSize(width, height);
 		setMaxSize(width, height);
-		vBoxHeader.setMinHeight(16);
-		vBoxHeader.setMaxHeight(16);
-		textHeader.setFont(new Font(12.0));
-		textArea.setFont(new Font(12.0));
-		textArea.setMinSize(width, height);
-		textArea.setMaxSize(width, height - 20.0);
+		vBoxHeader.setMinHeight(18);
+		vBoxHeader.setMaxHeight(18);
+		textHeader.setFont(new Font(14.0));
 		//vBoxRoot.setMinSize(w, h);
 		//vBoxRoot.setMaxSize(w, h);
 	}
@@ -148,7 +167,9 @@ public class MidiRaw extends VBox {
 			break;
 		}
 		
-		textArea.appendText(String.format(formatString, time, ch, d1, d2, d3, note, name ));
+		//textArea.appendText(String.format(formatString, time, ch, d1, d2, d3, note, name ));
+		stringAllHtml += String.format("<p>" + formatString + "</p>", time, ch, d1, d2, d3, note, name );
+		webEngine.loadContent(htmlHead.toString() + stringAllHtml + htmlTail.toString());
 	}
 
 	public String getControlChangeType (Integer n) {
