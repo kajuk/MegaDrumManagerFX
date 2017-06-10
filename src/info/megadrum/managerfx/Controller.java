@@ -233,11 +233,11 @@ public class Controller implements MidiRescanEventListener {
 				if (padPair > 0) {
 					inputNumber = ((padPair - 1)*2) +1; 
 				}				
-				System.out.printf("Input %s control change\n", (parameter == Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT) ? "left" : "right");
+				//System.out.printf("Input %s control change\n", (parameter == Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT) ? "left" : "right");
 				switch (parameter) {
 				case Constants.CONTROL_CHANGE_EVENT_LEFT_INPUT:
 					if (uiPad.isCopyPressed()) {
-						System.out.printf("left copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+						//System.out.printf("left copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
 						uiPad.resetCopyPressed();
 						copyLeftInputValueToAllOthers();
 						switchToSelectedPair(padPair);
@@ -247,7 +247,7 @@ public class Controller implements MidiRescanEventListener {
 					break;
 				case Constants.CONTROL_CHANGE_EVENT_RIGHT_INPUT:
 					if (uiPad.isCopyPressed()) {
-						System.out.printf("right copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+						//System.out.printf("right copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
 						uiPad.resetCopyPressed();
 						copyPadPairValueToAllOthers();
 					} else {
@@ -257,7 +257,7 @@ public class Controller implements MidiRescanEventListener {
 				case Constants.CONTROL_CHANGE_EVENT_3RD_INPUT:
 					if (padPair > 0) {
 						if (uiPad.isCopyPressed()) {
-							System.out.printf("3rd zone copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
+							//System.out.printf("3rd zone copy pressed with valueId = %d\n", uiPad.getCopyPressedValueId());
 							uiPad.resetCopyPressed();
 							copy3rdZoneValueToAllOthers();
 						} else {
@@ -892,7 +892,7 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.addAll(sysexLastChanged);
 		sysexLastChanged.clear();
 		sendSysex();
-		System.out.println("Sending last sysex config");			
+		//System.out.println("Sending last sysex config");			
 	}
 	
 	private void sendSysex() {
@@ -900,7 +900,7 @@ public class Controller implements MidiRescanEventListener {
 			sysexLastChanged.clear();
 			sysexLastChanged.addAll(sysexSendList);
 			sysexSendList.clear();
-			System.out.println("Still sending previus sysex");			
+			//System.out.println("Still sending previus sysex");			
 		} else {
 			midiController.sendSysexTaskRecreate();
 			uiGlobal.getProgressBarSysex().setVisible(true);
@@ -1106,14 +1106,14 @@ public class Controller implements MidiRescanEventListener {
 	private void sendSysexConfigName(int id) {
 		byte [] sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];
 		Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[id], sysex, configOptions.chainId, id);
-		System.out.printf("Config name to save in slot = %s\n", configFull.configConfigNames[id].name);
+		//System.out.printf("Config name to save in slot = %s\n", configFull.configConfigNames[id].name);
 		//sysexSendList.clear();
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
 
 	private void sendSysexSaveToSlotRequest(int slot) {
-		System.out.printf("Saving to slot %d\n", slot + 1);
+		//System.out.printf("Saving to slot %d\n", slot + 1);
 		configFull.configConfigNames[slot].name = (uiGlobalMisc.getTextFieldSlotName().getText() + "            ").substring(0, 12);
 		sendSysexConfigName(slot);
 		//Utils.copyConfigConfigNameToSysex(null, null, i, i);
@@ -1495,7 +1495,7 @@ public class Controller implements MidiRescanEventListener {
 		optionsUpdatePorts();
 		optionsWindow.show();
 		if (optionsWindow.getClosedWithOk()) {
-			System.out.println("Closed with ok");
+			//System.out.println("Closed with ok");
 			openMidiPorts(true);
 		}
 	}
@@ -1552,7 +1552,7 @@ public class Controller implements MidiRescanEventListener {
 		midiController.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
-				System.out.println("Received MidiEvent");
+				//System.out.println("Received MidiEvent");
 				byte [] buffer = new byte[midiController.getMidiDataList().get(0).length];
 				System.arraycopy(midiController.getMidiDataList().get(0), 0, buffer, 0, buffer.length);
 				midiController.getMidiDataList().remove(0);
@@ -1594,7 +1594,7 @@ public class Controller implements MidiRescanEventListener {
 			break;
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
-			System.out.printf("MIDI Short = %02x %02x %02x\n", buffer[0], buffer[1], buffer[2]);
+			//System.out.printf("MIDI Short = %02x %02x %02x\n", buffer[0], buffer[1], buffer[2]);
 			uiMidiLog.addRawMidi(buffer);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
 				type = MidiLevelBar.barTypeUnknown;
@@ -1856,7 +1856,7 @@ public class Controller implements MidiRescanEventListener {
 	@Override
 	public void midiRescanEventOccurred(MidiRescanEvent evt) {
 		// TODO Auto-generated method stub
-		System.out.println("Midi Rescan Event occured");
+		//System.out.println("Midi Rescan Event occured");
 		optionsUpdatePorts();
 		
 	}
@@ -2196,7 +2196,7 @@ public class Controller implements MidiRescanEventListener {
 		
 	private void save_all() {
 		fileManager.save_all(configFull, configOptions);
-		System.out.println("Saved all config");
+		//System.out.println("Saved all config");
 		//updateGlobalMiscControls();
 	}
 	

@@ -80,7 +80,7 @@ public class MidiController {
 				System.out.printf("Sysex Send thread exception text = %s\n", e.getMessage());				
 			}
 			sendingSysex = false;
-			System.out.println("Send Sysex thread finished");
+			//System.out.println("Send Sysex thread finished");
 			return null;
 		}
 		
@@ -172,9 +172,9 @@ public class MidiController {
 			}
 			if (Arrays.equals(buffer, sysexToCompare)) {
 				sysexReceived = true;
-				System.out.println("Received sysex is equal");
+				//System.out.println("Received sysex is equal");
 			} else {
-				System.out.println("Received sysex is NOT equal");
+				//System.out.println("Received sysex is NOT equal");
 			}
 			compareSysex = false;
 		} else {
@@ -367,7 +367,7 @@ public class MidiController {
 				
 				@Override
 				public void run() {
-					System.out.printf("Starting Sysex thread with number of sysexes = %d\n", sysexSendListLocal.size());
+					//System.out.printf("Starting Sysex thread with number of sysexes = %d\n", sysexSendListLocal.size());
 					new Thread(sendSysexTask).start();
 				}
 			});

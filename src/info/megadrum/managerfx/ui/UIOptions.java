@@ -112,7 +112,7 @@ public class UIOptions {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 				setSameMidiInOut(uiCheckBoxSamePort.uiCtlIsSelected());
 			}
         });
@@ -125,7 +125,7 @@ public class UIOptions {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 			}
         });
         allMidiControls.add(uiComboBoxMidiOut);
@@ -143,7 +143,7 @@ public class UIOptions {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
+				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 			}
         });
         allMidiControls.add(uiComboBoxMidiThru);
@@ -224,7 +224,7 @@ public class UIOptions {
 
 	public void okAndClose() {
 		// Tell something to controller here
-		System.out.println("Applying options");
+		//System.out.println("Applying options");
 		configOptions.useSamePort = uiCheckBoxSamePort.uiCtlIsSelected();
 		configOptions.useThruPort = uiCheckBoxEnableMidiThru.uiCtlIsSelected();
 		configOptions.autoOpenPorts = uiCheckBoxInitPortsStartup.uiCtlIsSelected();

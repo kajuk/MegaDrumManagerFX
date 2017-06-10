@@ -213,7 +213,7 @@ public class MidiLevelBarsPanel extends Pane {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				System.out.println("AAAAA");
+				System.out.println("Is there a better way to do it withot Platform.runLater?");
 				barsCount = Integer.valueOf(newValue);
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask() {

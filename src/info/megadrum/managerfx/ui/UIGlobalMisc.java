@@ -306,7 +306,7 @@ public class UIGlobalMisc {
 							spinnerLcdContrast.getEditor().setText(valueLcdContrast.toString());
 						} else {
 							if (valueLcdContrast.intValue() != Integer.valueOf(newValue).intValue()) {
-								System.out.printf("%s: new value = %d, old value = %d\n",labelLcdContrast.getText(),Integer.valueOf(newValue),valueLcdContrast );
+								//System.out.printf("%s: new value = %d, old value = %d\n",labelLcdContrast.getText(),Integer.valueOf(newValue),valueLcdContrast );
 								valueLcdContrast = Integer.valueOf(newValue);
 								fireControlChangeEvent(new ControlChangeEvent(this));
 								if (syncState != Constants.SYNC_STATE_UNKNOWN) {

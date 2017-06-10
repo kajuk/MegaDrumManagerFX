@@ -161,7 +161,7 @@ public class UICustomNames {
 		        	} else {
 			            if (allTextFields.get(iFinal).getText().length() > 8) {
 							int pos = allTextFields.get(iFinal).getCaretPosition();
-							System.out.printf("Pos = %d\n", pos);
+							//System.out.printf("Pos = %d\n", pos);
 							
 //			                String s = allTextFields.get(iFinal).getText().substring(0, 8);
 //			                allTextFields.get(iFinal).setText(s);

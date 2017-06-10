@@ -164,7 +164,7 @@ public class UICurves {
 					if (changedFromSetSpinners[iFinal] > 0) {
 						changedFromSetSpinners[iFinal] = 0;
 					} else {
-						System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
+						//System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
 						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
 					}
 				}
