@@ -122,7 +122,7 @@ public class MidiRaw extends VBox {
 			case 0xb0:
 				//fontColor = Constants.MIDI_CC_COLOR;
 				name = "CC: ";
-				//name += getControlChangeType(buffer[1]&0x7f);
+				name += getControlChangeType(buffer[1]&0x7f);
 				break;
 			case 0xc0:
 				//fontColor = Constants.MIDI_PC_COLOR;
