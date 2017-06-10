@@ -18,8 +18,8 @@ public class MidiLevelBar extends VBox {
 	final static public int barTypeChokeOn = barType3rd + 1;
 	final static public int barTypeChokeOff = barTypeChokeOn + 1;
 	final static public int barTypeHiHat = barTypeChokeOff + 1;
-	final private Double barHeightRatio = 0.9;
-	final private Double barHeightPadRatio = (1-barHeightRatio)*0.5;
+	private Double barHeightRatio = 0.9;
+	private Double barHeightPadRatio = (1-barHeightRatio)*0.5;
 	final private Double barWidthRatio = 0.9;
 	final private Double barWidthPadRatio =  (1-barWidthRatio)*0.5;
 	
@@ -65,6 +65,9 @@ public class MidiLevelBar extends VBox {
 		getChildren().add(canvas);
 		gc = canvas.getGraphicsContext2D();
 
+		barHeightRatio = (barHeight>300)?0.95:0.9;
+		barHeightPadRatio = (1-barHeightRatio)*0.5;
+
 		gc.setFill(bgColor);
 		gc.fillRect(0 + barWidth*barWidthPadRatio , 0, barWidth*barWidthRatio, barHeight);
 		gc.setFill(bgBarColor);
@@ -74,6 +77,7 @@ public class MidiLevelBar extends VBox {
 		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barFillHeight - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barFillHeight);
 
 		fontSize = barWidth*0.4;
+		fontSize = (fontSize>16.0)?16.0:fontSize;
 		Font font = new Font(fontSize);
 		Double textX, textW, textY;
 		gc.setFont(font);
