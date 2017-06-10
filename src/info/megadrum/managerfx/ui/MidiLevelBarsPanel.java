@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
@@ -42,12 +43,18 @@ class HitsPane extends Pane {
 	private GraphicsContext gc;
 	private Double canvasWidth;
 	private Double canvasHeight;
-	private Double paddingY, paddingX; 
+	private Double paddingY, paddingX;
+	private List<BarData> hitsDataList;
+	private Double lastHitMsPadding = 100.0;
+	private int fullMsTimeRange = 1000*30; // 30s
+	private int maxInterval = 1000*1;
 	
 	public HitsPane() {
 		canvas = new Canvas();		
 		getChildren().clear();
 		getChildren().add(canvas);
+		gc = canvas.getGraphicsContext2D();
+		hitsDataList = new ArrayList<BarData>();
 	}
 	
 	public void respondToResize(Double w, Double h) {
@@ -60,10 +67,55 @@ class HitsPane extends Pane {
 		canvas.setLayoutX(paddingX);
 		canvas.setLayoutY(paddingY);
 		
-		gc = canvas.getGraphicsContext2D();
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, canvasWidth, canvasHeight);
-
+		drawHits();
+	}
+	
+	public void addHit(int type, int note, int level, int interval) {
+		BarData hitData = new BarData();
+		hitData.type = type;
+		hitData.note = note;
+		hitData.level = level;
+		hitData.interval = (interval>maxInterval)?maxInterval:interval;
+		hitsDataList.add(hitData);
+		if (hitsDataList.size() > 2000) {
+			hitsDataList.remove(0);
+		}
+		drawHits();
+	}
+	
+	public void drawHits() {
+		if (hitsDataList.size() > 0) {
+			gc.setFill(Color.WHITE);
+			gc.fillRect(0, 0, canvasWidth, canvasHeight);
+			Double hitX, x, hitY;
+			Double hitTimeDiff = lastHitMsPadding;
+			Color color;
+			int interval, level;
+			int pointer = hitsDataList.size() - 1;
+			while ((hitTimeDiff < fullMsTimeRange ) && (pointer > -1)) {
+				color = MidiLevelBar.barColors[hitsDataList.get(pointer).type];
+				interval = hitsDataList.get(pointer).interval;
+				level = hitsDataList.get(pointer).level;
+				x = (hitTimeDiff*canvasWidth)/fullMsTimeRange;
+				hitX = canvasWidth - x;
+				hitY = (level*canvasHeight)/127; 
+				gc.setStroke(color);
+				gc.strokeLine(hitX, canvasHeight, hitX, canvasHeight - hitY);
+				hitTimeDiff += interval;
+				pointer--;
+			}
+		}
+	}
+	
+	public void setMaxInterval(int msInterval) {
+		maxInterval = msInterval;
+	}
+	
+	public void setTimeRange(int s) {
+		fullMsTimeRange = 1000*s;
+		drawHits();
 	}
 }
 
@@ -101,6 +153,8 @@ public class MidiLevelBarsPanel extends Pane {
 	private List<Label> labelsRight;
 	private Button buttonClear;
 	private List<Slider> slidersPos;
+	private SpinnerFast<Double> spinnerTimeRange;
+	private SpinnerFast<Double> spinnerMaxInterval;
 	
 	private long prevTime = 0;
 	
@@ -121,12 +175,12 @@ public class MidiLevelBarsPanel extends Pane {
 		paneRight.setStyle("-fx-background-color: lightgreen");
 		paneBars = new Pane();
 		//paneBars.setBackground(new Background(new BackgroundFill(Color.RED, null, getInsets())));
-		paneBars.setStyle("-fx-background-color: orange");
+		//paneBars.setStyle("-fx-background-color: orange");
 		paneHits = new HitsPane();
-		paneHits.setStyle("-fx-background-color: blue");
+		//paneHits.setStyle("-fx-background-color: blue");
 		paneHits.setPadding(new Insets(0, 0, 0, 0));
 		hBoxRoot = new HBox();
-		hBoxRoot.setStyle("-fx-background-color: yellow");
+		//hBoxRoot.setStyle("-fx-background-color: yellow");
 		hBoxRoot.setPadding(new Insets(0, 0, 0, 0));
 		getChildren().add(hBoxRoot);
 		vBoxLeft.setPadding(new Insets(0, 0, 0, 0));
@@ -237,6 +291,33 @@ public class MidiLevelBarsPanel extends Pane {
 		for (int i = 0; i < 7; i++) {
 			slidersPos.add(new Slider(0, 127, 63));
 		}
+		spinnerTimeRange = new SpinnerFast<Double>();
+		SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(10.0, 50.0, 30.0, 1.0);
+		spinnerTimeRange.setValueFactory(valueFactory);
+		spinnerTimeRange.getEditor().textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				Double value = Double.valueOf(newValue);
+				paneHits.setTimeRange(value.intValue());
+			}
+			
+		});
+		//spinnerFast.setEditable(true);
+		spinnerMaxInterval = new SpinnerFast<Double>();
+		valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 5.0, 1.0, 0.1);
+		spinnerMaxInterval.setValueFactory(valueFactory);
+		spinnerMaxInterval.getEditor().textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				Double value = Double.valueOf(newValue);
+				paneHits.setMaxInterval((int)(value*1000));
+			}
+			
+		});
+		//spinnerMaxInterval.setEditable(true);
+		
 		comboBoxBarCount.getSelectionModel().select((barsCount - 16)/4);
 	}
 	
@@ -323,6 +404,32 @@ public class MidiLevelBarsPanel extends Pane {
 			slidersPos.get(i).setLayoutY((panesRight.size() + 1)*rowHight + i*paneHeight + paneHeight);
 		}
 		paneRight.getChildren().addAll(slidersPos);
+		
+		Double spinnerButtonsFontSize = paneHeight*0.5;
+		Double layoutY = (panesRight.size() + 1)*rowHight + slidersPos.size()*paneHeight + paneHeight*2;
+		spinnerMaxInterval.setMinSize(paneWidth, paneHeight);
+		spinnerMaxInterval.setMaxSize(paneWidth, paneHeight);
+		spinnerMaxInterval.setLayoutX(0);
+		spinnerMaxInterval.setLayoutY(layoutY);
+		spinnerMaxInterval.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");
+		Label label = new Label("Max interval");
+		label.setLayoutX(paneWidth*1.1);
+		label.setLayoutY(layoutY);
+		label.setFont(fontOnTheRight);
+		paneRight.getChildren().addAll(spinnerMaxInterval, label);
+		
+		layoutY += paneHeight;
+		spinnerTimeRange.setMinSize(paneWidth, paneHeight);
+		spinnerTimeRange.setMaxSize(paneWidth, paneHeight);
+		spinnerTimeRange.setLayoutX(0);
+		spinnerTimeRange.setLayoutY(layoutY);
+		spinnerTimeRange.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");
+		label = new Label("Full range");
+		label.setLayoutX(paneWidth*1.1);
+		label.setLayoutY(layoutY);
+		label.setFont(fontOnTheRight);
+		paneRight.getChildren().addAll(spinnerTimeRange, label);
+		
 		updateBars();
 		updateHiHatBar();
 		reAddAllBars();
@@ -399,6 +506,7 @@ public class MidiLevelBarsPanel extends Pane {
 		barDatas[barDataPointer].note = note;
 		barDatas[barDataPointer].level = level;
 		barDatas[barDataPointer].interval = timeDiff;
+		paneHits.addHit(type, note, level, timeDiff);
 		barDataPointer++;
 		if (barDataPointer >= maxBars) {
 			barDataPointer = 0;
