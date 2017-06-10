@@ -159,12 +159,12 @@ public class UICurves {
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 					// TODO Auto-generated method stub
-					System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
 					curvesPaint.setYvalue(sp, Integer.valueOf(newValue));
 					testSyncState();
 					if (changedFromSetSpinners[iFinal] > 0) {
 						changedFromSetSpinners[iFinal] = 0;
 					} else {
+						System.out.printf("Spinner %d changed value to %d\n", sp, Integer.valueOf(newValue));
 						fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_CURVE);
 					}
 				}
@@ -220,7 +220,10 @@ public class UICurves {
 		v = new int[9];
 		curvesPaint.getYvalues(v);
 		for (int i = 0; i < 9; i++) {
-			allSpinners.get(i).getValueFactory().setValue(v[i]);
+			if (allSpinners.get(i).getValueFactory().getValue().intValue() != v[i]) {
+				changedFromSetSpinners[i] = 1;
+				allSpinners.get(i).getValueFactory().setValue(v[i]);
+			}
 		}
 	}
 	
@@ -233,11 +236,6 @@ public class UICurves {
 		int [] v;
 		v = new int[9];
 		curvesPaint.getYvalues(v);
-		for (int i=0; i< 9; i++) {
-			//if (values[i] != v[i]) {
-				changedFromSetSpinners[i] = 1;
-			//}
-		}
 		setSpinnersFromCurve();
 	}
 
