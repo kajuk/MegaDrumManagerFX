@@ -28,6 +28,7 @@ import info.megadrum.managerfx.ui.UIPanel;
 import info.megadrum.managerfx.ui.UIGlobal;
 import info.megadrum.managerfx.ui.UIGlobalMisc;
 import info.megadrum.managerfx.ui.UIInput;
+import info.megadrum.managerfx.ui.UIMidiLog;
 import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
 import info.megadrum.managerfx.ui.UIPad;
@@ -88,14 +89,10 @@ public class Controller implements MidiRescanEventListener {
 	private UIGlobal uiGlobal;
 	private UIGlobalMisc uiGlobalMisc;
 	private UIMisc uiMisc;
-	private Stage windowMisc;
 	private UIPedal uiPedal;
-	private Stage windowPedal;
 	private UIPad uiPad;
-	private Stage windowPad;
 	private UIPadsExtra uiPadsExtra;
-	private Stage windowPadsExtra;
-	private Stage windowMidiLog;
+	private UIMidiLog uiMidiLog;
 	private ArrayList<UIPanel>	allPanels;
 	//private ArrayList<Stage> allWindows;
 	//private ProgressBar tempProgressBar;
@@ -127,8 +124,6 @@ public class Controller implements MidiRescanEventListener {
 	private List<byte[]> sysexSendList;
 	private List<byte[]> sysexLastChanged;
 
-	MidiLevelBarsPanel tempMidiLevelBarsPanel;
-	
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
 		window.setTitle("MegaDrumManagerFX");
@@ -144,15 +139,16 @@ public class Controller implements MidiRescanEventListener {
 		uiPedal = new UIPedal("HiHat Pedal");
 		uiPad = new UIPad("Pads");
 		uiPadsExtra = new UIPadsExtra("Pads Extra Settings");
+		uiMidiLog = new UIMidiLog("MIDI Log");
 		initMidi();
 		initConfigs();
-		tempMidiLevelBarsPanel = new MidiLevelBarsPanel();
 		
 		allPanels = new ArrayList<UIPanel>();
 		allPanels.add(uiMisc);
 		allPanels.add(uiPedal);
 		allPanels.add(uiPad);
 		allPanels.add(uiPadsExtra);
+		allPanels.add(uiMidiLog);
 		
 		createMainMenuBar();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
@@ -514,18 +510,20 @@ public class Controller implements MidiRescanEventListener {
 							}
 							controlW = controlH*8;
 							if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-								uiMisc.respondToResize(height, width, height, controlH, controlW);
+								uiMisc.respondToResize(width, height, height, controlW, controlH);
 							}
 							if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-								uiPedal.respondToResize(height, width, height, controlH, controlW);
+								uiPedal.respondToResize(width, height, height, controlW, controlH);
 							}
 							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-								uiPad.respondToResize(height, width, height, controlH, controlW);
+								uiPad.respondToResize(width, height, height, controlW, controlH);
 							}
 							if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-								uiPadsExtra.respondToResize(height, width, height, controlH, controlW);							
+								uiPadsExtra.respondToResize(width, height, height, controlW, controlH);							
 							}
-							tempMidiLevelBarsPanel.respondToResize(width*0.5, height*0.7);
+							if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
+								uiMidiLog.respondToResize(width*0.5, height*0.7);							
+							}
 						}
 					});
 				}
@@ -538,7 +536,7 @@ public class Controller implements MidiRescanEventListener {
 	public void respondToResizeDetached(Scene sc, UIPanel uiPanel) {
 		Double height = sc.getHeight();
 		Double width = sc.getWidth();
-		uiPanel.respondToResizeDetached(height, width);
+		uiPanel.respondToResizeDetached(width, height);
 	}
 
 	private void reCreateSlotsMenuItems() {
@@ -694,7 +692,7 @@ public class Controller implements MidiRescanEventListener {
 		viewMenu.getItems().add(menuViewPadsExtra);
 
 		Menu menuViewMidiLog = new Menu("MidiLog");
-		// TODO
+		menuViewMidiLog.getItems().addAll(uiMidiLog.getRadioMenuItemHide(), uiMidiLog.getRadioMenuItemShow(), uiMidiLog.getRadioMenuItemDetach());
 		viewMenu.getItems().add(menuViewMidiLog);
 
 		for (int i = 0; i < allPanels.size(); i++) {
@@ -717,7 +715,6 @@ public class Controller implements MidiRescanEventListener {
 
 	private void showPanels() {
 		hBoxUIviews.getChildren().clear();
-		hBoxUIviews.getChildren().add(tempMidiLevelBarsPanel);
 		for (int i = 0; i < allPanels.size(); i++) {
 			final int iFinal = i;
 			switch (allPanels.get(i).getViewState()) {
@@ -1619,17 +1616,17 @@ public class Controller implements MidiRescanEventListener {
 						}						
 					}
 				}
-				tempMidiLevelBarsPanel.addNewBarData(type, buffer[1], buffer[2]);
+				uiMidiLog.addNewMidiData(type, buffer[1], buffer[2]);
 			}
 			if ((buffer[0]&0xf0) == 0xa0) {
-				tempMidiLevelBarsPanel.addNewBarData((buffer[2]>0)?MidiLevelBar.barTypeChokeOn:MidiLevelBar.barTypeChokeOff,
+				uiMidiLog.addNewMidiData((buffer[2]>0)?MidiLevelBar.barTypeChokeOn:MidiLevelBar.barTypeChokeOff,
 						buffer[1], buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
-				tempMidiLevelBarsPanel.setHiHatLevel(127 - buffer[2]);
+				uiMidiLog.setHiHatLevel(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
-				tempMidiLevelBarsPanel.addNewPositional(127 - buffer[2]);
+				uiMidiLog.addNewPositional(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];

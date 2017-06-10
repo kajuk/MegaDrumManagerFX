@@ -63,8 +63,8 @@ public class UICheckBox extends UIControl{
   }
 	
     @Override
-    public void respondToResize(Double h, Double w) {
-    	super.respondToResize(h, w);
+    public void respondToResize(Double w, Double h) {
+    	super.respondToResize(w, h);
     	Double checkBoxFontSize = h*0.2;
     	// Padding setting really should be done via css and on init.
     	// This is a temp hack

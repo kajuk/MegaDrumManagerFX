@@ -74,27 +74,27 @@ public class UIPadsExtra extends UIPanel {
 		//titledPane.setMaxSize(300, 500);
 	}
 
-	public void respondToResizeDetached(Double h, Double w) {
+	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w*0.01;
 		Double controlH = h*0.06;
-		respondToResize(h, w, h*1.6, controlH, controlW);
+		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 
-	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -fullHeight*0.0005;
 		Double tabHeaderHeight = fullHeight*0.013;
-		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPane.setFont(new Font(titledPaneFontHeight));
-		} else {
-			titledPane.setFont(new Font(Constants.FX_TITLEBARS_FONT_MIN_SIZE));
+		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
+		titledPane.setFont(new Font(titledPaneFontHeight));
 		if (detached) {
 			vBoxAll.setMaxWidth(w);
 		} else {
-			vBoxAll.setMaxWidth(360);
+			vBoxAll.setMaxWidth(340);
+			vBoxAll.setMinWidth(340);
 		}
 		tabCurves.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
@@ -103,8 +103,8 @@ public class UIPadsExtra extends UIPanel {
 		//titledPane.setMaxWidth(fullHeight*0.35);
 		//uiCurves.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
 		//uiCustomNames.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
-		uiCurves.respondToResize(h, w, fullHeight, controlH, controlW);
-		uiCustomNames.respondToResize(h, w, fullHeight, controlH, controlW);
+		uiCurves.respondToResize(w, h, fullHeight, controlW, controlH);
+		uiCustomNames.respondToResize(w, h, fullHeight, controlW, controlH);
 	}
 	
 	public void setAllCustomNamesStatesUnknown() {

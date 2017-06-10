@@ -77,9 +77,9 @@ public class UIComboBox extends UIControl {
 		initControl(layout);		
 	}
     @Override
-    public void respondToResize(Double h, Double w) {
+    public void respondToResize(Double w, Double h) {
     	Double width;
-    	super.respondToResize(h, w);
+    	super.respondToResize(w, h);
     	comboBox.setMinHeight(h);
     	comboBox.setMaxHeight(h);
     	width = w*0.1;

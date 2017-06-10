@@ -198,11 +198,11 @@ public class UIOptions {
         //Display window and wait for it to be closed before returning
         scene = new Scene(layout);
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
-			respondToResize(scene.getHeight(),scene.getWidth());
+			respondToResize(scene.getWidth(), scene.getHeight());
 		});
 
         scene.heightProperty().addListener((obs, oldVal, newVal) -> {
-			respondToResize(scene.getHeight(),scene.getWidth());
+			respondToResize(scene.getWidth(), scene.getHeight());
 		});
         
         uiComboBoxChainId.uiCtlSetValuesArray(Arrays.asList("0", "1", "2", "3" ));
@@ -276,7 +276,7 @@ public class UIOptions {
 		uiComboBoxChainId.uiCtlSetValue(String.valueOf(configOptions.chainId));
 	}
 
-	public void respondToResize(Double h, Double w) {
+	public void respondToResize(Double w, Double h) {
 		optionsTabs.setMinHeight(h - okCloseButtonsLayout.getHeight());
 		optionsTabs.setMaxHeight(h - okCloseButtonsLayout.getHeight());
 		optionsTabs.setMinWidth(w);
@@ -286,10 +286,10 @@ public class UIOptions {
 		Double tabViewHeight = optionsTabs.getHeight() - optionsTabs.getTabMaxHeight();
 		//System.out.printf("h = %f\n", tabViewHeight.doubleValue());
 		for (int i = 0; i < allMidiControls.size(); i++) {
-			allMidiControls.get(i).respondToResize(h*0.09, w*0.85);
+			allMidiControls.get(i).respondToResize(w*0.85, h*0.09);
         }
 		for (int i = 0; i < allMiscControls.size(); i++) {
-			allMiscControls.get(i).respondToResize(h*0.09, w*0.85);
+			allMiscControls.get(i).respondToResize(w*0.85, h*0.09);
         }
 
 	}

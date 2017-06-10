@@ -97,10 +97,10 @@ public class UISlider extends UIControl {
 	}
 
     @Override
-    public void respondToResize(Double h, Double w) {
+    public void respondToResize(Double w, Double h) {
     	//Double width = (h*3.5 + w*0.1);
     	Double width = w*0.48;
-    	super.respondToResize(h, w);
+    	super.respondToResize(w, h);
 		uiSlider.setMinHeight(h);
 		uiSlider.setMaxHeight(h);
 		uiSlider.setMaxWidth(width);

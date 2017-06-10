@@ -64,10 +64,10 @@ public class UIPanel {
 		}
 	}
 	
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 	}
 	
-	public void respondToResizeDetached(Double h, Double w) {
+	public void respondToResizeDetached(Double w, Double h) {
 	}
 
 	public final Parent getTopLayout() {

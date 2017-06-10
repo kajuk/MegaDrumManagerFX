@@ -243,7 +243,7 @@ public class UIControl extends Control implements UIControlInterface {
 		controlWidthMultiplier = 1.0 - mul - 0.05;
 	}
 	
-	public void respondToResize(Double h, Double w) {
+	public void respondToResize(Double w, Double h) {
 		Double wCl0, wCl1, wCl2;
 		wCl0 = (w - padding*2)*labelWidthMultiplier;
 		if (copyButtonShown) {
@@ -267,7 +267,7 @@ public class UIControl extends Control implements UIControlInterface {
         label.setFont(new Font(h*0.5));
 		//layout.setMaxWidth(w);
         //uiControl.minHeight(h - padding*2 - 1);
-        //uiControl.respondToResizeControl(h,w);
+        //uiControl.respondToResizeControl(w,h);
 	}
 	
 	public void uiCtlSetDisable(Boolean disable) {

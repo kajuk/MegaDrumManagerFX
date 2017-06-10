@@ -175,7 +175,7 @@ public class UI3rdZone {
 		return (Node) titledPane;
 	}
 
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
@@ -186,7 +186,7 @@ public class UI3rdZone {
 		// Use static size for now in UI3rdZone as well
 		titledPane.setFont(new Font(9.0));
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
         }
 		//titledPane.setMinHeight(h);
 		//titledPane.setMaxHeight(h);

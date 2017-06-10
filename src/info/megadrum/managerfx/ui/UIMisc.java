@@ -128,13 +128,13 @@ public class UIMisc extends UIPanel {
 		}
 	}
 	
-	public void respondToResizeDetached(Double h, Double w) {
+	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
 		Double controlH = (h/((allControls.size() + 1)))*1.04;
-		respondToResize(h, w, h*1.6, controlH, controlW);
+		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
@@ -151,7 +151,7 @@ public class UIMisc extends UIPanel {
 		buttonSave.setFont(buttonFont);
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize(controlH, controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+			allControls.get(i).respondToResize(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL, controlH);
         }
 		//toolBar.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);
 		//toolBar.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);

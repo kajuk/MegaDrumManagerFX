@@ -305,13 +305,13 @@ public class UIPedal extends UIPanel {
 		}
 	}
 	
-	public void respondToResizeDetached(Double h, Double w) {
+	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
 		Double controlH = (h/((allNotesControls.size() + 2)))*1.0;
-		respondToResize(h, w, h*1.6, controlH, controlW);
+		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
-	public void respondToResize(Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
@@ -335,13 +335,13 @@ public class UIPedal extends UIPanel {
 		buttonSave.setFont(buttonFont);
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
-			allMiscControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+			allMiscControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
 		}
 		for (int i = 0; i < allLevelsControls.size(); i++ ) {
-			allLevelsControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+			allLevelsControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
 		}
 		for (int i = 0; i < allNotesControls.size(); i++ ) {
-			allNotesControls.get(i).respondToResize(controlH, controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+			allNotesControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
 		}
 		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
 		tabPane.setMinHeight(0);

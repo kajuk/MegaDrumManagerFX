@@ -184,7 +184,7 @@ public class UICurves {
 		return (Node) vBox;
 	}
 
-	public void respondToResize (Double h, Double w, Double fullHeight, Double controlH, Double controlW) {
+	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;

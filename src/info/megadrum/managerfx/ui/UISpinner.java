@@ -136,8 +136,8 @@ public class UISpinner extends UIControl {
     }
 
     @Override
-    public void respondToResize(Double h, Double w) {
-    	super.respondToResize(h, w);
+    public void respondToResize(Double w, Double h) {
+    	super.respondToResize(w, h);
     	Double spinnerButtonsFontSize = h*0.3;
     	lastHeight = h;
     	lastWidth = w;
