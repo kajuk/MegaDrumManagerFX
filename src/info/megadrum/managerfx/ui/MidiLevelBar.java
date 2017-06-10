@@ -67,17 +67,19 @@ public class MidiLevelBar extends VBox {
 
 		barHeightRatio = (barHeight>300)?0.95:0.9;
 		barHeightPadRatio = (1-barHeightRatio)*0.5;
+		Double barPadHeight = barHeight*barHeightPadRatio;
 
 		gc.setFill(bgColor);
 		gc.fillRect(0 + barWidth*barWidthPadRatio , 0, barWidth*barWidthRatio, barHeight);
 		gc.setFill(bgBarColor);
-		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barHeight*barHeightRatio - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barHeight*barHeightRatio);
+		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barHeight*barHeightRatio - barPadHeight , barWidth*barWidthRatio, barHeight*barHeightRatio);
 		Double barFillHeight = ((barHeight*barHeightRatio)*barLevel)/127;
 		gc.setFill(barColors[barType]);
-		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barFillHeight - barHeight*barHeightPadRatio , barWidth*barWidthRatio, barFillHeight);
+		gc.fillRect(0 + barWidth*barWidthPadRatio, barHeight - barFillHeight - barPadHeight , barWidth*barWidthRatio, barFillHeight);
 
 		fontSize = barWidth*0.4;
 		fontSize = (fontSize>16.0)?16.0:fontSize;
+		fontSize = (fontSize>barPadHeight)?barPadHeight:fontSize;
 		Font font = new Font(fontSize);
 		Double textX, textW, textY;
 		gc.setFont(font);
