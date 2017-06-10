@@ -1,5 +1,8 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.megadrum.managerfx.utils.Constants;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -21,6 +24,7 @@ public class MidiRaw extends VBox {
 	private String formatStringHeader;
 	private String formatString;
 	private String stringAllHtml;
+	private List<String> listOfHtmlLines;
 	private StringBuilder htmlHead;
 	private StringBuilder htmlTail;
 	
@@ -54,7 +58,8 @@ public class MidiRaw extends VBox {
         htmlHead.append("   </style>");         
         htmlHead.append("</head>");  
         htmlHead.append("<body onload='toBottom()'>");  
-        htmlTail = new StringBuilder().append("</body></html>");  
+        htmlTail = new StringBuilder().append("</body></html>");
+        listOfHtmlLines = new ArrayList<String>();
 
 		formatStringHeader = "%-16s %-5s %-6s %-6s %-6s   %-6s   %-30s\n";
 		formatString = "%-10s %-3s %-5s %-5s %-5s %-5s %-30s\n";
@@ -76,6 +81,8 @@ public class MidiRaw extends VBox {
 		vBoxHeader.setMinHeight(18);
 		vBoxHeader.setMaxHeight(18);
 		textHeader.setFont(new Font(14.0));
+		webView.setMinHeight(h - 5);
+		webView.setMaxHeight(h - 5);
 		//vBoxRoot.setMinSize(w, h);
 		//vBoxRoot.setMaxSize(w, h);
 	}
@@ -168,8 +175,11 @@ public class MidiRaw extends VBox {
 			break;
 		}
 		
-		//textArea.appendText(String.format(formatString, time, ch, d1, d2, d3, note, name ));
-		stringAllHtml += String.format("<p style=color:" + fontColor + ">" + formatString + "</p>", time, ch, d1, d2, d3, note, name );
+		if (listOfHtmlLines.size() > 200) {
+			listOfHtmlLines.remove(0);
+		}
+		listOfHtmlLines.add(String.format("<p style=color:" + fontColor + ">" + formatString + "</p>", time, ch, d1, d2, d3, note, name ));
+		stringAllHtml = String.join("", listOfHtmlLines);
 		webEngine.loadContent(htmlHead.toString() + stringAllHtml + htmlTail.toString());
 	}
 
