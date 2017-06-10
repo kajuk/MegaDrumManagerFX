@@ -1595,6 +1595,7 @@ public class Controller implements MidiRescanEventListener {
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			System.out.printf("MIDI Short = %02x %02x %02x\n", buffer[0], buffer[1], buffer[2]);
+			uiMidiLog.addRawMidi(buffer);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
 				type = MidiLevelBar.barTypeUnknown;
 				for (int i = 0; i< configFull.configPads.length;i++) {

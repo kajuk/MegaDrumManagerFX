@@ -11,7 +11,7 @@ public class UIMidiLog extends UIPanel{
 	private Tab 				tabVisual;
 	private	Tab					tabRaw;
 	private MidiLevelBarsPanel	panelVisual;
-	private Pane				panelRaw;
+	private MidiRaw				panelRaw;
 
 	public UIMidiLog(String title) {
 		super(title);
@@ -22,6 +22,8 @@ public class UIMidiLog extends UIPanel{
         tabRaw.setClosable(false);
         panelVisual = new MidiLevelBarsPanel();
         tabVisual.setContent(panelVisual);
+        panelRaw = new MidiRaw();
+        tabRaw.setContent(panelRaw);
         tabPane.getTabs().addAll(tabVisual,tabRaw);
         vBoxAll.getChildren().add(tabPane);
 		setDetached(false);
@@ -48,7 +50,7 @@ public class UIMidiLog extends UIPanel{
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
 
 		panelVisual.respondToResize(w, h*0.965 - 5);
-		//panelRaw.respondToResize(w, h);
+		panelRaw.respondToResize(w, h*0.965 - 5);
 	}
 
 	public void addNewPositional(Integer pos) {
@@ -61,5 +63,9 @@ public class UIMidiLog extends UIPanel{
 	
 	public void setHiHatLevel(int level) {
 		panelVisual.setHiHatLevel(level);
+	}
+	
+	public void addRawMidi (byte [] buffer) {
+		panelRaw.addRawMidi(buffer);
 	}
 }
