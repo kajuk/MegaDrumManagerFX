@@ -199,6 +199,7 @@ public class UICurves {
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 		}
+/*		
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
 		buttonGetAll.setFont(buttonFont);
@@ -209,6 +210,10 @@ public class UICurves {
 		buttonPrev.setFont(buttonFont);
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
+*/
+		Double buttonFontSize = controlH*0.28;
+		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
+		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		toolBarTop.setMaxWidth(vBox.getWidth()*0.99);
 		toolBarTop.setMaxHeight(controlH);

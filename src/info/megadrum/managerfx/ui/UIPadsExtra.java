@@ -69,7 +69,7 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
         tabPane.getTabs().addAll(tabCurves,tabCustomNames);
         vBoxAll.getChildren().add(tabPane);
 		setDetached(false);
-		vBoxAll.setMaxHeight(440);
+		//vBoxAll.setMaxHeight(440);
 		//vBoxAll.setMaxSize(340, 440);
 		//titledPane.setMaxSize(300, 500);
 	}
@@ -105,6 +105,10 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
 
+		vBoxAll.setMinHeight(h - controlH*2);
+		vBoxAll.setMaxHeight(h - controlH*2);
+		//titledPane.setStyle("-fx-background-color: orange");
+		//vBoxAll.setStyle("-fx-background-color: lightgreen");
 		//titledPane.setMaxWidth(fullHeight*0.35);
 		//uiCurves.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
 		//uiCustomNames.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);

@@ -130,7 +130,7 @@ public class UICustomNames {
 		allCustomNames = new String[Constants.CUSTOM_NAMES_MAX];
 		allMdCustomNames = new String[Constants.CUSTOM_NAMES_MAX];
 		gridPane = new GridPane();
-		gridPane.getColumnConstraints().add(new ColumnConstraints(4));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(1));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(45));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(110));
 		gridPane.getColumnConstraints().add(new ColumnConstraints(1));
@@ -152,8 +152,8 @@ public class UICustomNames {
 			GridPane.setHalignment(allTextFields.get(i), HPos.CENTER);
 			GridPane.setValignment(allTextFields.get(i), VPos.CENTER);
 			gridPane.getChildren().add(allTextFields.get(i));
-			allTextFields.get(i).setMinWidth(100);
-			allTextFields.get(i).setMaxWidth(100);
+			//allTextFields.get(i).setMinWidth(100);
+			//allTextFields.get(i).setMaxWidth(100);
 			allTextFields.get(i).textProperty().addListener(new ChangeListener<String>() {
 		        @Override
 		        public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
@@ -235,13 +235,28 @@ public class UICustomNames {
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 		}
+/*
 		buttonGetAll.setFont(buttonFont);
 		buttonSendAll.setFont(buttonFont);
 		buttonLoadAll.setFont(buttonFont);
 		buttonSaveAll.setFont(buttonFont);
 		comboBoxCustomNamesCount.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
+*/
+		Double buttonFontSize = controlH*0.28;
+		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		vBox.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
+		//vBox.setMinHeight(h*2);
+		//vBox.setStyle("-fx-background-color: lightblue");
+
 		//toolBarTop.setStyle("-fx-padding: 0.0em 0.05em 0.2em 0.05em");
+		gridPane.getColumnConstraints().remove(1);
+		gridPane.getColumnConstraints().add(1, new ColumnConstraints(controlH*2.5));
+		gridPane.getColumnConstraints().remove(2);
+		gridPane.getColumnConstraints().add(2, new ColumnConstraints(controlH*2.7));
+		gridPane.getColumnConstraints().remove(4);
+		gridPane.getColumnConstraints().add(4, new ColumnConstraints(controlH*1.7));
+		gridPane.getColumnConstraints().remove(6);
+		gridPane.getColumnConstraints().add(6, new ColumnConstraints(controlH*1.7));
 		toolBarTop.setMaxHeight(controlH);
 		toolBarTop.setMaxWidth(vBox.getWidth()*0.99);
 		//comboBoxCustomNamesCount.setMinWidth(controlH*4);
