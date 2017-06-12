@@ -105,8 +105,10 @@ public class UIMisc extends UIPanel {
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Chokng", false);
 		allControls.add(uiCheckBoxAltNoteChoking);
 	
+		vBoxAll.getChildren().add(paneAll);
 		for (int i = 0; i < allControls.size(); i++) {
-        	vBoxAll.getChildren().add(allControls.get(i).getUI());
+        	//vBoxAll.getChildren().add(allControls.get(i).getUI());
+			paneAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -130,7 +132,7 @@ public class UIMisc extends UIPanel {
 	
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
-		Double controlH = (h/((allControls.size() + 1)))*1.04;
+		Double controlH = (h/((allControls.size() + 1)))*1.00;
 		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
@@ -138,7 +140,7 @@ public class UIMisc extends UIPanel {
 		Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			buttonFont = new Font(toolBarFontHeight);
 		} else {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
@@ -150,13 +152,13 @@ public class UIMisc extends UIPanel {
 		buttonLoad.setFont(buttonFont);
 		buttonSave.setFont(buttonFont);
 		//System.out.printf("Misc ControlW = %f\n", controlW);
+		paneAll.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		paneAll.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);		
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL, controlH);
+			allControls.get(i).getUI().setLayoutX(0);
+			allControls.get(i).getUI().setLayoutY(i*controlH);
         }
-		//toolBar.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);
-		//toolBar.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL*0.99);
-		//titledPane.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
-		//titledPane.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 	}
 
 	public void setControlsFromConfig(ConfigMisc config, Boolean setFromSysex) {

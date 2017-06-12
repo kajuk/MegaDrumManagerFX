@@ -16,6 +16,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -53,6 +54,7 @@ public class UIInput {
 	
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
+	private Pane			paneAll;
 	
 	//private ConfigPad			configPad;
 	//private ConfigPositional	configPos;
@@ -78,8 +80,6 @@ public class UIInput {
 	
 	public UIInput(String title) {
 		allControls = new ArrayList<UIControl>();
-
-		VBox layout = new VBox();
 
 		uiComboBoxName = new UIComboBox("Name", true);
 		allControls.add(uiComboBoxName);
@@ -163,9 +163,10 @@ public class UIInput {
 		setHeadEdgeType(Constants.PAD_TYPE_HEAD);
 		allControls.add(uiComboBoxType);
 	
+		paneAll = new Pane();
 		for (int i = 0; i < allControls.size(); i++) {
 			final int iFinal = i;
-        	layout.getChildren().add(allControls.get(i).getUI());
+			paneAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setValueId(i + Constants.INPUT_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
@@ -194,7 +195,7 @@ public class UIInput {
 
 		titledPane = new TitledPane();
 		titledPane.setText(title);
-		titledPane.setContent(layout);
+		titledPane.setContent(paneAll);
 		titledPane.setCollapsible(false);
 		
 		setAllStateUnknown();
@@ -245,8 +246,12 @@ public class UIInput {
 			System.out.printf("Rim title font size = %f\n", titledPaneFontHeight );			
 		}
 */
+		paneAll.setMinWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+		paneAll.setMaxWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
+			allControls.get(i).getUI().setLayoutX(0);
+			allControls.get(i).getUI().setLayoutY(i*controlH);
         }
 	}
 

@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -15,7 +16,8 @@ public class UIPanel {
 
 	protected int	viewSate = Constants.PANEL_SHOW;
 	protected TitledPane 	titledPane;
-	protected VBox 		vBoxAll;
+	protected VBox 			vBoxAll;
+	protected Pane			paneAll;
 	protected Button 		buttonGet;
 	protected Button 		buttonSend;
 	protected Button 		buttonLoad;
@@ -46,6 +48,8 @@ public class UIPanel {
         vBoxAll = new VBox(1);
 		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 		vBoxAll.setAlignment(Pos.TOP_CENTER);
+		paneAll = new Pane();
+		paneAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 	}
 	
 	public void setViewState(int state) {

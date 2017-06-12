@@ -18,6 +18,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -132,14 +133,14 @@ public class UIPedal extends UIPanel {
         tabNotes = new Tab("Notes");
         tabNotes.setClosable(false);
         tabPane.getTabs().addAll(tabMisc,tabLevels,tabNotes);
-        VBox vBoxMisc = new VBox();
-        VBox vBoxLevels = new VBox();
-        VBox vBoxNotes = new VBox();
+        Pane paneMisc = new Pane();
+        Pane paneLevels = new Pane();
+        Pane paneNotes = new Pane();
         
 
-        tabMisc.setContent(vBoxMisc);
-        tabLevels.setContent(vBoxLevels);
-        tabNotes.setContent(vBoxNotes);
+        tabMisc.setContent(paneMisc);
+        tabLevels.setContent(paneLevels);
+        tabNotes.setContent(paneNotes);
 
         uiComboBoxMiscType = new UIComboBox("Type", false);
         uiComboBoxMiscType.uiCtlSetValuesArray(Arrays.asList(Constants.PEDAL_TYPES_LIST));
@@ -175,7 +176,8 @@ public class UIPedal extends UIPanel {
         allMiscControls.add(uiSpinnerMiscCCReduction);
 			
 		for (int i = 0; i < allMiscControls.size(); i++) {
-        	vBoxMisc.getChildren().add(allMiscControls.get(i).getUI());
+        	//vBoxMisc.getChildren().add(allMiscControls.get(i).getUI());
+        	paneMisc.getChildren().add(allMiscControls.get(i).getUI());
         	allMiscControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allMiscControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -217,7 +219,8 @@ public class UIPedal extends UIPanel {
         allLevelsControls.add(uiSpinnerLevelsChickDeadPeriod);
 				
 		for (int i = 0; i < allLevelsControls.size(); i++) {
-        	vBoxLevels.getChildren().add(allLevelsControls.get(i).getUI());
+        	//vBoxLevels.getChildren().add(allLevelsControls.get(i).getUI());
+        	paneLevels.getChildren().add(allLevelsControls.get(i).getUI());
         	allLevelsControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allLevelsControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -277,7 +280,8 @@ public class UIPedal extends UIPanel {
         allNotesControls.add(uiSpinnerNoteSplash);
 		
 		for (int i = 0; i < allNotesControls.size(); i++) {
-        	vBoxNotes.getChildren().add(allNotesControls.get(i).getUI());
+        	//vBoxNotes.getChildren().add(allNotesControls.get(i).getUI());
+        	paneNotes.getChildren().add(allNotesControls.get(i).getUI());
         	allNotesControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allNotesControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -336,12 +340,18 @@ public class UIPedal extends UIPanel {
 		//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
 			allMiscControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+			allMiscControls.get(i).getUI().setLayoutX(0);
+			allMiscControls.get(i).getUI().setLayoutY(i*controlH);
 		}
 		for (int i = 0; i < allLevelsControls.size(); i++ ) {
 			allLevelsControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+			allLevelsControls.get(i).getUI().setLayoutX(0);
+			allLevelsControls.get(i).getUI().setLayoutY(i*controlH);
 		}
 		for (int i = 0; i < allNotesControls.size(); i++ ) {
 			allNotesControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+			allNotesControls.get(i).getUI().setLayoutX(0);
+			allNotesControls.get(i).getUI().setLayoutY(i*controlH);
 		}
 		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
 		tabPane.setMinHeight(0);

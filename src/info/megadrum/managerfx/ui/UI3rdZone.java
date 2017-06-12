@@ -16,6 +16,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -65,8 +66,9 @@ public class UI3rdZone {
 		gridColmn = new ArrayList<Integer>();
 		gridRow = new ArrayList<Integer>();
 
-		GridPane layout = new GridPane();
-		layout.setHgap(15);
+		//GridPane layout = new GridPane();
+		//layout.setHgap(15);
+		Pane paneAll = new Pane();
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
@@ -108,10 +110,7 @@ public class UI3rdZone {
 	
 		for (int i = 0; i < allControls.size(); i++) {
 			final int iFinal = i;
-			GridPane.setConstraints(allControls.get(i).getUI(), gridColmn.get(i), gridRow.get(i));
-			GridPane.setHalignment(allControls.get(i).getUI(), HPos.LEFT);
-			GridPane.setValignment(allControls.get(i).getUI(), VPos.CENTER);
-        	layout.getChildren().add(allControls.get(i).getUI());
+        	paneAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setValueId(i + Constants.THIRD_ZONE_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
@@ -141,7 +140,7 @@ public class UI3rdZone {
 		
 		titledPane = new TitledPane();
 		titledPane.setText("3rd Zone");
-		titledPane.setContent(layout);
+		titledPane.setContent(paneAll);
 		titledPane.setCollapsible(false);
 		setZoneType(zoneFromPizeo);
 		setAllStateUnknown();
@@ -186,6 +185,8 @@ public class UI3rdZone {
 		// Use static size for now in UI3rdZone as well
 		titledPane.setFont(new Font(9.0));
 		for (int i = 0; i < allControls.size(); i++) {
+			allControls.get(i).getUI().setLayoutX(gridColmn.get(i)*controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+			allControls.get(i).getUI().setLayoutY(gridRow.get(i)*controlH + controlH*0.2);
 			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
         }
 		//titledPane.setMinHeight(h);
