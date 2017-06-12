@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -27,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -36,7 +38,7 @@ import javafx.scene.text.Font;
 public class UICustomNames {
 	private ScrollPane	scrollPane;
 	private VBox		vBox;
-	private ToolBar		toolBarTop;
+	private HBox		toolBarTop;
 	private GridPane	gridPane;
 	private Button 		buttonGetAll;
 	private Button 		buttonSendAll;
@@ -108,13 +110,13 @@ public class UICustomNames {
 				}
 			}
         });
-		toolBarTop = new ToolBar();
+		toolBarTop = new HBox();
+		toolBarTop.setAlignment(Pos.CENTER_LEFT);
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
 		buttonLoadAll = new Button("LoadAll");
 		buttonSaveAll = new Button("SaveAll");
-		//buttonSaveAll.setOnAction(e-> setAllStateUnknown());
-		toolBarTop.getItems().addAll(labelCustomNamesCount, comboBoxCustomNamesCount, buttonGetAll,buttonSendAll, new Separator(),buttonLoadAll,buttonSaveAll);
+		toolBarTop.getChildren().addAll(labelCustomNamesCount, comboBoxCustomNamesCount, buttonGetAll,buttonSendAll, new Separator(Orientation.VERTICAL),buttonLoadAll,buttonSaveAll);
 
 		vBox = new VBox(1);
 		vBox.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");

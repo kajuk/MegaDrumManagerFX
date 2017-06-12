@@ -10,6 +10,7 @@ import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -32,8 +34,8 @@ import javafx.scene.text.Font;
 public class UICurves {
 	private VBox		vBox;
 	private GridPane	gridPaneSpinners;
-	private ToolBar		toolBarNavigator;
-	private ToolBar		toolBarTop;
+	private HBox		toolBarNavigator;
+	private HBox		toolBarTop;
 	private Button 		buttonGet;
 	private Button 		buttonSend;
 	private Button 		buttonGetAll;
@@ -75,23 +77,25 @@ public class UICurves {
 	}
 
 	public UICurves() {
-		toolBarTop = new ToolBar();
+		toolBarTop = new HBox();
+		toolBarTop.setAlignment(Pos.CENTER_LEFT);
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
 		buttonLoad = new Button("Load");
 		buttonSave = new Button("Save");
-		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave);
+		toolBarTop.getChildren().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(Orientation.VERTICAL),buttonLoad,buttonSave);
 
-		toolBarNavigator = new ToolBar();
+		toolBarNavigator = new HBox();
+		toolBarNavigator.setAlignment(Pos.CENTER_LEFT);
 		labelCurve = new Label("Curve:");
 		comboBoxCurve = new ComboBox<String>();
 		buttonFirst = new Button("First");
 		buttonPrev = new Button("Prev");
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
-		toolBarNavigator.getItems().addAll( labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
+		toolBarNavigator.getChildren().addAll( labelCurve, comboBoxCurve, buttonFirst, buttonPrev, buttonNext, buttonLast);
 	
 
 		curvesPaint = new UICurvesPaint();
@@ -210,8 +214,8 @@ public class UICurves {
 		toolBarTop.setMaxHeight(controlH);
 		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.99);
 		toolBarNavigator.setMaxHeight(controlH);
-		comboBoxCurve.setMinWidth(controlH*5.3);
-		comboBoxCurve.setMaxWidth(controlH*5.3);
+		comboBoxCurve.setMinWidth(controlW);
+		comboBoxCurve.setMaxWidth(controlW);
 		labelCurve.setFont(new Font(controlH*0.4));
 		labelCurve.setMinWidth(controlH*2);
 		labelCurve.setMaxWidth(controlH*2);

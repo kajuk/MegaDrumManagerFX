@@ -7,6 +7,7 @@ import javax.swing.event.EventListenerList;
 import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,12 +15,13 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIMisc extends UIPanel implements PanelInterface{
-	private ToolBar toolBar;
+	private HBox toolBar;
 	
 	private UISpinner uiSpinnerNoteOffDelay;
 	private UISpinner uiSpinnerPressrollTimeout;
@@ -56,12 +58,16 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	public UIMisc(String title) {
 		super(title);
 		allControls = new ArrayList<UIControl>();
-		toolBar = new ToolBar();
+/*		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);
 		toolBar.getItems().add(buttonSend);
 		toolBar.getItems().add(new Separator());
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
+*/
+		toolBar = new HBox();
+		toolBar.setAlignment(Pos.CENTER_LEFT);
+		toolBar.getChildren().addAll(buttonGet, buttonSend, new Separator(Orientation.VERTICAL), buttonLoad, buttonSave);
 		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
@@ -153,14 +159,18 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		titledPane.setWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
-		toolBar.setMaxWidth(controlW*0.98*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		toolBar.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		toolBar.setMinWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		toolBar.setMaxHeight(controlH);
 		//toolBar.setStyle("-fx-background-color: orange");
 		//vBoxAll.setStyle("-fx-background-color: lightgreen");
-		buttonGet.setFont(buttonFont);
-		buttonSend.setFont(buttonFont);
-		buttonLoad.setFont(buttonFont);
-		buttonSave.setFont(buttonFont);
+		//System.out.printf("Button font height = %f\n", buttonFont.getSize());
+		//buttonGet.setFont(buttonFont);
+		//buttonSend.setFont(buttonFont);
+		//buttonLoad.setFont(buttonFont);
+		//buttonSave.setFont(buttonFont);
+		Double buttonFontSize = controlH*0.31;
+		toolBar.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		paneAll.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		paneAll.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);		

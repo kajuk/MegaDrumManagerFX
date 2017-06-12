@@ -495,7 +495,7 @@ public class Controller implements MidiRescanEventListener {
 							Double controlH, controlW;
 							Double mainWindowMaxWidth = 0.0;
 							Double midiLogHeight = height*0.7;
-							Double midiLogWidth = width*0.3;
+							Double midiLogWidth = width*0.23;
 							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
 								controlH= (height/uiPad.getVerticalControlsCount())*1.105 - 0.95;
 								midiLogHeight = height*0.7;
@@ -568,7 +568,7 @@ public class Controller implements MidiRescanEventListener {
 					});
 				}
 			};
-			timerResizeDelay = 50;
+			timerResizeDelay = 10;
 			timerResize.schedule(timerTaskResize, timerResizeDelay);
 		}
 	}

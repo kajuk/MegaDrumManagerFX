@@ -12,6 +12,7 @@ import info.megadrum.managerfx.data.Config3rd;
 import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.data.ConfigPositional;
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -33,8 +34,8 @@ public class UIPad extends UIPanel implements PanelInterface {
 	private UIInput 	uiInputLeft;
 	private UIInput 	uiInputRight;
 	private UI3rdZone	ui3rdZone;
-	private ToolBar		toolBarNavigator;
-	private ToolBar		toolBarTop;
+	private HBox		toolBarNavigator;
+	private HBox		toolBarTop;
 	private Button 		buttonGetAll;
 	private Button 		buttonSendAll;
 	private Button 		buttonCopy;
@@ -93,22 +94,24 @@ public class UIPad extends UIPanel implements PanelInterface {
 		hBox.getChildren().addAll(uiInputLeft.getUI(),uiInputRight.getUI());
 		hBox.setAlignment(Pos.TOP_CENTER);
 
-		toolBarTop = new ToolBar();
+		toolBarTop = new HBox();
+		toolBarTop.setAlignment(Pos.CENTER_LEFT);
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
 		buttonCopy = new Button("Copy");
 		buttonDisableOthers = new Button("Disable Others");
-		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave,new Separator(),buttonCopy,buttonDisableOthers);
+		toolBarTop.getChildren().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(Orientation.VERTICAL),buttonLoad,buttonSave,new Separator(Orientation.VERTICAL),buttonCopy,buttonDisableOthers);
 		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.05em");
 		
-		toolBarNavigator = new ToolBar();
+		toolBarNavigator = new HBox();
+		toolBarNavigator.setAlignment(Pos.CENTER_LEFT);
 		labelInput = new Label("Input(s):");
 		comboBoxInput = new ComboBox<String>();
 		buttonFirst = new Button("First");
 		buttonPrev = new Button("Prev");
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
-		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
+		toolBarNavigator.getChildren().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
 		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.05em");
 		
 		vBoxAll.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
@@ -231,6 +234,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
+/*		
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
 		buttonGetAll.setFont(buttonFont);
@@ -243,6 +247,10 @@ public class UIPad extends UIPanel implements PanelInterface {
 		buttonPrev.setFont(buttonFont);
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
+*/
+		Double buttonFontSize = controlH*0.31;
+		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
+		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		comboBoxInput.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);

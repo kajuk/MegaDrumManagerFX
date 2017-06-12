@@ -9,6 +9,7 @@ import javax.swing.event.EventListenerList;
 import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.data.ConfigPedal;
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -18,13 +19,14 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UIPedal extends UIPanel implements PanelInterface {
-	private ToolBar		toolBar;
+	private HBox		toolBar;
 	private TabPane		tabPane;
 	private Tab 		tabMisc;
 	private Tab 		tabLevels;
@@ -110,13 +112,18 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
 		allNotesControls = new ArrayList<UIControl>();
+/*
 		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);
 		toolBar.getItems().add(buttonSend);
 		toolBar.getItems().add(new Separator());
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
-		toolBar.setStyle("-fx-padding: 0.1em 0.01em 0.2em 0.01em");
+*/
+		toolBar = new HBox();
+		toolBar.setAlignment(Pos.CENTER_LEFT);
+		toolBar.getChildren().addAll(buttonGet, buttonSend, new Separator(Orientation.VERTICAL), buttonLoad, buttonSave);
+		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 
 		vBoxAll.getChildren().add(toolBar);
@@ -334,17 +341,19 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		titledPane.setWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
-		toolBar.setMaxWidth(controlW*0.98*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		toolBar.setMaxWidth(controlW*0.99*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		toolBar.setMaxHeight(controlH);
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabLevels.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabNotes.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
-		buttonGet.setFont(buttonFont);
-		buttonSend.setFont(buttonFont);
-		buttonLoad.setFont(buttonFont);
-		buttonSave.setFont(buttonFont);
-		//System.out.println("Responding to scene resize in UIMisc");
+		//buttonGet.setFont(buttonFont);
+		//buttonSend.setFont(buttonFont);
+		//buttonLoad.setFont(buttonFont);
+		//buttonSave.setFont(buttonFont);
+		Double buttonFontSize = controlH*0.31;
+		toolBar.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
+	//System.out.println("Responding to scene resize in UIMisc");
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
 			allMiscControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
 			allMiscControls.get(i).getUI().setLayoutX(0);

@@ -108,8 +108,8 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 		//titledPane.setMaxWidth(fullHeight*0.35);
 		//uiCurves.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
 		//uiCustomNames.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
-		uiCurves.respondToResize(w, h, fullHeight, controlW, controlH);
-		uiCustomNames.respondToResize(w, h, fullHeight, controlW, controlH);
+		uiCurves.respondToResize(w, h, fullHeight, 340*0.4, controlH);
+		uiCustomNames.respondToResize(w, h, fullHeight, 340*0.4, controlH);
 	}
 	
 	public void setAllCustomNamesStatesUnknown() {
