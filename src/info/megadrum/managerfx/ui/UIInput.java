@@ -22,7 +22,7 @@ import javafx.scene.text.Font;
 
 public class UIInput {
 //	private VBox layout;
-	private TitledPane		titledPane;
+	private MdTitledPane	titledPane;
 	
 	private UIComboBox 		uiComboBoxName;
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
@@ -55,6 +55,7 @@ public class UIInput {
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
 	private Pane			paneAll;
+	private Double			lastTitleHeight = 5.0;
 	
 	//private ConfigPad			configPad;
 	//private ConfigPositional	configPos;
@@ -193,10 +194,9 @@ public class UIInput {
 			});
        }
 
-		titledPane = new TitledPane();
+		titledPane = new MdTitledPane();
 		titledPane.setText(title);
-		titledPane.setContent(paneAll);
-		titledPane.setCollapsible(false);
+		titledPane.getChildren().add(paneAll);
 		
 		setAllStateUnknown();
 	}
@@ -234,24 +234,16 @@ public class UIInput {
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		//titledPane.setFont(new Font(titledPaneFontHeight));
-		//Changing title font dynamically makes TitledPane header height different
-		// between left and right panels
-		// Use static size for now
-		titledPane.setFont(new Font(9.0));
-/*
-		if (inputType == Constants.PAD_TYPE_HEAD) {
-			System.out.printf("Head title font size = %f\n", titledPaneFontHeight );
-		} else {
-			System.out.printf("Rim title font size = %f\n", titledPaneFontHeight );			
-		}
-*/
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMinWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMaxWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		for (int i = 0; i < allControls.size(); i++) {
 			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
 			allControls.get(i).getUI().setLayoutX(0);
-			allControls.get(i).getUI().setLayoutY(i*controlH);
+			allControls.get(i).getUI().setLayoutY(i*controlH + controlH);
         }
 	}
 

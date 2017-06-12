@@ -437,11 +437,8 @@ public class Controller implements MidiRescanEventListener {
 		layout1VBox.getChildren().add(uiGlobal.getUI());
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		
-		hBoxUIviews = new HBox(5);
-		//hBoxUIviews.getChildren().add(uiMisc.getUI());
-		//hBoxUIviews.getChildren().add(uiPedal.getUI());
-		//hBoxUIviews.getChildren().add(uiPad.getUI());
-		//hBoxUIviews.getChildren().add(uiPadsExtra.getUI());
+		hBoxUIviews = new HBox(3);
+		hBoxUIviews.setStyle("-fx-padding: 1.0 0.0 0.0 0.0");
 		
 		layout1VBox.getChildren().add(hBoxUIviews);
 		//layout1VBox.setPadding(new Insets(5, 5, 5, 5));
@@ -455,7 +452,7 @@ public class Controller implements MidiRescanEventListener {
 		
 		window.setScene(scene1);
 		window.setMinWidth(1000);
-		window.setMinHeight(150);
+		window.setMinHeight(520);
 		//window.sizeToScene();
 		//scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
 		//	respondToResize(scene1);

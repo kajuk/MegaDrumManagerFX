@@ -21,10 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class UI3rdZone {
-//	private VBox layout;
-	//private GridPane layout;
 	private MdTitledPane	titledPane;
-	//private VBox			vBoxAll;
 	private Pane			paneAll;
 	
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
@@ -69,11 +66,8 @@ public class UI3rdZone {
 		gridColmn = new ArrayList<Integer>();
 		gridRow = new ArrayList<Integer>();
 
-		//GridPane layout = new GridPane();
-		//layout.setHgap(15);
 		paneAll = new Pane();
 		paneAll.setLayoutX(0);
-		//vBoxAll = new VBox();
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
@@ -183,10 +177,6 @@ public class UI3rdZone {
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		//titledPane.setFont(new Font(titledPaneFontHeight));
-		//Changing title font dynamically makes TitledPane header height different
-		// between left and right panels
-		// Use static size for now in UI3rdZone as well
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);
 		lastTitleHeight = controlH;
@@ -199,8 +189,6 @@ public class UI3rdZone {
 			allControls.get(i).getUI().setLayoutY(gridRow.get(i)*controlH + controlH*0.2);
 			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
         }
-		//titledPane.setMinHeight(h);
-		//titledPane.setMaxHeight(h);
 	}
 	
 	private void setMidPointAndWidthFromThreshold(int threshold, Boolean setFromSysex) {

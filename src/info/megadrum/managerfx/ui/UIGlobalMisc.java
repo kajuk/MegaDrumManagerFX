@@ -128,6 +128,7 @@ public class UIGlobalMisc {
 		rootGridPane.getChildren().add(labelInputs);
 
 		comboBoxInputs = new ComboBox<String>();
+		comboBoxInputs.setStyle("-fx-font-size: 9pt");
 		comboBoxInputs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 			@Override
