@@ -239,7 +239,9 @@ public class UICustomNames {
 		buttonSaveAll.setFont(buttonFont);
 		comboBoxCustomNamesCount.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		vBox.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		toolBarTop.setStyle("-fx-padding: 0.0em 0.0em 0.2em 0.0em");
+		//toolBarTop.setStyle("-fx-padding: 0.0em 0.05em 0.2em 0.05em");
+		toolBarTop.setMaxHeight(controlH);
+		toolBarTop.setMaxWidth(vBox.getWidth()*0.99);
 		//comboBoxCustomNamesCount.setMinWidth(controlH*4);
 		//comboBoxCustomNamesCount.setMaxWidth(controlH*4);
 		//labelCustomNamesCount.setFont(new Font(controlH*0.4));

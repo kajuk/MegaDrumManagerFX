@@ -10,39 +10,10 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-class MdTitledPane extends Pane {
-	private Label titleLabel;
-	public MdTitledPane () {
-		titleLabel = new Label();
-		titleLabel.setLayoutX(0);
-		titleLabel.setLayoutY(0);
-		titleLabel.setAlignment(Pos.CENTER);
-		setStyle("-fx-border-width: 1px; -fx-border-color: darkgrey");
-		getChildren().add(titleLabel);
-	}
-	
-	public void setText(String title) {
-		titleLabel.setText(title);
-	}
-	
-	public void setFont(Font font) {
-		titleLabel.setFont(font);
-	}
-	
-	public void setTitleHeight(Double h) {
-		titleLabel.setMinHeight(h);
-		titleLabel.setMaxHeight(h);
-	}
-	
-	public void setWidth(Double w) {
-		setMinWidth(w);
-		setMaxWidth(w);
-	}
-}
 
 public class UIPanel {
 

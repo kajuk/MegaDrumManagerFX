@@ -62,6 +62,7 @@ public class UIPad extends UIPanel {
 	//private Integer		controlsCha
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
+	private Double			inputsGap = 5.0;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -83,7 +84,7 @@ public class UIPad extends UIPanel {
 
 	public UIPad(String title) {
 		super(title);
-		HBox hBox = new HBox(5);
+		HBox hBox = new HBox(inputsGap);
 		uiInputLeft = new UIInput("Head/Bow");
 		uiInputLeft.setHeadEdgeType(Constants.PAD_TYPE_HEAD);
 		uiInputRight = new UIInput("Rim/Edge");
@@ -98,7 +99,7 @@ public class UIPad extends UIPanel {
 		buttonCopy = new Button("Copy");
 		buttonDisableOthers = new Button("Disable Others");
 		toolBarTop.getItems().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(),buttonLoad,buttonSave,new Separator(),buttonCopy,buttonDisableOthers);
-		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
+		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.05em");
 		
 		toolBarNavigator = new ToolBar();
 		labelInput = new Label("Input(s):");
@@ -108,9 +109,10 @@ public class UIPad extends UIPanel {
 		buttonNext = new Button("Next");
 		buttonLast = new Button("Last");
 		toolBarNavigator.getItems().addAll(labelInput, comboBoxInput, buttonFirst, buttonPrev, buttonNext, buttonLast);
-		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.5em");
+		toolBarNavigator.setStyle("-fx-padding: 0.05em 0.0em 0.2em 0.05em");
 		
 		vBoxAll.getChildren().addAll(toolBarTop,toolBarNavigator,hBox,ui3rdZone.getUI());
+		//vBoxAll.setAlignment(Pos.TOP_CENTER);
 		reCreateNamesArray();
 		switchToInputPair(0);
     	uiInputLeft.addControlChangeEventListener(new ControlChangeEventListener() {
@@ -213,7 +215,7 @@ public class UIPad extends UIPanel {
 	}
 
 	public void respondToResizeDetached(Double w, Double h) {
-		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.2);
+		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.05);
 		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 4))*1.04;
 		respondToResize(w, h, h, controlW*1.01, controlH);
 	}
@@ -245,16 +247,22 @@ public class UIPad extends UIPanel {
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);
 		lastTitleHeight = controlH;
-		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2);
 		vBoxAll.setLayoutY(lastTitleHeight);
-		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
-		toolBarTop.setMaxWidth(controlW*0.99*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
-		toolBarNavigator.setMaxWidth(controlW*0.99*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		vBoxAll.setLayoutX(0);
+		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2);
+		toolBarTop.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap);
+		toolBarNavigator.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap);
 		toolBarTop.setMaxHeight(controlH);
 		toolBarNavigator.setMaxHeight(controlH);
+		//toolBarTop.setStyle("-fx-background-color: orange");
+		//toolBarNavigator.setStyle("-fx-background-color: orange");
+		//vBoxAll.setStyle("-fx-background-color: lightgreen");
+		//titledPane.setStyle("-fx-background-color: lightblue");
+
 		uiInputLeft.respondToResize( w*0.5, h*0.6, fullHeight, controlW, controlH);
 		uiInputRight.respondToResize(w*0.5, h*0.6, fullHeight, controlW, controlH);
-		ui3rdZone.respondToResize(w*1.0, h*0.0915, fullHeight, controlW, controlH);
+		ui3rdZone.respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2, h*0.0915, fullHeight, controlW, controlH);
 		comboBoxInput.setMinWidth(controlH*6);
 		comboBoxInput.setMaxWidth(controlH*6);
 		labelInput.setFont(new Font(controlH*0.4));

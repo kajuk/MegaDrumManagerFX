@@ -206,8 +206,10 @@ public class UICurves {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		toolBarTop.setMaxWidth(vBox.getWidth()*0.995);
-		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.995);
+		toolBarTop.setMaxWidth(vBox.getWidth()*0.99);
+		toolBarTop.setMaxHeight(controlH);
+		toolBarNavigator.setMaxWidth(vBox.getWidth()*0.99);
+		toolBarNavigator.setMaxHeight(controlH);
 		comboBoxCurve.setMinWidth(controlH*5.3);
 		comboBoxCurve.setMaxWidth(controlH*5.3);
 		labelCurve.setFont(new Font(controlH*0.4));

@@ -23,7 +23,9 @@ import javafx.scene.text.Font;
 public class UI3rdZone {
 //	private VBox layout;
 	//private GridPane layout;
-	private TitledPane 		titledPane;
+	private MdTitledPane	titledPane;
+	//private VBox			vBoxAll;
+	private Pane			paneAll;
 	
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
 	private UISpinnerNote 	uiSpinnerNoteAltNote;
@@ -40,6 +42,7 @@ public class UI3rdZone {
 	static private final	Boolean zoneFromPizeo	= false;
 	static private final	Boolean zoneFromSwitch 	= true;
 	private boolean			zoneType = zoneFromPizeo;
+	private Double			lastTitleHeight = 5.0;
 
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
@@ -68,7 +71,9 @@ public class UI3rdZone {
 
 		//GridPane layout = new GridPane();
 		//layout.setHgap(15);
-		Pane paneAll = new Pane();
+		paneAll = new Pane();
+		paneAll.setLayoutX(0);
+		//vBoxAll = new VBox();
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
@@ -138,10 +143,9 @@ public class UI3rdZone {
 			});
         }
 		
-		titledPane = new TitledPane();
+		titledPane = new MdTitledPane();
 		titledPane.setText("3rd Zone");
-		titledPane.setContent(paneAll);
-		titledPane.setCollapsible(false);
+		titledPane.getChildren().add(paneAll);
 		setZoneType(zoneFromPizeo);
 		setAllStateUnknown();
 	}
@@ -183,9 +187,15 @@ public class UI3rdZone {
 		//Changing title font dynamically makes TitledPane header height different
 		// between left and right panels
 		// Use static size for now in UI3rdZone as well
-		titledPane.setFont(new Font(9.0));
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		paneAll.setLayoutY(lastTitleHeight);
+		paneAll.setMaxWidth(w);
+		titledPane.setWidth(w);
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).getUI().setLayoutX(gridColmn.get(i)*controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+			allControls.get(i).getUI().
+			setLayoutX(gridColmn.get(i)*controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL + controlW*0.01 + gridColmn.get(i)*controlW*0.05);
 			allControls.get(i).getUI().setLayoutY(gridRow.get(i)*controlH + controlH*0.2);
 			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
         }

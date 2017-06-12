@@ -92,7 +92,6 @@ public class UIPadsExtra extends UIPanel {
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);
 		lastTitleHeight = controlH;
-		titledPane.setWidth(controlW*2.74);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		if (detached) {
 			vBoxAll.setMaxWidth(w);

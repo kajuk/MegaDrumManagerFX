@@ -31,10 +31,10 @@ public class UIMidiLog extends UIPanel{
 	}
 
 	public void respondToResizeDetached(Double w, Double h) {
-		respondToResize(w, h - 5);
+		respondToResize(w, h - 5, h*0.1);
 	}
 
-	public void respondToResize (Double w, Double h) {
+	public void respondToResize (Double w, Double h, Double controlH) {
 		Double titledPaneFontHeight = h*1.4*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = h*1.4*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -h*0.0005;
@@ -43,10 +43,10 @@ public class UIMidiLog extends UIPanel{
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(titledPaneFontHeight*1.72);
-		lastTitleHeight = titledPaneFontHeight*1.72;
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
 		titledPane.setWidth(w);
-		vBoxAll.setLayoutY(titledPaneFontHeight*1.72);
+		vBoxAll.setLayoutY(controlH);
 		vBoxAll.setMaxSize(w, h);
 		vBoxAll.setMinSize(w, h);
 		tabVisual.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

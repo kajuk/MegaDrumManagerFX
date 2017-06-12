@@ -522,7 +522,7 @@ public class Controller implements MidiRescanEventListener {
 								uiPadsExtra.respondToResize(width, height, height, controlW, controlH);							
 							}
 							if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
-								uiMidiLog.respondToResize(width*0.5, height*0.7);							
+								uiMidiLog.respondToResize(width*0.5, height*0.7, controlH);							
 							}
 						}
 					});
