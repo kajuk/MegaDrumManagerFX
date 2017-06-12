@@ -28,7 +28,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIPad extends UIPanel {
+public class UIPad extends UIPanel implements PanelInterface {
 
 	private UIInput 	uiInputLeft;
 	private UIInput 	uiInputRight;
@@ -414,6 +414,11 @@ public class UIPad extends UIPanel {
 	
 	public ComboBox<String> getComboBoxInput() {
 		return comboBoxInput;
+	}
+
+	@Override
+	public int getVerticalControlsCount() {
+		return uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 3;
 	}
 
 }

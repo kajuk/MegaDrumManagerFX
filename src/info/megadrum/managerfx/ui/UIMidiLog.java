@@ -6,7 +6,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
-public class UIMidiLog extends UIPanel{
+public class UIMidiLog extends UIPanel implements PanelInterface {
 	private TabPane				tabPane;
 	private Tab 				tabVisual;
 	private	Tab					tabRaw;
@@ -71,5 +71,10 @@ public class UIMidiLog extends UIPanel{
 	
 	public void addRawMidi (byte [] buffer) {
 		panelRaw.addRawMidi(buffer);
+	}
+
+	@Override
+	public int getVerticalControlsCount() {
+		return 25;
 	}
 }

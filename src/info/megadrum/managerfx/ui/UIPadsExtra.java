@@ -14,7 +14,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIPadsExtra extends UIPanel {
+public class UIPadsExtra extends UIPanel implements PanelInterface {
 	private TabPane			tabPane;
 	private Tab 			tabCurves;
 	private	Tab				tabCustomNames;
@@ -210,5 +210,10 @@ public class UIPadsExtra extends UIPanel {
 
 	public Button getCurvesButtonLast() {
 		return uiCurves.getButtonLast();
+	}
+
+	@Override
+	public int getVerticalControlsCount() {
+		return 22;
 	}
 }

@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIInput {
+public class UIInput implements PanelInterface {
 //	private VBox layout;
 	private MdTitledPane	titledPane;
 	
@@ -388,8 +388,9 @@ public class UIInput {
 		configPad.setTypeInt(uiComboBoxType.uiCtlGetValue());
 	}
 	
+	@Override
 	public int getVerticalControlsCount() {
-		return allControls.size();
+		return allControls.size() + 1;
 	}
 
 }

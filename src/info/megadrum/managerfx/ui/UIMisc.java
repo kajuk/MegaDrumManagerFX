@@ -18,7 +18,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIMisc extends UIPanel {
+public class UIMisc extends UIPanel implements PanelInterface{
 	private ToolBar toolBar;
 	
 	private UISpinner uiSpinnerNoteOffDelay;
@@ -201,6 +201,11 @@ public class UIMisc extends UIPanel {
 		config.midi_thru = uiCheckBoxMIDIThru.uiCtlIsSelected();
 		config.send_triggered_in = uiCheckBoxSendTriggeredIn.uiCtlIsSelected();
 		config.alt_note_choking = uiCheckBoxAltNoteChoking.uiCtlIsSelected();
+	}
+	
+	@Override
+	public int getVerticalControlsCount() {
+		return allControls.size() + 2;
 	}
 
 }

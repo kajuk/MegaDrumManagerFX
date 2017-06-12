@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UI3rdZone {
+public class UI3rdZone implements PanelInterface {
 	private MdTitledPane	titledPane;
 	private Pane			paneAll;
 	
@@ -277,6 +277,6 @@ public class UI3rdZone {
 	}
 	
 	public int getVerticalControlsCount() {
-		return gridRow.size();
+		return gridRow.size() + 1;
 	}
 }

@@ -86,6 +86,7 @@ public class Controller implements MidiRescanEventListener {
 	
 	private UIOptions optionsWindow;
 	private HBox hBoxUIviews;
+	private Double hBoxUIviewsGap = 2.0;
 	private UIGlobal uiGlobal;
 	private UIGlobalMisc uiGlobalMisc;
 	private UIMisc uiMisc;
@@ -94,6 +95,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIPadsExtra uiPadsExtra;
 	private UIMidiLog uiMidiLog;
 	private ArrayList<UIPanel>	allPanels;
+	private Double mainWindowMinWidth = 1000.0;
 	//private ArrayList<Stage> allWindows;
 	//private ProgressBar tempProgressBar;
 	private Timer 		timerResize;
@@ -437,7 +439,7 @@ public class Controller implements MidiRescanEventListener {
 		layout1VBox.getChildren().add(uiGlobal.getUI());
 		layout1VBox.getChildren().add(uiGlobalMisc.getUI());
 		
-		hBoxUIviews = new HBox(3);
+		hBoxUIviews = new HBox(hBoxUIviewsGap);
 		hBoxUIviews.setStyle("-fx-padding: 1.0 0.0 0.0 0.0");
 		
 		layout1VBox.getChildren().add(hBoxUIviews);
@@ -451,12 +453,12 @@ public class Controller implements MidiRescanEventListener {
 		optionsWindow.addMidiRescanEventListener(this);
 		
 		window.setScene(scene1);
-		window.setMinWidth(1000);
+		window.setMinWidth(mainWindowMinWidth);
 		window.setMinHeight(520);
 		//window.sizeToScene();
-		//scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
-		//	respondToResize(scene1);
-		//});
+		scene1.widthProperty().addListener((obs, oldVal, newVal) -> {
+			respondToResize(scene1);
+		});
 
 		scene1.heightProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene1);
@@ -488,39 +490,80 @@ public class Controller implements MidiRescanEventListener {
 							Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
 							Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
 							Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight - globalMiscBarHeight;
-							Double width = height*2;
+							//Double width = height*2;
+							Double width = sc.getWidth();
 							Double controlH, controlW;
+							Double mainWindowMaxWidth = 0.0;
+							Double midiLogHeight = height*0.7;
+							Double midiLogWidth = width*0.3;
 							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-								controlH= height *0.028;
+								controlH= (height/uiPad.getVerticalControlsCount())*1.105 - 0.95;
+								midiLogHeight = height*0.7;
 							} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-								controlH= height *0.028 *1.55;
-								height = height * 1.2;
+								controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
+								midiLogHeight = height*0.7;
 							} else if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-								controlH= height *0.028 *2.4;							
-								height = height * 1.2;
+								controlH= height/uiPadsExtra.getVerticalControlsCount();
+								midiLogHeight = height*0.7;
 							} else if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-								controlH= height *0.028 *2.4;							
-								height = height * 1.2;
+								controlH= height/uiMisc.getVerticalControlsCount()*1.045 - 0.95;
+								midiLogHeight = height*0.7;
 							} else {
-								controlH= height *0.028 *2.4;							
-								height = height * 1.2;
+								controlH= height/uiMidiLog.getVerticalControlsCount();
+								midiLogHeight = height*0.95;
+								midiLogWidth = mainWindowMinWidth*0.99;
 							}
-							controlW = controlH*8;
+							
+							//controlW = controlH*8;
+							//controlW = width - midiLogWidth;
+							controlW = width - hBoxUIviewsGap;
+							Double controlWdivider = 0.0;
+							if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+								controlWdivider += Constants.FX_MISC_CONTROL_WIDTH_MUL*1.004;
+								controlW -= hBoxUIviewsGap;
+							} 
+							if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+								controlWdivider += Constants.FX_PEDAL_CONTROL_WIDTH_MUL*1.004;
+								controlW -= hBoxUIviewsGap;
+							}
+							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+								controlWdivider += Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.008;
+								controlW -= hBoxUIviewsGap*8;
+							}
+							if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+								controlW -= 340.0 + hBoxUIviewsGap;
+							}
+							if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
+								controlW -= midiLogWidth + hBoxUIviewsGap;
+							}
+							
+							controlWdivider = (controlWdivider == 0)?1:controlWdivider;
+							controlW = (controlW/controlWdivider)*1.0;
+							controlW = (controlW > 260.0)?260.0:controlW;
 							if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
 								uiMisc.respondToResize(width, height, height, controlW, controlH);
+								mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
 							}
 							if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
 								uiPedal.respondToResize(width, height, height, controlW, controlH);
+								mainWindowMaxWidth += controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
 							}
 							if (uiPad.getViewState() == Constants.PANEL_SHOW) {
 								uiPad.respondToResize(width, height, height, controlW, controlH);
+								mainWindowMaxWidth += (controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2;
 							}
 							if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
 								uiPadsExtra.respondToResize(width, height, height, controlW, controlH);							
+								mainWindowMaxWidth += 340.0;
 							}
 							if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
-								uiMidiLog.respondToResize(width*0.5, height*0.7, controlH);							
+								uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlH);							
+								mainWindowMaxWidth += midiLogWidth;
 							}
+							//mainWindowMaxWidth =  mainWindowMaxWidth*1.025;
+							//mainWindowMaxWidth = (mainWindowMaxWidth>mainWindowMinWidth)?mainWindowMaxWidth:mainWindowMinWidth;
+							//window.setMinWidth(mainWindowMaxWidth);
+							//window.setMaxWidth(mainWindowMaxWidth);
 						}
 					});
 				}

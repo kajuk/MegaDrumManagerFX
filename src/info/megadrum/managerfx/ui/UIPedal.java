@@ -23,7 +23,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class UIPedal extends UIPanel {
+public class UIPedal extends UIPanel implements PanelInterface {
 	private ToolBar		toolBar;
 	private TabPane		tabPane;
 	private Tab 		tabMisc;
@@ -468,4 +468,10 @@ public class UIPedal extends UIPanel {
 		config.splashNote = uiSpinnerNoteSplash.uiCtlGetValue();
 		
 	}
+
+	@Override
+	public int getVerticalControlsCount() {
+		return allNotesControls.size() + 3;
+	}
+
 }
