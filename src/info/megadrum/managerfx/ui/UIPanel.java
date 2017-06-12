@@ -5,17 +5,49 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+class MdTitledPane extends Pane {
+	private Label titleLabel;
+	public MdTitledPane () {
+		titleLabel = new Label();
+		titleLabel.setLayoutX(0);
+		titleLabel.setLayoutY(0);
+		titleLabel.setAlignment(Pos.CENTER);
+		setStyle("-fx-border-width: 1px; -fx-border-color: darkgrey");
+		getChildren().add(titleLabel);
+	}
+	
+	public void setText(String title) {
+		titleLabel.setText(title);
+	}
+	
+	public void setFont(Font font) {
+		titleLabel.setFont(font);
+	}
+	
+	public void setTitleHeight(Double h) {
+		titleLabel.setMinHeight(h);
+		titleLabel.setMaxHeight(h);
+	}
+	
+	public void setWidth(Double w) {
+		setMinWidth(w);
+		setMaxWidth(w);
+	}
+}
 
 public class UIPanel {
 
 	protected int	viewSate = Constants.PANEL_SHOW;
-	protected TitledPane 	titledPane;
+	protected MdTitledPane 	titledPane;
 	protected VBox 			vBoxAll;
 	protected Pane			paneAll;
 	protected Button 		buttonGet;
@@ -29,6 +61,7 @@ public class UIPanel {
 	protected RadioMenuItem rbShow;
 	protected RadioMenuItem rbDetach;
 	protected Stage			windowDetached;
+	protected Double 		lastTitleHeight = 10.0;
 
 	public UIPanel (String title) {
 		panelTitle = title;
@@ -48,6 +81,7 @@ public class UIPanel {
         vBoxAll = new VBox(1);
 		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 		vBoxAll.setAlignment(Pos.TOP_CENTER);
+		vBoxAll.setLayoutX(0);
 		paneAll = new Pane();
 		paneAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 	}
@@ -93,12 +127,14 @@ public class UIPanel {
 	public void setDetached(Boolean d) {
 		detached = d;
 		if (!detached) {
-			titledPane = new TitledPane();
+			titledPane = new MdTitledPane();
 			titledPane.setText(panelTitle);
-			titledPane.setContent(vBoxAll);
+			//titledPane.setContent(vBoxAll);
+			vBoxAll.setLayoutY(lastTitleHeight);
+			titledPane.getChildren().add(vBoxAll);
 			titledPane.setId("panelTitle");
-			titledPane.setCollapsible(false);
-			titledPane.setAlignment(Pos.CENTER);
+			//titledPane.setCollapsible(false);
+			//titledPane.setAlignment(Pos.CENTER);
 		}
 	}
 	

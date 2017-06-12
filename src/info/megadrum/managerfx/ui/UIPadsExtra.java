@@ -90,11 +90,17 @@ public class UIPadsExtra extends UIPanel {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		titledPane.setWidth(controlW*2.74);
+		vBoxAll.setLayoutY(lastTitleHeight);
 		if (detached) {
 			vBoxAll.setMaxWidth(w);
+			titledPane.setWidth(w);
 		} else {
 			vBoxAll.setMaxWidth(340);
 			vBoxAll.setMinWidth(340);
+			titledPane.setWidth(340.0);
 		}
 		tabCurves.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

@@ -116,7 +116,7 @@ public class UIPedal extends UIPanel {
 		toolBar.getItems().add(new Separator());
 		toolBar.getItems().add(buttonLoad);
 		toolBar.getItems().add(buttonSave);
-		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
+		toolBar.setStyle("-fx-padding: 0.1em 0.01em 0.2em 0.01em");
 
 
 		vBoxAll.getChildren().add(toolBar);
@@ -329,6 +329,13 @@ public class UIPedal extends UIPanel {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		titledPane.setWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		vBoxAll.setLayoutY(lastTitleHeight);
+		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		toolBar.setMaxWidth(controlW*0.98*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
+		toolBar.setMaxHeight(controlH);
 		tabMisc.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabLevels.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabNotes.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

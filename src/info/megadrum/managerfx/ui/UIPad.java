@@ -229,7 +229,6 @@ public class UIPad extends UIPanel {
 			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-		titledPane.setFont(new Font(titledPaneFontHeight));
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
 		buttonGetAll.setFont(buttonFont);
@@ -243,6 +242,16 @@ public class UIPad extends UIPanel {
 		buttonNext.setFont(buttonFont);
 		buttonLast.setFont(buttonFont);
 		comboBoxInput.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		vBoxAll.setLayoutY(lastTitleHeight);
+		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		toolBarTop.setMaxWidth(controlW*0.99*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		toolBarNavigator.setMaxWidth(controlW*0.99*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.1);
+		toolBarTop.setMaxHeight(controlH);
+		toolBarNavigator.setMaxHeight(controlH);
 		uiInputLeft.respondToResize( w*0.5, h*0.6, fullHeight, controlW, controlH);
 		uiInputRight.respondToResize(w*0.5, h*0.6, fullHeight, controlW, controlH);
 		ui3rdZone.respondToResize(w*1.0, h*0.0915, fullHeight, controlW, controlH);

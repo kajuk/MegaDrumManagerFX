@@ -43,6 +43,10 @@ public class UIMidiLog extends UIPanel{
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(titledPaneFontHeight*1.72);
+		lastTitleHeight = titledPaneFontHeight*1.72;
+		titledPane.setWidth(w);
+		vBoxAll.setLayoutY(titledPaneFontHeight*1.72);
 		vBoxAll.setMaxSize(w, h);
 		vBoxAll.setMinSize(w, h);
 		tabVisual.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

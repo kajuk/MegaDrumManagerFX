@@ -6,6 +6,7 @@ import javax.swing.event.EventListenerList;
 
 import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.utils.Constants;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -147,6 +148,15 @@ public class UIMisc extends UIPanel {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		titledPane.setWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		vBoxAll.setLayoutY(lastTitleHeight);
+		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		toolBar.setMaxWidth(controlW*0.98*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		toolBar.setMaxHeight(controlH);
+		//toolBar.setStyle("-fx-background-color: orange");
+		//vBoxAll.setStyle("-fx-background-color: lightgreen");
 		buttonGet.setFont(buttonFont);
 		buttonSend.setFont(buttonFont);
 		buttonLoad.setFont(buttonFont);
