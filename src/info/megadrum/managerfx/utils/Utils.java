@@ -624,7 +624,7 @@ public class Utils {
 	
 	public static int compareSysexToConfigPedal(byte [] sysex, ConfigPedal config, int mcu_type) {
 		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}
@@ -795,7 +795,7 @@ public class Utils {
 	}
 
 	public static void copySysexToConfigPedal(byte [] sysex, ConfigPedal config, int mcu_type) {
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}

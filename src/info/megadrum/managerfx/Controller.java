@@ -1275,7 +1275,7 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendSysexPedal() {
 		//sysexSendList.clear();
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}
@@ -1463,7 +1463,7 @@ public class Controller implements MidiRescanEventListener {
 		sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 		sysexSendList.add(sysex);		
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}
@@ -2115,7 +2115,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void loadSysexPedal() {
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}
@@ -2127,7 +2127,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void saveSysexPedal() {
-		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
 		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
 		}
