@@ -219,7 +219,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.05);
-		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 4))*1.04;
+		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount()))*1.048 - 0.5;
 		respondToResize(w, h, h, controlW*1.01, controlH);
 	}
 

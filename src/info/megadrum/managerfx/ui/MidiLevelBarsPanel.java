@@ -290,6 +290,7 @@ public class MidiLevelBarsPanel extends Pane {
 		slidersPos = new ArrayList<Slider>();
 		for (int i = 0; i < 7; i++) {
 			slidersPos.add(new Slider(0, 127, 63));
+			slidersPos.get(i).setDisable(true);
 		}
 		spinnerTimeRange = new SpinnerFast<Double>();
 		SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(10.0, 50.0, 30.0, 1.0);
@@ -404,10 +405,12 @@ public class MidiLevelBarsPanel extends Pane {
 		labelRim.setLayoutY(panesRight.size()*rowHight + paneHeight);
 		paneRight.getChildren().addAll(labelLastPos, labelCenter, labelRim);
 		
+		Double sliderFontSize = paneHeight*0.55;
+		sliderFontSize = (sliderFontSize>8)?8:sliderFontSize;
 		for (int i = 0; i < slidersPos.size(); i++) {
 			slidersPos.get(i).setMinSize(paneRightWidth, paneHeight);
 			slidersPos.get(i).setMaxSize(paneRightWidth, paneHeight);
-			
+			slidersPos.get(i).setStyle("-fx-font-size: " + sliderFontSize.toString()+ "pt");		
 			slidersPos.get(i).setLayoutX(0);
 			slidersPos.get(i).setLayoutY((panesRight.size() + 1)*rowHight + i*paneHeight + paneHeight);
 		}

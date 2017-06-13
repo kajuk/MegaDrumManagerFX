@@ -100,12 +100,14 @@ public class UISlider extends UIControl {
     public void respondToResize(Double w, Double h) {
     	//Double width = (h*3.5 + w*0.1);
     	Double width = w*0.48;
+    	Double sliderFontSize = h*0.5;
+    	sliderFontSize = (sliderFontSize>8)?8:sliderFontSize;
     	super.respondToResize(w, h);
 		uiSlider.setMinHeight(h);
 		uiSlider.setMaxHeight(h);
 		uiSlider.setMaxWidth(width);
 		uiSlider.setMinWidth(width);
-		
+		uiSlider.setStyle("-fx-font-size: " + sliderFontSize.toString()+ "pt");				
     }
 /*
     @Override
