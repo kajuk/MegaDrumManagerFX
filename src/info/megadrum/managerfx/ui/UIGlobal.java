@@ -137,6 +137,9 @@ public class UIGlobal {
 		} else if (status == Constants.MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN) {
 			backgroundColor = "pink";
 			message = Constants.MD_SYSEX_STATUS_NAMES[Constants.MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN];			
+		} else if (status == Constants.MD_SYSEX_STATUS_MIDI_INIT_ERROR) {
+			backgroundColor = "pink";
+			message = Constants.MD_SYSEX_STATUS_NAMES[Constants.MD_SYSEX_STATUS_MIDI_INIT_ERROR];			
 		} else if (status != Constants.MD_SYSEX_STATUS_OK) {
 			backgroundColor = "red";
 			message = "Sysex " + Constants.MD_SYSEX_NAMES[sysex_type] + " " + Constants.MD_SYSEX_STATUS_NAMES[status];

@@ -38,9 +38,9 @@ public interface Constants {
 	public static final byte MD_SYSEX_MISC = (byte)0x01;
 	public static final byte MD_SYSEX_MISC_SIZE = 17;
 	public static final byte MD_SYSEX_PEDAL = (byte)0x02;
-	public static final boolean OLD_PEDAL = true;
-	public static final byte MD_SYSEX_PEDAL_SIZE = 79;
-	//public static final byte MD_SYSEX_PEDAL_SIZE = 95;
+	public static final boolean OLD_PEDAL = false;
+	//public static final byte MD_SYSEX_PEDAL_SIZE = 79;
+	public static final byte MD_SYSEX_PEDAL_SIZE = 95;
 	public static final byte MD_SYSEX_PAD = (byte)0x03;
 	public static final byte MD_SYSEX_PAD_SIZE = 34;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;
@@ -79,8 +79,9 @@ public interface Constants {
 	public static final int MD_SYSEX_STATUS_TIMEOUT = 2;
 	public static final int MD_SYSEX_STATUS_MISMATCH = 3;
 	public static final int MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN = 4;
+	public static final int MD_SYSEX_STATUS_MIDI_INIT_ERROR = 5;
 	public static final String[] MD_SYSEX_STATUS_NAMES = {
-		"Sysex: OK", "Sysex: Working", "Timout", "Mismatch", "MIDI is NOT Open"	
+		"Sysex: OK", "Sysex: Working", "Timout", "Mismatch", "MIDI is NOT Open", "MIDI Init Error"
 	};
 	
 	public static final String[] CURVES_LIST = { "LinearCustom1", "Log1Custom2", "Log2Custom3", "Log3Custom4", "Log4Custom5",

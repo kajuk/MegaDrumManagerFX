@@ -77,7 +77,9 @@ public class MidiController {
 		        	sendSysexFromThread(buf, maxRetries, retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
-						sysexStatus[0] = Constants.MD_SYSEX_STATUS_TIMEOUT;
+		        		if ((sysexStatus[0]) == Constants.MD_SYSEX_STATUS_OK) {
+							sysexStatus[0] = Constants.MD_SYSEX_STATUS_TIMEOUT;
+		        		}
 		        		System.out.printf("Sysex timed out\n");
 		        		break;
 		        	}
