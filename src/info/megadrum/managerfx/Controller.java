@@ -992,7 +992,7 @@ public class Controller implements MidiRescanEventListener {
 			sysexThreadsStarted++;
 			//System.out.printf("Sending %d sysexes in thread %d\n", sysexSendList.size(), sysexThreadsStarted);
 			if (midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50) > 0) {
-				System.out.println("Not Ok");				
+				//System.out.println("Not Ok");				
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
 				uiGlobal.getProgressBarSysex().setVisible(false);
@@ -1275,8 +1275,12 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendSysexPedal() {
 		//sysexSendList.clear();
-		byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		byte [] sysex = new byte[sysex_length];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId, configOptions.mcuType);
 		sysexSendList.add(sysex);
 		sendSysex();
 	}
@@ -1459,8 +1463,12 @@ public class Controller implements MidiRescanEventListener {
 		sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 		sysexSendList.add(sysex);		
-		sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		sysex = new byte[sysex_length];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId, configOptions.mcuType);
 		sysexSendList.add(sysex);
 		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
@@ -1852,8 +1860,8 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_PEDAL:
-				Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
-				Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal);
+				Utils.copySysexToConfigPedal(sysex, configFull.configPedal, configOptions.mcuType);
+				Utils.copySysexToConfigPedal(sysex, moduleConfigFull.configPedal, configOptions.mcuType);
 				moduleConfigFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configPedal.sysexReceived = true;
 				uiPedal.setControlsFromConfig(configFull.configPedal, true);
@@ -2058,8 +2066,8 @@ public class Controller implements MidiRescanEventListener {
 		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
 		Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
 
-		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
-		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);		
+		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId, configOptions.mcuType);
+		Utils.copySysexToConfigPedal(sysex, configFull.configPedal, configOptions.mcuType);		
 
 		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
 			Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[i], sysex, configOptions.chainId, i);
@@ -2107,16 +2115,24 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void loadSysexPedal() {
-		byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		byte [] sysex = new byte[sysex_length];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId, configOptions.mcuType);
 		fileManager.loadSysex(sysex, configOptions);
-		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
+		Utils.copySysexToConfigPedal(sysex, configFull.configPedal, configOptions.mcuType);
 		uiPedal.setControlsFromConfig(configFull.configPedal, false);		
 	}
 	
 	private void saveSysexPedal() {
-		byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (configOptions.mcuType == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		byte [] sysex = new byte[sysex_length];
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId, configOptions.mcuType);
 		fileManager.saveSysex(sysex, configOptions);		
 	}
 	

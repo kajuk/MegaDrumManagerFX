@@ -21,7 +21,24 @@ public interface Constants {
 	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 5;
 	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Pads Extra", "MIDI Log"};
-	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6", "STM32F205LITE", "STM32F205TEST1"};
+	public static final int MCU_TYPE_UNKNOW = 0;
+	public static final int MCU_TYPE_Atmega644 = 1;
+	public static final int MCU_TYPE_Atmega1284 = 2;
+	public static final int MCU_TYPE_STM32F103VBT6 = 3;
+	public static final int MCU_TYPE_STM32F103RBT6 = 4;
+	public static final int MCU_TYPE_STM32F103RCT6 = 5;
+	public static final int MCU_TYPE_STM32F205RBT6 = 6;
+	public static final int MCU_TYPE_STM32F205RCT6 = 7;
+	public static final int MCU_TYPE_STM32F205LITE = 8;
+	public static final int MCU_TYPE_STM32F205TEST1 = 9;
+	public static final int MCU_TYPE_STM32TEST2 = 10;
+	public static final int MCU_TYPE_STM32TEST3 = 11;
+	public static final int MCU_TYPE_STM32TEST4 = 12;
+	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6",
+											"STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6",
+											"STM32F205LITE", "STM32F205TEST1", "STM32TEST2", "STM32TEST3",
+											"STM32TEST4"
+											};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;
@@ -38,9 +55,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_MISC = (byte)0x01;
 	public static final byte MD_SYSEX_MISC_SIZE = 17;
 	public static final byte MD_SYSEX_PEDAL = (byte)0x02;
-	public static final boolean OLD_PEDAL = false;
-	//public static final byte MD_SYSEX_PEDAL_SIZE = 79;
-	public static final byte MD_SYSEX_PEDAL_SIZE = 95;
+	public static final byte MD_SYSEX_PEDAL_SIZE_OLD = 79;
+	public static final byte MD_SYSEX_PEDAL_SIZE_NEW = 95;
 	public static final byte MD_SYSEX_PAD = (byte)0x03;
 	public static final byte MD_SYSEX_PAD_SIZE = 34;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;

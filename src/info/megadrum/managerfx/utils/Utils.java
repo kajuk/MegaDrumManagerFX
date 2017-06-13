@@ -622,14 +622,18 @@ public class Utils {
 		sysex[i++] = Constants.SYSEX_END;		
 	}
 	
-	public static int compareSysexToConfigPedal(byte [] sysex, ConfigPedal config) {
+	public static int compareSysexToConfigPedal(byte [] sysex, ConfigPedal config, int mcu_type) {
 		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte flags;
 		int i = 4;
 		int result = 1;
-		if (sysex.length >= Constants.MD_SYSEX_PEDAL_SIZE) {
+		if (sysex.length >= sysex_length) {
 			result = 0;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -716,7 +720,7 @@ public class Utils {
 			if (config.chickCurve != (flags&0x0f)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				if (config.semiOpenLevel2 != sysex2byte(sysex_byte)) result = 1;
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -733,7 +737,7 @@ public class Utils {
 			if (config.bellSemiOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				if (config.bowSemiOpen2Note != sysex2byte(sysex_byte)) result = 1;
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -753,7 +757,7 @@ public class Utils {
 			if (config.bellHalfOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				if (config.bowHalfOpen2Note != sysex2byte(sysex_byte)) result = 1;
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -790,12 +794,16 @@ public class Utils {
 		return result;
 	}
 
-	public static void copySysexToConfigPedal(byte [] sysex, ConfigPedal config) {
+	public static void copySysexToConfigPedal(byte [] sysex, ConfigPedal config, int mcu_type) {
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_NEW;
+		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte flags;
 		int i = 4;
-		if (sysex.length >= Constants.MD_SYSEX_PEDAL_SIZE) {
+		if (sysex.length >= sysex_length) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
@@ -872,7 +880,7 @@ public class Utils {
 			config.chickCurve = (flags&0x0f);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				config.semiOpenLevel2 = sysex2byte(sysex_byte);
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -889,7 +897,7 @@ public class Utils {
 			config.bellSemiOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				config.bowSemiOpen2Note = sysex2byte(sysex_byte);
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -909,7 +917,7 @@ public class Utils {
 			config.bellHalfOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!Constants.OLD_PEDAL) {
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 				config.bowHalfOpen2Note = sysex2byte(sysex_byte);
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
@@ -945,7 +953,7 @@ public class Utils {
 		}
 	}
 	
-	public static void copyConfigPedalToSysex(ConfigPedal config, byte [] sysex, int chainId) {
+	public static void copyConfigPedalToSysex(ConfigPedal config, byte [] sysex, int chainId, int mcu_type) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte flags;
@@ -1026,7 +1034,7 @@ public class Utils {
 		sysex_byte = byte2sysex(flags);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		if (!Constants.OLD_PEDAL) {
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_byte = byte2sysex((byte)config.semiOpenLevel2);
 			sysex[i++] = sysex_byte[0];
 			sysex[i++] = sysex_byte[1];
@@ -1043,7 +1051,7 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.bellSemiOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		if (!Constants.OLD_PEDAL) {
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_byte = byte2sysex((byte)config.bowSemiOpen2Note);
 			sysex[i++] = sysex_byte[0];
 			sysex[i++] = sysex_byte[1];
@@ -1063,7 +1071,7 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.bellHalfOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		if (!Constants.OLD_PEDAL) {
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
 			sysex_byte = byte2sysex((byte)config.bowHalfOpen2Note);
 			sysex[i++] = sysex_byte[0];
 			sysex[i++] = sysex_byte[1];
