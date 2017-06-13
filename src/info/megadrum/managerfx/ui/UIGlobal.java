@@ -1,5 +1,6 @@
 package info.megadrum.managerfx.ui;
 
+import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -52,7 +53,7 @@ public class UIGlobal {
 		buttonPrevFile.setMinWidth(55);
 		buttonNextFile = new Button("nextCfg");
 		buttonNextFile.setMinWidth(55);
-		labelMidiStatus = new Label("MIDI");
+		labelMidiStatus = new Label("");
 		labelMidiStatus.setMinWidth(100);
 		labelMidiStatus.setAlignment(Pos.CENTER);
 		//labelMidiStatus.setAlignment(Pos.CENTER);
@@ -122,4 +123,25 @@ public class UIGlobal {
 		return (Node) hBoxPane;
 	}
 
+	public void clearSysexStatusLabel() {
+		labelMidiStatus.setVisible(false);
+	}
+	
+	public void setSysexStatusLabel(int status, int sysex_type) {
+		labelMidiStatus.setVisible(true);
+		String backgroundColor = "lightgreen";
+		String message = Constants.MD_SYSEX_STATUS_NAMES[Constants.MD_SYSEX_STATUS_OK];
+		if (status == Constants.MD_SYSEX_STATUS_WORKING) {
+			backgroundColor = "orange";
+			message = Constants.MD_SYSEX_STATUS_NAMES[Constants.MD_SYSEX_STATUS_WORKING];
+		} else if (status == Constants.MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN) {
+			backgroundColor = "pink";
+			message = Constants.MD_SYSEX_STATUS_NAMES[Constants.MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN];			
+		} else if (status != Constants.MD_SYSEX_STATUS_OK) {
+			backgroundColor = "red";
+			message = "Sysex " + Constants.MD_SYSEX_NAMES[sysex_type] + " " + Constants.MD_SYSEX_STATUS_NAMES[status];
+		}
+		labelMidiStatus.setText(message);
+		labelMidiStatus.setStyle("-fx-background-color: " + backgroundColor);
+	}
 }

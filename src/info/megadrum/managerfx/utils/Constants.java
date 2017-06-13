@@ -21,7 +21,7 @@ public interface Constants {
 	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 5;
 	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Pads Extra", "MIDI Log"};
-	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6", "STM32F205LITE"};
+	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6", "STM32F205LITE", "STM32F205TEST1"};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;
@@ -68,6 +68,21 @@ public interface Constants {
 	public static final byte MD_SYSEX_CONFIG_CURRENT_SIZE = 6;
 	public static final byte MD_SYSEX_CONFIG_LOAD = (byte)0x11;
 	public static final byte MD_SYSEX_CONFIG_LOAD_SIZE = 6;
+	public static final String[] MD_SYSEX_NAMES = {
+			"Undefined", "Misc","Pedal","Input","3rd Zone","Version","Curve","Positional", 	//0-7
+			"Custom Name","Global Misc", "Undefined", "Bootloader","MCU Type","Config Name","Config Count","Config Save",	//8-f
+			"Config Current", "Config Load"							//10-
+	};
+	
+	public static final int MD_SYSEX_STATUS_OK = 0;
+	public static final int MD_SYSEX_STATUS_WORKING = 1;
+	public static final int MD_SYSEX_STATUS_TIMEOUT = 2;
+	public static final int MD_SYSEX_STATUS_MISMATCH = 3;
+	public static final int MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN = 4;
+	public static final String[] MD_SYSEX_STATUS_NAMES = {
+		"Sysex: OK", "Sysex: Working", "Timout", "Mismatch", "MIDI is NOT Open"	
+	};
+	
 	public static final String[] CURVES_LIST = { "LinearCustom1", "Log1Custom2", "Log2Custom3", "Log3Custom4", "Log4Custom5",
 		"Exp1Custom6", "Exp2Custom7", "S1Custom8", "S2Custom9", "Strong1Custom10", "Strong2Custom11", "MaxCustom12",
 		"Custom13", "Custom14", "Custom15", "Custom16" };
@@ -171,7 +186,10 @@ public interface Constants {
 			"3. Click button Start.\n" +
 			"4. Wait for the upgrade to finish.\n" +
 			"5. Click button Close.";
-	public static final int SYSEX_TIMEOUT_RETRIES = 10; // 8 at least needed to workaround Windows/Java/USB MIDI sysex corruption(bug?)
+	public static final int SYSEX_TIMEOUT_RETRIES = 15; // 8 at least needed to workaround Windows/Java/USB MIDI sysex corruption(bug?)
+	public static final String MIDI_IS_NOT_OPEN = "MIDI is not open";
+	public static final String SYSEX_OK_TEXT = "Sysex Ok";
+	public static final String SYSEX_ERROR_VERIFY_TEXT = "Sysex Verify Error";
 	public static final String SYSEX_TIMEOUT_VERSION_TXT = "Version Sysex Timeout";
 	public static final String SYSEX_TIMEOUT_MCU_TXT = "MCU Sysex Timeout";
 	public static final String SYSEX_TIMEOUT_MISC_TXT = "Misc Sysex Timeout";
@@ -185,9 +203,6 @@ public interface Constants {
 	public static final String SYSEX_TIMEOUT_CONFIG_NAME_TXT = "Config Name Sysex Timeout";
 	public static final String SYSEX_TIMEOUT_CONFIG_CURRENT_TXT = "Config Current Sysex Timeout";
 	public static final String SYSEX_TIMEOUT_CONFIG_COUNT_TXT = "Config COUNT Sysex Timeout";
-	public static final String SYSEX_OK_TEXT = "Sysex Ok";
-	public static final String SYSEX_ERROR_VERIFY_TEXT = "Sysex Verify Error";
-	public static final String MIDI_IS_NOT_OPEN = "MIDI is not open";
 
 	public static final Double FX_TITLEBARS_FONT_MIN_SIZE	= 4.4;
 	public static final Double FX_TOOLBARS_FONT_MIN_SIZE	= 4.0;

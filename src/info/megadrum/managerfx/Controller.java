@@ -942,6 +942,7 @@ public class Controller implements MidiRescanEventListener {
 			sysexSendList.clear();
 			//System.out.println("Still sending previus sysex");			
 		} else {
+			uiGlobal.setSysexStatusLabel(Constants.MD_SYSEX_STATUS_WORKING, 0);
 			midiController.sendSysexTaskRecreate();
 			uiGlobal.getProgressBarSysex().setVisible(true);
 			midiController.addSendSysexTaskSucceedEventHandler(new EventHandler<WorkerStateEvent>() {
@@ -953,29 +954,40 @@ public class Controller implements MidiRescanEventListener {
 					uiGlobal.getProgressBarSysex().progressProperty().unbind();
 					uiGlobal.getProgressBarSysex().setProgress(1.0);
 					uiGlobal.getProgressBarSysex().setVisible(false);
-					if (sysexLastChanged.size() > 0) {
-						sendSysexLastChanged();
+					int [] status = midiController.getStatus();
+					if (status[0] > 0) {
+						uiGlobal.setSysexStatusLabel(status[0], status[1]);
 					} else {
-						if (sendSysexReadOnlyRequestFlag) {
-							sendSysexReadOnlyRequestFlag = false;
-							sendSysexReadOnlyRequest();
+						if (sysexLastChanged.size() > 0) {
+							sendSysexLastChanged();
+						} else {
+							if (sendSysexReadOnlyRequestFlag) {
+								sendSysexReadOnlyRequestFlag = false;
+								sendSysexReadOnlyRequest();
+							}
+							if (saveToSlotAfterSendAll) {
+								saveToSlotAfterSendAll = false;
+								sendSysexSaveToSlotOnlyRequest(saveToSlot);
+							}
+							if (sendNextAllSysexRequestsFlag) {
+								sendNextAllSysexRequestsFlag = false;
+								sendNextAllSysexRequests();
+							}
+							if (loadConfigAfterLoadSlot) {
+								loadConfigAfterLoadSlot = false;
+								sendAllSysexRequests();
+							}
 						}
-						if (saveToSlotAfterSendAll) {
-							saveToSlotAfterSendAll = false;
-							sendSysexSaveToSlotOnlyRequest(saveToSlot);
-						}
-						if (sendNextAllSysexRequestsFlag) {
-							sendNextAllSysexRequestsFlag = false;
-							sendNextAllSysexRequests();
-						}
-						if (loadConfigAfterLoadSlot) {
-							loadConfigAfterLoadSlot = false;
-							sendAllSysexRequests();
-						}
+						uiGlobal.setSysexStatusLabel(Constants.MD_SYSEX_STATUS_OK, 0);
 					}
 				}
 			});
-			midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50);		
+			if (midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50) > 0) {
+				uiGlobal.getProgressBarSysex().progressProperty().unbind();
+				uiGlobal.getProgressBarSysex().setProgress(1.0);
+				uiGlobal.getProgressBarSysex().setVisible(false);	
+				uiGlobal.setSysexStatusLabel(Constants.MD_SYSEX_STATUS_MIDI_IS_NOT_OPEN, 0);
+			}
 		}
 	}
 	
@@ -1572,6 +1584,8 @@ public class Controller implements MidiRescanEventListener {
 			}
 		} else {
 			midiController.closeAllPorts();
+			configOptions.mcuType = 0;
+			configOptions.version = 0;
 		}
 		if (midiController.isMidiOpen()) {
 			uiGlobalMisc.getToggleButtonMidi().setSelected(true);
@@ -1581,6 +1595,7 @@ public class Controller implements MidiRescanEventListener {
 			uiGlobalMisc.getToggleButtonMidi().setSelected(false);
 			uiGlobalMisc.getToggleButtonMidi().setText("Open MIDI");
 			uiGlobalMisc.setAllStatesUnknown();
+			uiGlobal.clearSysexStatusLabel();
 			setAllStatesUnknown();
 		}
 	}

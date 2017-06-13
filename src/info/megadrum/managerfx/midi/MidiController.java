@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.spi.DirStateFactory.Result;
 import javax.rmi.CORBA.Util;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.Receiver;
@@ -43,6 +44,7 @@ public class MidiController {
 	private String sendSysexConfigResult = "";
 	private Boolean compareSysex = false;
 	private byte [] sysexToCompare;
+	private int [] sysexStatus;
 
 	private List<byte[]> sysexSendListLocal;
 //	private List<byte[]> receivedSysexList;
@@ -62,13 +64,20 @@ public class MidiController {
 		protected V call()  {
 			//System.out.println("thread started");
 			try {
+				sysexStatus[0] = Constants.MD_SYSEX_STATUS_OK;
 				int i = 0;
 				final int max = sysexesList.size();
 				while (sysexesList.size() > 0) {
 					buf = sysexesList.get(0);
+					if (buf.length > 3) {
+						sysexStatus[1] = buf[3];
+					} else {
+						sysexStatus[1] = buf[0];
+					}
 		        	sendSysexFromThread(buf, maxRetries, retryDelay);
 		        	if (sysexTimedOut) {
 		        		// do something when timed out and break
+						sysexStatus[0] = Constants.MD_SYSEX_STATUS_TIMEOUT;
 		        		System.out.printf("Sysex timed out\n");
 		        		break;
 		        	}
@@ -126,6 +135,7 @@ public class MidiController {
 		//receivedShortMidiList = new ArrayList<>();
 		//receivedSysexList = new ArrayList<>();
 		receivedMidiDataList = new ArrayList<>();
+		sysexStatus = new int[2];
 		
 		midiHandler.addMidiEventListener(new MidiEventListener() {
 			@Override
@@ -174,6 +184,7 @@ public class MidiController {
 				sysexReceived = true;
 				//System.out.println("Received sysex is equal");
 			} else {
+				sysexStatus[0] = Constants.MD_SYSEX_STATUS_MISMATCH;
 				//System.out.println("Received sysex is NOT equal");
 			}
 			compareSysex = false;
@@ -194,6 +205,10 @@ public class MidiController {
 		fireMidiEvent(new MidiEvent(this));
 	}
 
+	public int[] getStatus() {
+		return sysexStatus;
+	}
+		
 	private void processShortMidi(byte [] buffer) {
 		//fireMidiEventWithBuffer(new MidiEvent(this), buffer);
 		receivedMidiDataList.add(buffer);
@@ -351,7 +366,8 @@ public class MidiController {
 		} 	
 	}
 	
-	public void sendSysex(List<byte[]> sysexSendList, ProgressBar progressBar, Integer maxRetries, Integer retryDelay) {
+	public int sendSysex(List<byte[]> sysexSendList, ProgressBar progressBar, Integer maxRetries, Integer retryDelay) {
+		int result = 0;
 		sendSysexConfigResult = "";
 		sysexReceived = false;
 		sendSysexConfigRetries = maxRetries;
@@ -373,7 +389,9 @@ public class MidiController {
 			});
 		} else {
 			progressBar.setVisible(false);
+			result = 1;
 		}
+		return result;
 	}
 
 	public void getMidi() {
