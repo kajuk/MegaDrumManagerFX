@@ -388,6 +388,10 @@ public class UIInput implements PanelInterface {
 		configPad.setTypeInt(uiComboBoxType.uiCtlGetValue());
 	}
 	
+	public void setTypeDisable(Boolean disable) {
+		uiComboBoxType.uiCtlSetDisable(disable);
+	}
+	
 	@Override
 	public int getVerticalControlsCount() {
 		return allControls.size() + 1;

@@ -373,11 +373,13 @@ public class UIPad extends UIPanel implements PanelInterface {
 			arrayNamesLeft[0] = Constants.PADS_NAMES_LIST[0];
 			listNames = Arrays.asList(arrayNamesLeft);
 			uiInputLeft.setNameList(listNames);
+			uiInputLeft.setTypeDisable(true);
 			uiInputRight.getUI().setVisible(false);
 		} else {
 			arrayNamesLeft[0] = Constants.PADS_NAMES_LIST[((pair - 1)*2) + 1];
 			listNames = Arrays.asList(arrayNamesLeft);
 			uiInputLeft.setNameList(listNames);
+			uiInputLeft.setTypeDisable(false);
 			arrayNamesRight[0] = Constants.PADS_NAMES_LIST[((pair - 1)*2) + 2];
 			listNames = Arrays.asList(arrayNamesRight);
 			uiInputRight.setNameList(listNames);
