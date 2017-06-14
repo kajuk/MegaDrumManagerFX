@@ -488,6 +488,9 @@ public class Controller implements MidiRescanEventListener {
 					@Override
 					public void run() {
 						//resizeFromResize = true;
+						//Double uiGlobalMiscFontSize = 3.0;
+						//uiGlobalMisc.getUI().setStyle("-fx-font-size: " + uiGlobalMiscFontSize.toString() + "pt");
+						uiGlobalMisc.respondToResize(sc.getHeight()*0.05);
 						Double mainMenuBarHeight = mainMenuBar.getHeight();
 						Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
 						Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();

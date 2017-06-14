@@ -83,7 +83,7 @@ public class UIGlobal {
 				
 			}
 		}
-		comboBoxFile.getEditor().setFont(new Font(10));
+		comboBoxFile.setStyle("-fx-font-size: 7.5pt");
 		comboBoxFile.setMinWidth(200);
 	}
 

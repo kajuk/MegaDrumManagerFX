@@ -14,12 +14,14 @@ import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Spinner;
@@ -29,6 +31,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -126,7 +130,6 @@ public class UIGlobalMisc {
 		rootGridPane.getChildren().add(labelMidi);
 
 		toggleButtonMidi = new ToggleButton("Open MIDI");
-		toggleButtonMidi.setFont(new Font(10));
 		GridPane.setConstraints(toggleButtonMidi, 1, 0);
 		GridPane.setHalignment(toggleButtonMidi, HPos.LEFT);
 		GridPane.setValignment(toggleButtonMidi, VPos.CENTER);
@@ -177,7 +180,7 @@ public class UIGlobalMisc {
 
 		lblFwVersion = new Label("FwVersion");
 		lblFwVersion.setStyle("-fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
-		lblFwVersion.setMinWidth(80);
+		lblFwVersion.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
 		lblFwVersion.setAlignment(Pos.CENTER);
 		GridPane.setConstraints(lblFwVersion, 3, 0);
 		GridPane.setHalignment(lblFwVersion, HPos.LEFT);
@@ -193,7 +196,7 @@ public class UIGlobalMisc {
 
 		lblMcu = new Label("mcu");
 		lblMcu.setStyle("-fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
-		lblMcu.setMinWidth(100);
+		//lblMcu.setMinWidth(100);
 		lblMcu.setAlignment(Pos.CENTER);
 		GridPane.setConstraints(lblMcu, 3, 1);
 		GridPane.setHalignment(lblMcu, HPos.LEFT);
@@ -480,6 +483,63 @@ public class UIGlobalMisc {
 	public Node getUI() {
 		return (Node) rootGridPane;
 	}
+	
+	public void respondToResize(Double h) {
+		Double fontSize = h*0.25;
+		Double styledFontSize = fontSize*0.7;
+		Font font = new Font(fontSize);
+		rootGridPane.setMinHeight(h);
+		rootGridPane.setMaxHeight(h);
+		rootGridPane.getRowConstraints().clear();
+		rootGridPane.getColumnConstraints().clear();
+		rootGridPane.getRowConstraints().add(new RowConstraints(h*0.45));
+		rootGridPane.getRowConstraints().add(new RowConstraints(h*0.45));
+		
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.0)); // 0
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 1
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 2
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 3
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 4
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*0.5)); // 5
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 6
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*0.5)); // 7
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 8
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.5)); // 9
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 10
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.5)); // 11
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*0.5)); // 12
+		for (int i=0; i<rootGridPane.getChildren().size(); i++) {
+			if (rootGridPane.getChildren().get(i) instanceof Label) {
+				((Label)rootGridPane.getChildren().get(i)).setFont(font);
+			}
+			if (rootGridPane.getChildren().get(i) instanceof TextField) {
+				((TextField)rootGridPane.getChildren().get(i)).setFont(font);
+			}
+			if (rootGridPane.getChildren().get(i) instanceof ComboBox<?>) {
+				((ComboBox<?>)rootGridPane.getChildren().get(i)).setStyle("-fx-font-size: " + styledFontSize.toString() + "pt");
+			}
+			if (rootGridPane.getChildren().get(i) instanceof Spinner<?>) {
+				((Spinner<?>)rootGridPane.getChildren().get(i)).setStyle("-fx-font-size: " + styledFontSize.toString() + "pt");
+			}
+			if (rootGridPane.getChildren().get(i) instanceof CheckBox) {
+				((CheckBox)rootGridPane.getChildren().get(i)).setStyle("-fx-font-size: " + styledFontSize.toString() + "pt");
+			}
+			if (rootGridPane.getChildren().get(i) instanceof Button) {
+				((Button)rootGridPane.getChildren().get(i)).setStyle("-fx-font-size: " + styledFontSize.toString() + "pt");
+			}
+			if (rootGridPane.getChildren().get(i) instanceof ToggleButton) {
+				((ToggleButton)rootGridPane.getChildren().get(i)).setStyle("-fx-font-size: " + styledFontSize.toString() + "pt");
+			}
+			((Control)rootGridPane.getChildren().get(i)).setMaxHeight(h*0.4);
+		}
+		lblFwVersion.setMinWidth(h*2);
+		//lblFwVersion.setMinHeight(h*0.45);
+		lblMcu.setMinWidth(h*2);
+		//lblMcu.setMinHeight(h*0.45);
+		textSlotName.setMinWidth(h*2);
+		//textSlotName.setMinHeight(h*0.45);
+	}
+
 	
 	public void setVersion(Integer version) {
 		lblFwVersion.setText(version.toString());
