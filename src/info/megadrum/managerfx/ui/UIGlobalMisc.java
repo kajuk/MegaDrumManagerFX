@@ -21,10 +21,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -62,10 +64,13 @@ public class UIGlobalMisc {
 	private Button		buttonSend;
 	private Label		labelLiveUpdates;
 	private CheckBox	checkBoxLiveUpdates;
-	//private Button		buttonLiveUpdates;
+	private ToggleGroup	toggleGroup;
+	private RadioMenuItem rbHide;
+	private RadioMenuItem rbShow;
 	
 	private ArrayList<Label> allControlLabels;
 
+	private int			viewSate = Constants.PANEL_SHOW;
 	private int			valueInputsCount = 18;
 	private int			valueModuleInputsCount = 18;
 	private int			changedFromSetInputs = 0;
@@ -101,6 +106,13 @@ public class UIGlobalMisc {
 	}
 
 	public UIGlobalMisc() {
+		ToggleGroup toggleGroup = new ToggleGroup();
+		rbHide = new RadioMenuItem("Hide");
+		rbHide.setToggleGroup(toggleGroup);
+		rbShow = new RadioMenuItem("Show");
+		rbShow.setToggleGroup(toggleGroup);
+		rbShow.setSelected(true);
+		
 		allControlLabels = new ArrayList<Label>();
 		rootGridPane = new GridPane();
 		rootGridPane.setStyle("-fx-border-color: lightgrey");
@@ -586,4 +598,23 @@ public class UIGlobalMisc {
 		return textSlotName;
 	}
 	
+	public RadioMenuItem getRadioMenuItemHide() {
+		return rbHide;
+	}
+
+	public RadioMenuItem getRadioMenuItemShow() {
+		return rbShow;
+	}
+
+	public void selectRadioMenuItemHide() {
+		rbHide.setSelected(true);
+	}
+
+	public void setViewState(int state) {
+		viewSate = state;
+	}
+	
+	public int getViewState() {
+		return viewSate;
+	}
 }
