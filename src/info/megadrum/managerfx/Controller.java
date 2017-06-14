@@ -502,7 +502,7 @@ public class Controller implements MidiRescanEventListener {
 						Double midiLogHeight = height*0.7;
 						Double midiLogWidth = width*0.23;
 						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlH= (height/uiPad.getVerticalControlsCount())*1.104 - 0.4;
+							controlH= (height/uiPad.getVerticalControlsCount())*1.100 - 0.4;
 							midiLogHeight = height*0.7;
 						} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
 							controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
@@ -524,15 +524,15 @@ public class Controller implements MidiRescanEventListener {
 						//controlW = width - hBoxUIviewsGap;
 						Double controlWdivider = 0.0;
 						if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_MISC_CONTROL_WIDTH_MUL*1.004;
+							controlWdivider += Constants.FX_MISC_CONTROL_WIDTH_MUL*1.000;
 							controlW -= hBoxUIviewsGap;
 						} 
 						if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_PEDAL_CONTROL_WIDTH_MUL*1.004;
+							controlWdivider += Constants.FX_PEDAL_CONTROL_WIDTH_MUL*1.000;
 							controlW -= hBoxUIviewsGap;
 						}
 						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.008;
+							controlWdivider += Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.000;
 							controlW -= hBoxUIviewsGap*8;
 						}
 						if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
@@ -544,7 +544,7 @@ public class Controller implements MidiRescanEventListener {
 						
 						controlWdivider = (controlWdivider == 0)?1:controlWdivider;
 						controlW = (controlW/controlWdivider)*1.0;
-						controlW = (controlW > 260.0)?260.0:controlW;
+						controlW = (controlW > 360.0)?360.0:controlW;
 						if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
 							uiMisc.respondToResize(width, height, height, controlW, controlH);
 							mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
@@ -616,6 +616,7 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void createMainMenuBar() {
 		mainMenuBar = new MenuBar();
+		mainMenuBar.useSystemMenuBarProperty().set(true);
 		mainMenuBar.setStyle("-fx-font-size: 10 pt");
 		mainMenu = new Menu("Main");
 		viewMenu = new Menu("View");
