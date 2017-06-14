@@ -178,7 +178,7 @@ public class UISpinnerNote extends UIControl {
     public void respondToResize(Double w, Double h) {
     	super.respondToResize(w, h);
 	  	Double spinnerButtonsFontSize = h*0.3;
-    	Double checkBoxFontSize = h*0.16;
+    	Double checkBoxFontSize = h*0.26;
 		spinnerFast.setMinHeight(h);
 		spinnerFast.setMaxHeight(h);
 		spinnerFast.setMaxWidth(h*2.8);
@@ -204,7 +204,7 @@ public class UISpinnerNote extends UIControl {
 			labelNote.setFont(new Font(h*0.50));			
 	    	// Padding setting really should be done via css and on init.
 	    	// This is a temp hack
-			checkBoxNoteLinked.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
+			//checkBoxNoteLinked.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
 			checkBoxNoteLinked.setStyle("-fx-font-size: " + checkBoxFontSize.toString() + "pt");
 		} else {
 			labelNote.setFont(new Font(h*0.55));

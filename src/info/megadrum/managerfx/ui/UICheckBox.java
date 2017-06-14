@@ -65,18 +65,8 @@ public class UICheckBox extends UIControl{
     @Override
     public void respondToResize(Double w, Double h) {
     	super.respondToResize(w, h);
-    	Double checkBoxFontSize = h*0.2;
-    	// Padding setting really should be done via css and on init.
-    	// This is a temp hack
-    	if (copyButtonShown) {
-          	checkBox.lookup(".box").setStyle("-fx-padding: 0.6em 0.6em 0.8em 0.8em;");
-    	} else {
-          	checkBox.lookup(".box").setStyle("-fx-padding: 0.4em 0.4em 0.6em 0.6em;");    		
-    	}
+    	Double checkBoxFontSize = h*0.35;
     	checkBox.setStyle("-fx-font-size: " + checkBoxFontSize.toString() + "pt");
-    	// Standard checkBox is not resizeable
-    	//checkBox.setMinHeight(h*0.1);
-    	//checkBox.setMaxHeight(h*0.1);
     }
     
     public void uiCtlSetValue(Boolean selected, Boolean setFromSysex) {

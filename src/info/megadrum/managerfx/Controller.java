@@ -475,6 +475,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	public void respondToResize(Scene sc) {
+/*
 		if (timerResize != null) {
 			timerResize.cancel();
 		}
@@ -487,6 +488,7 @@ public class Controller implements MidiRescanEventListener {
 					
 					@Override
 					public void run() {
+*/
 						//resizeFromResize = true;
 						//Double uiGlobalMiscFontSize = 3.0;
 						//uiGlobalMisc.getUI().setStyle("-fx-font-size: " + uiGlobalMiscFontSize.toString() + "pt");
@@ -568,16 +570,14 @@ public class Controller implements MidiRescanEventListener {
 							uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlH);							
 							mainWindowMaxWidth += midiLogWidth;
 						}
-						//mainWindowMaxWidth =  mainWindowMaxWidth*1.025;
-						//mainWindowMaxWidth = (mainWindowMaxWidth>mainWindowMinWidth)?mainWindowMaxWidth:mainWindowMinWidth;
-						//window.setMinWidth(mainWindowMaxWidth);
-						//window.setMaxWidth(mainWindowMaxWidth);
+/*						
 					}
 				});
 			}
 		};
 		timerResizeDelay = 10;
 		timerResize.schedule(timerTaskResize, timerResizeDelay);
+*/
 	}
 
 	public void respondToResizeDetached(Scene sc, UIPanel uiPanel) {

@@ -340,8 +340,6 @@ public class UIGlobalMisc {
 			}
 	    });
 
-		spinnerLcdContrast.setMaxWidth(70.0);
-		spinnerLcdContrast.setMinWidth(70.0);
 		GridPane.setConstraints(spinnerLcdContrast, 9, 0);
 		GridPane.setHalignment(spinnerLcdContrast, HPos.LEFT);
 		GridPane.setValignment(spinnerLcdContrast, VPos.CENTER);
@@ -496,9 +494,9 @@ public class UIGlobalMisc {
 		rootGridPane.getRowConstraints().add(new RowConstraints(h*0.45));
 		
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.0)); // 0
-		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 1
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.6)); // 1
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 2
-		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 3
+		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.3)); // 3
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*2.0)); // 4
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*0.5)); // 5
 		rootGridPane.getColumnConstraints().add(new ColumnConstraints(h*1.5)); // 6
@@ -532,12 +530,11 @@ public class UIGlobalMisc {
 			}
 			((Control)rootGridPane.getChildren().get(i)).setMaxHeight(h*0.4);
 		}
-		lblFwVersion.setMinWidth(h*2);
-		//lblFwVersion.setMinHeight(h*0.45);
-		lblMcu.setMinWidth(h*2);
-		//lblMcu.setMinHeight(h*0.45);
+		lblFwVersion.setMinWidth(h*2.4);
+		lblMcu.setMinWidth(h*2.4);
 		textSlotName.setMinWidth(h*2);
-		//textSlotName.setMinHeight(h*0.45);
+		spinnerLcdContrast.setMaxWidth(h*1.3);
+		spinnerLcdContrast.setMinWidth(h*1.3);		//textSlotName.setMinHeight(h*0.45);
 	}
 
 	
