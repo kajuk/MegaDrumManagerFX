@@ -1083,9 +1083,7 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void sendSysexCustomName(int id) {
 		//sysexSendList.clear();
-		byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-		Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[id], sysex, configOptions.chainId, id);
-		sysexSendList.add(sysex);
+		sysexSendList.add(configFull.configCustomNames[id].getSysexFromConfig(configOptions.chainId, id));
 		sendSysex();
 	}
 
@@ -1111,10 +1109,7 @@ public class Controller implements MidiRescanEventListener {
 		byte [] sysex;
 		byte i;
 		for (i = 0; i < configFull.customNamesCount; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];	
-			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
-			sysexSendList.add(sysex);
-			
+			sysexSendList.add(configFull.configCustomNames[i].getSysexFromConfig(configOptions.chainId, i));
 		}
 		sendSysex();
 	}
@@ -1520,9 +1515,7 @@ public class Controller implements MidiRescanEventListener {
 			
 		}
 		for (i = 0; i < configFull.customNamesCount; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];	
-			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
-			sysexSendList.add(sysex);
+			sysexSendList.add(configFull.configCustomNames[i].getSysexFromConfig(configOptions.chainId, i));
 			
 		}
 		for (i = 0; i < configFull.configNamesCount; i++) {
@@ -1839,8 +1832,8 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CUSTOM_NAME:
-				Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[pointer]);
-				Utils.copySysexToConfigCustomName(sysex, moduleConfigFull.configCustomNames[pointer]);
+				configFull.configCustomNames[pointer].setConfigFromSysex(sysex);
+				moduleConfigFull.configCustomNames[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configCustomNames[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configCustomNames[pointer].sysexReceived = true;
 				uiPadsExtra.setCustomName(configFull.configCustomNames[pointer], pointer, true);
@@ -2117,8 +2110,9 @@ public class Controller implements MidiRescanEventListener {
 			Utils.copySysexToConfigCurve(sysex, configFull.configCurves[i]);					
 		}
 		for (int i=0; i < (Constants.CUSTOM_NAMES_MAX); i++) {
-			Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[i], sysex, configOptions.chainId, i);
-			Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[i]);					
+			configFull.configCustomNames[i].setConfigFromSysex(
+					fullConfigs[configOptions.lastConfig].configCustomNames[i].getSysexFromConfig(configOptions.chainId, i)
+							);
 		}
 		switchToSelectedPair(padPair);
 	}
@@ -2301,8 +2295,8 @@ public class Controller implements MidiRescanEventListener {
 		fileManager.loadSysex(sysexAll, configOptions);					
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-			System.arraycopy(sysexAll, i*Constants.MD_SYSEX_CUSTOM_NAME_SIZE, sysex, 0, sysex.length);
-			Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[i]);
+			System.arraycopy(sysexAll, i*Constants.MD_SYSEX_CUSTOM_NAME_SIZE, sysex, 0, Constants.MD_SYSEX_CUSTOM_NAME_SIZE);
+			configFull.configCustomNames[i].setConfigFromSysex(sysex);
 			uiPadsExtra.setCustomName(configFull.configCustomNames[i], i, false);
 		}
 
@@ -2312,9 +2306,7 @@ public class Controller implements MidiRescanEventListener {
 		byte [] sysex;
 		byte [] sysexAll = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE * configFull.customNamesCount];
 		for (int i = 0; i < configFull.customNamesCount; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
-			System.arraycopy(sysex, 0, sysexAll, i*Constants.MD_SYSEX_CUSTOM_NAME_SIZE, sysex.length);
+			System.arraycopy(configFull.configCustomNames[i].getSysexFromConfig(configOptions.chainId, i), 0, sysexAll, i*Constants.MD_SYSEX_CUSTOM_NAME_SIZE, Constants.MD_SYSEX_CUSTOM_NAME_SIZE);
 		}
 		fileManager.saveSysex(sysexAll, configOptions);
 	}
