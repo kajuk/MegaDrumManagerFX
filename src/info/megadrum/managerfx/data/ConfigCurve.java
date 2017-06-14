@@ -35,5 +35,40 @@ public class ConfigCurve {
 		}
 	}	
 
+	public byte[] getSysexFromConfig(int chainId, int curveId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
+		int i = 0;
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_CURVE;
+		sysex[i++] = (byte)curveId;
+
+		for (int p = 0; p < 9;p++) {
+			sysex_byte = Utils.byte2sysex((byte)yValues[p]);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+		if (sysex.length >= Constants.MD_SYSEX_CURVE_SIZE) {
+			for (int p = 0; p < 9;p++) {
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				yValues[p] = Utils.sysex2byte(sysex_byte);
+				if (yValues[p]<0) {
+					yValues[p] += 256;
+				}
+			}
+		}
+		
+	}
+
 
 }

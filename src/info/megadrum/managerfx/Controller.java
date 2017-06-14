@@ -1129,10 +1129,7 @@ public class Controller implements MidiRescanEventListener {
 
 
 	private void sendSysexCurve() {
-		//sysexSendList.clear();
-		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(configFull.configCurves[curvePointer], sysex, configOptions.chainId, curvePointer);
-		sysexSendList.add(sysex);
+		sysexSendList.add(configFull.configCurves[curvePointer].getSysexFromConfig(configOptions.chainId, curvePointer));
 		sendSysex();
 	}
 	
@@ -1197,11 +1194,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysexConfigName(int id) {
-		byte [] sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];
-		Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[id], sysex, configOptions.chainId, id);
-		//System.out.printf("Config name to save in slot = %s\n", configFull.configConfigNames[id].name);
-		//sysexSendList.clear();
-		sysexSendList.add(sysex);
+		sysexSendList.add(configFull.configConfigNames[id].getSysexFromConfig(configOptions.chainId, id));
 		sendSysex();
 	}
 
@@ -1248,13 +1241,9 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendAllCurvesSysex() {
 		//sysexSendList.clear();
-		byte [] sysex;
 		byte i;
 		for (i = 0; i < Constants.CURVES_COUNT; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];	
-			Utils.copyConfigCurveToSysex(configFull.configCurves[i], sysex, configOptions.chainId, i);
-			sysexSendList.add(sysex);
-			
+			sysexSendList.add(configFull.configCurves[i].getSysexFromConfig(configOptions.chainId, i));	
 		}
 		sendSysex();
 	}
@@ -1509,9 +1498,7 @@ public class Controller implements MidiRescanEventListener {
 			}
 		}
 		for (i = 0; i < Constants.CURVES_COUNT; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];	
-			Utils.copyConfigCurveToSysex(configFull.configCurves[i], sysex, configOptions.chainId, i);
-			sysexSendList.add(sysex);
+			sysexSendList.add(configFull.configCurves[i].getSysexFromConfig(configOptions.chainId, i));
 			
 		}
 		for (i = 0; i < configFull.customNamesCount; i++) {
@@ -1519,9 +1506,7 @@ public class Controller implements MidiRescanEventListener {
 			
 		}
 		for (i = 0; i < configFull.configNamesCount; i++) {
-			sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];	
-			Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[i], sysex, configOptions.chainId, i);
-			sysexSendList.add(sysex);
+			sysexSendList.add(configFull.configConfigNames[i].getSysexFromConfig(configOptions.chainId, i));
 		}
 		sendSysexReadOnlyRequestFlag = true;
 		sendSysex();
@@ -1813,8 +1798,8 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
-				Utils.copySysexToConfigConfigName(sysex, configFull.configConfigNames[pointer]);
-				Utils.copySysexToConfigConfigName(sysex, moduleConfigFull.configConfigNames[pointer]);
+				configFull.configConfigNames[pointer].setConfigFromSysex(sysex);
+				moduleConfigFull.configConfigNames[pointer].setConfigFromSysex(sysex);
 				configFull.configConfigNames[pointer].sysexReceived = true;
 			    //System.out.printf("sysexReceived for ConfigName id %d set to true\n", buffer[4]);
 				reCreateSlotsMenuItems();
@@ -1823,8 +1808,8 @@ public class Controller implements MidiRescanEventListener {
 				}
 				break;
 			case Constants.MD_SYSEX_CURVE:
-				Utils.copySysexToConfigCurve(sysex, configFull.configCurves[pointer]);
-				Utils.copySysexToConfigCurve(sysex, moduleConfigFull.configCurves[pointer]);
+				configFull.configCurves[pointer].setConfigFromSysex(sysex);
+				moduleConfigFull.configCurves[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configCurves[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configCurves[pointer].sysexReceived = true;
 				if (pointer == curvePointer) {
@@ -2106,13 +2091,18 @@ public class Controller implements MidiRescanEventListener {
 		}				
 		
 		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
-			Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[i], sysex, configOptions.chainId, i);
-			Utils.copySysexToConfigCurve(sysex, configFull.configCurves[i]);					
+			configFull.configCurves[i].setConfigFromSysex(
+					fullConfigs[configOptions.lastConfig].configCurves[i].getSysexFromConfig(configOptions.chainId, i)
+					);
+			if (i == curvePointer) {
+				uiPadsExtra.setYvalues(configFull.configCurves[curvePointer].yValues, false);
+			}
 		}
 		for (int i=0; i < (Constants.CUSTOM_NAMES_MAX); i++) {
 			configFull.configCustomNames[i].setConfigFromSysex(
 					fullConfigs[configOptions.lastConfig].configCustomNames[i].getSysexFromConfig(configOptions.chainId, i)
 							);
+			uiPadsExtra.setCustomName(configFull.configCustomNames[i], i, false);
 		}
 		switchToSelectedPair(padPair);
 	}
@@ -2277,16 +2267,14 @@ public class Controller implements MidiRescanEventListener {
 
 	private void loadSysexCurve() {
 		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(configFull.configCurves[curvePointer], sysex, configOptions.chainId, curvePointer);
+		sysex = configFull.configCurves[curvePointer].getSysexFromConfig(configOptions.chainId, curvePointer);
 		fileManager.loadSysex(sysex, configOptions);
-		Utils.copySysexToConfigCurve(sysex, configFull.configCurves[curvePointer]);
+		configFull.configCurves[curvePointer].setConfigFromSysex(sysex);
 		uiPadsExtra.setYvalues(configFull.configCurves[curvePointer].yValues, false);
 	}
 	
 	private void saveSysexCurve() {
-		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(configFull.configCurves[curvePointer], sysex, configOptions.chainId, curvePointer);
-		fileManager.saveSysex(sysex, configOptions);
+		fileManager.saveSysex(configFull.configCurves[curvePointer].getSysexFromConfig(configOptions.chainId, curvePointer), configOptions);
 	}
 	
 	private void loadSysexAllCustomNames() {
@@ -2303,7 +2291,6 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void saveSysexAllCustomNames() {
-		byte [] sysex;
 		byte [] sysexAll = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE * configFull.customNamesCount];
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			System.arraycopy(configFull.configCustomNames[i].getSysexFromConfig(configOptions.chainId, i), 0, sysexAll, i*Constants.MD_SYSEX_CUSTOM_NAME_SIZE, Constants.MD_SYSEX_CUSTOM_NAME_SIZE);
