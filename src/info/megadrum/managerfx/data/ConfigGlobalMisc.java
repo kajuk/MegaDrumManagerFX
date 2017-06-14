@@ -38,4 +38,60 @@ public class ConfigGlobalMisc {
 		midi2_for_sysex = prop.getBoolean(prefix+"midi2_for_sysex", midi2_for_sysex);
 	}
 
+	public byte[] getSysexFromConfig(int chainId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
+		short flags;
+		int i = 0;
+
+		flags = (short) (
+				(((custom_names_en)?1:0)<<1)|(((config_names_en)?1:0)<<2)|(((midi2_for_sysex)?1:0)<<5)
+				);
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId;
+		sysex[i++] = Constants.MD_SYSEX_GLOBAL_MISC;
+		
+		sysex_byte = Utils.byte2sysex((byte)(100 - lcd_contrast));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)inputs_count);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = Utils.short2sysex(flags);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+	
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		short flags;
+		
+		int i = 4;
+		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			lcd_contrast = (100 - Utils.sysex2byte(sysex_byte));
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			inputs_count = Utils.sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			flags = Utils.sysex2short(sysex_short);
+			custom_names_en = ((flags&(1<<1)) != 0);
+			config_names_en = ((flags&(1<<2)) != 0);
+			midi2_for_sysex = ((flags&(1<<5)) != 0);
+		}
+		
+	}
+	
+
 }

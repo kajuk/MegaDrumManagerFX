@@ -68,4 +68,86 @@ public class ConfigMisc {
 	public int getNoteOff() {
 		return note_off;
 	}
+	
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		short flags;
+		int i = 4;
+		//System.out.printf("sysex_byte size: %d\n", sysex_byte.length);
+		//System.out.printf("sx size: %d\n", sx.length);
+		if (sysex.length >= Constants.MD_SYSEX_MISC_SIZE) {
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = 0;
+			sysex_short[3] = 0;
+			setNoteOff(Utils.sysex2short(sysex_short));
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			latency = Utils.sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			flags = Utils.sysex2short(sysex_short);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = 0;
+			sysex_short[3] = 0;
+			pressroll = Utils.sysex2short(sysex_short);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			octave_shift = Utils.sysex2byte(sysex_byte);
+			
+			
+			all_gains_low = ((flags&1) != 0);
+			alt_note_choking = ((flags&(1<<1)) != 0);
+			big_vu_meter = ((flags&(1<<2)) != 0);
+			quick_access = ((flags&(1<<3)) != 0);
+			big_vu_split = ((flags&(1<<4)) != 0);
+			alt_false_tr_supp = ((flags&(1<<5)) != 0);
+			inputs_priority = ((flags&(1<<6)) != 0);
+			midi_thru = ((flags&(1<<8)) != 0);
+			send_triggered_in = ((flags&(1<<11)) != 0);
+		}
+	}
+
+	public byte[] getSysexFromConfig(int chainId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+		short flags;
+		int i = 0;
+		
+		flags = (short) (((all_gains_low)?1:0)|
+				(((alt_note_choking)?1:0)<<1)|(((big_vu_meter)?1:0)<<2)
+				|(((quick_access)?1:0)<<3)|(((big_vu_split)?1:0)<<4)
+				|(((alt_false_tr_supp)?1:0)<<5)|(((inputs_priority)?1:0)<<6)
+				|(((midi_thru)?1:0)<<8)|(((send_triggered_in)?1:0)<<11));
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_MISC;
+		sysex_byte = Utils.byte2sysex((byte)getNoteOff());
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)latency);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = Utils.short2sysex(flags);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_byte = Utils.byte2sysex((byte)pressroll);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)octave_shift);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+	
+
 }

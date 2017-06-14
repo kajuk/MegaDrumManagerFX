@@ -158,4 +158,327 @@ public class ConfigPedal {
 		splashNote = Utils.validateInt(prop.getInt(prefix+"splashNote", splashNote),0,127,splashNote);
 		chickThres = Utils.validateInt(prop.getInt(prefix+"chickThres", chickThres),0,127,chickThres);
 	}
+	
+	public void setConfigFromSysex(byte [] sysex, int mcu_type) {
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
+		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte flags;
+		int i = 4;
+		if (sysex.length >= sysex_length) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			type = ((flags&1) != 0);
+			autoLevels = ((flags&(1<<1)) != 0);
+			altIn = ((flags&(1<<2)) != 0);
+			reverseLevels = ((flags&(1<<3)) != 0);
+			curve = ((flags&0xf0)>>4);
+			
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			chickDelay = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			cc = Utils.sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			lowLevel = Utils.sysex2short(sysex_short);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			highLevel = Utils.sysex2short(sysex_short);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			openLevel = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			closedLevel = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			shortThres = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			longThres = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			hhInput = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			softChicks = ((flags&1) != 0);
+			ccRdcLvl = ((flags&0x06)>>1);
+			new_algorithm = (((flags&0x08)>>3) != 0);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			semiOpenLevel = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			halfOpenLevel = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			chickThres = Utils.sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			chickParam1 = Utils.sysex2short(sysex_short);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			chickParam2 = Utils.sysex2short(sysex_short);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			chickParam3 = Utils.sysex2short(sysex_short);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			chickCurve = (flags&0x0f);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+				semiOpenLevel2 = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				halfOpenLevel2 = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
+			bowSemiOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			edgeSemiOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			bellSemiOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+				bowSemiOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				edgeSemiOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				bellSemiOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
+			bowHalfOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			edgeHalfOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			bellHalfOpenNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+				bowHalfOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				edgeHalfOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				bellHalfOpen2Note = Utils.sysex2byte(sysex_byte);
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+			}
+			bowSemiClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			edgeSemiClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			bellSemiClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			bowClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			edgeClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			bellClosedNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			chickNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			splashNote = Utils.sysex2byte(sysex_byte);
+		}
+	}
+	
+	public byte[] getSysexFromConfig( int chainId, int mcu_type) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
+		if (mcu_type == Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_length = Constants.MD_SYSEX_PEDAL_SIZE_OLD;
+		}
+		byte [] sysex = new byte[sysex_length];
+		byte flags;
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_PEDAL;
+
+		flags = (byte) (((type)?1:0)|(((autoLevels)?1:0)<<1)|(((altIn)?1:0)<<2)|(((reverseLevels)?1:0)<<3)
+				|(curve<<4));
+		sysex_byte = Utils.byte2sysex(flags);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)chickDelay);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)cc);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = Utils.short2sysex((short)lowLevel);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_short = Utils.short2sysex((short)highLevel);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_byte = Utils.byte2sysex((byte)openLevel);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)closedLevel);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)shortThres);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)longThres);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)hhInput);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		flags = (byte) ((softChicks)?1:0);
+		flags = (byte) (flags|(ccRdcLvl<<1));
+		flags = (byte) (flags|((new_algorithm?1:0)<<3));
+		sysex_byte = Utils.byte2sysex((byte)flags);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)semiOpenLevel);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)halfOpenLevel);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)chickThres);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = Utils.short2sysex((short)chickParam1);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_short = Utils.short2sysex((short)chickParam2);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_short = Utils.short2sysex((short)chickParam3);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		flags = (byte) (chickCurve);
+		sysex_byte = Utils.byte2sysex(flags);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_byte = Utils.byte2sysex((byte)semiOpenLevel2);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = Utils.byte2sysex((byte)halfOpenLevel2);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex_byte = Utils.byte2sysex((byte)bowSemiOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)edgeSemiOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)bellSemiOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_byte = Utils.byte2sysex((byte)bowSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = Utils.byte2sysex((byte)edgeSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = Utils.byte2sysex((byte)bellSemiOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex_byte = Utils.byte2sysex((byte)bowHalfOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)edgeHalfOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)bellHalfOpenNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		if (mcu_type != Constants.MCU_TYPE_STM32F205TEST1) {
+			sysex_byte = Utils.byte2sysex((byte)bowHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = Utils.byte2sysex((byte)edgeHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+			sysex_byte = Utils.byte2sysex((byte)bellHalfOpen2Note);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex_byte = Utils.byte2sysex((byte)bowSemiClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)edgeSemiClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)bellSemiClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)bowClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)edgeClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)bellClosedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)chickNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)splashNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+
+
 }
