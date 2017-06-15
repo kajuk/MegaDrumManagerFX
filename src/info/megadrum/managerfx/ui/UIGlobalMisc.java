@@ -668,6 +668,11 @@ public class UIGlobalMisc {
 	}
 
 	public void setViewState(int state) {
+		if (state == Constants.PANEL_HIDE) {
+			rbHide.setSelected(true);
+		} else {
+			rbShow.setSelected(true);
+		}
 		viewSate = state;
 	}
 	

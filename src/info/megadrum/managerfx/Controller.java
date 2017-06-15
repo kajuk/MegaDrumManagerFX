@@ -482,6 +482,7 @@ public class Controller implements MidiRescanEventListener {
 		});
 		loadConfig();
 		showPanels();
+		showGlobalMisc();
 		window.show();
 	}
 
@@ -792,7 +793,9 @@ public class Controller implements MidiRescanEventListener {
 
 	private void showGlobalMisc() {
 		if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
-			topVBox.getChildren().add(2, uiGlobalMisc.getUI());			
+			if (!topVBox.getChildren().contains(uiGlobalMisc.getUI())) {
+				topVBox.getChildren().add(2, uiGlobalMisc.getUI());					
+			}
 		} else {
 			topVBox.getChildren().remove(uiGlobalMisc.getUI());			
 		}
@@ -928,6 +931,7 @@ public class Controller implements MidiRescanEventListener {
 			allPanels.get(i).setLastW(configOptions.framesSizes[i].getX());
 			allPanels.get(i).setLastH(configOptions.framesSizes[i].getY());
 		}
+		uiGlobalMisc.setViewState(configOptions.globalMiscViewState);
 		uiGlobalMisc.getCheckBoxLiveUpdates().setSelected(configOptions.liveUpdates);
 		//checkBoxAutoResize.setSelected(configOptions.autoResize);
 	}
@@ -948,6 +952,7 @@ public class Controller implements MidiRescanEventListener {
 			}
 			configOptions.showPanels[i] = allPanels.get(i).getViewState();
 		}
+		configOptions.globalMiscViewState = uiGlobalMisc.getViewState();
 		if (configOptions.saveOnExit) {
 			fileManager.saveLastOptions(configOptions);
 		}

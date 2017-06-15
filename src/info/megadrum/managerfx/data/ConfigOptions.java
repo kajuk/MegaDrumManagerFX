@@ -35,10 +35,11 @@ public class ConfigOptions implements java.io.Serializable {
 	public String LookAndFeelName = "";
 	public Point2D mainWindowPosition = new Point2D(10,10);
 	public Point2D mainWindowSize = new Point2D(1000,600);
-	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log, 5 - GlobalMisc (hide/show only)
+	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 	public Point2D [] framesPositions = { new Point2D(10,10), new Point2D(210,10), new Point2D(410,10), new Point2D(610,10), new Point2D(810,10)};
 	public Point2D [] framesSizes = { new Point2D(200,300), new Point2D(200,300), new Point2D(400,500), new Point2D(400,500), new Point2D(500,300)};
-	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE, Constants.PANEL_SHOW };
+	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
+	public int globalMiscViewState = Constants.PANEL_SHOW; 
 	public int mcuType = 0;
 	public int version = 0;
 	public boolean autoResize = true;
@@ -93,6 +94,7 @@ public class ConfigOptions implements java.io.Serializable {
 			prop.setProperty("framesSizes"+ ((Integer)i).toString()+"H", framesSizes[i].getY());
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
+		prop.setProperty("globalMiscViewState", globalMiscViewState);
 		prop.setProperty("autoResize", autoResize);
 		prop.setProperty("changeNotified", changeNotified);
 	}
@@ -145,6 +147,7 @@ public class ConfigOptions implements java.io.Serializable {
 					);
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
+		globalMiscViewState = Utils.validateInt(prop.getInt("globalMiscViewState", globalMiscViewState),0,1,globalMiscViewState);
 		autoResize = prop.getBoolean("autoResize", autoResize);
 		changeNotified = prop.getBoolean("changeNotified", false);
 	}
