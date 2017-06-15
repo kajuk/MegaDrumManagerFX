@@ -405,18 +405,7 @@ public class Controller implements MidiRescanEventListener {
 		uiPadsExtra.getCustomNamesButtonSendAll().setOnAction(e-> sendAllCustomNamesSysex());
 		uiPadsExtra.getCustomNamesButtonLoadAll().setOnAction(e-> loadSysexAllCustomNames());
 		uiPadsExtra.getCustomNamesButtonSaveAll().setOnAction(e-> saveSysexAllCustomNames());
-		switch (configFull.customNamesCount) {
-		case 32:
-			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(2);
-			break;
-		case 16:
-			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(1);
-			break;
-		case 2:
-		default:
-			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(0);
-			break;
-		}
+		setCustomNamesCountControl();
 		uiPadsExtra.getCurvesButtonGet().setOnAction(e-> sendSysexCurveRequest());
 		uiPadsExtra.getCurvesButtonSend().setOnAction(e-> sendSysexCurve());
 		uiPadsExtra.getCurvesButtonGetAll().setOnAction(e-> sendAllCurvesSysexRequests());
@@ -598,6 +587,21 @@ public class Controller implements MidiRescanEventListener {
 		uiPanel.respondToResizeDetached(width, height);
 	}
 
+	public void setCustomNamesCountControl() {
+		switch (configFull.customNamesCount) {
+		case 32:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(2);
+			break;
+		case 16:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(1);
+			break;
+		case 2:
+		default:
+			uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().select(0);
+			break;
+		}
+	}
+	
 	private void reCreateSlotsMenuItems() {
 		allMenuItemsLoadFromSlot.clear();
 		for (int i = 0; i < configFull.configNamesCount; i++) {
@@ -901,7 +905,6 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void loadConfig() {
-		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
 		System.out.println("ToDo!!");
 		//showChangeNotificationIfNeeded();
@@ -920,9 +923,7 @@ public class Controller implements MidiRescanEventListener {
 		window.setX(configOptions.mainWindowPosition.getX());
 		window.setY(configOptions.mainWindowPosition.getY());
 		window.setWidth(configOptions.mainWindowSize.getX());
-		//System.out.printf("Setting height to %f\n", configOptions.mainWindowSize.getY());
 		window.setHeight(configOptions.mainWindowSize.getY());
-		//System.out.printf("Height after setting is %f\n", window.getHeight());
 		
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			allPanels.get(i).setViewState(configOptions.showPanels[i]);
@@ -1510,7 +1511,6 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void sendAllSysexRequests() {
 		byte [] typeAndId;
-		byte i;
 		//sysexSendList.clear();
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
@@ -2107,6 +2107,8 @@ public class Controller implements MidiRescanEventListener {
 							);
 			uiPadsExtra.setCustomName(configFull.configCustomNames[i], i, false);
 		}
+		configFull.customNamesCount = fullConfigs[configOptions.lastConfig].customNamesCount;
+		setCustomNamesCountControl();
 		switchToSelectedPair(padPair);
 	}
 	
