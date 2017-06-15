@@ -168,9 +168,11 @@ public class Controller implements MidiRescanEventListener {
 		    	if (comboBoxFileChangedFromSet > 0) {
 		    		comboBoxFileChangedFromSet--;
 		    	} else {
-					configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
-					fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
-					loadAllFromConfigFull();
+		    		if (uiGlobal.getComboBoxFile().getItems().size() > 0) {
+						configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
+						fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
+						loadAllFromConfigFull();
+		    		}
 		    	}				
 			}
         });
@@ -2193,10 +2195,11 @@ public class Controller implements MidiRescanEventListener {
 	}
 		
 	private void save_all() {
+		configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
 		fileManager.save_all(configFull, configOptions);
-		//System.out.println("Saved all config");
-		//updateGlobalMiscControls();
-	}
-	
+		uiGlobal.getComboBoxFile().getItems().clear();
+		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
+		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
+	}	
 
 }
