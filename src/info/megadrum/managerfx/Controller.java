@@ -2069,7 +2069,11 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void load_all() {
+		configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
+		uiGlobal.getComboBoxFile().getItems().clear();
+		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
+		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
 		loadAllFromConfigFull();
 	}
 
@@ -2198,7 +2202,6 @@ public class Controller implements MidiRescanEventListener {
 			configFull.configCustomNames[i].setConfigFromSysex(sysex);
 			uiPadsExtra.setCustomName(configFull.configCustomNames[i], i, false);
 		}
-
 	}
 	
 	private void saveSysexAllCustomNames() {
