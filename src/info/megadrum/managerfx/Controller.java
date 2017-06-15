@@ -2089,45 +2089,25 @@ public class Controller implements MidiRescanEventListener {
 			int rightInput = leftInput + 1;
 			byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE*2];
 			sysex = configFull.configPads[leftInput].getSysexFromConfig();
-			for (int i = 0; i<sysex.length;i++) {
-				sysexPad[i] = sysex[i];
-			}
+			System.arraycopy(sysex, 0, sysexPad, 0, sysex.length);
 			sysex = configFull.configPads[rightInput].getSysexFromConfig();
-			for (int i = 0; i<sysex.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
-			}
+			System.arraycopy(sysex, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex.length);
 			sysex3rd = configFull.config3rds[padPair - 1].getSysexFromConfig();
-			for (int i = 0; i<sysex3rd.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
-			}
+			System.arraycopy(sysex3rd, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2, sysex3rd.length);
 			sysexPos = configFull.configPos[leftInput].getSysexFromConfig();
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + i] = sysexPos[i];
-			}
+			System.arraycopy(sysexPos, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE, sysexPos.length);
 			sysexPos = configFull.configPos[rightInput].getSysexFromConfig();
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE + i] = sysexPos[i];
-			}
+			System.arraycopy(sysexPos, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE+ Constants.MD_SYSEX_POS_SIZE, sysexPos.length);
 			fileManager.loadSysex(sysexPad, configOptions);
-			for (int i = 0; i<sysex.length;i++) {
-				sysex[i] = sysexPad[i];
-			}
+			System.arraycopy(sysexPad, 0, sysex, 0, sysex.length);
 			configFull.configPads[leftInput].setConfigFromSysex(sysex);
-			for (int i = 0; i<sysex.length;i++) {
-				sysex[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE + i];
-			}
+			System.arraycopy(sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex, 0, sysex.length);
 			configFull.configPads[rightInput].setConfigFromSysex(sysex);
-			for (int i = 0; i<sysex3rd.length;i++) {
-				sysex3rd[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i];
-			}
+			System.arraycopy(sysexPad, Constants.MD_SYSEX_PAD_SIZE*2, sysex3rd, 0, sysex3rd.length);
 			configFull.config3rds[padPair - 1].setConfigFromSysex(sysex3rd);
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPos[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + i];
-			}
+			System.arraycopy(sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE, sysexPos, 0, sysexPos.length);
 			configFull.configPos[leftInput].setConfigFromSysex(sysexPos);
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPos[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE + i];
-			}
+			System.arraycopy(sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE, sysexPos, 0, sysexPos.length);
 			configFull.configPos[rightInput].setConfigFromSysex(sysexPos);
 			uiPad.setControlsFromConfigPad(configFull.configPads[leftInput], true, false);
 			uiPad.setControlsFromConfigPad(configFull.configPads[rightInput], false, false);
@@ -2141,13 +2121,9 @@ public class Controller implements MidiRescanEventListener {
 			sysexPos = configFull.configPos[0].getSysexFromConfig();
 			System.arraycopy(sysexPos, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysexPos.length);
 			fileManager.loadSysex(sysexPad, configOptions);					
-			for (int i = 0; i<sysex.length;i++) {
-				sysex[i] = sysexPad[i];
-			}
+			System.arraycopy(sysexPad, 0, sysex, 0, sysex.length);
 			configFull.configPads[0].setConfigFromSysex(sysex);
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPos[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE + i];
-			}
+			System.arraycopy(sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysexPos, 0, sysexPos.length);
 			configFull.configPos[0].setConfigFromSysex(sysexPos);
 			uiPad.setControlsFromConfigPad(configFull.configPads[0], true, false);
 			uiPad.setControlsFromConfigPos(configFull.configPos[0], true, false);
@@ -2163,36 +2139,22 @@ public class Controller implements MidiRescanEventListener {
 			int rightInput = leftInput + 1;
 			byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE*2];
 			sysex = configFull.configPads[leftInput].getSysexFromConfig();
-			for (int i = 0; i<sysex.length;i++) {
-				sysexPad[i] = sysex[i];
-			}
+			System.arraycopy(sysex, 0, sysexPad, 0, sysex.length);
 			sysex = configFull.configPads[rightInput].getSysexFromConfig();
-			for (int i = 0; i<sysex.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
-			}
+			System.arraycopy(sysex, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex.length);
 			sysex3rd = configFull.config3rds[padPair - 1].getSysexFromConfig();
-			for (int i = 0; i<sysex3rd.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
-			}
+			System.arraycopy(sysex3rd, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2, sysex3rd.length);
 			sysexPos = configFull.configPos[leftInput].getSysexFromConfig();
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + i] = sysexPos[i];
-			}
+			System.arraycopy(sysexPos, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE, sysexPos.length);
 			sysexPos = configFull.configPos[rightInput].getSysexFromConfig();
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + Constants.MD_SYSEX_POS_SIZE + i] = sysexPos[i];
-			}
+			System.arraycopy(sysexPos, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE  + Constants.MD_SYSEX_POS_SIZE, sysexPos.length);
 			fileManager.saveSysex(sysexPad, configOptions);
 		} else {
 			byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE + Constants.MD_SYSEX_POS_SIZE];
 			sysex = configFull.configPads[0].getSysexFromConfig();
-			for (int i = 0; i<sysex.length;i++) {
-				sysexPad[i] = sysex[i];
-			}					
+			System.arraycopy(sysex, 0, sysexPad, 0, sysex.length);
 			sysexPos = configFull.configPos[0].getSysexFromConfig();
-			for (int i = 0; i<sysexPos.length;i++) {
-				sysexPad[i + Constants.MD_SYSEX_PAD_SIZE] = sysexPos[i];
-			}
+			System.arraycopy(sysex, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex.length);
 			fileManager.saveSysex(sysexPad, configOptions);
 		}
 	}
