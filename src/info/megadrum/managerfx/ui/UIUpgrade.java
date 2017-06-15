@@ -1,8 +1,14 @@
 package info.megadrum.managerfx.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
+import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.data.FileManager;
+import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.utils.Constants;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,8 +32,15 @@ public class UIUpgrade {
 	private Label labelFile;
 	private TextField textFieldFileName;
 	private ProgressBar progressBar;
+	private MidiController midiController;
+	private File file;
+	private FileManager fileManager;
+	private ConfigOptions configOptions;
 
-	public UIUpgrade() {
+	public UIUpgrade(MidiController controller, FileManager fm, ConfigOptions config) {
+		configOptions = config;
+		fileManager = fm;
+		midiController = controller;
 		window = new Stage();
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("MegaDrum Firmware Upgrade");
@@ -49,7 +62,13 @@ public class UIUpgrade {
 		labelFile = new Label("MegaDrum firmware:");
 		textFieldFileName = new TextField();
 		textFieldFileName.setMinWidth(350);
+		textFieldFileName.setOnKeyReleased(e-> {
+			textFieldChanged();
+		});
 		buttonOpen = new Button("Open");
+		buttonOpen.setOnAction(e-> {
+			selectFile();
+		});
 		HBox hBoxFileSelection = new HBox();
 		hBoxFileSelection.setAlignment(Pos.CENTER);
 		hBoxFileSelection.getChildren().addAll(labelFile,textFieldFileName,buttonOpen);
@@ -63,7 +82,13 @@ public class UIUpgrade {
 		vBoxTop.getChildren().add(progressBar);
 		
 		buttonStart = new Button("Start");
+		buttonStart.setOnAction(e-> {
+			startUpgrade();
+		});
 		buttonCancel = new Button("Cancel");
+		buttonCancel.setOnAction(e-> {
+			midiController.cancelUpgrade();
+		});
 		buttonClose = new Button("Close");
 		buttonClose.setOnAction(e-> {
 			closeWindow();
@@ -83,8 +108,10 @@ public class UIUpgrade {
 
 	}
 	
-	public void show(int mcuType) {
-		if (mcuType > 2) {
+	public void show() {
+		midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, "");
+		midiController.setInFirmwareUpgrade(true);
+		if (configOptions.mcuType > 2) {
 			textAreaInstruction.setText(Constants.UPGRADE_INSTRUCTION_ARM);
 		} else {
 			textAreaInstruction.setText(Constants.UPGRADE_INSTRUCTION_ATMEGA);
@@ -98,6 +125,42 @@ public class UIUpgrade {
 	}
 
 	public void closeWindow() {
+		midiController.setInFirmwareUpgrade(false);
 		window.close();
+	}
+	
+	public void startUpgrade() {
+		if (file != null) {
+			Task<Integer> taskUpgrade;
+			try {
+				taskUpgrade = midiController.doFirmwareUpgrade(file, configOptions.mcuType, progressBar);
+				taskUpgrade.setOnSucceeded(e->{
+					upgradeFinished();
+				});
+				new Thread(taskUpgrade).start();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}	
+
+	public void upgradeFinished() {
+		System.out.printf("Upgrade thread finished with error = %d\nResult text = %s\n",
+				midiController.getUpgradeError(), midiController.getUpgradeString());
+	}
+	
+	private void selectFile() {
+		file = fileManager.selectFirmwareFile(configOptions);
+		if (file != null) {
+			textFieldFileName.setText(file.getAbsolutePath());
+			buttonStart.setDisable(false);
+		}
+		window.toFront();
+	}
+	
+	private void textFieldChanged() {		
+		file = new File(textFieldFileName.getText());
+		buttonStart.setDisable(!file.isFile());
 	}
 }

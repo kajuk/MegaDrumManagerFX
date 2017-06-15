@@ -460,7 +460,7 @@ public class Controller implements MidiRescanEventListener {
 		optionsWindow = new UIOptions(configOptions);		
 		optionsWindow.addMidiRescanEventListener(this);
 		
-		upgradeWindow = new UIUpgrade();
+		upgradeWindow = new UIUpgrade(midiController, fileManager, configOptions);
 		
 		window.setScene(scene1);
 		window.setMinWidth(mainWindowMinWidth);
@@ -1579,7 +1579,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void showUpgradeWindow() {
-		upgradeWindow.show(configOptions.mcuType);
+		upgradeWindow.show();
 	}
 	
 	private void showOptionsWindow() {

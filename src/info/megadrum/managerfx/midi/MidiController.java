@@ -1,5 +1,11 @@
 package info.megadrum.managerfx.midi;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +52,9 @@ public class MidiController {
 	private byte [] sysexToCompare;
 	private int [] sysexStatus;
 	private int chainId;
+	private boolean upgradeCancelled = false;
+	private String upgradeResultString;
+	private int upgradeError;
 
 	private List<byte[]> sysexSendListLocal;
 //	private List<byte[]> receivedSysexList;
@@ -134,7 +143,7 @@ public class MidiController {
 
 	public MidiController() {
 		midiHandler = new Midi_handler();
-		
+		dump_receiver = midiHandler.getDumpReceiver();
 		//receivedShortMidiList = new ArrayList<>();
 		//receivedSysexList = new ArrayList<>();
 		receivedMidiDataList = new ArrayList<>();
@@ -143,6 +152,7 @@ public class MidiController {
 		midiHandler.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
+				//System.out.println("MIDI received event occured");
 				if (!isInFirmwareUpgrade) {
 					midiHandler.getMidi();
 					if (midiHandler.isSysexReceived()) {
@@ -403,6 +413,212 @@ public class MidiController {
 		return result;
 	}
 
+	private static int readHex(DataInputStream d) throws IOException {
+		StringBuffer curr;
+		int result;
+
+		curr = new StringBuffer("");
+		
+		curr.append(String.format("%c", d.readByte()).toUpperCase());
+		curr.append(String.format("%c", d.readByte()).toUpperCase());
+		
+		result = Integer.parseInt(curr.toString(),16);
+		//out(String.valueOf(result));
+		//System.out.printf("%h\n", result);
+		return result;
+	}
+
+	public Task<Integer> doFirmwareUpgrade (File file, int mcuType, ProgressBar progressBar) throws IOException {		
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		DataInputStream dis = null;
+		upgradeResultString = "Upgrade completed successufully";
+		int[] buffer = new int[0x40000];	// Data buffer for sending the data
+
+		int bufferSize = 0;			// Total number of bytes in the buffer
+		upgradeError = 0;
+
+		//closeAllPorts();
+		//initPorts();
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			Utils.show_error("Error loading from file:\n" +
+					file.getAbsolutePath() + "\n" +
+					"(" + e.getMessage() + ")");
+		}
+		bis = new BufferedInputStream(fis);
+		dis = new DataInputStream(bis);
+
+		//("Starting upgrade\n");
+				
+		if (mcuType > 2) {
+			// Restart ARM based MegaDrum in bootloader mode
+			midiHandler.requestArmBootloader();
+			//System.out.printf("Sent reboot request\n");
+			Utils.delayMs(4000);
+		}
+		closeAllPorts();
+		System.out.printf("Loading Firmware file\n");
+		while (dis.available() > 1)
+		{
+			buffer[bufferSize] = readHex(dis);
+			bufferSize++;
+		}
+		System.out.printf("Firmware file loaded\n");
+		midiHandler.initPorts();
+		//parent.getProgressBar().setMinimum(0);
+		//parent.getProgressBar().setMaximum(bufferSize);
+		dis.close();
+		bis.close();
+		fis.close();
+		System.out.printf("Firmware size is %d bytes\n", bufferSize);
+		
+		midiHandler.clear_midi_input();
+		final int bufferSizeFinal = bufferSize;
+		Task<Integer> task = new Task<Integer>() {
+			int frameSize;				// Number of bytes in the current frame
+			int receivedByte;		// One byte received from COM port
+			int bytesSent = 0;			// Number of bytes sent so far
+			int prevBytesSent = 0;
+			int retries = 0;		// Number of tries so far
+			//int Block_size;
+			int nBytes;
+			int inDelay;
+			boolean firstDelay;
+			byte[] receivedBuffer;
+
+
+			@Override
+			protected Integer call() throws Exception {
+	            updateProgress(0, bufferSizeFinal);
+	    		firstDelay = true;
+				for(int index = 0; index < bufferSizeFinal; index += frameSize)
+				{
+					frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
+					if (((bytesSent-prevBytesSent)*100/(bufferSizeFinal/10)) > 1) {
+			            updateProgress(bytesSent, bufferSizeFinal);
+						prevBytesSent = bytesSent;				
+					}
+					System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+
+					//Block_size = frameSize;				// Seem it fails
+					//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
+					//Block_size = 2;
+					//if (Block_size > frameSize) Block_size = frameSize;
+					midiHandler.writeMid(receiver, buffer, index, frameSize);
+					System.out.printf("Sent %d bytes\n", frameSize);
+					
+
+					nBytes = 0;
+					if (firstDelay) {
+						inDelay = 5000;				
+						firstDelay = false;
+					} else {
+						inDelay = 1000;
+					}
+					receivedBuffer = null;
+					int t = 0;
+		 			while ((nBytes == 0) && (inDelay > 0)) {
+		 				receivedBuffer = dump_receiver.getByteMessage();
+		 				t++;
+		 				if (t > 100) {
+		 					t = 0;
+		 	 				//System.out.printf(".");
+		 				}
+		 				if (receivedBuffer != null)
+		 				{
+		 					nBytes = receivedBuffer.length;
+		 				}
+					    inDelay--;
+					    Utils.delayMs(2);
+					    if (upgradeCancelled) break;
+					}
+		 			//System.out.printf("\n");
+					System.out.printf("Received %d bytes\n", nBytes);
+								
+		 			receivedByte = Constants.Error_NoResponse;
+					if (nBytes > 2) {
+						receivedByte = receivedBuffer[1]<<4;
+						receivedByte = receivedBuffer[2]|receivedByte;
+						//System.out.println(String.valueOf((int)receivedByte));
+					} else {
+						System.out.println("Read error\n");
+						if (nBytes > 0) {
+							receivedByte = Constants.Error_Read;
+						}
+					}
+
+					switch (receivedByte) {
+						case Constants.Error_OK:
+							System.out.printf("Got OK from MegaDrum\n");
+							bytesSent += frameSize;
+							retries = 0;
+							break;
+
+						default: // Error_CRC:
+							if (++retries < 4) {
+								index -= frameSize;
+								System.out.println("Retrying on error\n");
+								Utils.delayMs(10);
+							} else {
+								System.out.println("\nCRC error. File damaged.\n");
+								switch (receivedByte) {
+								case Constants.Error_CRC:
+									upgradeError = 2;
+									upgradeResultString = "CRC error. File damaged?";
+									break;
+								case Constants.Error_NoResponse:
+									upgradeError = 3;
+									upgradeResultString = "MegaDrum is not responding";
+									break;
+								case Constants.Error_Read:
+									upgradeError = 4;
+									upgradeResultString = "Read error. Bad communication?";
+									break;
+								default:
+									upgradeError = 99;
+									upgradeResultString = "Unknown error";
+									break;
+								}
+								System.out.printf("Exit with error: %s\n", upgradeResultString);
+							}
+							break;
+					}
+					if (upgradeCancelled) {
+						//System.out.println("Upgrade cancelled\n");
+						upgradeError = 1;
+						upgradeResultString = "Upgrade cancelled";
+					}
+					if (upgradeError > 0) {
+						break;
+					}
+				}		
+				return 0;
+			}
+		};
+		progressBar.progressProperty().bind(task.progressProperty());
+		return task;
+	}
+	
+	public void setInFirmwareUpgrade(Boolean inUpgrade) {
+		isInFirmwareUpgrade = inUpgrade;
+	}
+	
+	public void cancelUpgrade() {
+		upgradeCancelled = true;
+	}
+	
+	public int getUpgradeError() {
+		return upgradeError;
+	}
+	
+	public String getUpgradeString() {
+		return upgradeResultString;
+	}
+	
 	public void getMidi() {
 		midiHandler.getMidi();
 	}

@@ -139,27 +139,32 @@ public class FileManager {
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(extensionFilter);
 		if (options.mcuType == 4) {
-			extensionFilter = new FileChooser.ExtensionFilter("STM32a firmware files (*.bin)", "megadrumstm32a_*");
+			//extensionFilter = new FileChooser.ExtensionFilter("STM32a firmware files (*.bin)", "megadrumstm32a_*");
+			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 			fileChooser.getExtensionFilters().clear();
 			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 5) {
-			extensionFilter = new FileChooser.ExtensionFilter("STM32b firmware files (*.bin)", "megadrumstm32b_*");
+			//extensionFilter = new FileChooser.ExtensionFilter("STM32b firmware files (*.bin)", "megadrumstm32b_*");
+			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 			fileChooser.getExtensionFilters().clear();
 			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 6) {
-			extensionFilter = new FileChooser.ExtensionFilter("STM32c firmware files (*.bin)", "megadrumstm32c_*");
+			//extensionFilter = new FileChooser.ExtensionFilter("STM32c firmware files (*.bin)", "megadrumstm32c_*");
+			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 			fileChooser.getExtensionFilters().clear();
 			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 7) {
-			extensionFilter = new FileChooser.ExtensionFilter("STM32d firmware files (*.bin)", "megadrumstm32d_*");
+			//extensionFilter = new FileChooser.ExtensionFilter("STM32d firmware files (*.bin)", "megadrumstm32d_*");
+			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 			fileChooser.getExtensionFilters().clear();
 			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
 		if (options.mcuType == 8) {
-			extensionFilter = new FileChooser.ExtensionFilter("STM32e firmware files (*.bin)", "megadrumstm32e_*");
+			//extensionFilter = new FileChooser.ExtensionFilter("STM32e firmware files (*.bin)", "megadrumstm32e_*");
+			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
 			fileChooser.getExtensionFilters().clear();
 			fileChooser.getExtensionFilters().add(extensionFilter);
 		}
