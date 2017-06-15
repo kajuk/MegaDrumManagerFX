@@ -766,12 +766,12 @@ public class Midi_handler {
 		sendSysexUpgrade(buffer);
 		//sendSysex(buffer);
 	}
-/*	
-	public void doFirmwareUpgrade (Upgrade parent, File file) throws IOException {		
+
+	public void doFirmwareUpgrade (File file, int mcuType, int upgradeError, String resultString) throws IOException {		
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;
-		String resultString = "Upgrade completed successufully";
+		resultString = "Upgrade completed successufully";
 		int[] buffer = new int[0x40000];	// Data buffer for sending the data
 
 		byte[] receivedBuffer;
@@ -785,10 +785,8 @@ public class Midi_handler {
 		int nBytes;
 		int inDelay;
 		boolean firstDelay;
-		int upgradeError = 0;
+		upgradeError = 0;
 
-		return;
-		System.out.println("Not implemented yet");
 		//closeAllPorts();
 		//initPorts();
 		try {
@@ -805,11 +803,11 @@ public class Midi_handler {
 
 		//("Starting upgrade\n");
 				
-		if (configOptions.mcuType > 2) {
+		if (mcuType > 2) {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			//System.out.printf("Sent reboot request\n");
-			delayMs(4000);
+			Utils.delayMs(4000);
 		}
 		closeAllPorts();
 		//System.out.printf("Loading Firmware file\n");
@@ -820,8 +818,8 @@ public class Midi_handler {
 		}
 		//System.out.printf("Firmware file loaded\n");
 		initPorts();
-		parent.getProgressBar().setMinimum(0);
-		parent.getProgressBar().setMaximum(bufferSize);
+		//parent.getProgressBar().setMinimum(0);
+		//parent.getProgressBar().setMaximum(bufferSize);
 		dis.close();
 		bis.close();
 		fis.close();
@@ -834,7 +832,7 @@ public class Midi_handler {
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
 			//clear_midi_input();
 			if (((bytesSent-prevBytesSent)*100/(bufferSize/10)) > 1) {
-				parent.setProgressBar(bytesSent);
+				//parent.setProgressBar(bytesSent);
 				prevBytesSent = bytesSent;				
 			}
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
@@ -868,7 +866,7 @@ public class Midi_handler {
  					nBytes = receivedBuffer.length;
  				}
 			    inDelay--;
-			    delayMs(2);
+			    Utils.delayMs(2);
 			    if (upgradeCancelled) break;
 			}
  			//System.out.printf("\n");
@@ -897,7 +895,7 @@ public class Midi_handler {
 					if (++retries < 4) {
 						index -= frameSize;
 						//System.out.println("Retrying on error\n");
-						delayMs(10);
+						Utils.delayMs(10);
 					} else {
 						//System.out.println("\nCRC error. File damaged.\n");
 						switch (receivedByte) {
@@ -932,9 +930,9 @@ public class Midi_handler {
 			}
 		}		
 		
-		parent.midiFinished(upgradeError, resultString);
+		//parent.midiFinished(upgradeError, resultString);
 	}
-*/	
+	
 	public boolean isMidiOpen() {
 		boolean result = false;
 		if ((midiin != null) && (midiout != null)) {

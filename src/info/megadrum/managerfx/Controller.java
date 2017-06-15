@@ -33,6 +33,7 @@ import info.megadrum.managerfx.ui.UIMisc;
 import info.megadrum.managerfx.ui.UIOptions;
 import info.megadrum.managerfx.ui.UIPad;
 import info.megadrum.managerfx.ui.UIPedal;
+import info.megadrum.managerfx.ui.UIUpgrade;
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
 import javafx.application.Platform;
@@ -88,6 +89,7 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem firmwareUpgradeMenuItem, optionsMenuItem, exitMenuItem;
 	
 	private UIOptions optionsWindow;
+	private UIUpgrade upgradeWindow;
 	private VBox topVBox;
 	private HBox hBoxUIviews;
 	private Double hBoxUIviewsHPadding = 2.0;
@@ -455,8 +457,10 @@ public class Controller implements MidiRescanEventListener {
 		scene1 = new Scene(topVBox);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-		optionsWindow = new UIOptions(this, configOptions);
+		optionsWindow = new UIOptions(configOptions);		
 		optionsWindow.addMidiRescanEventListener(this);
+		
+		upgradeWindow = new UIUpgrade();
 		
 		window.setScene(scene1);
 		window.setMinWidth(mainWindowMinWidth);
@@ -728,6 +732,9 @@ public class Controller implements MidiRescanEventListener {
 		menuCustomNames.getItems().addAll(menuItemCustomNamesGet, menuItemCustomNamesSend);
 
 		firmwareUpgradeMenuItem = new MenuItem("Firmware Upgrade");
+		firmwareUpgradeMenuItem.setOnAction(e-> {
+			showUpgradeWindow();
+		});
 		optionsMenuItem = new MenuItem("Options");
 		optionsMenuItem.setOnAction(e-> { 
 			showOptionsWindow();
@@ -1571,6 +1578,10 @@ public class Controller implements MidiRescanEventListener {
 		sendSysex();
 	}
 	
+	private void showUpgradeWindow() {
+		upgradeWindow.show(configOptions.mcuType);
+	}
+	
 	private void showOptionsWindow() {
 		optionsUpdatePorts();
 		optionsWindow.show();
@@ -1632,6 +1643,7 @@ public class Controller implements MidiRescanEventListener {
 			if (clearMidiLabelStatus) {
 				uiGlobal.clearSysexStatusLabel();
 			}
+			configOptions.mcuType = 0;
 			setAllStatesUnknown();
 		}
 	}

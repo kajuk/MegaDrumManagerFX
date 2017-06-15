@@ -69,7 +69,7 @@ public class UIOptions {
 		}
 	}
 	
-	public UIOptions(Controller controller, ConfigOptions config) {
+	public UIOptions(ConfigOptions config) {
 		configOptions = config;
         window = new Stage();
 
