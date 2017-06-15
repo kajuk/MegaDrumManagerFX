@@ -16,9 +16,11 @@ public class Config3rd {
 	public boolean altNote_linked = false;
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
+	private int id = 0;
 
 
-	public Config3rd () {
+	public Config3rd (int i) {
+		id = i;
 	}
 
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
@@ -94,7 +96,7 @@ public class Config3rd {
 		return value;
 	}
 
-	public byte[] getSysexFromConfig (int padId) {
+	public byte[] getSysexFromConfig () {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
 		int i = 0;
@@ -103,7 +105,7 @@ public class Config3rd {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = 0; //(byte)chainId;
 		sysex[i++] = Constants.MD_SYSEX_3RD;
-		sysex[i++] = (byte)padId;
+		sysex[i++] = (byte)id;
 		
 		sysex_byte = Utils.byte2sysex((byte)note);
 		sysex[i++] = sysex_byte[0];

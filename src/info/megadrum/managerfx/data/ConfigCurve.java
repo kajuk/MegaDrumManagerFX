@@ -10,8 +10,10 @@ public class ConfigCurve {
 	public int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
+	private int id;
 
-	public ConfigCurve() {
+	public ConfigCurve(int i) {
+		id = i;
 	}
 
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
@@ -35,7 +37,7 @@ public class ConfigCurve {
 		}
 	}	
 
-	public byte[] getSysexFromConfig(int curveId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
 		int i = 0;
@@ -43,7 +45,7 @@ public class ConfigCurve {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CURVE;
-		sysex[i++] = (byte)curveId;
+		sysex[i++] = (byte)id;
 
 		for (int p = 0; p < 9;p++) {
 			sysex_byte = Utils.byte2sysex((byte)yValues[p]);

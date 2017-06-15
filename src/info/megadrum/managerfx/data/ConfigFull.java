@@ -47,24 +47,24 @@ public class ConfigFull implements java.io.Serializable {
 		configPos = new ConfigPositional[Constants.PADS_COUNT];
 		config3rds = new Config3rd[(Constants.PADS_COUNT-1)/2];
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
-			configPads[i] = new ConfigPad();
-			configPos[i] = new ConfigPositional(); 
+			configPads[i] = new ConfigPad(i);
+			configPos[i] = new ConfigPositional(i); 
 			if ((i>0) && ((i&0x01)==0)) {
-				config3rds[(i-1)/2] = new Config3rd();
+				config3rds[(i-1)/2] = new Config3rd((i-1)/2);
 			}
 		}
 		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
-			configCurves[i] = new ConfigCurve();
+			configCurves[i] = new ConfigCurve(i);
 		}
 		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
 		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
-			configCustomNames[i] = new ConfigCustomName();
+			configCustomNames[i] = new ConfigCustomName(i);
         	configCustomNames[i].name = "Custom" + i.toString(); 
 		}
 		configConfigNames = new ConfigConfigName[Constants.CONFIG_NAMES_MAX];
 		for (Integer i = 0; i < Constants.CONFIG_NAMES_MAX;i++) {
-			configConfigNames[i] = new ConfigConfigName();
+			configConfigNames[i] = new ConfigConfigName(i);
 			//configConfigNames[i].name = "Custom" + i.toString(); 
 			configConfigNames[i].name = "            "; 
 		}

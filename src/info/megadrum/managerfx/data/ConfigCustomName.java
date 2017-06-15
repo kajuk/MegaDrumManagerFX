@@ -11,8 +11,10 @@ public class ConfigCustomName {
 	public String name = "Custom__";
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
+	private int id;
 
-	public ConfigCustomName() {
+	public ConfigCustomName(int i) {
+		id = i;
 	}
 
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
@@ -29,7 +31,7 @@ public class ConfigCustomName {
 		name = prop.getString(prefix, name);
 	}	
 
-	public byte[] getSysexFromConfig(int nameId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
 		String nameString;
@@ -39,7 +41,7 @@ public class ConfigCustomName {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CUSTOM_NAME;
-		sysex[i++] = (byte)nameId;
+		sysex[i++] = (byte)id;
 		
 		nameString = name + "        ";
 		nameString = nameString.substring(0, 8);

@@ -39,8 +39,10 @@ public class ConfigPad {
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
 
+	private int id;
 	
-	public ConfigPad (){
+	public ConfigPad (int i) {
+		id = i;
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
@@ -286,7 +288,7 @@ public class ConfigPad {
 		return value;
 	}
 
-	public byte[] getSysexFromConfig(int padId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
@@ -297,7 +299,7 @@ public class ConfigPad {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = 0; //(byte)chainId; 
 		sysex[i++] = Constants.MD_SYSEX_PAD;
-		sysex[i++] = (byte)(padId + 1);
+		sysex[i++] = (byte)(id + 1);
 		
 		if (inputDisabled) {
 			sysex_byte = Utils.byte2sysex((byte)0);

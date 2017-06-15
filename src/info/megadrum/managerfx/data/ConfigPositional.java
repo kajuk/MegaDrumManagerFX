@@ -12,9 +12,11 @@ public class ConfigPositional {
 	public int high = 15;
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
+	private int id;
 
 	
-	public ConfigPositional (){
+	public ConfigPositional(int i) {
+		id = i;
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
@@ -68,7 +70,7 @@ public class ConfigPositional {
 		return value;
 	}
 
-	public byte[] getSysexFromConfig(int padId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
 		int i = 0;
@@ -77,7 +79,7 @@ public class ConfigPositional {
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = 0; //(byte)chainId; 
 		sysex[i++] = Constants.MD_SYSEX_POS;
-		sysex[i++] = (byte)(padId);
+		sysex[i++] = (byte)id;
 		
 		sysex_byte = Utils.byte2sysex((byte)level);
 		sysex[i++] = sysex_byte[0];
