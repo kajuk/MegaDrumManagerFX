@@ -107,6 +107,14 @@ public class UIGlobal {
 		return buttonSaveAll;
 	}
 	
+	public Button getButtonLoadFromSlot() {
+		return buttonLoadFromSlot;
+	}
+	
+	public Button getButtonSaveToSlot() {
+		return buttonSaveToSlot;
+	}
+	
 	public ComboBox<String> getComboBoxFile() {
 		return comboBoxFile;
 	}

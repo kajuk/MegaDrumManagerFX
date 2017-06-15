@@ -43,9 +43,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -74,6 +76,7 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
 				menuItemAllSettingsSave;
 	private Menu menuLoadFromMdSlot, menuSaveToMdSlot;
+	private ContextMenu contextMenuLoadFromMdSlot, contextMenuSaveToMdSlot;
 	private ArrayList<MenuItem> allMenuItemsLoadFromSlot, allMenuItemsSaveSlot;
 	private MenuItem menuItemGlobalMiscGet, menuItemGlobalMiscSend;
 	private MenuItem menuItemMiscGet, menuItemMiscSend;
@@ -161,6 +164,12 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
 		uiGlobal.getButtonLoadAll().setOnAction(e-> load_all());
 		uiGlobal.getButtonSaveAll().setOnAction(e-> save_all());
+		uiGlobal.getButtonLoadFromSlot().setOnAction(e-> {
+			contextMenuLoadFromMdSlot.show(uiGlobal.getButtonLoadFromSlot(), Side.RIGHT, 0, 0);
+		});
+		uiGlobal.getButtonSaveToSlot().setOnAction(e-> {
+			contextMenuSaveToMdSlot.show(uiGlobal.getButtonSaveToSlot(), Side.RIGHT, 0, 0);
+		});	
 		uiGlobal.getComboBoxFile().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -603,6 +612,8 @@ public class Controller implements MidiRescanEventListener {
 		}
 		menuLoadFromMdSlot.getItems().clear();
 		menuLoadFromMdSlot.getItems().addAll(allMenuItemsLoadFromSlot);
+		contextMenuLoadFromMdSlot.getItems().clear();
+		contextMenuLoadFromMdSlot.getItems().addAll(allMenuItemsLoadFromSlot);
 		allMenuItemsSaveSlot.clear();
 		for (int i = 0; i < configFull.configNamesCount; i++) {
 			final int iFinal = i;
@@ -617,6 +628,8 @@ public class Controller implements MidiRescanEventListener {
 		}
 		menuSaveToMdSlot.getItems().clear();
 		menuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
+		contextMenuSaveToMdSlot.getItems().clear();
+		contextMenuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
 	}
 	
 	private void createMainMenuBar() {
@@ -639,8 +652,10 @@ public class Controller implements MidiRescanEventListener {
 		menuItemAllSettingsSave = new MenuItem("Save to file");
 		menuItemAllSettingsSave.setOnAction(e-> save_all());
 		menuLoadFromMdSlot = new Menu("Load from MD Slot:");
+		contextMenuLoadFromMdSlot = new ContextMenu();
 		allMenuItemsLoadFromSlot = new ArrayList<MenuItem>();
 		menuSaveToMdSlot = new Menu("Save to MD Slot:");
+		contextMenuSaveToMdSlot = new ContextMenu();
 		allMenuItemsSaveSlot = new ArrayList<MenuItem>();
 		reCreateSlotsMenuItems();
 		menuAllSettings.getItems().addAll(menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
