@@ -1309,19 +1309,11 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendSysexPair(Integer pair) {
 		//sysexSendList.clear();
-		byte [] sysex;
-		sysexSendList.add(configFull.configPads[(pair*2) - 1].getSysexFromConfig(configOptions.chainId, (pair*2) - 1));
-		
+		sysexSendList.add(configFull.configPads[(pair*2) - 1].getSysexFromConfig(configOptions.chainId, (pair*2) - 1));		
 		sysexSendList.add(configFull.configPads[(pair*2)].getSysexFromConfig(configOptions.chainId, (pair*2)));
-
-		sysexSendList.add(configFull.configPos[(pair*2) - 1].getSysexFromConfig(configOptions.chainId, (pair*2) - 1));
-		
+		sysexSendList.add(configFull.configPos[(pair*2) - 1].getSysexFromConfig(configOptions.chainId, (pair*2) - 1));		
 		sysexSendList.add(configFull.configPos[(pair*2)].getSysexFromConfig(configOptions.chainId, (pair*2)));
-
-		sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
-		Utils.copyConfig3rdToSysex(configFull.config3rds[pair - 1], sysex, configOptions.chainId, pair - 1);
-		sysexSendList.add(sysex);
-
+		sysexSendList.add(configFull.config3rds[pair - 1].getSysexFromConfig(configOptions.chainId, pair - 1));
 		sendSysex();
 	}
 
@@ -1335,10 +1327,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysex3rd(Integer pair) {
-		byte [] sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
-		Utils.copyConfig3rdToSysex(configFull.config3rds[pair - 1], sysex, configOptions.chainId, pair - 1);
-		//sysexSendList.clear();
-		sysexSendList.add(sysex);
+		sysexSendList.add(configFull.config3rds[pair - 1].getSysexFromConfig(configOptions.chainId, pair - 1));
 		sendSysex();
 	}
 	
@@ -1395,18 +1384,12 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void sendAllInputsSysex() {
-		//sysexSendList.clear();
-		byte [] sysex;
 		byte i;
 		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			sysexSendList.add(configFull.configPads[i].getSysexFromConfig(configOptions.chainId, i));
-			
 			sysexSendList.add(configFull.configPos[i].getSysexFromConfig(configOptions.chainId, i));
-
 			if ((i&1) > 0) {
-				sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
-				Utils.copyConfig3rdToSysex(configFull.config3rds[(i-1)/2], sysex, configOptions.chainId, ((i-1)/2));
-				sysexSendList.add(sysex);
+				sysexSendList.add(configFull.config3rds[(i-1)/2].getSysexFromConfig(configOptions.chainId, (i-1)/2));
 			}
 		}
 		sendSysex();
@@ -1437,8 +1420,6 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendAllSysex() {
-		//sysexSendList.clear();
-		byte [] sysex;
 		byte i;
 		sysexSendList.add(configFull.configGlobalMisc.getSysexFromConfig(configOptions.chainId));
 		sysexSendList.add(configFull.configMisc.getSysexFromConfig(configOptions.chainId));		
@@ -1449,9 +1430,7 @@ public class Controller implements MidiRescanEventListener {
 			sysexSendList.add(configFull.configPos[i].getSysexFromConfig(configOptions.chainId, i));
 
 			if ((i&1) > 0) {
-				sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
-				Utils.copyConfig3rdToSysex(configFull.config3rds[(i-1)/2], sysex, configOptions.chainId, ((i-1)/2));
-				sysexSendList.add(sysex);
+				sysexSendList.add(configFull.config3rds[(i-1)/2].getSysexFromConfig(configOptions.chainId, (i-1)/2));
 			}
 		}
 		for (i = 0; i < Constants.CURVES_COUNT; i++) {
@@ -1709,8 +1688,8 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.MD_SYSEX_3RD:
 				//System.out.printf("Sysex 3rd pointer = %d\n", pointer);
 				if (pointer < configFull.config3rds.length) {
-					Utils.copySysexToConfig3rd(sysex, configFull.config3rds[pointer]);
-					Utils.copySysexToConfig3rd(sysex, moduleConfigFull.config3rds[pointer]);
+					configFull.config3rds[pointer].setConfigFromSysex(sysex);
+					moduleConfigFull.config3rds[pointer].setConfigFromSysex(sysex);
 					moduleConfigFull.config3rds[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
 					moduleConfigFull.config3rds[pointer].sysexReceived = true;
 					if ((pointer + 1) == padPair) {
@@ -2021,7 +2000,6 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void loadAllFromConfigFull() {
-		byte [] sysex = new byte[256];
 
 		configFull.configGlobalMisc.setConfigFromSysex(
 				fullConfigs[configOptions.lastConfig].configGlobalMisc.getSysexFromConfig(configOptions.chainId)
@@ -2049,8 +2027,9 @@ public class Controller implements MidiRescanEventListener {
 					);
 		}
 		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
-			Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[i], sysex, configOptions.chainId, i);
-			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);
+			configFull.config3rds[i].setConfigFromSysex(
+					fullConfigs[configOptions.lastConfig].config3rds[i].getSysexFromConfig(configOptions.chainId, i)
+					);
 			configFull.config3rds[i].altNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked;
 			configFull.config3rds[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked;
 		}				
@@ -2117,7 +2096,7 @@ public class Controller implements MidiRescanEventListener {
 			for (int i = 0; i<sysex.length;i++) {
 				sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 			}
-			Utils.copyConfig3rdToSysex(configFull.config3rds[padPair - 1], sysex3rd, configOptions.chainId, padPair - 1);
+			sysex3rd = configFull.config3rds[padPair - 1].getSysexFromConfig(configOptions.chainId, padPair - 1);
 			for (int i = 0; i<sysex3rd.length;i++) {
 				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 			}
@@ -2141,7 +2120,7 @@ public class Controller implements MidiRescanEventListener {
 			for (int i = 0; i<sysex3rd.length;i++) {
 				sysex3rd[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i];
 			}
-			Utils.copySysexToConfig3rd(sysex3rd, configFull.config3rds[padPair - 1]);
+			configFull.config3rds[padPair - 1].setConfigFromSysex(sysex3rd);
 			for (int i = 0; i<sysexPos.length;i++) {
 				sysexPos[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE + i];
 			}
@@ -2191,7 +2170,7 @@ public class Controller implements MidiRescanEventListener {
 			for (int i = 0; i<sysex.length;i++) {
 				sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 			}
-			Utils.copyConfig3rdToSysex(configFull.config3rds[padPair - 1], sysex3rd, configOptions.chainId, padPair - 1);
+			sysex3rd = configFull.config3rds[padPair - 1].getSysexFromConfig(configOptions.chainId, padPair - 1);
 			for (int i = 0; i<sysex3rd.length;i++) {
 				sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 			}

@@ -94,4 +94,58 @@ public class Config3rd {
 		return value;
 	}
 
+	public byte[] getSysexFromConfig(int chainId, int padId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId;
+		sysex[i++] = Constants.MD_SYSEX_3RD;
+		sysex[i++] = (byte)padId;
+		
+		sysex_byte = Utils.byte2sysex((byte)note);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)threshold);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)pressrollNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)altNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)dampenedNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+	
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+		if (sysex.length >= Constants.MD_SYSEX_3RD_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			note = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			threshold = (int)(Utils.sysex2byte(sysex_byte)&0xff);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			pressrollNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			altNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			dampenedNote = Utils.sysex2byte(sysex_byte);
+		}
+		
+	}
+
+
 }

@@ -65,57 +65,6 @@ public class Utils {
 		return result;
 	}
 
-	public static void copyConfig3rdToSysex(Config3rd config, byte [] sysex, int chainId, int padId) {
-		byte [] sysex_byte = new byte[2];
-		int i = 0;
-
-		sysex[i++] = Constants.SYSEX_START;
-		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte)chainId;
-		sysex[i++] = Constants.MD_SYSEX_3RD;
-		sysex[i++] = (byte)padId;
-		
-		sysex_byte = byte2sysex((byte)config.note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.threshold);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.pressrollNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.altNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.dampenedNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex[i++] = Constants.SYSEX_END;		
-	}
-	
-	public static void copySysexToConfig3rd(byte [] sysex, Config3rd config) {
-		byte [] sysex_byte = new byte[2];
-		int i = 5;
-		if (sysex.length >= Constants.MD_SYSEX_3RD_SIZE) {
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.note = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.threshold = (int)(sysex2byte(sysex_byte)&0xff);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.pressrollNote = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.altNote = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.dampenedNote = sysex2byte(sysex_byte);
-		}
-		
-	}
-
 	public static int validateInt(int value, int min, int max, int fallBack){
 		//returns value if min <= value <= max
 		//otherwise returns fallBack
