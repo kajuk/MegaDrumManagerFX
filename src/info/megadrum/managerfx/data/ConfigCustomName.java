@@ -29,7 +29,7 @@ public class ConfigCustomName {
 		name = prop.getString(prefix, name);
 	}	
 
-	public byte[] getSysexFromConfig(int chainId, int nameId) {
+	public byte[] getSysexFromConfig(int nameId) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
 		String nameString;
@@ -37,7 +37,7 @@ public class ConfigCustomName {
 		int i = 0;
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte) chainId;
+		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CUSTOM_NAME;
 		sysex[i++] = (byte)nameId;
 		

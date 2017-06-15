@@ -35,13 +35,13 @@ public class ConfigCurve {
 		}
 	}	
 
-	public byte[] getSysexFromConfig(int chainId, int curveId) {
+	public byte[] getSysexFromConfig(int curveId) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
 		int i = 0;
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte) chainId;
+		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CURVE;
 		sysex[i++] = (byte)curveId;
 

@@ -45,6 +45,7 @@ public class MidiController {
 	private Boolean compareSysex = false;
 	private byte [] sysexToCompare;
 	private int [] sysexStatus;
+	private int chainId;
 
 	private List<byte[]> sysexSendListLocal;
 //	private List<byte[]> receivedSysexList;
@@ -258,6 +259,11 @@ public class MidiController {
 		sendSysexTask.setOnSucceeded(eh);
 	}
 	
+	public void setChainId(int id ) {
+		midiHandler.setChainId(id);
+		chainId = id;
+	}
+	
 	public void sendSysexFromThread(byte [] sysex, Integer maxRetries, Integer retryDelay) {
 		//System.out.println("sendSysexConfigFromThread called\n");
 		sendSysexConfigRetries = maxRetries;
@@ -277,6 +283,7 @@ public class MidiController {
 		sysexReceived = false;
 		while (sendSysexConfigRetries > 0) {
 			if (sysex.length > 2) {
+				sysex[2] = (byte)chainId;
 				sysexToCompare = Arrays.copyOf(sysex, sysex.length);
 				compareSysex = true;
 		    	midiHandler.sendSysex(sysex);

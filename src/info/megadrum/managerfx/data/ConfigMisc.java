@@ -112,7 +112,7 @@ public class ConfigMisc {
 		}
 	}
 
-	public byte[] getSysexFromConfig(int chainId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
@@ -126,7 +126,7 @@ public class ConfigMisc {
 				|(((midi_thru)?1:0)<<8)|(((send_triggered_in)?1:0)<<11));
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte) chainId;
+		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_MISC;
 		sysex_byte = Utils.byte2sysex((byte)getNoteOff());
 		sysex[i++] = sysex_byte[0];

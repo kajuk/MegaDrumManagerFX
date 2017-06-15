@@ -94,14 +94,14 @@ public class Config3rd {
 		return value;
 	}
 
-	public byte[] getSysexFromConfig(int chainId, int padId) {
+	public byte[] getSysexFromConfig (int padId) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_3RD_SIZE];
 		int i = 0;
 
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte)chainId;
+		sysex[i++] = 0; //(byte)chainId;
 		sysex[i++] = Constants.MD_SYSEX_3RD;
 		sysex[i++] = (byte)padId;
 		

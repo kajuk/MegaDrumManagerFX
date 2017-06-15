@@ -38,7 +38,7 @@ public class ConfigGlobalMisc {
 		midi2_for_sysex = prop.getBoolean(prefix+"midi2_for_sysex", midi2_for_sysex);
 	}
 
-	public byte[] getSysexFromConfig(int chainId) {
+	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		byte [] sysex = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
@@ -50,7 +50,7 @@ public class ConfigGlobalMisc {
 				);
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte)chainId;
+		sysex[i++] = 0; //(byte)chainId;
 		sysex[i++] = Constants.MD_SYSEX_GLOBAL_MISC;
 		
 		sysex_byte = Utils.byte2sysex((byte)(100 - lcd_contrast));

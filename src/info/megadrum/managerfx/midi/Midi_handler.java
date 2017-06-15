@@ -98,6 +98,10 @@ public class Midi_handler {
 		sysexReceived = false;		
 	}
 	
+	public void setChainId(int id ) {
+		chainId = id;
+	}
+
 	public byte[] getBufferIn() {
 		return bufferIn;
 	}

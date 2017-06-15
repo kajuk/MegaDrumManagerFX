@@ -318,7 +318,7 @@ public class ConfigPedal {
 		}
 	}
 	
-	public byte[] getSysexFromConfig( int chainId, int mcu_type) {
+	public byte[] getSysexFromConfig(int mcu_type) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
 		int sysex_length = Constants.MD_SYSEX_PEDAL_SIZE;
@@ -331,7 +331,7 @@ public class ConfigPedal {
 
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte) chainId;
+		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_PEDAL;
 
 		flags = (byte) (((type)?1:0)|(((autoLevels)?1:0)<<1)|(((altIn)?1:0)<<2)|(((reverseLevels)?1:0)<<3)

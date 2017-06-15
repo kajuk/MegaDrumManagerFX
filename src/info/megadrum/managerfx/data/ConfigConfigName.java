@@ -10,7 +10,7 @@ public class ConfigConfigName {
 	public ConfigConfigName() {
 	}
 
-	public byte[] getSysexFromConfig(int chainId, int nameId) {
+	public byte[] getSysexFromConfig(int nameId) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];
 		String nameString;
@@ -18,7 +18,7 @@ public class ConfigConfigName {
 		int i = 0;
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte) chainId;
+		sysex[i++] = 0; //(byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CONFIG_NAME;
 		sysex[i++] = (byte)nameId;
 		
