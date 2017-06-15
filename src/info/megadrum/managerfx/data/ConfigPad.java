@@ -286,4 +286,137 @@ public class ConfigPad {
 		return value;
 	}
 
+	public byte[] getSysexFromConfig(int chainId, int padId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];	
+		byte flags;
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId; 
+		sysex[i++] = Constants.MD_SYSEX_PAD;
+		sysex[i++] = (byte)(padId + 1);
+		
+		if (inputDisabled) {
+			sysex_byte = Utils.byte2sysex((byte)0);
+		} else {
+			sysex_byte = Utils.byte2sysex((byte)note);
+		}
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)((channel<<4)|(curve)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)threshold);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)retrigger);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = Utils.short2sysex((short)levelMax);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_byte = Utils.byte2sysex((byte)minScan);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		flags = (byte) (((type)?1:0)|(((autoLevel)?1:0)<<1)|(((dual)?1:0)<<2)|(((threeWay)?1:0)<<3)
+				|(gain<<4));
+		sysex_byte = Utils.byte2sysex(flags);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)((xtalkGroup<<3)|(xtalkLevel)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)((dynLevel<<4)|(dynTime)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)(((function)<<6)|(shift<<3)|(compression)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];		
+		sysex_byte = Utils.byte2sysex((byte)name);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)pressrollNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)altNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte flags;
+		int i = 5;
+
+		if (sysex.length >= Constants.MD_SYSEX_PAD_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (!inputDisabled) {
+				note = Utils.sysex2byte(sysex_byte);
+			}
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			curve = (flags&0x0f);
+			channel = ((flags&0xf0)>>4);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			threshold = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			retrigger = Utils.sysex2byte(sysex_byte);
+			if (retrigger <1 ) retrigger = 1;
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			levelMax = Utils.sysex2short(sysex_short);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			minScan = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			gain = ((flags&0xf0)>>4);
+			type = ((flags&1) != 0);
+			autoLevel = ((flags&(1<<1)) != 0);
+			dual = ((flags&(1<<2)) != 0);
+			threeWay = ((flags&(1<<3)) != 0);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			xtalkGroup = ((flags&0x38)>>3);
+			xtalkLevel = (flags&0x07);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			dynTime = (flags&0x0f);
+			dynLevel = ((flags&0xf0)>>4);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			shift = ((flags&0x38)>>3);
+			compression = (flags&0x07);
+			function = ((flags&0xc0)>>6);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			name = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			pressrollNote = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			altNote = Utils.sysex2byte(sysex_byte);
+		}
+	}
+
+
 }
