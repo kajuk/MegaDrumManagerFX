@@ -1,5 +1,7 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.Set;
+
 import info.megadrum.managerfx.utils.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -33,7 +35,11 @@ public class UIPanel {
 	protected RadioMenuItem rbDetach;
 	protected Stage			windowDetached;
 	protected Double 		lastTitleHeight = 10.0;
-
+	private Double lastX = -1.0;
+	private Double lastY = -1.0;
+	private Double lastW = -1.0;
+	private Double lastH = -1.0;
+	
 	public UIPanel (String title) {
 		panelTitle = title;
 		ToggleGroup toggleGroup = new ToggleGroup();
@@ -55,6 +61,38 @@ public class UIPanel {
 		vBoxAll.setLayoutX(0);
 		paneAll = new Pane();
 		paneAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
+	}
+	
+	public void setLastX(Double x) {
+		lastX = x;
+	}
+	
+	public void setLastY(Double y) {
+		lastY = y;
+	}
+	
+	public void setLastW(Double w) {
+		lastW = w;
+	}
+	
+	public void setLastH(Double h) {
+		lastH = h;
+	}
+	
+	public Double getLastX() {
+		return lastX;
+	}
+	
+	public Double getLastY() {
+		return lastY;
+	}
+	
+	public Double getLastW() {
+		return lastW;
+	}
+	
+	public Double getLastH() {
+		return lastH;
 	}
 	
 	public void setViewState(int state) {
@@ -95,6 +133,14 @@ public class UIPanel {
 		rbHide.setSelected(true);
 	}
 	
+	public void selectRadioMenuItemShow() {
+		rbShow.setSelected(true);
+	}
+
+	public void selectRadioMenuItemDetach() {
+		rbDetach.setSelected(true);
+	}
+
 	public void setDetached(Boolean d) {
 		detached = d;
 		if (!detached) {

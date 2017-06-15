@@ -35,9 +35,10 @@ public class ConfigOptions implements java.io.Serializable {
 	public String LookAndFeelName = "";
 	public Point2D mainWindowPosition = new Point2D(10,10);
 	public Point2D mainWindowSize = new Point2D(1000,600);
-	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
+	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log, 5 - GlobalMisc (hide/show only)
 	public Point2D [] framesPositions = { new Point2D(10,10), new Point2D(210,10), new Point2D(410,10), new Point2D(610,10), new Point2D(810,10)};
-	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
+	public Point2D [] framesSizes = { new Point2D(200,300), new Point2D(200,300), new Point2D(400,500), new Point2D(400,500), new Point2D(500,300)};
+	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE, Constants.PANEL_SHOW };
 	public int mcuType = 0;
 	public int version = 0;
 	public boolean autoResize = true;
@@ -88,6 +89,8 @@ public class ConfigOptions implements java.io.Serializable {
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", framesPositions[i].getX());
 			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].getY());
+			prop.setProperty("framesSizes"+ ((Integer)i).toString()+"W", framesSizes[i].getX());
+			prop.setProperty("framesSizes"+ ((Integer)i).toString()+"H", framesSizes[i].getY());
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
 		prop.setProperty("autoResize", autoResize);
@@ -135,6 +138,10 @@ public class ConfigOptions implements java.io.Serializable {
 			framesPositions[i] = new Point2D (
 					Utils.validateDouble(prop.getDouble("framesPositions"+ ((Integer)i).toString()+"X", 0.0),0.0,1600.0,0.0),
 					Utils.validateDouble(prop.getDouble("framesPositions"+ ((Integer)i).toString()+"Y", 0.0),0.0,600.0,0.0)
+					);
+			framesSizes[i] = new Point2D (
+					Utils.validateDouble(prop.getDouble("framesSizes"+ ((Integer)i).toString()+"W", 0.0),0.0,3200.0,0.0),
+					Utils.validateDouble(prop.getDouble("framesSizes"+ ((Integer)i).toString()+"H", 0.0),0.0,2000.0,0.0)
 					);
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}

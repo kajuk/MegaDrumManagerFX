@@ -807,6 +807,7 @@ public class Controller implements MidiRescanEventListener {
 			case Constants.PANEL_DETACH:
 				if (!allPanels.get(i).isDetached()) {
 					allPanels.get(i).setDetached(true);
+					allPanels.get(iFinal).selectRadioMenuItemDetach();
 					//hBoxUIviews.getChildren().remove(allPanels.get(i).getUI());
 					VBox scenePane = new VBox();
 					scenePane.setAlignment(Pos.TOP_CENTER);
@@ -817,6 +818,10 @@ public class Controller implements MidiRescanEventListener {
 					allPanels.get(i).getWindow().setScene(scene);
 					allPanels.get(i).getWindow().sizeToScene();
 					allPanels.get(i).getWindow().setOnCloseRequest(e-> {
+						allPanels.get(iFinal).setLastX(allPanels.get(iFinal).getWindow().getX());
+						allPanels.get(iFinal).setLastY(allPanels.get(iFinal).getWindow().getY());
+						allPanels.get(iFinal).setLastW(allPanels.get(iFinal).getWindow().getWidth());
+						allPanels.get(iFinal).setLastH(allPanels.get(iFinal).getWindow().getHeight());
 						scenePane.getChildren().clear();
 						allPanels.get(iFinal).setViewState(Constants.PANEL_HIDE);
 						allPanels.get(iFinal).selectRadioMenuItemHide();
@@ -828,7 +833,28 @@ public class Controller implements MidiRescanEventListener {
 					scene.widthProperty().addListener(e-> {
 						respondToResizeDetached(scene, allPanels.get(iFinal));
 					});
-					allPanels.get(i).getWindow().show();
+					Timer timer = new Timer();
+					timer.schedule(new TimerTask() {
+					// This is a hack on startup for detached windows.
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							Platform.runLater(new Runnable() {
+								
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									allPanels.get(iFinal).getWindow().setX(allPanels.get(iFinal).getLastX());
+									allPanels.get(iFinal).getWindow().setY(allPanels.get(iFinal).getLastY());
+									allPanels.get(iFinal).getWindow().setWidth(allPanels.get(iFinal).getLastW());
+									allPanels.get(iFinal).getWindow().setHeight(allPanels.get(iFinal).getLastH());
+									allPanels.get(iFinal).getWindow().show();
+								}
+							});
+							
+						}
+					}, 1);
 				} else {
 					allPanels.get(i).getWindow().toFront();
 				}
@@ -838,6 +864,7 @@ public class Controller implements MidiRescanEventListener {
 					allPanels.get(i).getWindow().close();
 					allPanels.get(i).getWindow().setScene(null);
 				}
+				allPanels.get(iFinal).selectRadioMenuItemHide();
 				allPanels.get(i).setDetached(false);
 				break;
 			case Constants.PANEL_SHOW:
@@ -846,6 +873,7 @@ public class Controller implements MidiRescanEventListener {
 					allPanels.get(i).getWindow().close();
 					allPanels.get(i).getWindow().setScene(null);
 				}
+				allPanels.get(iFinal).selectRadioMenuItemShow();
 				allPanels.get(i).setDetached(false);
 				hBoxUIviews.getChildren().add(allPanels.get(i).getUI());
 				break;
@@ -894,8 +922,11 @@ public class Controller implements MidiRescanEventListener {
 		//System.out.printf("Height after setting is %f\n", window.getHeight());
 		
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			//framesDetached[i].setLocation(configOptions.framesPositions[i]);
-			//viewMenus[i].setConfigOptions(configOptions);
+			allPanels.get(i).setViewState(configOptions.showPanels[i]);
+			allPanels.get(i).setLastX(configOptions.framesPositions[i].getX());
+			allPanels.get(i).setLastY(configOptions.framesPositions[i].getY());
+			allPanels.get(i).setLastW(configOptions.framesSizes[i].getX());
+			allPanels.get(i).setLastH(configOptions.framesSizes[i].getY());
 		}
 		uiGlobalMisc.getCheckBoxLiveUpdates().setSelected(configOptions.liveUpdates);
 		//checkBoxAutoResize.setSelected(configOptions.autoResize);
@@ -909,7 +940,13 @@ public class Controller implements MidiRescanEventListener {
 		point2d = new Point2D(window.getWidth(), window.getHeight());
 		configOptions.mainWindowSize = point2d;
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			//configOptions.framesPositions[i] = framesDetached[i].getLocation(); 
+			if (allPanels.get(i).getViewState() == Constants.PANEL_DETACH) {
+				point2d = new Point2D(allPanels.get(i).getWindow().getX(), allPanels.get(i).getWindow().getY());
+				configOptions.framesPositions[i] = point2d;
+				point2d = new Point2D(allPanels.get(i).getWindow().getWidth(), allPanels.get(i).getWindow().getHeight());
+				configOptions.framesSizes[i] = point2d;
+			}
+			configOptions.showPanels[i] = allPanels.get(i).getViewState();
 		}
 		if (configOptions.saveOnExit) {
 			fileManager.saveLastOptions(configOptions);
