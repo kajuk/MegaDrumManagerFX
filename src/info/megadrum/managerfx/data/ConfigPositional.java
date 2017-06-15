@@ -68,4 +68,46 @@ public class ConfigPositional {
 		return value;
 	}
 
+	public byte[] getSysexFromConfig(int chainId, int padId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex = new byte[Constants.MD_SYSEX_POS_SIZE];	
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId; 
+		sysex[i++] = Constants.MD_SYSEX_POS;
+		sysex[i++] = (byte)(padId);
+		
+		sysex_byte = Utils.byte2sysex((byte)level);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)low);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)high);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+		return sysex;
+	}
+
+	public void setConfigFromSysex(byte [] sysex) {
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+
+		if (sysex.length >= Constants.MD_SYSEX_POS_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			level = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			low = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			high = Utils.sysex2byte(sysex_byte);
+		}
+	}
+
+
 }

@@ -65,46 +65,6 @@ public class Utils {
 		return result;
 	}
 
-	public static void copyConfigPosToSysex(ConfigPositional config, byte [] sysex, int chainId, int padId) {
-		byte [] sysex_byte = new byte[2];
-		int i = 0;
-
-		sysex[i++] = Constants.SYSEX_START;
-		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte)chainId; 
-		sysex[i++] = Constants.MD_SYSEX_POS;
-		sysex[i++] = (byte)(padId);
-		
-		sysex_byte = byte2sysex((byte)config.level);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.low);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.high);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex[i++] = Constants.SYSEX_END;
-
-	}
-
-	public static void copySysexToConfigPos(byte [] sysex, ConfigPositional config) {
-		byte [] sysex_byte = new byte[2];
-		int i = 5;
-
-		if (sysex.length >= Constants.MD_SYSEX_POS_SIZE) {
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.level = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.low = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.high = sysex2byte(sysex_byte);
-		}
-	}
-
 	public static void copyConfig3rdToSysex(Config3rd config, byte [] sysex, int chainId, int padId) {
 		byte [] sysex_byte = new byte[2];
 		int i = 0;
