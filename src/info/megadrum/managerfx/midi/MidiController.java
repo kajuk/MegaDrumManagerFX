@@ -16,6 +16,7 @@ import javax.rmi.CORBA.Util;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
+import javax.sound.sampled.ReverbType;
 import javax.swing.event.EventListenerList;
 
 import org.apache.commons.collections.functors.IfClosure;
@@ -77,6 +78,7 @@ public class MidiController {
 				sysexStatus[0] = Constants.MD_SYSEX_STATUS_OK;
 				int i = 0;
 				final int max = sysexesList.size();
+				updateProgress(0, max);
 				while (sysexesList.size() > 0) {
 					buf = sysexesList.get(0);
 					if (buf.length > 3) {
@@ -397,6 +399,7 @@ public class MidiController {
 			sysexSendListLocal = new ArrayList<>(sysexSendList);
 			sysexSendList.clear();
 			sendSysexTask.setParameters(sysexSendListLocal,maxRetries,retryDelay);
+			//progressBar.setProgress(0);
 			progressBar.progressProperty().bind(sendSysexTask.progressProperty());
 			Platform.runLater(new Runnable() {
 				
@@ -462,20 +465,20 @@ public class MidiController {
 			Utils.delayMs(4000);
 		}
 		closeAllPorts();
-		System.out.printf("Loading Firmware file\n");
+		//System.out.printf("Loading Firmware file\n");
 		while (dis.available() > 1)
 		{
 			buffer[bufferSize] = readHex(dis);
 			bufferSize++;
 		}
-		System.out.printf("Firmware file loaded\n");
+		//System.out.printf("Firmware file loaded\n");
 		midiHandler.initPorts();
 		//parent.getProgressBar().setMinimum(0);
 		//parent.getProgressBar().setMaximum(bufferSize);
 		dis.close();
 		bis.close();
 		fis.close();
-		System.out.printf("Firmware size is %d bytes\n", bufferSize);
+		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
 		midiHandler.clear_midi_input();
 		final int bufferSizeFinal = bufferSize;
@@ -503,14 +506,14 @@ public class MidiController {
 			            updateProgress(bytesSent, bufferSizeFinal);
 						prevBytesSent = bytesSent;				
 					}
-					System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+					//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 					//Block_size = frameSize;				// Seem it fails
 					//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
 					//Block_size = 2;
 					//if (Block_size > frameSize) Block_size = frameSize;
 					midiHandler.writeMid(receiver, buffer, index, frameSize);
-					System.out.printf("Sent %d bytes\n", frameSize);
+					//System.out.printf("Sent %d bytes\n", frameSize);
 					
 
 					nBytes = 0;
@@ -524,6 +527,11 @@ public class MidiController {
 					int t = 0;
 		 			while ((nBytes == 0) && (inDelay > 0)) {
 		 				receivedBuffer = dump_receiver.getByteMessage();
+		 				if (t== 11) {
+		 					receivedBuffer = new byte[3];
+		 					receivedBuffer[1] = 1;
+		 					receivedBuffer[2] = 1;
+		 				}
 		 				t++;
 		 				if (t > 100) {
 		 					t = 0;
@@ -538,7 +546,7 @@ public class MidiController {
 					    if (upgradeCancelled) break;
 					}
 		 			//System.out.printf("\n");
-					System.out.printf("Received %d bytes\n", nBytes);
+					//System.out.printf("Received %d bytes\n", nBytes);
 								
 		 			receivedByte = Constants.Error_NoResponse;
 					if (nBytes > 2) {
@@ -546,7 +554,7 @@ public class MidiController {
 						receivedByte = receivedBuffer[2]|receivedByte;
 						//System.out.println(String.valueOf((int)receivedByte));
 					} else {
-						System.out.println("Read error\n");
+						//System.out.println("Read error\n");
 						if (nBytes > 0) {
 							receivedByte = Constants.Error_Read;
 						}
@@ -554,7 +562,7 @@ public class MidiController {
 
 					switch (receivedByte) {
 						case Constants.Error_OK:
-							System.out.printf("Got OK from MegaDrum\n");
+							//System.out.printf("Got OK from MegaDrum\n");
 							bytesSent += frameSize;
 							retries = 0;
 							break;
@@ -562,10 +570,10 @@ public class MidiController {
 						default: // Error_CRC:
 							if (++retries < 4) {
 								index -= frameSize;
-								System.out.println("Retrying on error\n");
+								//System.out.println("Retrying on error\n");
 								Utils.delayMs(10);
 							} else {
-								System.out.println("\nCRC error. File damaged.\n");
+								//System.out.println("\nCRC error. File damaged.\n");
 								switch (receivedByte) {
 								case Constants.Error_CRC:
 									upgradeError = 2;
@@ -584,7 +592,7 @@ public class MidiController {
 									upgradeResultString = "Unknown error";
 									break;
 								}
-								System.out.printf("Exit with error: %s\n", upgradeResultString);
+								//System.out.printf("Exit with error: %s\n", upgradeResultString);
 							}
 							break;
 					}
