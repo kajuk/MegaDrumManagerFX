@@ -295,185 +295,114 @@ public class Midi_handler {
 		}
 	}
 
-	public void requestConfigGlobalMisc() {
-		byte [] sx = new byte[5];
-		
+	private void sendSysexRequest(byte[] sx) {
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
 		sx[2] = (byte)chainId;
-		sx[3] = Constants.MD_SYSEX_GLOBAL_MISC;
-		sx[4] = Constants.SYSEX_END;
+		sx[sx.length - 1] = Constants.SYSEX_END;
 		sendSysex(sx);
+	}
+	
+	public void requestConfigGlobalMisc() {
+		byte [] sx = new byte[5];		
+		sx[3] = Constants.MD_SYSEX_GLOBAL_MISC;
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigMisc() {
-		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
+		byte [] sx = new byte[5];	
 		sx[3] = Constants.MD_SYSEX_MISC;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestVersion() {
 		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_VERSION;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestMCU() {
 		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_MCU_TYPE;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigCount() {
 		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CONFIG_COUNT;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigCurrent() {
 		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CONFIG_CURRENT;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigPedal() {
 		byte [] sx = new byte[5];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_PEDAL;
-		sx[4] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 	
 	public void requestConfigPad(int pad_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_PAD;
 		sx[4] = (byte)pad_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigPos(int pad_id) {
-		int id = pad_id;
 		byte [] sx = new byte[6];
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_POS;
-		sx[4] = (byte)id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sx[4] = (byte)pad_id;
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfig3rd(int third_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_3RD;
 		sx[4] = (byte)third_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigCurve(int curve_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CURVE;
 		sx[4] = (byte)curve_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigCustomName(int name_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CUSTOM_NAME;
 		sx[4] = (byte)name_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestConfigConfigName(int name_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CONFIG_NAME;
 		sx[4] = (byte)name_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestSaveToSlot(int config_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CONFIG_SAVE;
 		sx[4] = (byte)config_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestLoadFromSlot(int config_id) {
 		byte [] sx = new byte[6];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CONFIG_LOAD;
 		sx[4] = (byte)config_id;
-		sx[5] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 
 	public void requestArmBootloader() {
 		byte [] sx = new byte[21];
-		
-		sx[0] = Constants.SYSEX_START;
-		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_BOOTLOADER;
 		sx[4] = 0x09;
 		sx[5] = 0x03;
@@ -491,8 +420,7 @@ public class Midi_handler {
 		sx[17] = 0x0b;
 		sx[18] = 0x00;
 		sx[19] = 0x05;
-		sx[20] = Constants.SYSEX_END;
-		sendSysex(sx);
+		sendSysexRequest(sx);
 	}
 	
 	public void requestVersionAndMcu() {

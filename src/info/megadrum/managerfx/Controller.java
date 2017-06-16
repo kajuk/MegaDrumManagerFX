@@ -1415,9 +1415,22 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.add(typeAndId);
 		
 		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_POS;
-		typeAndId[1] = input.byteValue();
-		sysexSendList.add(typeAndId);
+		if (configOptions.mcuType > 2) {
+			//STM32. All inputs
+			typeAndId[0] = Constants.MD_SYSEX_POS;
+			typeAndId[1] = input.byteValue();
+			sysexSendList.add(typeAndId);
+		} else {
+			// Atmega644/1284. 4 or 8 head/bow inputs
+			if ((input&1) > 0) {
+				int in = (input - 3)/2;
+				if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+					typeAndId[0] = Constants.MD_SYSEX_POS;
+					typeAndId[1] = (byte)in;
+					sysexSendList.add(typeAndId);
+				}				
+			}
+		}
 		sendSysex();
 	}
 
@@ -1434,15 +1447,29 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[1] = (byte)(pair*2);
 		sysexSendList.add(typeAndId);
 
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_POS;
-		typeAndId[1] = (byte)((pair*2) - 1);
-		sysexSendList.add(typeAndId);
+		if (configOptions.mcuType > 2) {
+			//STM32. All inputs
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_POS;
+			typeAndId[1] = (byte)((pair*2) - 1);
+			sysexSendList.add(typeAndId);
 
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_POS;
-		typeAndId[1] = (byte)(pair*2);
-		sysexSendList.add(typeAndId);
+			typeAndId = new byte[2];
+			typeAndId[0] = Constants.MD_SYSEX_POS;
+			typeAndId[1] = (byte)(pair*2);
+			sysexSendList.add(typeAndId);
+		} else {
+			// Atmega644/1284. 4 or 8 head/bow inputs
+			int input = (pair*2) - 1;
+			if ((input&1) > 0) {
+				int in = (input - 3)/2;
+				if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+					typeAndId[0] = Constants.MD_SYSEX_POS;
+					typeAndId[1] = (byte)in;
+					sysexSendList.add(typeAndId);
+				}				
+			}
+		}
 
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_3RD;
@@ -1472,10 +1499,27 @@ public class Controller implements MidiRescanEventListener {
 			typeAndId[0] = Constants.MD_SYSEX_PAD;
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
-			typeAndId = new byte[2];
-			typeAndId[0] = Constants.MD_SYSEX_POS;
-			typeAndId[1] = i;
-			sysexSendList.add(typeAndId);
+
+			if (configOptions.mcuType > 2) {
+				//STM32. All inputs
+				typeAndId = new byte[2];
+				typeAndId[0] = Constants.MD_SYSEX_POS;
+				typeAndId[1] = i;
+				sysexSendList.add(typeAndId);
+
+			} else {
+				// Atmega644/1284. 4 or 8 head/bow inputs
+				int input = i;
+				if ((input&1) > 0) {
+					int in = (input - 3)/2;
+					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+						typeAndId[0] = Constants.MD_SYSEX_POS;
+						typeAndId[1] = (byte)in;
+						sysexSendList.add(typeAndId);
+					}				
+				}
+			}
+						
 			if ((i&1) > 0) {
 				typeAndId = new byte[2];
 				typeAndId[0] = Constants.MD_SYSEX_3RD;
@@ -1541,10 +1585,27 @@ public class Controller implements MidiRescanEventListener {
 			typeAndId[0] = Constants.MD_SYSEX_PAD;
 			typeAndId[1] = i;
 			sysexSendList.add(typeAndId);
-			typeAndId = new byte[2];
-			typeAndId[0] = Constants.MD_SYSEX_POS;
-			typeAndId[1] = i;
-			sysexSendList.add(typeAndId);
+
+			if (configOptions.mcuType > 2) {
+				//STM32. All inputs
+				typeAndId = new byte[2];
+				typeAndId[0] = Constants.MD_SYSEX_POS;
+				typeAndId[1] = i;
+				sysexSendList.add(typeAndId);
+
+			} else {
+				// Atmega644/1284. 4 or 8 head/bow inputs
+				int input = i;
+				if ((input&1) > 0) {
+					int in = (input - 3)/2;
+					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+						typeAndId[0] = Constants.MD_SYSEX_POS;
+						typeAndId[1] = (byte)in;
+						sysexSendList.add(typeAndId);
+					}				
+				}
+			}
+			
 			if ((i&1) > 0) {
 				typeAndId = new byte[2];
 				typeAndId[0] = Constants.MD_SYSEX_3RD;
@@ -1882,6 +1943,10 @@ public class Controller implements MidiRescanEventListener {
 				break;
 			case Constants.MD_SYSEX_POS:
 				//System.out.printf("Sysex pos pointer = %d\n", pointer);
+				if (configOptions.mcuType < 3) {
+					//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
+					pointer = (byte)(pointer*2 + 1);
+				}
 				configFull.configPos[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configPos[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
