@@ -433,6 +433,7 @@ public class MidiController {
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;
 		upgradeResultString = "Upgrade completed successufully";
+		upgradeCancelled = false;
 		int[] buffer = new int[0x40000];	// Data buffer for sending the data
 
 		int bufferSize = 0;			// Total number of bytes in the buffer

@@ -8,6 +8,9 @@ import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.data.FileManager;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.utils.Constants;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +21,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,12 +32,14 @@ public class UIUpgrade {
 	private Stage window;
 	private Scene scene;
 	private Boolean upgradeCompleted = false;
+	private Boolean upgradeIsInProgress = false;
 	//private TextArea textAreaInstruction;
 	private Label textAreaInstruction;
 	private Button buttonStart, buttonCancel, buttonClose, buttonOpen;
 	private Label labelFile;
 	private TextField textFieldFileName;
 	private ProgressBar progressBar;
+	private Label labelResult;
 	private MidiController midiController;
 	private File file;
 	private FileManager fileManager;
@@ -50,9 +58,10 @@ public class UIUpgrade {
 		});
 
 		textAreaInstruction = new Label();
+		textAreaInstruction.setFont(new Font(16));
 		textAreaInstruction.setPadding(new Insets(2, 2, 2, 2));
-		textAreaInstruction.setMinHeight(300);
-		textAreaInstruction.setMaxHeight(300);
+		textAreaInstruction.setMinHeight(400);
+		textAreaInstruction.setMaxHeight(400);
 		//textAreaInstruction.setDisable(true);
 		VBox vBoxTop = new VBox();
 		vBoxTop.setPadding(new Insets(2, 2, 2, 2));
@@ -61,7 +70,7 @@ public class UIUpgrade {
 		
 		labelFile = new Label("MegaDrum firmware:");
 		textFieldFileName = new TextField();
-		textFieldFileName.setMinWidth(350);
+		textFieldFileName.setMinWidth(450);
 		textFieldFileName.setOnKeyReleased(e-> {
 			textFieldChanged();
 		});
@@ -80,6 +89,10 @@ public class UIUpgrade {
 		progressBar.prefWidthProperty().bind(vBoxTop.widthProperty().subtract(10));  //  -10 is for 
 		   // padding from right and left, since we aligned it to TOP_CENTER.
 		vBoxTop.getChildren().add(progressBar);
+		labelResult = new Label();
+		labelResult.setFont(new Font(16));
+		labelResult.setPadding(new Insets(2, 0, 10, 0));
+		vBoxTop.getChildren().add(labelResult);
 		
 		buttonStart = new Button("Start");
 		buttonStart.setOnAction(e-> {
@@ -108,7 +121,27 @@ public class UIUpgrade {
 
 	}
 	
+	private void setLabelResult(String s, int error) {
+		String fontColor = "blue";
+		if (s.length() == 0) {
+			labelResult.setText("");
+		} else {
+			if (error > 0) {
+				fontColor = "red";
+			} else {
+				if (error < 0) {
+					fontColor = "orange";
+				} else {
+					fontColor = "green";
+				}
+			}
+			labelResult.setText(s);
+		}
+		labelResult.setStyle("-fx-text-fill: " + fontColor);
+	}
+	
 	public void show() {
+		progressBar.progressProperty().unbind();
 		midiController.openMidi(configOptions.MidiInName, configOptions.MidiOutName, "");
 		midiController.setInFirmwareUpgrade(true);
 		if (configOptions.mcuType > 2) {
@@ -118,21 +151,35 @@ public class UIUpgrade {
 		}
 		upgradeCompleted = false;
         window.setResizable(false);
-        buttonCancel.setDisable(true);
+        setButtons(true);
+        setLabelResult("", 0);
 		progressBar.setProgress(0);
         
         window.showAndWait();
 	}
 
-	public void closeWindow() {
-		midiController.setInFirmwareUpgrade(false);
-		window.close();
+	private void closeWindow() {
+		if (!upgradeIsInProgress) {
+			midiController.setInFirmwareUpgrade(false);
+			window.close();
+		}
 	}
 	
-	public void startUpgrade() {
+	private void setButtons(Boolean state) {
+		textFieldFileName.setDisable(!state);
+		buttonStart.setDisable(!state);
+		buttonClose.setDisable(!state);
+		buttonCancel.setDisable(state);		
+		buttonOpen.setDisable(!state);		
+	}
+	
+	private void startUpgrade() {
 		if (file != null) {
+			upgradeIsInProgress = true;
+			setLabelResult("Upgrade is in progress", -1);
 			Task<Integer> taskUpgrade;
 			try {
+				setButtons(false);
 				taskUpgrade = midiController.doFirmwareUpgrade(file, configOptions.mcuType, progressBar);
 				taskUpgrade.setOnSucceeded(e->{
 					upgradeFinished();
@@ -141,13 +188,27 @@ public class UIUpgrade {
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				setButtons(true);
+				progressBar.progressProperty().unbind();
+				upgradeIsInProgress = false;
 			}
+		} else {
+			setLabelResult("Incorrect or no file specified", 1);
 		}
 	}	
 
-	public void upgradeFinished() {
-		System.out.printf("Upgrade thread finished with error = %d\nResult text = %s\n",
-				midiController.getUpgradeError(), midiController.getUpgradeString());
+	private void upgradeFinished() {
+		upgradeIsInProgress = false;
+		progressBar.progressProperty().unbind();
+		setButtons(true);
+		if (midiController.getUpgradeError() > 0) {
+			
+		} else {
+			progressBar.setProgress(1);
+		}
+		setLabelResult(midiController.getUpgradeString(), midiController.getUpgradeError());
+		//System.out.printf("Upgrade thread finished with error = %d\nResult text = %s\n",
+		//		midiController.getUpgradeError(), midiController.getUpgradeString());
 	}
 	
 	private void selectFile() {
