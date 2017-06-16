@@ -31,7 +31,10 @@ import javafx.stage.Stage;
 public class UIUpgrade {
 	private Stage window;
 	private Scene scene;
-	private Boolean upgradeCompleted = false;
+	public final static int UPGRADE_SUCCESS = 0;
+	public final static int UPGRADE_NOT_PERFORMED = 1;
+	public final static int UPGRADE_FAILED = 2;	
+	private int upgradeResult = UPGRADE_NOT_PERFORMED;
 	private Boolean upgradeIsInProgress = false;
 	//private TextArea textAreaInstruction;
 	private Label textAreaInstruction;
@@ -149,7 +152,7 @@ public class UIUpgrade {
 		} else {
 			textAreaInstruction.setText(Constants.UPGRADE_INSTRUCTION_ATMEGA);
 		}
-		upgradeCompleted = false;
+		upgradeResult = UPGRADE_NOT_PERFORMED;
         window.setResizable(false);
         setButtons(true);
         setLabelResult("", 0);
@@ -158,6 +161,10 @@ public class UIUpgrade {
         window.showAndWait();
 	}
 
+	public int getUpgradeResult() {
+		return upgradeResult;
+	}
+	
 	private void closeWindow() {
 		if (!upgradeIsInProgress) {
 			midiController.setInFirmwareUpgrade(false);
@@ -191,6 +198,7 @@ public class UIUpgrade {
 				setButtons(true);
 				progressBar.progressProperty().unbind();
 				upgradeIsInProgress = false;
+				upgradeResult = UPGRADE_FAILED;
 			}
 		} else {
 			setLabelResult("Incorrect or no file specified", 1);
@@ -202,8 +210,9 @@ public class UIUpgrade {
 		progressBar.progressProperty().unbind();
 		setButtons(true);
 		if (midiController.getUpgradeError() > 0) {
-			
+			upgradeResult = UPGRADE_FAILED;			
 		} else {
+			upgradeResult = UPGRADE_SUCCESS;
 			progressBar.setProgress(1);
 		}
 		setLabelResult(midiController.getUpgradeString(), midiController.getUpgradeError());

@@ -454,16 +454,6 @@ public class MidiController {
 		}
 		bis = new BufferedInputStream(fis);
 		dis = new DataInputStream(bis);
-
-		//("Starting upgrade\n");
-				
-		if (mcuType > 2) {
-			// Restart ARM based MegaDrum in bootloader mode
-			midiHandler.requestArmBootloader();
-			//System.out.printf("Sent reboot request\n");
-			Utils.delayMs(4000);
-		}
-		closeAllPorts();
 		//System.out.printf("Loading Firmware file\n");
 		while (dis.available() > 1)
 		{
@@ -471,15 +461,12 @@ public class MidiController {
 			bufferSize++;
 		}
 		//System.out.printf("Firmware file loaded\n");
-		midiHandler.initPorts();
-		//parent.getProgressBar().setMinimum(0);
-		//parent.getProgressBar().setMaximum(bufferSize);
 		dis.close();
 		bis.close();
 		fis.close();
-		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
-		
-		midiHandler.clear_midi_input();
+
+		//("Starting upgrade\n");
+				
 		final int bufferSizeFinal = bufferSize;
 		Task<Integer> task = new Task<Integer>() {
 			int frameSize;				// Number of bytes in the current frame
@@ -497,6 +484,20 @@ public class MidiController {
 			@Override
 			protected Integer call() throws Exception {
 	            updateProgress(0, bufferSizeFinal);
+
+	    		if (mcuType > 2) {
+	    			// Restart ARM based MegaDrum in bootloader mode
+	    			midiHandler.requestArmBootloader();
+	    			//System.out.printf("Sent reboot request\n");
+	    			Utils.delayMs(4000);
+	    		}
+	    		closeAllPorts();
+	    		midiHandler.initPorts();
+	    		//System.out.printf("Firmware size is %d bytes\n", bufferSizeFinal);
+	    		
+	    		midiHandler.clear_midi_input();
+	            
+	            
 	    		firstDelay = true;
 				for(int index = 0; index < bufferSizeFinal; index += frameSize)
 				{

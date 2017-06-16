@@ -175,7 +175,6 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getComboBoxFile().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 		    	if (comboBoxFileChangedFromSet > 0) {
 		    		comboBoxFileChangedFromSet--;
 		    	} else {
@@ -211,8 +210,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
-				//System.out.println("aaaaaaaaaaaaaaaaaaaaa");
 				controlsChangedGlobalMisc();
 			}
 		});
@@ -226,7 +223,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				controlsChangedMisc();
 			}
 		});
@@ -239,7 +235,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				controlsChangedPedal();
 			}
 		});
@@ -247,7 +242,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				Integer inputNumber = 0;
 				if (padPair > 0) {
 					inputNumber = ((padPair - 1)*2) +1; 
@@ -345,7 +339,6 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.getComboBoxInput().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 		    	if (comboBoxInputChangedFromSet > 0) {
 		    		comboBoxInputChangedFromSet--;
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
@@ -365,7 +358,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				if (parameter.intValue() == Constants.CONTROL_CHANGE_EVENT_CURVE) {
 					controlsChangedCurve();
 				} else {
@@ -388,7 +380,6 @@ public class Controller implements MidiRescanEventListener {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				switch (uiPadsExtra.getComboBoxCustomNamesCount().getSelectionModel().getSelectedIndex()) {
 				case 0:
 					configFull.customNamesCount = 2;
@@ -418,7 +409,6 @@ public class Controller implements MidiRescanEventListener {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				int newCurve = uiPadsExtra.getCurvesComboBox().getSelectionModel().getSelectedIndex();
 				if (newCurve != curvePointer) {
 					switchToSelectedCurve(newCurve);
@@ -853,7 +843,6 @@ public class Controller implements MidiRescanEventListener {
 						
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
 							Platform.runLater(new Runnable() {
 								
 								@Override
@@ -865,8 +854,7 @@ public class Controller implements MidiRescanEventListener {
 									allPanels.get(iFinal).getWindow().setHeight(allPanels.get(iFinal).getLastH());
 									allPanels.get(iFinal).getWindow().show();
 								}
-							});
-							
+							});						
 						}
 					}, 1);
 				} else {
@@ -919,14 +907,10 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
 		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
 		//showMidiWarningIfNeeded();
-		//if (configOptions.autoOpenPorts) {
-		//	midiController.;
-		//	tglbtnMidi.setSelected(midi_handler.isMidiOpen());
-		//}
-		//midiController.chainId = configOptions.chainId;
-		//comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		//updateInputsCountControls();
-		//updateGlobalMiscControls();
+		if (configOptions.autoOpenPorts) {
+			openMidiPorts(true);
+		}
+		midiController.setChainId(configOptions.chainId);
 		window.setX(configOptions.mainWindowPosition.getX());
 		window.setY(configOptions.mainWindowPosition.getY());
 		window.setWidth(configOptions.mainWindowSize.getX());
@@ -1165,6 +1149,12 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
 		typeAndId[1] = (byte)id;
+		if (configOptions.mcuType < 2) {
+			//Atmega644 has 16 custom names max
+			if (id > 15) {
+				typeAndId[1] = 15;
+			}
+		}
 		sysexSendList.add(typeAndId);
 		sendSysex();
 	}
@@ -1184,6 +1174,12 @@ public class Controller implements MidiRescanEventListener {
 		byte [] typeAndId;
 		byte i;
 		for (i = 0; i < configFull.customNamesCount; i++) {
+			if (configOptions.mcuType < 2) {
+				//Atmega644 has 16 custom names max
+				if (i > 15) {
+					break;
+				}
+			}
 			typeAndId = new byte[2];
 			typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
 			typeAndId[1] = i;
@@ -1620,6 +1616,12 @@ public class Controller implements MidiRescanEventListener {
 			sysexSendList.add(typeAndId);
 		}
 		for (i = 0; i < configFull.customNamesCount; i++) {
+			if (configOptions.mcuType < 2) {
+				//Atmega644 has 16 custom names max
+				if (i > 15) {
+					break;
+				}
+			}
 			typeAndId = new byte[2];
 			typeAndId[0] = Constants.MD_SYSEX_CUSTOM_NAME;
 			typeAndId[1] = i;
@@ -1641,6 +1643,20 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void showUpgradeWindow() {
 		upgradeWindow.show();
+		switch (upgradeWindow.getUpgradeResult()) {
+		case UIUpgrade.UPGRADE_SUCCESS:
+			//System.out.println("Ok");
+			openMidiPorts(true);
+			break;
+		case UIUpgrade.UPGRADE_FAILED:
+			//System.out.println("Failed");
+			openMidiPorts(false);
+			break;
+		case UIUpgrade.UPGRADE_NOT_PERFORMED:
+		default:
+			//System.out.println("Not performed");
+			break;
+		}
 	}
 	
 	private void showOptionsWindow() {
