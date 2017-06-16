@@ -50,7 +50,8 @@ public class UIPanel {
 		rbDetach = new RadioMenuItem("Detach");
 		rbDetach.setToggleGroup(toggleGroup);
 		windowDetached = new Stage();
-		windowDetached.setTitle(title);
+		//windowDetached.setTitle(title);
+		windowDetached.setTitle(Constants.WINDOWS_TITLE_SHORT + title);
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");

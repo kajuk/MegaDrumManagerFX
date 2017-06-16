@@ -8,6 +8,8 @@ import org.apache.commons.collections.functors.IfClosure;
 import javafx.scene.paint.Color;
 
 public interface Constants {
+	public static final String WINDOWS_TITLE = "MegaDrumManager FX";
+	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
 	public static final String MD_VERSION = "20170511";
 	public static final int MD_MINIMUM_VERSION = 20170413;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +

@@ -137,7 +137,7 @@ public class Controller implements MidiRescanEventListener {
 
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
-		window.setTitle("MegaDrumManagerFX");
+		window.setTitle(Constants.WINDOWS_TITLE);
 		window.setOnCloseRequest(e-> {
 			e.consume();
 			closeProgram();

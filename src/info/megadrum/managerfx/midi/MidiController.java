@@ -399,7 +399,6 @@ public class MidiController {
 			sysexSendListLocal = new ArrayList<>(sysexSendList);
 			sysexSendList.clear();
 			sendSysexTask.setParameters(sysexSendListLocal,maxRetries,retryDelay);
-			//progressBar.setProgress(0);
 			progressBar.progressProperty().bind(sendSysexTask.progressProperty());
 			Platform.runLater(new Runnable() {
 				
@@ -527,11 +526,12 @@ public class MidiController {
 					int t = 0;
 		 			while ((nBytes == 0) && (inDelay > 0)) {
 		 				receivedBuffer = dump_receiver.getByteMessage();
-		 				if (t== 11) {
-		 					receivedBuffer = new byte[3];
-		 					receivedBuffer[1] = 1;
-		 					receivedBuffer[2] = 1;
-		 				}
+		 				//Faking ok response for testing
+		 				//if (t== 11) {
+		 				//	receivedBuffer = new byte[3];
+		 				//	receivedBuffer[1] = 1;
+		 				//	receivedBuffer[2] = 1;
+		 				//}
 		 				t++;
 		 				if (t > 100) {
 		 					t = 0;
