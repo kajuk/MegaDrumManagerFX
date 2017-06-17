@@ -1366,8 +1366,27 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void sendSysexInput(Integer input, Boolean leftInput) {
 		sysexSendList.add(configFull.configPads[input].getSysexFromConfig());
-		
-		sysexSendList.add(configFull.configPos[input].getSysexFromConfig());
+		if (configOptions.mcuType > 2) {
+			sysexSendList.add(configFull.configPos[input].getSysexFromConfig());
+		} else {
+			if (input > 2) {
+				if ((input&1) > 0) {
+					byte [] sysex;
+					sysex = configFull.configPos[input].getSysexFromConfig();
+					sysex[4] = (byte) ((input-3)/2);
+					if (configOptions.mcuType == 1) {
+						if (((input-3)/2) < 4) {
+							sysexSendList.add(sysex);							
+						}
+					}
+					if (configOptions.mcuType == 2) {
+						if (((input-3)/2) < 8) {
+							sysexSendList.add(sysex);							
+						}
+					}
+				}
+			}
+		}
 		sendSysex();
 	}
 
@@ -1375,8 +1394,29 @@ public class Controller implements MidiRescanEventListener {
 		//sysexSendList.clear();
 		sysexSendList.add(configFull.configPads[(pair*2) - 1].getSysexFromConfig());		
 		sysexSendList.add(configFull.configPads[(pair*2)].getSysexFromConfig());
-		sysexSendList.add(configFull.configPos[(pair*2) - 1].getSysexFromConfig());		
-		sysexSendList.add(configFull.configPos[(pair*2)].getSysexFromConfig());
+		if (configOptions.mcuType > 2) {
+			sysexSendList.add(configFull.configPos[(pair*2) - 1].getSysexFromConfig());		
+			sysexSendList.add(configFull.configPos[(pair*2)].getSysexFromConfig());
+		} else {
+			int input = padPair*2 - 1;
+			if (input > 2) {
+				if ((input&1) > 0) {
+					byte [] sysex;
+					sysex = configFull.configPos[(pair*2) - 1].getSysexFromConfig();
+					sysex[4] = (byte) ((input-3)/2);
+					if (configOptions.mcuType == 1) {
+						if (((input-3)/2) < 4) {
+							sysexSendList.add(sysex);							
+						}
+					}
+					if (configOptions.mcuType == 2) {
+						if (((input-3)/2) < 8) {
+							sysexSendList.add(sysex);							
+						}
+					}
+				}
+			}
+		}
 		sysexSendList.add(configFull.config3rds[pair - 1].getSysexFromConfig());
 		sendSysex();
 	}
