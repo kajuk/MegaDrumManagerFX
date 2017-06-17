@@ -299,6 +299,7 @@ public class MidiController {
 				sysexToCompare = Arrays.copyOf(sysex, sysex.length);
 				compareSysex = true;
 		    	midiHandler.sendSysex(sysex);
+				Utils.delayMs(5);
 			}
 			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
