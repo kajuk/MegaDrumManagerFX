@@ -2458,8 +2458,10 @@ public class Controller implements MidiRescanEventListener {
 
 	private void addCustomNamesToPads() {
 		String [] names;
-		names = new String[configFull.customNamesCount];
-		for (int i =0; i < configFull.customNamesCount; i++) {
+		//names = new String[configFull.customNamesCount];
+		names = new String[configFull.configCustomNames.length];
+		//for (int i =0; i < configFull.customNamesCount; i++) {
+		for (int i =0; i < configFull.configCustomNames.length; i++) {
 			names[i] = configFull.configCustomNames[i].name;
 		}
 		uiPad.addAllCustomNames(names);
