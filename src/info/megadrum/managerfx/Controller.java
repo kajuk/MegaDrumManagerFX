@@ -1141,6 +1141,7 @@ public class Controller implements MidiRescanEventListener {
 		if (configOptions.liveUpdates) {
 			sendSysexCustomName(id);
 		}
+		addCustomNamesToPads();
 	}
 	
 	private void sendSysexCustomNameRequest(int id) {
@@ -2000,6 +2001,7 @@ public class Controller implements MidiRescanEventListener {
 				moduleConfigFull.configCustomNames[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configCustomNames[pointer].sysexReceived = true;
 				uiPadsExtra.setCustomName(configFull.configCustomNames[pointer], pointer, true);
+				addCustomNamesToPads();
 				break;
 			case Constants.MD_SYSEX_GLOBAL_MISC:
 				configFull.configGlobalMisc.setConfigFromSysex(sysex);
@@ -2151,7 +2153,7 @@ public class Controller implements MidiRescanEventListener {
 			if (namePointer < (totalCustomNames + 1 )) {
 				result = result + (Constants.CUSTOM_PADS_NAMES_LIST[namePointer - 1]);
 			} else {
-				result = result + configFull.configCustomNames[namePointer - totalCustomNames + 1];
+				result = result + configFull.configCustomNames[namePointer - totalCustomNames - 1].name;
 			}
 			if ((input & 1) > 0) {
 				result += "h";
@@ -2297,6 +2299,7 @@ public class Controller implements MidiRescanEventListener {
 		}
 		configFull.customNamesCount = fullConfigs[configOptions.lastConfig].customNamesCount;
 		setCustomNamesCountControl();
+		addCustomNamesToPads();
 		switchToSelectedPair(padPair);
 	}
 	
@@ -2434,6 +2437,7 @@ public class Controller implements MidiRescanEventListener {
 			configFull.configCustomNames[i].setConfigFromSysex(sysex);
 			uiPadsExtra.setCustomName(configFull.configCustomNames[i], i, false);
 		}
+		addCustomNamesToPads();
 	}
 	
 	private void saveSysexAllCustomNames() {
@@ -2452,4 +2456,13 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
 	}	
 
+	private void addCustomNamesToPads() {
+		String [] names;
+		names = new String[configFull.customNamesCount];
+		for (int i =0; i < configFull.customNamesCount; i++) {
+			names[i] = configFull.configCustomNames[i].name;
+		}
+		uiPad.addAllCustomNames(names);
+		updateComboBoxInput(true);
+	}
 }

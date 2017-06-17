@@ -403,7 +403,7 @@ public class MidiController {
 				//System.out.println("Sysex received");
 				break;
 			} else {
-				System.out.println("Reseting ports");
+				System.out.println("Resetting ports");
 				midi_reset_ports();
 				System.out.printf("Retries remaining after = %d\n", sendSysexConfigRetries);			
 			}
