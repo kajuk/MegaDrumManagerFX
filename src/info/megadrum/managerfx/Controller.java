@@ -1588,12 +1588,16 @@ public class Controller implements MidiRescanEventListener {
 			sysexSendList.add(configFull.configCurves[i].getSysexFromConfig());
 			
 		}
-		for (i = 0; i < configFull.customNamesCount; i++) {
-			sysexSendList.add(configFull.configCustomNames[i].getSysexFromConfig());
-			
-		}
-		for (i = 0; i < configFull.configNamesCount; i++) {
-			sysexSendList.add(configFull.configConfigNames[i].getSysexFromConfig());
+		//if (configFull.configGlobalMisc.custom_names_en) {
+			for (i = 0; i < configFull.customNamesCount; i++) {
+				sysexSendList.add(configFull.configCustomNames[i].getSysexFromConfig());
+				
+			}
+		//}
+		if (configFull.configGlobalMisc.config_names_en) {
+			for (i = 0; i < configFull.configNamesCount; i++) {
+				sysexSendList.add(configFull.configConfigNames[i].getSysexFromConfig());
+			}
 		}
 		sendSysexReadOnlyRequestFlag = true;
 		sendSysex();
