@@ -1410,21 +1410,24 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[1] = input.byteValue();
 		sysexSendList.add(typeAndId);
 		
-		typeAndId = new byte[2];
 		if (configOptions.mcuType > 2) {
 			//STM32. All inputs
+			typeAndId = new byte[2];
 			typeAndId[0] = Constants.MD_SYSEX_POS;
 			typeAndId[1] = input.byteValue();
 			sysexSendList.add(typeAndId);
 		} else {
 			// Atmega644/1284. 4 or 8 head/bow inputs
-			if ((input&1) > 0) {
-				int in = (input - 3)/2;
-				if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
-					typeAndId[0] = Constants.MD_SYSEX_POS;
-					typeAndId[1] = (byte)in;
-					sysexSendList.add(typeAndId);
-				}				
+			if (input > 2) {
+				if ((input&1) > 0) {
+					int in = (input - 3)/2;
+					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_POS;
+						typeAndId[1] = (byte)in;
+						sysexSendList.add(typeAndId);
+					}				
+				}
 			}
 		}
 		sendSysex();
@@ -1457,13 +1460,16 @@ public class Controller implements MidiRescanEventListener {
 		} else {
 			// Atmega644/1284. 4 or 8 head/bow inputs
 			int input = (pair*2) - 1;
-			if ((input&1) > 0) {
-				int in = (input - 3)/2;
-				if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
-					typeAndId[0] = Constants.MD_SYSEX_POS;
-					typeAndId[1] = (byte)in;
-					sysexSendList.add(typeAndId);
-				}				
+			if (input > 2) {
+				if ((input&1) > 0) {
+					int in = (input - 3)/2;
+					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_POS;
+						typeAndId[1] = (byte)in;
+						sysexSendList.add(typeAndId);
+					}				
+				}
 			}
 		}
 
@@ -1476,9 +1482,26 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendAllInputsSysex() {
 		byte i;
+		boolean doPos = true;
 		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			sysexSendList.add(configFull.configPads[i].getSysexFromConfig());
-			sysexSendList.add(configFull.configPos[i].getSysexFromConfig());
+			doPos = false;
+			if (configOptions.mcuType > 2) {
+				doPos = true;
+			} else {
+				if (configOptions.mcuType > 1) {
+					if (i < 8) {
+						doPos = true;
+					}
+				} else {
+					if (i < 4) {
+						doPos = true;
+					}
+				}
+			}
+			if (doPos) {
+				sysexSendList.add(configFull.configPos[i].getSysexFromConfig());
+			}
 			if ((i&1) > 0) {
 				sysexSendList.add(configFull.config3rds[(i-1)/2].getSysexFromConfig());
 			}
@@ -1506,13 +1529,16 @@ public class Controller implements MidiRescanEventListener {
 			} else {
 				// Atmega644/1284. 4 or 8 head/bow inputs
 				int input = i;
-				if ((input&1) > 0) {
-					int in = (input - 3)/2;
-					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
-						typeAndId[0] = Constants.MD_SYSEX_POS;
-						typeAndId[1] = (byte)in;
-						sysexSendList.add(typeAndId);
-					}				
+				if (input > 2) {
+					if ((input&1) > 0) {
+						int in = (input - 3)/2;
+						if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+							typeAndId = new byte[2];
+							typeAndId[0] = Constants.MD_SYSEX_POS;
+							typeAndId[1] = (byte)in;
+							sysexSendList.add(typeAndId);
+						}				
+					}
 				}
 			}
 						
@@ -1529,13 +1555,30 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void sendAllSysex() {
 		byte i;
+		boolean doPos;
 		sysexSendList.add(configFull.configGlobalMisc.getSysexFromConfig());
 		sysexSendList.add(configFull.configMisc.getSysexFromConfig());		
 		sysexSendList.add(configFull.configPedal.getSysexFromConfig(configOptions.mcuType));
 		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 1); i++) {
 			sysexSendList.add(configFull.configPads[i].getSysexFromConfig());
 			
-			sysexSendList.add(configFull.configPos[i].getSysexFromConfig());
+			doPos = false;
+			if (configOptions.mcuType > 2) {
+				doPos = true;
+			} else {
+				if (configOptions.mcuType > 1) {
+					if (i < 8) {
+						doPos = true;
+					}
+				} else {
+					if (i < 4) {
+						doPos = true;
+					}
+				}
+			}
+			if (doPos) {
+				sysexSendList.add(configFull.configPos[i].getSysexFromConfig());
+			}
 
 			if ((i&1) > 0) {
 				sysexSendList.add(configFull.config3rds[(i-1)/2].getSysexFromConfig());
@@ -1592,13 +1635,16 @@ public class Controller implements MidiRescanEventListener {
 			} else {
 				// Atmega644/1284. 4 or 8 head/bow inputs
 				int input = i;
-				if ((input&1) > 0) {
-					int in = (input - 3)/2;
-					if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
-						typeAndId[0] = Constants.MD_SYSEX_POS;
-						typeAndId[1] = (byte)in;
-						sysexSendList.add(typeAndId);
-					}				
+				if (input > 2) {
+					if ((input&1) > 0) {
+						int in = (input - 3)/2;
+						if (((in < 4) && (configOptions.mcuType > 0)) || ((in < 8) && (configOptions.mcuType > 1))) {
+							typeAndId = new byte[2];
+							typeAndId[0] = Constants.MD_SYSEX_POS;
+							typeAndId[1] = (byte)in;
+							sysexSendList.add(typeAndId);
+						}				
+					}
 				}
 			}
 			
@@ -1688,6 +1734,7 @@ public class Controller implements MidiRescanEventListener {
 		uiPadsExtra.setAllCustomNamesStatesUnknown();
 		
 	}
+	
 	private void openMidiPorts(Boolean toOpen) {
 		boolean clearMidiLabelStatus = true;
 		if (toOpen) {
@@ -1959,14 +2006,16 @@ public class Controller implements MidiRescanEventListener {
 				break;
 			case Constants.MD_SYSEX_POS:
 				//System.out.printf("Sysex pos pointer = %d\n", pointer);
+				//byte realPointer = pointer;
 				if (configOptions.mcuType < 3) {
 					//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
-					pointer = (byte)(pointer*2 + 1);
+					pointer = (byte)(pointer*2 + 3);
 				}
 				configFull.configPos[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configPos[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configPos[pointer].syncState = Constants.SYNC_STATE_RECEIVED;
 				moduleConfigFull.configPos[pointer].sysexReceived = true;
+				//pointer = realPointer;
 				if (pointer == 0) {
 					if (padPair == 0) {
 						uiPad.setControlsFromConfigPos(configFull.configPos[pointer], true, true);					
