@@ -1016,11 +1016,11 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void sendSysex() {
-		if (midiController.isSendingSysex()) {
+		if (sysexThreadsStarted > 0) {
 			sysexLastChanged.clear();
 			sysexLastChanged.addAll(sysexSendList);
 			sysexSendList.clear();
-			//System.out.println("Still sending previus sysex");			
+			//System.out.println("Still sending previous sysex");			
 		} else {
 			midiController.sendSysexTaskRecreate();
 			uiGlobal.getProgressBarSysex().setVisible(true);
@@ -1028,7 +1028,7 @@ public class Controller implements MidiRescanEventListener {
 
 				@Override
 				public void handle(WorkerStateEvent event) {
-					// TODO Auto-generated method stub
+					sysexThreadsStarted--;
 					//System.out.println("SendSysexConfigsTask succeeded");
 					uiGlobal.getProgressBarSysex().progressProperty().unbind();
 					uiGlobal.getProgressBarSysex().setProgress(1.0);
@@ -1057,7 +1057,6 @@ public class Controller implements MidiRescanEventListener {
 								sendAllSysexRequests();
 							}
 						}
-						sysexThreadsStarted--;
 						if (sysexThreadsStarted == 0) {
 							uiGlobal.setSysexStatusLabel(Constants.MD_SYSEX_STATUS_OK, 0);
 							//System.out.printf("Finished all sysex threads\n");
@@ -1072,7 +1071,8 @@ public class Controller implements MidiRescanEventListener {
 			//System.out.printf("Sending %d sysexes in thread %d\n", sysexSendList.size(), sysexThreadsStarted);
 			midiController.setChainId(configOptions.chainId);
 			if (midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50) > 0) {
-				//System.out.println("Not Ok");				
+				sysexThreadsStarted--;
+				System.out.println("Not Ok");				
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
 				uiGlobal.getProgressBarSysex().setVisible(false);
@@ -1650,10 +1650,12 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
 		sysexSendList.add(typeAndId);
 		sendNextAllSysexRequestsFlag = true;
+		//System.out.println("Requesting Global Misc for Get All");
 		sendSysex();
 	}
 	
 	private void sendNextAllSysexRequests() {
+		//System.out.println("Requesting the rest for Get All");
 		byte [] typeAndId;
 		byte i;
 		//sysexSendList.clear();

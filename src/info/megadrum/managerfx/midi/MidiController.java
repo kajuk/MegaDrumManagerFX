@@ -41,8 +41,8 @@ public class MidiController {
 	private Boolean isInFirmwareUpgrade = false;
 	
 	private Midi_handler midiHandler;
-	private Boolean sendingSysex = false;
 	private Boolean sysexTimedOut = false;
+	private Boolean sysexMismatch = false;
 	private Boolean sysexReceived;
 	private byte currentSysexType;
 	private byte currentSysexId;
@@ -58,11 +58,7 @@ public class MidiController {
 	private int upgradeError;
 
 	private List<byte[]> sysexSendListLocal;
-//	private List<byte[]> receivedSysexList;
-//	private List<byte[]> receivedShortMidiList;
 	private List<byte[]> receivedMidiDataList;
-	//private List<byte[]> sysexSendList;
-	//private List<byte[]> sysexRequestsList;
 
 	class SendSysexTask<V> extends Task<V> {
 		
@@ -73,6 +69,7 @@ public class MidiController {
 		
 		@Override
 		protected V call()  {
+			//System.out.println("****************************************************************");
 			//System.out.println("thread started");
 			try {
 				sysexStatus[0] = Constants.MD_SYSEX_STATUS_OK;
@@ -102,8 +99,8 @@ public class MidiController {
 			} catch (Exception e) {
 				System.out.printf("Sysex Send thread exception text = %s\n", e.getMessage());				
 			}
-			sendingSysex = false;
 			//System.out.println("Send Sysex thread finished");
+			//System.out.println("----------------------------------------------------------------");
 			return null;
 		}
 		
@@ -169,17 +166,16 @@ public class MidiController {
 			}
 
 			@Override
-			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
-				// TODO Auto-generated method stub
-				
+			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {				
 			}
 		});		
 	}
 	
 	private void processSysex(byte [] buffer) {
-		//TODO
 		//implement comparison of sent and received sysex config
+		//System.out.println("1111111111111111111");
 		if (compareSysex) {
+			//System.out.println("Comparing");
 			if (buffer[3] == Constants.MD_SYSEX_GLOBAL_MISC) {
 				/*
 				#define GL_BF_AUTO_LOAD_CONFIG	0
@@ -200,10 +196,18 @@ public class MidiController {
 				//System.out.println("Received sysex is equal");
 			} else {
 				sysexStatus[0] = Constants.MD_SYSEX_STATUS_MISMATCH;
-				//System.out.println("Received sysex is NOT equal");
+				for (int i= 0; i < buffer.length; i++) {
+					if (buffer[i] != sysexToCompare[i]) {
+						System.out.printf("Missmatch. Id = %d, sent=%d, got=%d\n", i, sysexToCompare[i], buffer[i]);
+						break;
+					}
+				}
+				sysexMismatch = true;
+				System.out.println("Received sysex is NOT equal");
 			}
-			compareSysex = false;
+			//compareSysex = false;
 		} else {
+			//System.out.println("Not comparing");
 			if (buffer[3] == currentSysexType) {
 				if (currentSysexWithId) {
 					if (buffer[4] == currentSysexId) {
@@ -216,8 +220,13 @@ public class MidiController {
 		}
 		//System.out.printf("Received sysex with id = %d\n", buffer[4]);
 		//fireMidiEventWithBuffer(new MidiEvent(this), buffer);
-		receivedMidiDataList.add(buffer);
-		fireMidiEvent(new MidiEvent(this));
+		//System.out.println("2222222222222222222");
+		if (sysexReceived) {
+			sysexStatus[0] = 0;
+			//System.out.println("Fire MIDI event");
+			receivedMidiDataList.add(buffer);
+			fireMidiEvent(new MidiEvent(this));
+		}
 	}
 
 	public int[] getStatus() {
@@ -278,7 +287,8 @@ public class MidiController {
 	
 	public void sendSysexFromThread(byte [] sysex, Integer maxRetries, Integer retryDelay) {
 		//System.out.println("sendSysexConfigFromThread called\n");
-		sendSysexConfigRetries = maxRetries;
+		//sendSysexConfigRetries = maxRetries;
+		sendSysexConfigRetries = 10;
 		byte type;
 		byte id;
 		if (sysex.length > 2) {
@@ -293,13 +303,28 @@ public class MidiController {
 		currentSysexWithId = false;
 		currentSysexId = id;
 		sysexReceived = false;
+		sysexMismatch = true;
+		compareSysex = false;
 		while (sendSysexConfigRetries > 0) {
+			//System.out.printf("Retries remaining  before = %d\n", sendSysexConfigRetries);
+			if (sendSysexConfigRetries != maxRetries) {
+				System.out.println("Retrying");
+			}
 			if (sysex.length > 2) {
-				sysex[2] = (byte)chainId;
-				sysexToCompare = Arrays.copyOf(sysex, sysex.length);
+				if (sysexMismatch) {
+					//System.out.println("Sending config");
+					sysexMismatch = false;
+					sysex[2] = (byte)chainId;
+					sysexToCompare = Arrays.copyOf(sysex, sysex.length);
+					compareSysex = true;
+			    	midiHandler.sendSysex(sysex);
+			    	if (sendSysexConfigRetries < maxRetries) {
+			    		System.out.println("Additional delay on mismatch retry");
+						Utils.delayMs(sysex.length/4);
+			    	}
+					Utils.delayMs(sysex.length/5);
+				}
 				compareSysex = true;
-		    	midiHandler.sendSysex(sysex);
-				Utils.delayMs(5);
 			}
 			//System.out.printf("Retry %d\n", maxRetries - sendSysexConfigRetries + 1);
 			sendSysexConfigRetries--;
@@ -375,16 +400,19 @@ public class MidiController {
 				delayCounter--;
 			}
 			if (sysexReceived) {
+				//System.out.println("Sysex received");
 				break;
 			} else {
+				System.out.println("Reseting ports");
 				midi_reset_ports();
+				System.out.printf("Retries remaining after = %d\n", sendSysexConfigRetries);			
 			}
 		}
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
 			sysexTimedOut = true;
-			//System.out.println(sendSysexConfigResult);
+			System.out.println(sendSysexConfigResult);
 		} 	
 	}
 	
@@ -395,8 +423,7 @@ public class MidiController {
 		sendSysexConfigRetries = maxRetries;
 		sysexTimedOut = false;
 
-		if (midiHandler.isMidiOpen() && (!sendingSysex)) {
-			sendingSysex = true;
+		if (midiHandler.isMidiOpen()) {
 			sysexSendListLocal = new ArrayList<>(sysexSendList);
 			sysexSendList.clear();
 			sendSysexTask.setParameters(sysexSendListLocal,maxRetries,retryDelay);
@@ -447,7 +474,6 @@ public class MidiController {
 		try {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			Utils.show_error("Error loading from file:\n" +
 					file.getAbsolutePath() + "\n" +
@@ -642,7 +668,4 @@ public class MidiController {
 		midiHandler.closeAllPorts();
 	}
 	
-	public Boolean isSendingSysex() {
-		return sendingSysex;
-	}
 }
