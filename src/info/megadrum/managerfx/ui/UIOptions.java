@@ -16,9 +16,11 @@ import info.megadrum.managerfx.midi.MidiRescanEventListener;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
@@ -182,11 +184,13 @@ public class UIOptions {
         Button okButton = new Button("Ok");
         okButton.setOnAction(e -> okAndClose());
 
+        Label labelSpacer = new Label("   ");
+       
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(e -> window.close());
 
         okCloseButtonsLayout = new HBox();
-        okCloseButtonsLayout.getChildren().addAll(okButton,cancelButton);
+        okCloseButtonsLayout.getChildren().addAll(okButton, labelSpacer, cancelButton);
         okCloseButtonsLayout.setAlignment(Pos.CENTER_RIGHT);
         
         layout = new VBox();
@@ -196,6 +200,7 @@ public class UIOptions {
         //okCloseButtonsLayout.setStyle("-fx-background-color: red");
 
         //Display window and wait for it to be closed before returning
+        okCloseButtonsLayout.setPadding(new Insets(5, 20, 10, 20));
         scene = new Scene(layout);
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
 			respondToResize(scene.getWidth(), scene.getHeight());
@@ -210,8 +215,8 @@ public class UIOptions {
 		//layout.setMinWidth(400);
         window.setMinWidth(600);
         window.setMaxWidth(600);
-        window.setMinHeight(350);
-        window.setMaxHeight(350);
+        window.setMinHeight(380);
+        window.setMaxHeight(380);
 	}
 	
 	public void show() {

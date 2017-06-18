@@ -904,15 +904,36 @@ public class Controller implements MidiRescanEventListener {
 		//vB.getChildren().add(tempMidiLevelBar);
 		respondToResize(scene1);
 	}
+
+	private void showMidiWarningIfNeeded() {
+		if (configOptions.MidiInName.equals("") || configOptions.MidiOutName.equals("")) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setHeaderText("MIDI ports warning!");
+            WebView webView = new WebView();
+            webView.getEngine().loadContent(Constants.MIDI_PORTS_WARNING);
+            webView.setPrefSize(300, 120);
+            alert.getDialogPane().setContent(webView);
+			Timer warning_timer = new Timer();
+			warning_timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					Platform.runLater(new Runnable() {
+						public void run() {
+							alert.showAndWait();
+						}
+					});
+				}
+			}, 500);
+		}		
+	}
 	
 	private void loadConfig() {
 		configOptions  = fileManager.loadLastOptions(configOptions);
-		System.out.println("ToDo!!");
-		//showChangeNotificationIfNeeded();
 		uiGlobal.getComboBoxFile().getItems().clear();
 		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
 		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
-		//showMidiWarningIfNeeded();
+		showMidiWarningIfNeeded();
 		if (configOptions.autoOpenPorts) {
 			openMidiPorts(true);
 		}
