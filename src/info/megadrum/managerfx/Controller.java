@@ -470,8 +470,8 @@ public class Controller implements MidiRescanEventListener {
 			respondToResize(scene1);
 		});
 		loadConfig();
-		showPanels();
 		showGlobalMisc();
+		showPanels();
 		window.show();
 	}
 
@@ -490,13 +490,15 @@ public class Controller implements MidiRescanEventListener {
 					@Override
 					public void run() {
 */
-						//resizeFromResize = true;
-						//Double uiGlobalMiscFontSize = 3.0;
-						//uiGlobalMisc.getUI().setStyle("-fx-font-size: " + uiGlobalMiscFontSize.toString() + "pt");
 						uiGlobalMisc.respondToResize(sc.getHeight()*0.05);
 						Double mainMenuBarHeight = mainMenuBar.getHeight();
 						Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
-						Double globalMiscBarHeight = uiGlobalMisc.getUI().layoutBoundsProperty().getValue().getHeight();
+						Double globalMiscBarHeight;
+						if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
+							globalMiscBarHeight = sc.getHeight()*0.05;							
+						} else {
+							globalMiscBarHeight = 0.0;							
+						}
 						Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight;
 						if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
 							height -= globalMiscBarHeight;
@@ -525,7 +527,6 @@ public class Controller implements MidiRescanEventListener {
 							midiLogWidth = mainWindowMinWidth*0.99;
 						}
 						
-						//controlW = controlH*8;
 						controlW = width;
 						//controlW = width - hBoxUIviewsGap;
 						Double controlWdivider = 0.0;
