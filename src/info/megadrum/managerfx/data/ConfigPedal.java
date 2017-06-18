@@ -168,6 +168,7 @@ public class ConfigPedal {
 		byte [] sysex_short = new byte[4];
 		byte flags;
 		int i = 4;
+		//System.out.printf("length = %d\n", sysex.length);
 		if (sysex.length >= sysex_length) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];

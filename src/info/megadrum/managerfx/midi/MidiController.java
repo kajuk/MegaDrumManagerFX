@@ -172,6 +172,8 @@ public class MidiController {
 	}
 	
 	private void processSysex(byte [] buffer) {
+		//System.out.printf("processSysex length = %d\n", buffer.length);
+
 		//implement comparison of sent and received sysex config
 		//System.out.println("1111111111111111111");
 		if (compareSysex) {
