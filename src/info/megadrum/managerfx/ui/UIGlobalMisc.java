@@ -464,6 +464,7 @@ public class UIGlobalMisc {
 			allControlLabels.get(i).setTextFill(Constants.SYNC_STATE_UNKNOWN_COLOR);
 		}
 		lblFwVersion.setText("????????");
+		lblFwVersion.setStyle("-fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
 		lblMcu.setText("????????");
 		lblSlotCurrent.setText("?");
 		lblSlotsCount.setText("??");
@@ -476,6 +477,7 @@ public class UIGlobalMisc {
 		labelPadsNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 		labelConfigNamesEn.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
 		labelMidi2ForSysex.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
+		
 	}
 
 	public Node getUI() {
@@ -538,17 +540,10 @@ public class UIGlobalMisc {
 	}
 
 	
-	public void setVersion(Integer version) {
+	public void setVersion(Integer version, String color) {
 		lblFwVersion.setText(version.toString());
+		lblFwVersion.setStyle("-fx-background-color: " + color + "; -fx-border-insets: 0; -fx-border-width: 2px; -fx-border-color: black lightgray lightgray black;");
 		labelFwVersion.setTextFill(Constants.SYNC_STATE_SYNCED_COLOR);
-		//TODO
-/*
-		if (version < Constants.MD_MINIMUM_VERSION) {
-			lblFwVersion.setBackground(Color.RED);
-		} else {
-			lblFwVersion.setBackground(Color.GREEN);
-		}
-*/
 	}
 
 	public void setMcu(Integer mcu) {

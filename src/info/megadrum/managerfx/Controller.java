@@ -47,7 +47,10 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -65,6 +68,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class Controller implements MidiRescanEventListener {
@@ -134,6 +138,8 @@ public class Controller implements MidiRescanEventListener {
 	private List<byte[]> sysexSendList;
 	private List<byte[]> sysexLastChanged;
 	private int sysexThreadsStarted = 0;
+	
+	private Boolean versionWarningAlreadyShown = false;
 
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -1948,21 +1954,6 @@ public class Controller implements MidiRescanEventListener {
 					configFull.configNamesCount = b;
 					configFull.configCountSysexReceived = true;
 					reCreateSlotsMenuItems();
-					
-					//TODO
-/*
-					setSysexOk();
-					popupMenuSaveToSlot.removeAll();
-					mntmSaveToMd.removeAll();
-					popupMenuLoadFromSlot.removeAll();
-					mntmLoadFromMd.removeAll();
-					for (int i = 0; i < b; i++) {
-						popupMenuSaveToSlot.add(popupMenuItemsSaveToSlot[i]);
-						mntmSaveToMd.add(menuItemsSaveToSlot[i]);
-						popupMenuLoadFromSlot.add(popupMenuItemsLoadFromSlot[i]);
-						mntmLoadFromMd.add(menuItemsLoadFromSlot[i]);
-					}
-*/
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_CURRENT:
@@ -1972,8 +1963,6 @@ public class Controller implements MidiRescanEventListener {
 					uiGlobalMisc.setConfigCurrent(b);
 					configFull.configCurrentSysexReceived = true;
 					uiGlobalMisc.getTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
-					//TODO
-					//setSysexOk();
 				}
 				break;
 			case Constants.MD_SYSEX_CONFIG_NAME:
@@ -2018,8 +2007,6 @@ public class Controller implements MidiRescanEventListener {
 					if (configOptions.mcuType < Constants.MCU_TYPES.length ) {
 						uiGlobalMisc.setMcu(configOptions.mcuType);								
 					}
-					//TODO
-					//setSysexOk();
 				}
 				break;
 			case Constants.MD_SYSEX_MISC:
@@ -2084,30 +2071,33 @@ public class Controller implements MidiRescanEventListener {
 						ver += b<<(8*i);
 					}
 					configOptions.version = ver;
-					uiGlobalMisc.setVersion(ver);
-					//TODO
-/*
-					setSysexOk();
 					if (ver < Constants.MD_MINIMUM_VERSION) {
+						uiGlobalMisc.setVersion(ver, "salmon");
 						if (!versionWarningAlreadyShown) {
 							versionWarningAlreadyShown = true;
-							lblVersion.setBackground(Color.RED);
+							Alert alert = new Alert(AlertType.WARNING);
+				            alert.setHeaderText("Firmware version is too old!");
+				            WebView webView = new WebView();
+				            webView.getEngine().loadContent(Constants.WARNING_VERSION);
+				            webView.setPrefSize(300, 120);
+				            alert.getDialogPane().setContent(webView);
+							
 							Timer warning_timer = new Timer();
 							warning_timer.schedule(new TimerTask() {
 								
 								@Override
 								public void run() {
-									JOptionPane.showMessageDialog(null,
-										    "<html><font size=5>"+Constants.WARNING_VERSION+"</font></html>",
-										    "Warning",
-										    JOptionPane.WARNING_MESSAGE);
+									Platform.runLater(new Runnable() {
+										public void run() {
+											alert.showAndWait();
+										}
+									});
 								}
 							}, 200);
 						}
 					} else {
-						lblVersion.setBackground(Color.GREEN);
+						uiGlobalMisc.setVersion(ver, "lightgreen");
 					}
-*/
 				}
 				break;
 			default:

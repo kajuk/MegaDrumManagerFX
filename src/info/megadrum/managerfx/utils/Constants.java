@@ -12,8 +12,8 @@ public interface Constants {
 	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
 	public static final String MD_VERSION = "20170511";
 	public static final int MD_MINIMUM_VERSION = 20170413;
-	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
-			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
+	public static final String WARNING_VERSION = "<html><font size=4>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
+			"<html><font size=4>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
 	public static final Double MD_CONFIG_VERSION = 0.5;
 	public static final int MIN_INPUTS = 17;
 	public static final int MAX_INPUTS = 55;
