@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="../" default="build" name="MegaDrumManagerFX">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../Applications/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="JavaFX SDK.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}plugins/org.eclipse.fx.ide.css.jfx8_2.4.0.201605112122.jar"/>
+    </path>
+    <path id="MegaDrumManagerFX.classpath">
+<pathelement location="bin"/>
+    <path refid="JavaFX SDK.libraryclasspath"/>
+        <pathelement location="libraries/commons-collections-3.2.1-javadoc.jar"/>
+        <pathelement location="libraries/commons-collections-3.2.1-sources.jar"/>
+        <pathelement location="libraries/commons-collections-3.2.1.jar"/>
+        <pathelement location="libraries/commons-configuration-1.8-javadoc.jar"/>
+        <pathelement location="libraries/commons-configuration-1.8-sources.jar"/>
+        <pathelement location="libraries/commons-configuration-1.8.jar"/>
+        <pathelement location="libraries/commons-lang-2.6-sources.jar"/>
+        <pathelement location="libraries/commons-lang-2.6.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.1-sources.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.1.jar"/>
+        <pathelement location="libraries/mmj.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.xtend"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="MegaDrumManagerFX.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="MegaDrumManagerFX">
+        <java classname="info.megadrum.managerfx.Main" failonerror="true" fork="yes">
+            <classpath refid="MegaDrumManagerFX.classpath"/>
+        </java>
+    </target>
+
+<taskdef 
+    name="bundleapp" 
+    classname="com.oracle.appbundler.AppBundlerTask" 
+    classpath="MacOSx/appbundler-1.0.jar" />
+
+<target name="bundle">
+    <bundleapp 
+        outputdirectory="MacOSX/MacDistJRE" 
+        name="MegaDrumManagerFX" 
+        displayname="MegaDrumManagerFX" 
+        identifier="info.megadrum.managerfx" 
+        shortversion="1.0"
+        icon="MacOSX/MegaDrumManagerFX.icns"
+        mainclassname="info.megadrum.managerfx.Main">
+	<runtime dir="${env.JAVA_HOME}" />
+        <classpath file="MegaDrumManagerFX.jar" />
+        <classpath file="libmmj.jnilib" />
+	<option value="-Djava.library.path=$APP_ROOT/Contents/Java/" />
+    </bundleapp>
+</target>
+<target name="bundle-small">
+    <bundleapp 
+        outputdirectory="MacOSX/MacDist" 
+        name="MegaDrumManagerFX" 
+        displayname="MegaDrumManagerFX" 
+        identifier="info.megadrum.managerfx" 
+        shortversion="1.0"
+        icon="MacOSX/MegaDrumManagerFX.icns"
+        mainclassname="info.megadrum.managerfx.Main">
+        <classpath file="MegaDrumManagerFX.jar" />
+        <classpath file="libmmj.jnilib" />
+	<option value="-Djava.library.path=$APP_ROOT/Contents/Java/" />
+    </bundleapp>
+</target>
+
+</project>

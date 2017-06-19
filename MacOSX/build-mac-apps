@@ -1,0 +1,17 @@
+#!/bin/bash
+mkdir MacDist
+mkdir MacDistJRE
+versionsdate=`date "+%Y%m%d"`
+
+export ANT_OPTS="-Xmx64m"
+JAVA_HOME=`/usr/libexec/java_home` ~/Projects/apache-ant-1.9.7/bin/ant bundle-small
+JAVA_HOME=`/usr/libexec/java_home` ~/Projects/apache-ant-1.9.7/bin/ant bundle
+sed -i -e $'s/<\/dict>/<key>NSHighResolutionCapable<\/key>\\\n<string>True<\/string>\\\n<\/dict>/g' MacDist/MegaDrumManagerFX.app/Contents/Info.plist
+sed -i -e $'s/<\/dict>/<key>NSHighResolutionCapable<\/key>\\\n<string>True<\/string>\\\n<\/dict>/g' MacDistJRE/MegaDrumManagerFX.app/Contents/Info.plist
+productbuild --version ${versionsdate} --component MacDist/MegaDrumManagerFX.app /Applications megadrum-manager-fx-installer-${versionsdate}.pkg
+productbuild --version ${versionsdate} --component MacDistJRE/MegaDrumManagerFX.app /Applications megadrum-manager-fx-jre-installer-${versionsdate}.pkg
+
+rm -rf MacDist
+rm -rf MacDistJRE
+
+
