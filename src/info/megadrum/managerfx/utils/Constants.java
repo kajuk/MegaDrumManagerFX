@@ -170,13 +170,13 @@ public interface Constants {
 	public static final Color MD_HIHAT_COLOR = Color.MAGENTA;
 	public static final Color MD_AFTERTOUCH_ON_COLOR = Color.GRAY;
 	public static final Color MD_AFTERTOUCH_OFF_COLOR = Color.LIGHTGREY;
-	public static final String HELP_ABOUT = "<html><font size=2>MegaDrum Manager</font></html>\n" +
-			"<html><font size=2>Version: " + MD_VERSION + "</font></html>\n" +
-			"<html><font size=2>www.megadrum.info</font></html>\n"+
-			"<html><font size=2>\u00a9 2007-2016 Dmitri Skachkov</font></html>";
-	public static final String HELP_ABOUT_MMJ = "\n<html><font size=2>mmj Library is included with MegaDrum Manager for Mac OS X</font></html>\n" +
-			"<html><font size=2>mmj is copyright of Humatic</font></html>\n" +
-			"<html><font size=2>See www.humatic.de/htools/mmj.htm for details</font></html>";
+	public static final String HELP_ABOUT = "<html><font size=5>MegaDrum Manager FX</font></html>\n" +
+			"<html><font size=5>Version: " + MD_VERSION + "</font></html>\n" +
+			"<html><font size=5>www.megadrum.info<br></font></html>\n"+
+			"<html><font size=5>\u00a9 2007-2017 Dmitri Skachkov<br></font></html>";
+	public static final String HELP_ABOUT_MMJ = "\n<html><font size=4>mmj Library is included with MegaDrum Manager for Mac OS X<br></font></html>\n" +
+			"<html><font size=4>mmj is copyright of Humatic<br></font></html>\n" +
+			"<html><font size=4>See www.humatic.de/htools/mmj.htm for details</font></html>";
 	public static final String MIDI_PORTS_WARNING =
 			"<html><font size=4>Before using MegaDrum Manager</font></html>\n" +
 			"<html><font size=4>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";

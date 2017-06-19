@@ -75,7 +75,8 @@ public class Controller implements MidiRescanEventListener {
 	private Stage window;
 	private Scene scene1;
 	private MenuBar mainMenuBar;
-	private Menu mainMenu, viewMenu, aboutMenu;
+	private Menu mainMenu, viewMenu, helpMenu;
+	private MenuItem aboutMenuItem;
 	private Menu menuAllSettings, menuGlobalMisc, menuMisc, menuHiHat, menuAllPads,
 				menuSelectedPad, menuCustomCurves, menuCustomNames;
 	private MenuItem menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
@@ -644,9 +645,14 @@ public class Controller implements MidiRescanEventListener {
 		mainMenuBar.setStyle("-fx-font-size: 10 pt");
 		mainMenu = new Menu("Main");
 		viewMenu = new Menu("View");
-		aboutMenu = new Menu("About");
+		helpMenu = new Menu("Help");
+		aboutMenuItem = new MenuItem("About");
+		aboutMenuItem.setOnAction(e-> {
+			showAbout();
+		});
+		helpMenu.getItems().add(aboutMenuItem);
 		
-		mainMenuBar.getMenus().addAll(mainMenu,viewMenu,aboutMenu);
+		mainMenuBar.getMenus().addAll(mainMenu,viewMenu,helpMenu);
 
 		menuAllSettings = new Menu("All Settings");
 		menuItemAllSettingsGet = new MenuItem("Get from MD");
@@ -2478,5 +2484,35 @@ public class Controller implements MidiRescanEventListener {
 		}
 		uiPad.addAllCustomNames(names);
 		updateComboBoxInput(true);
+	}
+	
+	private void showAbout() {
+		String aboutString;
+		if (System.getProperty("os.name").startsWith("Mac")) {
+			aboutString = Constants.HELP_ABOUT + Constants.HELP_ABOUT_MMJ;
+		} else {
+			aboutString = Constants.HELP_ABOUT;
+		}
+		Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText("About MegaDrum Manager FX");
+        WebView webView = new WebView();
+        webView.getEngine().loadContent(aboutString);
+        webView.setPrefSize(400, 220);
+        alert.getDialogPane().setContent(webView);
+        alert.showAndWait();
+
+        Timer warning_timer = new Timer();
+		warning_timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						//alert.showAndWait();
+					}
+				});
+			}
+		}, 500);
+
 	}
 }
