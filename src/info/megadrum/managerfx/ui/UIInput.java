@@ -25,6 +25,7 @@ public class UIInput implements PanelInterface {
 	private MdTitledPane	titledPane;
 	
 	private UIComboBox 		uiComboBoxName;
+	private UICheckBox 		uiCheckBoxDisabled;
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
 	private UISpinnerNote 	uiSpinnerNoteAltNote;
 	private UISpinnerNote 	uiSpinnerNotePressNote;
@@ -84,6 +85,9 @@ public class UIInput implements PanelInterface {
 
 		uiComboBoxName = new UIComboBox("Name", true);
 		allControls.add(uiComboBoxName);
+
+		uiCheckBoxDisabled = new UICheckBox("Disabled", false);
+		allControls.add(uiCheckBoxDisabled);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
@@ -276,6 +280,7 @@ public class UIInput implements PanelInterface {
 	
 	public void setMdValuesFromConfigPad(ConfigPad configPad) {
 		uiComboBoxName.uiCtlSetMdValue(configPad.name);
+		uiCheckBoxDisabled.uiCtlSetMdValue(configPad.disabled);
 		uiSpinnerNoteMainNote.uiCtlSetMdValue(configPad.note);
 		uiSpinnerNoteAltNote.uiCtlSetMdValue(configPad.altNote);
 		uiSpinnerNotePressNote.uiCtlSetMdValue(configPad.pressrollNote);
@@ -316,6 +321,7 @@ public class UIInput implements PanelInterface {
 	
 	public void setControlsFromConfigPad(ConfigPad configPad, Boolean setFromSysex) {
 		uiComboBoxName.uiCtlSetValue(configPad.name, setFromSysex);
+		uiCheckBoxDisabled.uiCtlSetValue(configPad.disabled, setFromSysex);
 		uiSpinnerNoteMainNote.uiCtlSetValue(configPad.note, setFromSysex);
 		if (configPad.altNote_linked) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(configPad.note, setFromSysex);
@@ -356,6 +362,7 @@ public class UIInput implements PanelInterface {
 	
 	public void setConfigPadFromControls(ConfigPad configPad) {
 		configPad.name = uiComboBoxName.uiCtlGetValue();
+		configPad.disabled = uiCheckBoxDisabled.uiCtlIsSelected();
 		configPad.note = uiSpinnerNoteMainNote.uiCtlGetValue();
 		if (uiSpinnerNoteAltNote.getLinked()) {
 			configPad.altNote = uiSpinnerNoteMainNote.uiCtlGetValue();

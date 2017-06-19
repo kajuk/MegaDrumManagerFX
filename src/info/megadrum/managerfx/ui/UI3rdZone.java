@@ -24,6 +24,7 @@ public class UI3rdZone implements PanelInterface {
 	private MdTitledPane	titledPane;
 	private Pane			paneAll;
 	
+	private UICheckBox		uiCheckBoxDisabled;
 	private UISpinnerNote 	uiSpinnerNoteMainNote;
 	private UISpinnerNote 	uiSpinnerNoteAltNote;
 	private UISpinnerNote 	uiSpinnerNotePressNote;
@@ -69,25 +70,25 @@ public class UI3rdZone implements PanelInterface {
 		paneAll = new Pane();
 		paneAll.setLayoutX(0);
 
+		uiCheckBoxDisabled = new UICheckBox("Disabled", false);
+		allControls.add(uiCheckBoxDisabled);
+		gridColmn.add(0);
+		gridRow.add(0);
+		
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
 		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		gridColmn.add(0);
-		gridRow.add(0);
+		gridRow.add(1);
 				
 		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
 		allControls.add(uiSpinnerNoteAltNote);
 		gridColmn.add(0);
-		gridRow.add(1);
+		gridRow.add(2);
 
 		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
 		allControls.add(uiSpinnerNotePressNote);
-		gridColmn.add(0);
-		gridRow.add(2);
-
-		uiSpinnerNoteDampenedNote = new UISpinnerNote("DampenedNote", true);
-		allControls.add(uiSpinnerNoteDampenedNote);
 		gridColmn.add(0);
 		gridRow.add(3);
 
@@ -106,6 +107,10 @@ public class UI3rdZone implements PanelInterface {
 		gridColmn.add(1);
 		gridRow.add(2);
 
+		uiSpinnerNoteDampenedNote = new UISpinnerNote("DampenedNote", true);
+		allControls.add(uiSpinnerNoteDampenedNote);
+		gridColmn.add(1);
+		gridRow.add(3);
 	
 		for (int i = 0; i < allControls.size(); i++) {
 			final int iFinal = i;
@@ -197,6 +202,7 @@ public class UI3rdZone implements PanelInterface {
 	}
 	
 	public void setMdValuesFromConfig3rd(Config3rd config) {
+		uiCheckBoxDisabled.uiCtlSetMdValue(config.disabled);
 		uiSpinnerNoteMainNote.uiCtlSetMdValue(config.note);
 		uiSpinnerNoteAltNote.uiCtlSetMdValue(config.altNote);
 		uiSpinnerNotePressNote.uiCtlSetMdValue(config.pressrollNote);
@@ -218,6 +224,7 @@ public class UI3rdZone implements PanelInterface {
 	}
 	
 	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {
+		uiCheckBoxDisabled.uiCtlSetValue(config.disabled, setFromSysex);
 		uiSpinnerNoteMainNote.uiCtlSetValue(config.note, setFromSysex);
 		if (config.altNote_linked) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(config.note, setFromSysex);
@@ -237,6 +244,7 @@ public class UI3rdZone implements PanelInterface {
 	}
 	
 	public void setConfig3rdFromControls(Config3rd config) {
+		config.disabled = uiCheckBoxDisabled.uiCtlIsSelected();
 		config.note = uiSpinnerNoteMainNote.uiCtlGetValue();
 		if (uiSpinnerNoteAltNote.getLinked()) {
 			config.altNote = uiSpinnerNoteMainNote.uiCtlGetValue();

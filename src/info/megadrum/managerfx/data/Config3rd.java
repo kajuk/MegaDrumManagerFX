@@ -7,6 +7,7 @@ import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
 
 public class Config3rd {
+	public boolean disabled;
 	public int note;
 	public int threshold = 30;
 	public int pressrollNote;
@@ -28,6 +29,7 @@ public class Config3rd {
 		Integer rim = id+1;
 		prefix = prefix+"["+id.toString()+"+"+rim.toString()+"].";
 		layout.setComment(prefix+"note", "\n#Third zone for intputs "+id.toString() + " and " + rim.toString() + " settings");
+		prop.setProperty(prefix+"disabled", disabled);
 		prop.setProperty(prefix+"note", note);
 		prop.setProperty(prefix+"threshold", threshold);
 		prop.setProperty(prefix+"altNote", altNote);
@@ -41,6 +43,7 @@ public class Config3rd {
 		id = id*2+2;
 		Integer rim = id+1;
 		prefix = prefix+"["+id.toString()+"+"+rim.toString()+"].";
+		disabled = prop.getBoolean(prefix+"disabled", disabled);
 		note = Utils.validateInt(prop.getInt(prefix+"note", note),0,127,note);
 		threshold = Utils.validateInt(prop.getInt(prefix+"threshold", threshold),0,256,threshold);
 		altNote = Utils.validateInt(prop.getInt(prefix+"altNote", altNote),0,127,altNote);
@@ -52,6 +55,9 @@ public class Config3rd {
 	
 	public void setValueById(int valueId, int value) {
 		switch (valueId) {
+		case Constants.THIRD_ZONE_VALUE_ID_DISABLED:
+			disabled = (value > 0);
+			break;
 		case Constants.THIRD_ZONE_VALUE_ID_NOTE:
 			note = value;
 			break;
@@ -75,6 +81,9 @@ public class Config3rd {
 	public int getValueById(int valueId) {
 		int value = -1;
 		switch (valueId) {
+		case Constants.THIRD_ZONE_VALUE_ID_DISABLED:
+			value = disabled?1:0;
+			break;
 		case Constants.THIRD_ZONE_VALUE_ID_NOTE:
 			value = note;
 			break;
@@ -107,7 +116,7 @@ public class Config3rd {
 		sysex[i++] = Constants.MD_SYSEX_3RD;
 		sysex[i++] = (byte)id;
 		
-		sysex_byte = Utils.byte2sysex((byte)note);
+		sysex_byte = Utils.byte2sysex((byte)(note|(disabled?0x80:0)));
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = Utils.byte2sysex((byte)threshold);
@@ -132,7 +141,8 @@ public class Config3rd {
 		if (sysex.length >= Constants.MD_SYSEX_3RD_SIZE) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			note = Utils.sysex2byte(sysex_byte);
+			note = Utils.sysex2byte(sysex_byte)&0x7f;
+			disabled = ((Utils.sysex2byte(sysex_byte)&0x80) > 0);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			threshold = (int)(Utils.sysex2byte(sysex_byte)&0xff);

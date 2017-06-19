@@ -11,6 +11,7 @@ import info.megadrum.managerfx.utils.Utils;
 
 public class ConfigPad {
 	public int note = 0;
+	public boolean disabled = false;
 	public int channel = 9;
 	public int curve = 0;
 	public int threshold = 30;
@@ -35,7 +36,6 @@ public class ConfigPad {
 	public int pressrollNote = 0;
 	public boolean altNote_linked = false;
 	public boolean pressrollNote_linked = false;
-	public boolean inputDisabled = false;
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	public boolean sysexReceived = false;
 
@@ -49,6 +49,7 @@ public class ConfigPad {
 		id++;
 		prefix = prefix+"["+id.toString()+"].";
 		layout.setComment(prefix+"note", "\n#Input "+id.toString()+" settings");
+		prop.setProperty(prefix+"disabled", disabled);
 		prop.setProperty(prefix+"note", note);
 		prop.setProperty(prefix+"channel", channel);
 		prop.setProperty(prefix+"curve", curve);
@@ -78,6 +79,7 @@ public class ConfigPad {
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
 		id++;
 		prefix = prefix+"["+id.toString()+"].";
+		autoLevel = prop.getBoolean(prefix+"disabled", disabled);
 		note = Utils.validateInt(prop.getInt(prefix+"note", note),0,127,note);
 		channel = Utils.validateInt(prop.getInt(prefix+"channel", channel),0,15,channel);
 		curve = Utils.validateInt(prop.getInt(prefix+"curve", curve),0,15,curve);
@@ -154,6 +156,9 @@ public class ConfigPad {
 	
 	public void setValueById(int valueId, int value) {
 		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_DISABLED:
+			disabled = (value > 0);
+			break;
 		case Constants.INPUT_VALUE_ID_NAME:
 			name = value;
 			break;
@@ -222,6 +227,9 @@ public class ConfigPad {
 	public int getValueById(int valueId) {
 		int value = -1;
 		switch (valueId) {
+		case Constants.INPUT_VALUE_ID_DISABLED:
+			value = disabled?1:0;
+			break;
 		case Constants.INPUT_VALUE_ID_NAME:
 			value = name;
 			break;
@@ -287,7 +295,7 @@ public class ConfigPad {
 		}
 		return value;
 	}
-
+	
 	public byte[] getSysexFromConfig() {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
@@ -301,11 +309,7 @@ public class ConfigPad {
 		sysex[i++] = Constants.MD_SYSEX_PAD;
 		sysex[i++] = (byte)(id + 1);
 		
-		if (inputDisabled) {
-			sysex_byte = Utils.byte2sysex((byte)0);
-		} else {
-			sysex_byte = Utils.byte2sysex((byte)note);
-		}
+		sysex_byte = Utils.byte2sysex((byte)(note|(disabled?0x80:0)));
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = Utils.byte2sysex((byte)((channel<<4)|(curve)));
@@ -361,9 +365,8 @@ public class ConfigPad {
 		if (sysex.length >= Constants.MD_SYSEX_PAD_SIZE) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (!inputDisabled) {
-				note = Utils.sysex2byte(sysex_byte);
-			}
+			disabled = ((Utils.sysex2byte(sysex_byte)&0x80)>0);
+			note = (Utils.sysex2byte(sysex_byte)&0x7f);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = Utils.sysex2byte(sysex_byte);

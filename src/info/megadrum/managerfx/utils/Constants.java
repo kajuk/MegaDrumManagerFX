@@ -269,7 +269,8 @@ public interface Constants {
 	
 	public static final int INPUT_VALUE_ID_MIN				= 100;
 	public static final int INPUT_VALUE_ID_NAME 			= INPUT_VALUE_ID_MIN;
-	public static final int INPUT_VALUE_ID_NOTE 			= INPUT_VALUE_ID_NAME + 1;
+	public static final int INPUT_VALUE_ID_DISABLED 		= INPUT_VALUE_ID_NAME + 1;
+	public static final int INPUT_VALUE_ID_NOTE 			= INPUT_VALUE_ID_DISABLED + 1;
 	public static final int INPUT_VALUE_ID_ALT_NOTE			= INPUT_VALUE_ID_NOTE + 1;
 	public static final int INPUT_VALUE_ID_PRESSROLL_NOTE	= INPUT_VALUE_ID_ALT_NOTE + 1;
 	public static final int INPUT_VALUE_ID_CHANNEL 			= INPUT_VALUE_ID_PRESSROLL_NOTE + 1;
@@ -294,7 +295,8 @@ public interface Constants {
 	public static final int INPUT_VALUE_ID_MAX				= INPUT_VALUE_ID_TYPE;
 	
 	public static final int THIRD_ZONE_VALUE_ID_MIN				= INPUT_VALUE_ID_MAX + 1;
-	public static final int THIRD_ZONE_VALUE_ID_NOTE			= THIRD_ZONE_VALUE_ID_MIN;
+	public static final int THIRD_ZONE_VALUE_ID_DISABLED		= THIRD_ZONE_VALUE_ID_MIN;
+	public static final int THIRD_ZONE_VALUE_ID_NOTE			= THIRD_ZONE_VALUE_ID_DISABLED + 1;
 	public static final int THIRD_ZONE_VALUE_ID_ALT_NOTE		= THIRD_ZONE_VALUE_ID_NOTE + 1;
 	public static final int THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE	= THIRD_ZONE_VALUE_ID_ALT_NOTE + 1;
 	public static final int THIRD_ZONE_VALUE_ID_DAMPENED_NOTE	= THIRD_ZONE_VALUE_ID_PRESSROLL_NOTE + 1;
