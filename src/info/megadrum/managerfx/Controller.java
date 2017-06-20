@@ -511,7 +511,7 @@ public class Controller implements MidiRescanEventListener {
 						Double midiLogHeight = height*0.7;
 						Double midiLogWidth = width*0.23;
 						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlH= (height/uiPad.getVerticalControlsCount())*1.100 - 0.4;
+							controlH= (height/uiPad.getVerticalControlsCount())*1.125 - 0.4;
 							midiLogHeight = height*0.7;
 						} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
 							controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
