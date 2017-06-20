@@ -77,7 +77,7 @@ public class UI3rdZone implements PanelInterface {
 		
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
-		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
+		//uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		gridColmn.add(0);
 		gridRow.add(1);

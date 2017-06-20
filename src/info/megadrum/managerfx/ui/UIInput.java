@@ -91,7 +91,7 @@ public class UIInput implements PanelInterface {
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
-		uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
+		//uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
 		
 		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
