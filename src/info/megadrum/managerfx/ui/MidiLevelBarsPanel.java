@@ -191,9 +191,9 @@ public class MidiLevelBarsPanel extends Pane {
 		GridPane.setConstraints(labelTop, 0, 0);
 		GridPane.setHalignment(labelTop, HPos.CENTER);
 		GridPane.setValignment(labelTop, VPos.CENTER);
-		labelTopHiHat = new Label("HiHat");
+		labelTopHiHat = new Label("HiHat    ");
 		GridPane.setConstraints(labelTopHiHat, 1, 0);
-		GridPane.setHalignment(labelTopHiHat, HPos.CENTER);
+		GridPane.setHalignment(labelTopHiHat, HPos.RIGHT);
 		GridPane.setValignment(labelTopHiHat, VPos.CENTER);
 		gridPaneTop.getChildren().addAll(labelTop, labelTopHiHat);
 		//gridPaneTop.setStyle("-fx-background-color: red");
@@ -340,8 +340,8 @@ public class MidiLevelBarsPanel extends Pane {
 		barWidth = barsTotalWidth/(barsCount + 2);
 		Double smallBarsHeight = (barsTotalHeight - barHeight)*0.5;
 		gridPaneTop.getColumnConstraints().clear();
-		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.94));
-		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.06));
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.88));
+		gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barsTotalWidth*0.12));
 		//gridPaneTop.getColumnConstraints().add(new ColumnConstraints(barWidth*1.5));
 		gridPaneTop.setMinSize(barsTotalWidth, smallBarsHeight);
 		gridPaneTop.setMaxSize(barsTotalWidth, smallBarsHeight);
@@ -395,11 +395,11 @@ public class MidiLevelBarsPanel extends Pane {
 		labelLastPos.setFont(fontOnTheRight);
 		labelLastPos.setLayoutX((paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelLastPos.getText()))*0.5);
 		labelLastPos.setLayoutY(panesRight.size()*rowHight + paneHeight*0.5);
-		Label labelCenter = new Label("Center");
+		Label labelCenter = new Label(" Center");
 		labelCenter.setFont(fontOnTheRight);
 		labelCenter.setLayoutX(0);
 		labelCenter.setLayoutY(panesRight.size()*rowHight + paneHeight);
-		Label labelRim = new Label("Rim");
+		Label labelRim = new Label("Rim  ");
 		labelRim.setFont(fontOnTheRight);
 		labelRim.setLayoutX(paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelRim.getText()));
 		labelRim.setLayoutY(panesRight.size()*rowHight + paneHeight);

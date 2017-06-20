@@ -1935,7 +1935,8 @@ public class Controller implements MidiRescanEventListener {
 				uiMidiLog.setHiHatLevel(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
-				uiMidiLog.addNewPositional(127 - buffer[2]);
+				//uiMidiLog.addNewPositional(127 - buffer[2]);
+				uiMidiLog.addNewPositional((int)buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];
