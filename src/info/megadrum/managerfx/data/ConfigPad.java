@@ -22,7 +22,7 @@ public class ConfigPad {
 	public boolean autoLevel = true;
 	public boolean dual = false;
 	public boolean threeWay = false;
-	public boolean leftInput = true;
+	private boolean leftInput = true;
 	public int function = 0;
 	public int gain = 0;
 	public int xtalkLevel = 3;
@@ -114,21 +114,26 @@ public class ConfigPad {
 			case 1:
 				dual = true;
 				threeWay = false;
+				//System.out.println("Set Dual");
 				break;
 			case 2:
 				dual = false;
 				threeWay = true;
+				//System.out.println("Set 3way");
 				break;
 			default:
 				dual = false;
 				threeWay = false;
+				//System.out.println("Set Single");
 				break;
 			}
 		} else {
 			if (typeInt == 0) {
 				type = false;
+				//System.out.println("Set Piezo");
 			} else {
 				type = true;
+				//System.out.println("Set Switch");
 			}
 		}			
 
@@ -139,16 +144,21 @@ public class ConfigPad {
 		if (leftInput) {
 			if (dual) {
 				result = 1;
+				//System.out.println("Get Dual");
 			} else if (threeWay) {
 				result = 2;
+				//System.out.println("Get 3way");
 			} else {
 				result = 0;
+				//System.out.println("Get Single");
 			}
 		} else {
 			if (type) {
 				result = 1;
+				//System.out.println("Get Piezo");
 			} else {
 				result = 0;
+				//System.out.println("Get Switch");
 			}
 		}
 		return result;
@@ -423,5 +433,8 @@ public class ConfigPad {
 		}
 	}
 
+	public void setLeftRight(boolean left) {
+		leftInput = left;
+	}
 
 }

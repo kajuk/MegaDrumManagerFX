@@ -48,6 +48,11 @@ public class ConfigFull implements java.io.Serializable {
 		config3rds = new Config3rd[(Constants.PADS_COUNT-1)/2];
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
 			configPads[i] = new ConfigPad(i);
+			if (i == 0) {
+				configPads[i].setLeftRight(true);
+			} else {
+				configPads[i].setLeftRight((i&1) > 0);
+			}
 			configPos[i] = new ConfigPositional(i); 
 			if ((i>0) && ((i&0x01)==0)) {
 				config3rds[(i-1)/2] = new Config3rd((i-1)/2);
