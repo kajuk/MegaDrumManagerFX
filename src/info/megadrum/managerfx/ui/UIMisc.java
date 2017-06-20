@@ -15,6 +15,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -37,6 +38,10 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	private UICheckBox uiCheckBoxSendTriggeredIn;
 	private UICheckBox uiCheckBoxAltNoteChoking;
 	private ArrayList<UIControl> allControls;
+	private Tooltip   tooltipUnused;
+	private Tooltip   tooltipAllGainsLow;
+	private Tooltip   tooltipAltSampling;
+	private Tooltip   tooltipUnknown;
 		
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -102,6 +107,10 @@ public class UIMisc extends UIPanel implements PanelInterface{
 
 		uiCheckBoxUnknownSetting = new UICheckBox("Unknown", false);
 		allControls.add(uiCheckBoxUnknownSetting);
+		tooltipUnused = new Tooltip("This setting is unused on this MegaDrum hardware version");
+		tooltipAllGainsLow = new Tooltip("When enabled, it will disable all individual input Gain levels\nand make Gain even lower than 'Gain Level' 0.\nIt could be used if all your pads are 'hot' and to get\na better dynamic range with such pads.");
+		tooltipAltSampling = new Tooltip("When enabled, MegaDrum uses a new sampling algorithm\nwhich can reduce signal noise\nand improve sensitivity.");
+		tooltipUnknown = new Tooltip("This setting function depends on the type of MegaDrum MCU");
 
 		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", false);
 		allControls.add(uiCheckBoxMIDIThru);
@@ -135,6 +144,9 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		for (int i = 0; i < allControls.size(); i++ ) {
 			allControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		}
+		uiCheckBoxUnknownSetting.setLabelText("Unknown");
+		uiCheckBoxUnknownSetting.setControlTooltip(tooltipUnknown);
+
 	}
 	
 	public void respondToResizeDetached(Double w, Double h) {
@@ -217,5 +229,19 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	public int getVerticalControlsCount() {
 		return allControls.size() + 2;
 	}
-
+	
+	public void setUnknownLabel(int mcuType) {
+		if (mcuType < 3) {
+			uiCheckBoxUnknownSetting.setLabelText("All Gains Low");
+			uiCheckBoxUnknownSetting.setControlTooltip(tooltipAllGainsLow);
+		} else {
+			if (mcuType < 6) {
+				uiCheckBoxUnknownSetting.setLabelText("Unused");
+				uiCheckBoxUnknownSetting.setControlTooltip(tooltipUnused);
+			} else {
+				uiCheckBoxUnknownSetting.setLabelText("Alt Sampling Alg");
+				uiCheckBoxUnknownSetting.setControlTooltip(tooltipAltSampling);
+			}
+		}
+	}
 }

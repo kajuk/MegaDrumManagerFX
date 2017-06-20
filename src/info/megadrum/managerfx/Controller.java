@@ -2036,6 +2036,7 @@ public class Controller implements MidiRescanEventListener {
 					if (configOptions.mcuType < Constants.MCU_TYPES.length ) {
 						uiGlobalMisc.setMcu(configOptions.mcuType);								
 					}
+					uiMisc.setUnknownLabel(configOptions.mcuType);
 				}
 				break;
 			case Constants.MD_SYSEX_MISC:

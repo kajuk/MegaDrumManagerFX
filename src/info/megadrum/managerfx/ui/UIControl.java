@@ -294,4 +294,11 @@ public class UIControl extends Control implements UIControlInterface {
 		buttonCopy.getTooltip().setText(tt);
 	}
 	
+	public void setLabelText(String text) {
+		label.setText(text);
+	}
+
+	public void setControlTooltip(Tooltip tooltip) {
+		Tooltip.install(uiControl, tooltip);
+	}
 }
