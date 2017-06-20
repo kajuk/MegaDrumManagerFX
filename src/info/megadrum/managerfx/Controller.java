@@ -1237,27 +1237,43 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId[0] = Constants.MD_SYSEX_CONFIG_LOAD;
 		typeAndId[1] = (byte)slot;
 		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
-		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_VERSION;
-		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_MCU_TYPE;
-		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_CONFIG_COUNT;
-		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
-		sysexSendList.add(typeAndId);
-		//loadConfigAfterLoadSlot = configOptions.liveUpdates;
-		loadConfigAfterLoadSlot = true;
 		sendSysex();
-		System.out.println("Load from slot to do");
+
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {			
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						byte [] typeAndId;
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_GLOBAL_MISC;
+						sysexSendList.add(typeAndId);
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_VERSION;
+						sysexSendList.add(typeAndId);
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_MCU_TYPE;
+						sysexSendList.add(typeAndId);
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_CONFIG_COUNT;
+						sysexSendList.add(typeAndId);
+						typeAndId = new byte[2];
+						typeAndId[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
+						sysexSendList.add(typeAndId);
+						//loadConfigAfterLoadSlot = configOptions.liveUpdates;
+						loadConfigAfterLoadSlot = true;
+						sendSysex();
+					}
+				});
+			}
+		}, 200);
+		
+		//System.out.println("Load from slot to do");
 	}
-	
+
 	private void sendSysexSaveToSlotOnlyRequest(int slot) {
 		//sysexSendList.clear();
 		byte [] typeAndId;
@@ -1285,8 +1301,7 @@ public class Controller implements MidiRescanEventListener {
 					}
 				});
 			}
-		}, 2000);
-		System.out.println("Save slot to do");
+		}, 3000);
 	}
 	
 	private void sendSysexConfigName(int id) {
@@ -1297,7 +1312,9 @@ public class Controller implements MidiRescanEventListener {
 	private void sendSysexSaveToSlotRequest(int slot) {
 		//System.out.printf("Saving to slot %d\n", slot + 1);
 		configFull.configConfigNames[slot].name = (uiGlobalMisc.getTextFieldSlotName().getText() + "            ").substring(0, 12);
-		sendSysexConfigName(slot);
+		if (configFull.configGlobalMisc.config_names_en) {
+			sendSysexConfigName(slot);
+		}
 		//Utils.copyConfigConfigNameToSysex(null, null, i, i);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
