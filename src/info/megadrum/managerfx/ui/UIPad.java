@@ -419,6 +419,10 @@ public class UIPad extends UIPanel implements PanelInterface {
 		return buttonLast;
 	}
 	
+	public Button getButtonCopy() {
+		return buttonCopy;
+	}
+	
 	public ComboBox<String> getComboBoxInput() {
 		return comboBoxInput;
 	}

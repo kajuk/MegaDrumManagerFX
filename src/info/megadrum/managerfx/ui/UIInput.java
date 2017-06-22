@@ -49,14 +49,14 @@ public class UIInput implements PanelInterface {
 	private UISpinner 		uiSpinnerPosHigh;
 	private UIComboBox 		uiComboBoxType;
 	
-	private List<String>    listInputName;
+	//private List<String>    listInputName;
 	private List<String>    listInputType;
-	private int				inputType;
+	//private int				inputType;
 	
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
 	private Pane			paneAll;
-	private Double			lastTitleHeight = 5.0;
+	//private Double			lastTitleHeight = 5.0;
 	
 	//private ConfigPad			configPad;
 	//private ConfigPositional	configPos;
@@ -239,7 +239,7 @@ public class UIInput implements PanelInterface {
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
+		//lastTitleHeight = controlH;
 		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMinWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMaxWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
@@ -251,7 +251,7 @@ public class UIInput implements PanelInterface {
 	}
 
 	public void setHeadEdgeType(int type) {
-		inputType = type;
+		//inputType = type;
 		if (type == Constants.PAD_TYPE_HEAD) {
 			listInputType = Arrays.asList(Constants.PAD_TYPE_HEAD_LIST);
 			for (int i = 0; i < allControls.size(); i++) {

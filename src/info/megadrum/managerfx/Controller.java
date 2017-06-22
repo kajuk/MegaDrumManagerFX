@@ -92,6 +92,9 @@ public class Controller implements MidiRescanEventListener {
 	private MenuItem menuItemCustomCurvesGet, menuItemCustomCurvesSend;
 	private MenuItem menuItemCustomNamesGet, menuItemCustomNamesSend;
 	private MenuItem firmwareUpgradeMenuItem, optionsMenuItem, exitMenuItem;
+	private ContextMenu contextMenuCopyPad;
+	private Menu menuCopyPad, menuCopyHead, menuCopyRim, menuCopy3rd;
+	private ArrayList<MenuItem> menuItemsCopyPad, menuItemsCopyHead, menuItemsCopyRim, menuItemsCopy3rd;
 	
 	private UIOptions optionsWindow;
 	private UIUpgrade upgradeWindow;
@@ -169,6 +172,7 @@ public class Controller implements MidiRescanEventListener {
 		allPanels.add(uiMidiLog);
 		
 		createMainMenuBar();
+		createContextMenuCopyPad();
 		uiGlobal.getButtonGetAll().setOnAction(e-> sendAllSysexRequests());
 		uiGlobal.getButtonSendAll().setOnAction(e-> sendAllSysex());
 		uiGlobal.getButtonLoadAll().setOnAction(e-> load_all());
@@ -637,6 +641,22 @@ public class Controller implements MidiRescanEventListener {
 		menuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
 		contextMenuSaveToMdSlot.getItems().clear();
 		contextMenuSaveToMdSlot.getItems().addAll(allMenuItemsSaveSlot);		
+	}
+	
+	private void createContextMenuCopyPad() {
+		contextMenuCopyPad = new ContextMenu();
+		menuCopyPad = new Menu("CopyPad");
+		menuCopyHead = new Menu("CopyHead");
+		menuCopyRim = new Menu("CopyRim");
+		menuCopy3rd = new Menu("Copy3rd");
+		contextMenuCopyPad.getItems().addAll(menuCopyPad, menuCopyHead, menuCopyRim, menuCopy3rd );
+		uiPad.getButtonCopy().setOnAction(e-> {
+			contextMenuCopyPad.show(uiPad.getButtonCopy(), Side.RIGHT, 0, 0);
+		});
+		menuItemsCopyPad = new ArrayList<MenuItem>();
+		menuItemsCopyHead = new ArrayList<MenuItem>();
+		menuItemsCopyRim = new ArrayList<MenuItem>();
+		menuItemsCopy3rd = new ArrayList<MenuItem>();
 	}
 	
 	private void createMainMenuBar() {
@@ -2195,28 +2215,172 @@ public class Controller implements MidiRescanEventListener {
 		return result;
 	}
 	
+	private void copyPad(int index) {
+		int src,dst;
+		if (padPair == 0) {
+			src = 0;
+		} else {
+			src = (padPair*2) - 1;
+		}
+		if (index == 0) {
+			for (int i = 1; i < (configFull.configGlobalMisc.inputs_count/2); i++) {
+				dst = (i*2) - 1;
+				configFull.configPads[dst].setConfigFromSysex(configFull.configPads[src].getSysexFromConfig());						
+				configFull.configPos[dst].setConfigFromSysex(configFull.configPos[src].getSysexFromConfig());						
+				if (src != 0) {
+					configFull.configPads[dst + 1].setConfigFromSysex(configFull.configPads[src + 1].getSysexFromConfig());					
+					configFull.configPos[dst + 1].setConfigFromSysex(configFull.configPos[src + 1].getSysexFromConfig());
+					configFull.config3rds[i - 1].setConfigFromSysex(configFull.config3rds[padPair - 1].getSysexFromConfig());
+				}
+			}
+		} else {
+			dst = index*2 - 1;
+			configFull.configPads[dst].setConfigFromSysex(configFull.configPads[src].getSysexFromConfig());						
+			configFull.configPos[dst].setConfigFromSysex(configFull.configPos[src].getSysexFromConfig());						
+			if (src != 0) {
+				configFull.configPads[dst + 1].setConfigFromSysex(configFull.configPads[src + 1].getSysexFromConfig());					
+				configFull.configPos[dst + 1].setConfigFromSysex(configFull.configPos[src + 1].getSysexFromConfig());
+				configFull.config3rds[index - 1].setConfigFromSysex(configFull.config3rds[padPair - 1].getSysexFromConfig());						
+			}			
+		}
+	}
+	
+	private void copy3rd(int index) {
+		int src,dst;
+		if (padPair > 0) {
+			src = padPair - 1;
+			if (index == 0) {
+				for (int i = 1; i < (configFull.configGlobalMisc.inputs_count/2); i++) {
+					dst = i - 1;
+					configFull.config3rds[dst].setConfigFromSysex(configFull.config3rds[src].getSysexFromConfig());						
+				}
+			} else {
+				dst = index - 1;
+				configFull.config3rds[dst].setConfigFromSysex(configFull.config3rds[src].getSysexFromConfig());						
+			}
+		}
+	}
+
+	private void copyHead(int index) {
+		int src,dst;
+		if (padPair == 0) {
+			src = 0;
+		} else {
+			src = (padPair*2) - 1;
+		}
+		if (index == 0) {
+			for (int i = 1; i < (configFull.configGlobalMisc.inputs_count/2); i++) {
+				dst = (i*2) - 1;
+				configFull.configPads[dst].setConfigFromSysex(configFull.configPads[src].getSysexFromConfig());						
+				configFull.configPos[dst].setConfigFromSysex(configFull.configPos[src].getSysexFromConfig());						
+			}
+		} else {
+			dst = index*2 - 1;
+			configFull.configPads[dst].setConfigFromSysex(configFull.configPads[src].getSysexFromConfig());						
+			configFull.configPos[dst].setConfigFromSysex(configFull.configPos[src].getSysexFromConfig());						
+		}
+	}
+	
+	private void copyRim(int index) {
+		int src,dst;
+		if (padPair == 0) {
+			src = 0;
+		} else {
+			src = (padPair*2) - 1;
+		}
+		if (index == 0) {
+			for (int i = 1; i < (configFull.configGlobalMisc.inputs_count/2); i++) {
+				dst = (i*2) - 1;
+				if (src != 0) {
+					configFull.configPads[dst + 1].setConfigFromSysex(configFull.configPads[src + 1].getSysexFromConfig());					
+					configFull.configPos[dst + 1].setConfigFromSysex(configFull.configPos[src + 1].getSysexFromConfig());
+				}
+			}
+		} else {
+			dst = index*2 - 1;
+			if (src != 0) {
+				configFull.configPads[dst + 1].setConfigFromSysex(configFull.configPads[src + 1].getSysexFromConfig());					
+				configFull.configPos[dst + 1].setConfigFromSysex(configFull.configPos[src + 1].getSysexFromConfig());
+			}			
+		}
+	}
+	
 	private void updateComboBoxInput(Boolean nameChaned) {
+		MenuItem menuItem;
 		if ((oldInputsCounts != configFull.configGlobalMisc.inputs_count) || nameChaned ) {
+			menuItemsCopyPad.clear();
+			menuItemsCopyPad.add(new MenuItem("To All Pads"));
+			menuItemsCopyPad.get(0).setOnAction( e->{
+				copyPad(0);
+			});
+			menuItemsCopyHead.clear();
+			menuItemsCopyHead.add(new MenuItem("To All Heads"));
+			menuItemsCopyHead.get(0).setOnAction( e->{
+				copyHead(0);
+			});
+			menuItemsCopyRim.clear();
+			menuItemsCopyRim.add(new MenuItem("To All Rims"));
+			menuItemsCopyRim.get(0).setOnAction( e->{
+				copyRim(0);
+			});
+			menuItemsCopy3rd.clear();
+			menuItemsCopy3rd.add(new MenuItem("To All 3rds"));
+			menuItemsCopy3rd.get(0).setOnAction( e->{
+				copy3rd(0);
+			});
 			oldInputsCounts = configFull.configGlobalMisc.inputs_count;
 			List<String> list;
 			String name;
 			list = new ArrayList<>();
 			int inputPointer;
 			for (int i = 0; i < ((configFull.configGlobalMisc.inputs_count/2)); i++) {
+				final int iFinal = i;
 				if (i == 0) {
 					list.add(getInputName(i));
+					menuItem = new MenuItem("To " + getInputName(i));
+					menuItemsCopyHead.add(menuItem);
 				} else {
 					inputPointer = (i*2) - 1;
 					name = getInputName(inputPointer);
+					menuItem = new MenuItem("To " + getInputName(inputPointer));
+					menuItem.setOnAction( e->{
+						copyHead(iFinal);						
+					});
+					menuItemsCopyHead.add(menuItem);
 					name = name + "/";
 					inputPointer++;
 					name = name + getInputName(inputPointer);
+					menuItem = new MenuItem("To " + getInputName(inputPointer));
+					menuItem.setOnAction( e->{
+						copyRim(iFinal);						
+					});
+					menuItemsCopyRim.add(menuItem);
 					list.add(name);
+					menuItem = new MenuItem("To " + name);
+					menuItem.setOnAction( e->{
+						copyPad(iFinal);						
+					});
+					menuItemsCopyPad.add(menuItem);
+					menuItem = new MenuItem("To " + name);
+					menuItem.setOnAction( e->{
+						copy3rd(iFinal);						
+					});
+					menuItemsCopy3rd.add(menuItem);
 				}
 			}
 			//comboBoxInputChangedFromSet = 1;
 			uiPad.getComboBoxInput().getItems().clear();
 			uiPad.getComboBoxInput().getItems().addAll(list);
+			
+			menuCopyPad.getItems().clear();
+			menuCopyPad.getItems().addAll(menuItemsCopyPad);
+			menuCopyHead.getItems().clear();
+			menuCopyHead.getItems().addAll(menuItemsCopyHead);
+			menuCopyRim.getItems().clear();
+			menuCopyRim.getItems().addAll(menuItemsCopyRim);
+			menuCopy3rd.getItems().clear();
+			menuCopy3rd.getItems().addAll(menuItemsCopy3rd);
+			
 			if ((configFull.configGlobalMisc.inputs_count)/2 > padPair) {
 				uiPad.getComboBoxInput().getSelectionModel().select(padPair);				
 			} else {
@@ -2265,7 +2429,7 @@ public class Controller implements MidiRescanEventListener {
 	private void switchToSelectedCurve(Integer curve) {
 		if ((curve > -1) && (curve < Constants.CURVES_COUNT)) {
 			//uiPadsExtra.getYvalues(configFull.configCurves[curvePointer].yValues);
-			int [] t = configFull.configCurves[curvePointer].yValues;
+			//int [] t = configFull.configCurves[curvePointer].yValues;
 			//System.out.printf("Y values at %d: %d %d %d %d %d %d %d %d %d\n", curvePointer, t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8] );
 			curvePointer = curve;
 			if (moduleConfigFull.configCurves[curvePointer].sysexReceived) {
