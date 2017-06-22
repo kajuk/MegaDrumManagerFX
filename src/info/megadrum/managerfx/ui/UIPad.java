@@ -39,7 +39,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 	private Button 		buttonGetAll;
 	private Button 		buttonSendAll;
 	private Button 		buttonCopy;
-	private Button 		buttonDisableOthers;
+	//private Button 		buttonDisableOthers;
 	
 	private Label		labelInput;
 	private ComboBox<String>	comboBoxInput;
@@ -58,7 +58,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 	//private ConfigPad	configPadRight;
 	//private ConfigPositional	configPosLeft;
 	//private ConfigPositional	configPosRight;
-	private Integer		padPair;
+	//private Integer		padPair;
 	private Boolean		nameChanged = false;
 	//private Integer		controlsCha
 	private Boolean			copyPressed = false;
@@ -99,8 +99,9 @@ public class UIPad extends UIPanel implements PanelInterface {
 		buttonGetAll = new Button("GetAll");
 		buttonSendAll = new Button("SendAll");
 		buttonCopy = new Button("Copy");
-		buttonDisableOthers = new Button("Disable Others");
-		toolBarTop.getChildren().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(Orientation.VERTICAL),buttonLoad,buttonSave,new Separator(Orientation.VERTICAL),buttonCopy,buttonDisableOthers);
+		toolBarTop.getChildren().addAll(buttonGet,buttonSend,buttonGetAll,buttonSendAll,new Separator(Orientation.VERTICAL),buttonLoad,buttonSave,new Separator(Orientation.VERTICAL),buttonCopy);
+		//buttonDisableOthers = new Button("Disable Others");
+		//toolBarTop.getChildren().add(buttonDisableOthers);
 		toolBarTop.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.05em");
 		
 		toolBarNavigator = new HBox();
@@ -364,7 +365,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 	}
 	
 	private void switchToInputPair(Integer pair) {
-		padPair = pair;
+		//padPair = pair;
 		List<String> listNames;
 		if (pair == 0) {
 			arrayNamesLeft[0] = Constants.PADS_NAMES_LIST[0];
