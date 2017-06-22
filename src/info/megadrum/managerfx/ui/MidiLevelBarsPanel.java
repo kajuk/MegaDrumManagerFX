@@ -155,6 +155,11 @@ public class MidiLevelBarsPanel extends Pane {
 	private List<Slider> slidersPos;
 	private SpinnerFast<Double> spinnerTimeRange;
 	private SpinnerFast<Double> spinnerMaxInterval;
+	private Label labelLastPos;
+	private Label labelCenterPos;
+	private Label labelRimPos;
+	private Label labelInterval;
+	private Label labelFullRange;
 	
 	private long prevTime = 0;
 	
@@ -213,25 +218,8 @@ public class MidiLevelBarsPanel extends Pane {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				System.out.println("MidiLevelBarsPanel: Is there a better way to do it withot Platform.runLater?");
 				barsCount = Integer.valueOf(newValue);
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
-					
-					@Override
-					public void run() {
-						Platform.runLater(new Runnable() {
-							
-							@Override
-							public void run() {
-								//updateBars();
-								respondToResize(width, height);						
-								//updateHiHatBar();
-								//reAddAllBars();
-							}
-						});
-					}
-				}, 200);
+				respondToResize(width, height);
 			}
 			
 		});
@@ -318,7 +306,21 @@ public class MidiLevelBarsPanel extends Pane {
 			
 		});
 		//spinnerMaxInterval.setEditable(true);
+		labelInterval = new Label("Max interval");
+		paneRight.getChildren().addAll(spinnerMaxInterval, labelInterval);
+		labelFullRange = new Label("Full range");
+		paneRight.getChildren().addAll(spinnerTimeRange, labelFullRange);
 		
+		labelLastPos = new Label("Last Positional");
+		labelCenterPos = new Label(" Center");
+		labelRimPos = new Label("Rim  ");
+
+		paneRight.getChildren().addAll(panesRight);
+		paneRight.getChildren().addAll(labelsRight);
+		paneRight.getChildren().addAll(labelLastPos, labelCenterPos, labelRimPos);
+
+		paneRight.getChildren().addAll(slidersPos);
+
 		comboBoxBarCount.getSelectionModel().select((barsCount - 16)/4);
 	}
 	
@@ -361,7 +363,6 @@ public class MidiLevelBarsPanel extends Pane {
 		labelTopHiHat.setFont(new Font(labelTopBottomFontSize*0.8));
 		labelBottom.setFont(new Font(labelTopBottomFontSize));
 		
-		paneRight.getChildren().clear();
 		Double rowHight = (height*0.35)/panesRight.size();
 		Double paneHeight = rowHight*0.8;
 		Double paneWidth = paneRightWidth*0.46;
@@ -386,25 +387,19 @@ public class MidiLevelBarsPanel extends Pane {
 			labelsRight.get(i).setLayoutY(yPos + paneHeight*0.3 );
 			yPos += rowHight;
 		}
-		paneRight.getChildren().addAll(panesRight);
-		paneRight.getChildren().addAll(labelsRight);
 		
 		buttonClear.setFont(new Font(fontOnTheRightSize));
 		
-		Label labelLastPos = new Label("Last Positional");
 		labelLastPos.setFont(fontOnTheRight);
 		labelLastPos.setLayoutX((paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelLastPos.getText()))*0.5);
 		labelLastPos.setLayoutY(panesRight.size()*rowHight + paneHeight*0.5);
-		Label labelCenter = new Label(" Center");
-		labelCenter.setFont(fontOnTheRight);
-		labelCenter.setLayoutX(0);
-		labelCenter.setLayoutY(panesRight.size()*rowHight + paneHeight);
-		Label labelRim = new Label("Rim  ");
-		labelRim.setFont(fontOnTheRight);
-		labelRim.setLayoutX(paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelRim.getText()));
-		labelRim.setLayoutY(panesRight.size()*rowHight + paneHeight);
-		paneRight.getChildren().addAll(labelLastPos, labelCenter, labelRim);
-		
+		labelCenterPos.setFont(fontOnTheRight);
+		labelCenterPos.setLayoutX(0);
+		labelCenterPos.setLayoutY(panesRight.size()*rowHight + paneHeight);
+		labelRimPos.setFont(fontOnTheRight);
+		labelRimPos.setLayoutX(paneRightWidth - MidiLevelBar.getTextWidth(fontOnTheRight, labelRim.getText()));
+		labelRimPos.setLayoutY(panesRight.size()*rowHight + paneHeight);
+
 		Double sliderFontSize = paneHeight*0.55;
 		sliderFontSize = (sliderFontSize>8)?8:sliderFontSize;
 		for (int i = 0; i < slidersPos.size(); i++) {
@@ -414,7 +409,6 @@ public class MidiLevelBarsPanel extends Pane {
 			slidersPos.get(i).setLayoutX(0);
 			slidersPos.get(i).setLayoutY((panesRight.size() + 1)*rowHight + i*paneHeight + paneHeight);
 		}
-		paneRight.getChildren().addAll(slidersPos);
 		
 		Double spinnerButtonsFontSize = fontOnTheRightSize*0.8;
 		Double layoutY = (panesRight.size() + 1)*rowHight + slidersPos.size()*paneHeight + paneHeight*2;
@@ -423,11 +417,9 @@ public class MidiLevelBarsPanel extends Pane {
 		spinnerMaxInterval.setLayoutX(0);
 		spinnerMaxInterval.setLayoutY(layoutY);
 		spinnerMaxInterval.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");
-		Label label = new Label("Max interval");
-		label.setLayoutX(paneWidth*1.1);
-		label.setLayoutY(layoutY);
-		label.setFont(fontOnTheRight);
-		paneRight.getChildren().addAll(spinnerMaxInterval, label);
+		labelInterval.setLayoutX(paneWidth*1.1);
+		labelInterval.setLayoutY(layoutY);
+		labelInterval.setFont(fontOnTheRight);
 		
 		layoutY += paneHeight;
 		spinnerTimeRange.setMinSize(paneWidth, paneHeight);
@@ -435,11 +427,9 @@ public class MidiLevelBarsPanel extends Pane {
 		spinnerTimeRange.setLayoutX(0);
 		spinnerTimeRange.setLayoutY(layoutY);
 		spinnerTimeRange.setStyle("-fx-font-size: " + spinnerButtonsFontSize.toString() + "pt");
-		label = new Label("Full range");
-		label.setLayoutX(paneWidth*1.1);
-		label.setLayoutY(layoutY);
-		label.setFont(fontOnTheRight);
-		paneRight.getChildren().addAll(spinnerTimeRange, label);
+		labelFullRange.setLayoutX(paneWidth*1.1);
+		labelFullRange.setLayoutY(layoutY);
+		labelFullRange.setFont(fontOnTheRight);
 		
 		updateBars();
 		updateHiHatBar();
