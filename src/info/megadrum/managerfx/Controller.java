@@ -2390,6 +2390,9 @@ public class Controller implements MidiRescanEventListener {
 	}
 	
 	private void switchToSelectedPair(Integer newPadPair) {
+		menuCopyPad.setDisable(newPadPair == 0);
+		menuCopyRim.setDisable(newPadPair == 0);
+		menuCopy3rd.setDisable(newPadPair == 0);
 		if (padPair != newPadPair) {
 			if (padPair == 0) {
 				uiPad.setConfigFromControlsPad(configFull.configPads[0], true);			
