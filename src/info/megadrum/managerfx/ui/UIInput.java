@@ -86,7 +86,7 @@ public class UIInput implements PanelInterface {
 		uiComboBoxName = new UIComboBox("Name", true);
 		allControls.add(uiComboBoxName);
 
-		uiCheckBoxDisabled = new UICheckBox("Disabled", false);
+		uiCheckBoxDisabled = new UICheckBox("Disabled", true);
 		allControls.add(uiCheckBoxDisabled);
 
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
