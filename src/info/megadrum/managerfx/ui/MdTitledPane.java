@@ -8,7 +8,7 @@ import javafx.scene.text.Font;
 
 public class MdTitledPane extends Pane {
 	private Label titleLabel;
-	private Double titleHeight = 5.0;
+	//private Double titleHeight = 5.0;
 	private VBox vBox;
 	public MdTitledPane () {
 		
@@ -36,7 +36,7 @@ public class MdTitledPane extends Pane {
 		//titleLabel.setMaxHeight(h);
 		vBox.setMinHeight(h);
 		vBox.setMaxHeight(h);
-		titleHeight = h;
+		//titleHeight = h;
 	}
 	
 	public void setWidth(Double w) {

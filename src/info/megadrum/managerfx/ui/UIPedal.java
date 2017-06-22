@@ -190,7 +190,6 @@ public class UIPedal extends UIPanel implements PanelInterface {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-					// TODO Auto-generated method stub
 					fireControlChangeEvent(new ControlChangeEvent(this));					
 				}
 			});
@@ -233,7 +232,6 @@ public class UIPedal extends UIPanel implements PanelInterface {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-					// TODO Auto-generated method stub
 					fireControlChangeEvent(new ControlChangeEvent(this));
 				}
 			});
@@ -294,7 +292,6 @@ public class UIPedal extends UIPanel implements PanelInterface {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-					// TODO Auto-generated method stub
 					fireControlChangeEvent(new ControlChangeEvent(this));
 				}
 			});
@@ -323,16 +320,16 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	}
 	
 	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		Font buttonFont;
+		//Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -fullHeight*0.0005;
 		Double tabHeaderHeight = fullHeight*0.013;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			buttonFont = new Font(toolBarFontHeight);
+			//buttonFont = new Font(toolBarFontHeight);
 		} else {
-			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
+			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));

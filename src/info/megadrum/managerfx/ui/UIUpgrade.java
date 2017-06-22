@@ -193,7 +193,6 @@ public class UIUpgrade {
 				});
 				new Thread(taskUpgrade).start();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				setButtons(true);
 				progressBar.progressProperty().unbind();

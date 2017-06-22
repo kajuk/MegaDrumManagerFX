@@ -39,7 +39,6 @@ public class UIComboBox extends UIControl {
 		comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 		    	if (changedFromSet > 0) {
 		    		changedFromSet--;
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());

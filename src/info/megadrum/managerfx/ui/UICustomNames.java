@@ -82,7 +82,6 @@ public class UICustomNames {
 		comboBoxCustomNamesCount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				Integer start = 2;
 				switch (comboBoxCustomNamesCount.getSelectionModel().getSelectedIndex()) {
 				case 0:
@@ -224,16 +223,16 @@ public class UICustomNames {
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		Font buttonFont;
+		//Font buttonFont;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		//Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
 		if (fullHeight > 600) {
-			buttonFont = new Font(600*Constants.FX_TOOLBARS_FONT_SCALE);
+			//buttonFont = new Font(600*Constants.FX_TOOLBARS_FONT_SCALE);
 		} else if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
-			buttonFont = new Font(toolBarFontHeight);
+			//buttonFont = new Font(toolBarFontHeight);
 		} else {
-			buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
+			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 		}
 /*
 		buttonGetAll.setFont(buttonFont);
@@ -324,7 +323,6 @@ public class UICustomNames {
 	public void setSyncState(int state, Integer namePointer) {
 		allSyncStates[namePointer] = state;
 		Color color;
-		// TODO Auto-generated method stub
 		switch (state) {
 		case Constants.SYNC_STATE_UNKNOWN:
 			color = Constants.SYNC_STATE_UNKNOWN_COLOR;

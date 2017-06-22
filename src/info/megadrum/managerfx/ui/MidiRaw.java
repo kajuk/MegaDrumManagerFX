@@ -28,7 +28,7 @@ public class MidiRaw extends VBox {
 	private StringBuilder htmlHead;
 	private StringBuilder htmlTail;
 	
-	private VBox vBoxRoot;
+	//private VBox vBoxRoot;
 	private VBox vBoxHeader;
 
 	public MidiRaw () {

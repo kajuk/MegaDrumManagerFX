@@ -68,7 +68,6 @@ public class UIGlobalMisc {
 	private Button		buttonSend;
 	private Label		labelLiveUpdates;
 	private CheckBox	checkBoxLiveUpdates;
-	private ToggleGroup	toggleGroup;
 	private RadioMenuItem rbHide;
 	private RadioMenuItem rbShow;
 	
@@ -148,7 +147,6 @@ public class UIGlobalMisc {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 		    	if (changedFromSetInputs > 0) {
 		    		changedFromSetInputs--;
 		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
@@ -409,26 +407,12 @@ public class UIGlobalMisc {
 		rootGridPane.getChildren().add(labelLiveUpdates);
 
 		checkBoxLiveUpdates = new CheckBox();
-/*		
-		checkBoxMidi2ForSysex.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	//TODO
-		    }
-		});
-*/
+
 		GridPane.setConstraints(checkBoxLiveUpdates, 12, 1);
 		GridPane.setHalignment(checkBoxLiveUpdates, HPos.LEFT);
 		GridPane.setValignment(checkBoxLiveUpdates, VPos.CENTER);
 		rootGridPane.getChildren().add(checkBoxLiveUpdates);
 		
-/*
-		buttonLiveUpdates = new Button("Live Updates");
-		GridPane.setConstraints(buttonLiveUpdates, 11, 1);
-		GridPane.setHalignment(buttonLiveUpdates, HPos.CENTER);
-		GridPane.setValignment(buttonLiveUpdates, VPos.CENTER);
-		rootGridPane.getChildren().add(buttonLiveUpdates);
-*/	
 		for (int i = 0; i < rootGridPane.getChildren().size(); i++) {
 			if (rootGridPane.getChildren().get(i) instanceof Button) {
 				((Button)rootGridPane.getChildren().get(i)).setFont(new Font(10));

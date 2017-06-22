@@ -178,7 +178,6 @@ public class UIInput implements PanelInterface {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-					// TODO Auto-generated method stub
 					if (allControls.get(iFinal).isCopyPressed()) {
 						allControls.get(iFinal).resetCopyPressed();
 						copyPressedValueId = allControls.get(iFinal).getValueId();

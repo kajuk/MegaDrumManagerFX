@@ -38,7 +38,7 @@ public class UI3rdZone implements PanelInterface {
 	private ArrayList<Integer> gridRow;
 	
 	static private final	Boolean zoneFromPizeo	= false;
-	static private final	Boolean zoneFromSwitch 	= true;
+	//static private final	Boolean zoneFromSwitch 	= true;
 	private boolean			zoneType = zoneFromPizeo;
 	private Double			lastTitleHeight = 5.0;
 
@@ -121,7 +121,6 @@ public class UI3rdZone implements PanelInterface {
 				
 				@Override
 				public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-					// TODO Auto-generated method stub
 					if (allControls.get(iFinal).isCopyPressed()) {
 						allControls.get(iFinal).resetCopyPressed();
 						copyPressedValueId = allControls.get(iFinal).getValueId();

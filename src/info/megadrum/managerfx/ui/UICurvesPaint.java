@@ -54,7 +54,6 @@ public class UICurvesPaint extends Pane {
 	}
 
 	public UICurvesPaint() {
-		// TODO Auto-generated constructor stub
 		canvas = new Canvas(300, 276);
 		setMinHeight(276);
 		gc = canvas.getGraphicsContext2D();

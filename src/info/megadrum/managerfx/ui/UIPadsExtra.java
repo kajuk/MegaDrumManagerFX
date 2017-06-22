@@ -51,7 +51,6 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 			}
 		});
@@ -61,7 +60,6 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 			
 			@Override
 			public void controlChangeEventOccurred(ControlChangeEvent evt, Integer parameter) {
-				// TODO Auto-generated method stub
 				fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 			}
 		});
@@ -81,7 +79,7 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		//Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -fullHeight*0.0005;

@@ -113,7 +113,6 @@ public class UIOptions {
         uiComboBoxMidiIn.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 				setSameMidiInOut(uiCheckBoxSamePort.uiCtlIsSelected());
 			}
@@ -126,7 +125,6 @@ public class UIOptions {
         uiComboBoxMidiOut.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 			}
         });
@@ -144,7 +142,6 @@ public class UIOptions {
         uiComboBoxMidiThru.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
 				//System.out.printf("Old value = %s, new value = %s\n", oldValue, newValue);
 			}
         });

@@ -28,7 +28,7 @@ public class MidiLevelBar extends VBox {
 	private Color bgColor = Color.LIGHTGREY;
 	private Color bgBarColor = Color.WHITE;
 	private Color fontColor = Color.BLACK;
-	private Color barColor = barColors[barTypeUnknown];
+	//private Color barColor = barColors[barTypeUnknown];
 	private Double barWidth = 16.0;
 	private Double barHeight = 300.0;
 	private Double fontSize = 6.0;

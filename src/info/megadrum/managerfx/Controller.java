@@ -860,7 +860,6 @@ public class Controller implements MidiRescanEventListener {
 								
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
 									allPanels.get(iFinal).getWindow().setX(allPanels.get(iFinal).getLastX());
 									allPanels.get(iFinal).getWindow().setY(allPanels.get(iFinal).getLastY());
 									allPanels.get(iFinal).getWindow().setWidth(allPanels.get(iFinal).getLastW());
@@ -1239,6 +1238,9 @@ public class Controller implements MidiRescanEventListener {
 		sysexSendList.add(typeAndId);
 		sendSysex();
 
+		// After sending MD_SYSEX_CONFIG_LOAD sysex to MegaDrum
+		// We need to let MegaDrum ~200ms to load a config from EEPROM
+		// before sending other sysexes, hence the timer.
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {			
 			@Override
@@ -1270,8 +1272,6 @@ public class Controller implements MidiRescanEventListener {
 				});
 			}
 		}, 200);
-		
-		//System.out.println("Load from slot to do");
 	}
 
 	private void sendSysexSaveToSlotOnlyRequest(int slot) {
@@ -1287,13 +1287,10 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				Platform.runLater(new Runnable() {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-						//sysexSendList.clear();
 						byte [] typeAndIdFinal = new byte[2];
 						typeAndIdFinal[0] = Constants.MD_SYSEX_CONFIG_CURRENT;
 						sysexSendList.add(typeAndIdFinal);
@@ -1321,7 +1318,6 @@ public class Controller implements MidiRescanEventListener {
 			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				Platform.runLater(new Runnable() {
 					
 					@Override
@@ -1896,7 +1892,6 @@ public class Controller implements MidiRescanEventListener {
 
 			@Override
 			public void midiEventOccurredWithBuffer(MidiEvent evt, byte[] buffer) {
-				// TODO Auto-generated method stub
 				//System.out.println("Received MidiEvent with buffer");
 				if (buffer.length > 3) {
 					processSysex(buffer);
@@ -2173,7 +2168,6 @@ public class Controller implements MidiRescanEventListener {
 	
 	@Override
 	public void midiRescanEventOccurred(MidiRescanEvent evt) {
-		// TODO Auto-generated method stub
 		//System.out.println("Midi Rescan Event occured");
 		optionsUpdatePorts();
 		

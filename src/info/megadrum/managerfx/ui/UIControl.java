@@ -35,7 +35,6 @@ public class UIControl extends Control implements UIControlInterface {
 	
 	@Override
 	protected Skin<?> createDefaultSkin() {
-		// TODO Auto-generated method stub
 		return super.createDefaultSkin();
 	}
 
@@ -171,7 +170,6 @@ public class UIControl extends Control implements UIControlInterface {
 	public void setSyncState(int state) {
 		syncState = state;
 		Color color;
-		// TODO Auto-generated method stub
 		switch (state) {
 		case Constants.SYNC_STATE_UNKNOWN:
 			color = Constants.SYNC_STATE_UNKNOWN_COLOR;
