@@ -1,5 +1,8 @@
 package info.megadrum.managerfx.utils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import info.megadrum.managerfx.data.Config3rd;
 import info.megadrum.managerfx.data.ConfigConfigName;
 import info.megadrum.managerfx.data.ConfigCurve;
@@ -9,6 +12,10 @@ import info.megadrum.managerfx.data.ConfigMisc;
 import info.megadrum.managerfx.data.ConfigPad;
 import info.megadrum.managerfx.data.ConfigPedal;
 import info.megadrum.managerfx.data.ConfigPositional;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.web.WebView;
 
 public class Utils {
 
@@ -16,8 +23,6 @@ public class Utils {
 	    try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 			Utils.show_error("Unrecoverable timer error. Exiting.\n" +
 					"(" + e.getMessage() + ")");
 			System.exit(1);
@@ -26,13 +31,27 @@ public class Utils {
 	}
 
 	public static void show_error(String msg) {
-		System.out.printf("Utils.show_error -> %s\n",msg);
-/*		JOptionPane.showMessageDialog(null,
-			    msg,
-			    "Error",
-			    JOptionPane.ERROR_MESSAGE);
-*/
+		//System.out.printf("Utils.show_error -> %s\n",msg);
+		Alert alert = new Alert(AlertType.ERROR);
+	    alert.setHeaderText("Error!");
+	    WebView webView = new WebView();
+	    webView.getEngine().loadContent(msg);
+	    webView.setPrefSize(300, 120);
+	    alert.getDialogPane().setContent(webView);
+		Timer warning_timer = new Timer();
+		warning_timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						alert.showAndWait();
+					}
+				});
+			}
+		}, 10);
 	}
+
 	public static byte [] byte2sysex (byte b) {
 		byte [] result = new byte[2];
 

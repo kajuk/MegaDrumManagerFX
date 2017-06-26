@@ -89,7 +89,7 @@ public class MidiController {
 		        		if ((sysexStatus[0]) == Constants.MD_SYSEX_STATUS_OK) {
 							sysexStatus[0] = Constants.MD_SYSEX_STATUS_TIMEOUT;
 		        		}
-		        		System.out.printf("Sysex timed out\n");
+		        		//System.out.printf("Sysex timed out\n");
 		        		break;
 		        	}
 		            updateProgress(i, max);
@@ -97,7 +97,7 @@ public class MidiController {
 					sysexesList.remove(0);
 				}
 			} catch (Exception e) {
-				System.out.printf("Sysex Send thread exception text = %s\n", e.getMessage());				
+				Utils.show_error(String.format("Sysex Send thread exception text = %s\n", e.getMessage()));
 			}
 			//System.out.println("Send Sysex thread finished");
 			//System.out.println("----------------------------------------------------------------");
@@ -321,7 +321,7 @@ public class MidiController {
 					compareSysex = true;
 			    	midiHandler.sendSysex(sysex);
 			    	if (sendSysexConfigRetries < maxRetries) {
-			    		System.out.println("Additional delay on mismatch retry");
+			    		//System.out.println("Additional delay on mismatch retry");
 						Utils.delayMs(sysex.length/4);
 			    	}
 					Utils.delayMs(sysex.length/5);
