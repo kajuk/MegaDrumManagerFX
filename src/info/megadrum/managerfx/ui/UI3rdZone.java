@@ -34,13 +34,14 @@ public class UI3rdZone implements PanelInterface {
 	private UISpinner 		uiSpinnerThreshold;
 		
 	private ArrayList<UIControl> allControls;
-	private ArrayList<Integer> gridColmn;
-	private ArrayList<Integer> gridRow;
 	
 	static private final	Boolean zoneFromPizeo	= false;
 	//static private final	Boolean zoneFromSwitch 	= true;
 	private boolean			zoneType = zoneFromPizeo;
 	private Double			lastTitleHeight = 5.0;
+	private Boolean			showAdvanced = true;
+	private int 			verticalControlsCount = 0;
+	private int 			verticalControlsCountWithoutAdvanced = 0;
 
 	private Boolean			copyPressed = false;
 	private int				copyPressedValueId = -1;
@@ -64,57 +65,44 @@ public class UI3rdZone implements PanelInterface {
 
 	public UI3rdZone() {
 		allControls = new ArrayList<UIControl>();
-		gridColmn = new ArrayList<Integer>();
-		gridRow = new ArrayList<Integer>();
 
 		paneAll = new Pane();
 		paneAll.setLayoutX(0);
 
 		uiCheckBoxDisabled = new UICheckBox("Disabled", false);
 		allControls.add(uiCheckBoxDisabled);
-		gridColmn.add(0);
-		gridRow.add(0);
+		
+		uiSliderMidpoint = new UISlider("Midpoint", 0, 15, 7, true);
+		allControls.add(uiSliderMidpoint);
 		
 		uiSpinnerNoteMainNote = new UISpinnerNote("Note", true);
 		uiSpinnerNoteMainNote.setNoteIsMain(true);
 		//uiSpinnerNoteMainNote.setDisabledNoteAllowed(true);
 		allControls.add(uiSpinnerNoteMainNote);
-		gridColmn.add(0);
-		gridRow.add(1);
 				
-		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
-		allControls.add(uiSpinnerNoteAltNote);
-		gridColmn.add(0);
-		gridRow.add(2);
-
-		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
-		allControls.add(uiSpinnerNotePressNote);
-		gridColmn.add(0);
-		gridRow.add(3);
-
-		uiSliderMidpoint = new UISlider("Midpoint", 0, 15, 7, true);
-		allControls.add(uiSliderMidpoint);
-		gridColmn.add(1);
-		gridRow.add(0);
-		
-		uiSpinnerMidpointWidth = new UISpinner("MidpointWidth", 0, 15, 0, 1, true);
-		allControls.add(uiSpinnerMidpointWidth);
-		gridColmn.add(1);
-		gridRow.add(1);
-		
 		uiSpinnerThreshold = new UISpinner("Threshold", 0, 255, 0, 1, true);
 		allControls.add(uiSpinnerThreshold);
-		gridColmn.add(1);
-		gridRow.add(2);
+
+		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
+		uiSpinnerNoteAltNote.setAdvancedSetting(true);
+		allControls.add(uiSpinnerNoteAltNote);
+
+		uiSpinnerMidpointWidth = new UISpinner("MidpointWidth", 0, 15, 0, 1, true);
+		uiSpinnerMidpointWidth.setAdvancedSetting(true);
+		allControls.add(uiSpinnerMidpointWidth);
+		
+		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
+		uiSpinnerNotePressNote.setAdvancedSetting(true);
+		allControls.add(uiSpinnerNotePressNote);
 
 		uiSpinnerNoteDampenedNote = new UISpinnerNote("DampenedNote", true);
+		uiSpinnerNoteDampenedNote.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNoteDampenedNote);
-		gridColmn.add(1);
-		gridRow.add(3);
 	
+		verticalControlsCount = 4;
+		verticalControlsCountWithoutAdvanced = 2;
 		for (int i = 0; i < allControls.size(); i++) {
 			final int iFinal = i;
-        	paneAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setValueId(i + Constants.THIRD_ZONE_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
@@ -145,9 +133,29 @@ public class UI3rdZone implements PanelInterface {
 		titledPane.setText("3rd Zone");
 		titledPane.getChildren().add(paneAll);
 		setZoneType(zoneFromPizeo);
+		reAddAllControls();
 		setAllStateUnknown();
 	}
 
+	private void reAddAllControls() {
+		paneAll.getChildren().clear();
+		for (int i = 0; i < allControls.size(); i++) {
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneAll.getChildren().add(allControls.get(i).getUI());
+				}				
+			} else {
+				paneAll.getChildren().add(allControls.get(i).getUI());
+			}
+        }
+		
+	}
+	
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
+		reAddAllControls();
+	}
+	
 	public int getCopyPressedValueId() {
 		return copyPressedValueId;
 	}
@@ -187,11 +195,27 @@ public class UI3rdZone implements PanelInterface {
 		paneAll.setLayoutY(lastTitleHeight);
 		paneAll.setMaxWidth(w);
 		titledPane.setWidth(w);
+		Double xPos, yPos;
+		int visibleControlsCount = -1;
+		boolean showControl;
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).getUI().
-			setLayoutX(gridColmn.get(i)*controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL + controlW*0.01 + gridColmn.get(i)*controlW*0.05);
-			allControls.get(i).getUI().setLayoutY(gridRow.get(i)*controlH + controlH*0.2);
-			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
+			showControl = false;
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				xPos = (visibleControlsCount&1)*controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL + controlW*0.01 + (visibleControlsCount&1)*controlW*0.05;
+				allControls.get(i).getUI().setLayoutX(xPos);
+				yPos = (visibleControlsCount/2)*controlH + controlH*0.2;
+				allControls.get(i).getUI().setLayoutY(yPos);
+				allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
+			}
         }
 	}
 	
@@ -284,6 +308,10 @@ public class UI3rdZone implements PanelInterface {
 	}
 	
 	public int getVerticalControlsCount() {
-		return gridRow.size() + 1;
+		if (showAdvanced) {
+			return verticalControlsCount + 1;
+		} else {
+			return verticalControlsCountWithoutAdvanced + 1;
+		}
 	}
 }

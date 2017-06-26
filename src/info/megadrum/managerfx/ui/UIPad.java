@@ -217,7 +217,12 @@ public class UIPad extends UIPanel implements PanelInterface {
 
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.05);
-		Double controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount()))*1.048 - 0.5;
+		Double controlH;
+		if (showAdvanced) {
+			controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount()))*0.95 - 0.5;
+		} else {
+			controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount()))*0.91 - 0.5;			
+		}
 		respondToResize(w, h, h, controlW*1.01, controlH);
 	}
 
@@ -431,6 +436,14 @@ public class UIPad extends UIPanel implements PanelInterface {
 	@Override
 	public int getVerticalControlsCount() {
 		return uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount() + 3;
+	}
+
+	@Override
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
+		uiInputLeft.setShowAdvanced(show);
+		uiInputRight.setShowAdvanced(show);
+		ui3rdZone.setShowAdvanced(show);
 	}
 
 }

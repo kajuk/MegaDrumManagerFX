@@ -187,7 +187,13 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/Constants.FX_MISC_CONTROL_WIDTH_MUL;
-		Double controlH = (h/((allControls.size() + 1)))*1.00;
+		int visibleControls;
+		if (showAdvanced) {
+			visibleControls = verticalControlsCount;
+		} else {
+			visibleControls = verticalControlsCountWithoutAdvanced;
+		}
+		Double controlH = (h/((visibleControls + 1)))*1.00;
 		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	

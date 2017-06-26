@@ -62,6 +62,10 @@ public class UIInput implements PanelInterface {
 	//private ConfigPositional	configPos;
 		
 	private ArrayList<UIControl> allControls;
+
+	private Boolean			showAdvanced = true;
+	private int 			verticalControlsCount = 0;
+	private int 			verticalControlsCountWithoutAdvanced = 0;
 	
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -95,15 +99,19 @@ public class UIInput implements PanelInterface {
 		allControls.add(uiSpinnerNoteMainNote);
 		
 		uiSpinnerNoteAltNote = new UISpinnerNote("AltNote", true, true);
+		uiSpinnerNoteAltNote.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNoteAltNote);
 
 		uiSpinnerNotePressNote = new UISpinnerNote("PressrollNote", true, true);
+		uiSpinnerNotePressNote.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNotePressNote);
 
 		uiSpinnerChannel = new UISpinner("Channel", 1, 16, 10, 1, true);
+		uiSpinnerChannel.setAdvancedSetting(true);
 		allControls.add(uiSpinnerChannel);
 		
 		uiComboBoxFunction = new UIComboBox("Function", true);
+		uiComboBoxFunction.setAdvancedSetting(true);
 		uiComboBoxFunction.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_FUNCTION_LIST));
 		allControls.add(uiComboBoxFunction);
 
@@ -112,10 +120,12 @@ public class UIInput implements PanelInterface {
 		allControls.add(uiComboBoxCurve);
 
 		uiComboBoxCompression = new UIComboBox("Compression", true);
+		uiComboBoxCompression.setAdvancedSetting(true);
 		uiComboBoxCompression.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_COMPRESSION_LIST));
 		allControls.add(uiComboBoxCompression);
 
 		uiComboBoxLevelShift = new UIComboBox("Level Shift", true);
+		uiComboBoxLevelShift.setAdvancedSetting(true);
 		uiComboBoxLevelShift.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_LEVEL_SHIFT_LIST));
 		allControls.add(uiComboBoxLevelShift);
 
@@ -155,13 +165,16 @@ public class UIInput implements PanelInterface {
 		allControls.add(uiSpinnerMinScan);
 
 		uiComboBoxPosLevel = new UIComboBox("Pos Level", true);
+		uiComboBoxPosLevel.setAdvancedSetting(true);
 		uiComboBoxPosLevel.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_POS_LEVEL_LIST));
 		allControls.add(uiComboBoxPosLevel);
 
 		uiSpinnerPosLow = new UISpinner("Pos Low", 0, 100, 5, 1, true);
+		uiSpinnerPosLow.setAdvancedSetting(true);
 		allControls.add(uiSpinnerPosLow);
 
 		uiSpinnerPosHigh = new UISpinner("Pos High", 0, 100, 15, 1, true);
+		uiSpinnerPosHigh.setAdvancedSetting(true);
 		allControls.add(uiSpinnerPosHigh);
 		
 		uiComboBoxType = new UIComboBox("Type", true);
@@ -171,7 +184,10 @@ public class UIInput implements PanelInterface {
 		paneAll = new Pane();
 		for (int i = 0; i < allControls.size(); i++) {
 			final int iFinal = i;
-			paneAll.getChildren().add(allControls.get(i).getUI());
+			verticalControlsCount++;
+			if (!allControls.get(i).isAdvancedSetting()) {
+				verticalControlsCountWithoutAdvanced++;
+			}
         	allControls.get(i).setValueId(i + Constants.INPUT_VALUE_ID_MIN);
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_INPUT_LABEL_WIDTH_MUL);        	
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
@@ -200,8 +216,27 @@ public class UIInput implements PanelInterface {
 		titledPane = new MdTitledPane();
 		titledPane.setText(title);
 		titledPane.getChildren().add(paneAll);
-		
+		reAddAllControls();
 		setAllStateUnknown();
+	}
+
+	private void reAddAllControls() {
+		paneAll.getChildren().clear();
+		for (int i = 0; i < allControls.size(); i++) {
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneAll.getChildren().add(allControls.get(i).getUI());
+				}				
+			} else {
+				paneAll.getChildren().add(allControls.get(i).getUI());
+			}
+        }
+		
+	}
+	
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
+		reAddAllControls();
 	}
 
 	public int getCopyPressedValueId() {
@@ -243,10 +278,25 @@ public class UIInput implements PanelInterface {
 		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMinWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
 		paneAll.setMaxWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL);
+		int visibleControlsCount = -1;
+		boolean showControl;
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
-			allControls.get(i).getUI().setLayoutX(0);
-			allControls.get(i).getUI().setLayoutY(i*controlH + controlH);
+			showControl = false;
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				allControls.get(i).respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL, controlH);
+				allControls.get(i).getUI().setLayoutX(0);
+				allControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);				
+				allControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH + controlH);
+			}
         }
 	}
 
@@ -322,13 +372,13 @@ public class UIInput implements PanelInterface {
 		uiComboBoxName.uiCtlSetValue(configPad.name, setFromSysex);
 		uiCheckBoxDisabled.uiCtlSetValue(configPad.disabled, setFromSysex);
 		uiSpinnerNoteMainNote.uiCtlSetValue(configPad.note, setFromSysex);
-		if (configPad.altNote_linked) {
+		if (configPad.altNote_linked || (!showAdvanced)) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(configPad.note, setFromSysex);
 		} else {
 			uiSpinnerNoteAltNote.uiCtlSetValue(configPad.altNote, setFromSysex);			
 		}
 		uiSpinnerNoteAltNote.setLinked(configPad.altNote_linked);		
-		if (configPad.pressrollNote_linked) {
+		if (configPad.pressrollNote_linked || (!showAdvanced)) {
 			uiSpinnerNotePressNote.uiCtlSetValue(configPad.note, setFromSysex);
 		} else {
 			uiSpinnerNotePressNote.uiCtlSetValue(configPad.pressrollNote, setFromSysex);			
@@ -363,13 +413,13 @@ public class UIInput implements PanelInterface {
 		configPad.name = uiComboBoxName.uiCtlGetValue();
 		configPad.disabled = uiCheckBoxDisabled.uiCtlIsSelected();
 		configPad.note = uiSpinnerNoteMainNote.uiCtlGetValue();
-		if (uiSpinnerNoteAltNote.getLinked()) {
+		if (uiSpinnerNoteAltNote.getLinked() || (!showAdvanced)) {
 			configPad.altNote = uiSpinnerNoteMainNote.uiCtlGetValue();
 		} else {
 			configPad.altNote = uiSpinnerNoteAltNote.uiCtlGetValue();			
 		}
 		configPad.altNote_linked = uiSpinnerNoteAltNote.getLinked();
-		if (uiSpinnerNotePressNote.getLinked()) {
+		if (uiSpinnerNotePressNote.getLinked() || (!showAdvanced)) {
 			configPad.pressrollNote = uiSpinnerNoteMainNote.uiCtlGetValue();
 		} else {
 			configPad.pressrollNote = uiSpinnerNotePressNote.uiCtlGetValue();			
@@ -398,9 +448,12 @@ public class UIInput implements PanelInterface {
 		uiComboBoxType.uiCtlSetDisable(disable);
 	}
 	
-	@Override
 	public int getVerticalControlsCount() {
-		return allControls.size() + 1;
+		if (showAdvanced) {
+			return verticalControlsCount + 1;
+		} else {
+			return verticalControlsCountWithoutAdvanced + 1;
+		}
 	}
 
 }

@@ -276,6 +276,7 @@ public class UIOptions {
 		uiCheckBoxEnableMidiThru.uiCtlSetValue(configOptions.useThruPort, true);
 		uiCheckBoxInitPortsStartup.uiCtlSetValue(configOptions.autoOpenPorts, true);
 		uiCheckBoxSaveOnExit.uiCtlSetValue(configOptions.saveOnExit, true);
+		uiCheckBoxShowAdvanced.uiCtlSetValue(configOptions.showAdvancedSettings, true);
 		uiSpinnerSysexTimeout.uiCtlSetValue(configOptions.sysexDelay, true);
 		uiComboBoxMidiIn.uiCtlSetValue(configOptions.MidiInName);
 		setSameMidiInOut(configOptions.useSamePort);

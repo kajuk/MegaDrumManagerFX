@@ -515,7 +515,7 @@ public class Controller implements MidiRescanEventListener {
 						Double midiLogHeight = height*0.7;
 						Double midiLogWidth = width*0.23;
 						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlH= (height/uiPad.getVerticalControlsCount())*1.125 - 0.4;
+							controlH= (height/uiPad.getVerticalControlsCount())*1.00 - 0.4;
 							midiLogHeight = height*0.7;
 						} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
 							controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
@@ -978,6 +978,7 @@ public class Controller implements MidiRescanEventListener {
 		}
 		uiGlobalMisc.setViewState(configOptions.globalMiscViewState);
 		uiGlobalMisc.getCheckBoxLiveUpdates().setSelected(configOptions.liveUpdates);
+		setShowAdvanced();
 		//checkBoxAutoResize.setSelected(configOptions.autoResize);
 	}
 
@@ -1825,10 +1826,18 @@ public class Controller implements MidiRescanEventListener {
 		if (optionsWindow.getClosedWithOk()) {
 			//System.out.println("Closed with ok");
 			openMidiPorts(true);
-			for (int i=0; i < allPanels.size(); i++) {
-				allPanels.get(i).setShowAdvanced(configOptions.showAdvancedSettings);
+			setShowAdvanced();
+		}
+	}
+	
+	private void setShowAdvanced() {
+		for (int i=0; i < allPanels.size(); i++) {
+			allPanels.get(i).setShowAdvanced(configOptions.showAdvancedSettings);
+			if (allPanels.get(i).isDetached()) {
+				respondToResizeDetached(allPanels.get(i).getWindow().getScene(), allPanels.get(i));
+			} else {
+				respondToResize(scene1);
 			}
-			respondToResize(scene1);
 		}
 	}
 	
