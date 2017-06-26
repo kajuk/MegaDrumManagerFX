@@ -358,11 +358,11 @@ public class UIInput implements PanelInterface {
 	}
 	
 	private void linkedNoteStateChanged() {
-		if (uiSpinnerNoteAltNote.getLinked()) {
+		if (uiSpinnerNoteAltNote.getLinked() || (!showAdvanced)) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
 		}
 		uiSpinnerNoteAltNote.setLinked(uiSpinnerNoteAltNote.getLinked());
-		if (uiSpinnerNotePressNote.getLinked()) {
+		if (uiSpinnerNotePressNote.getLinked() || (!showAdvanced)) {
 			uiSpinnerNotePressNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
 		}
 		uiSpinnerNotePressNote.setLinked(uiSpinnerNotePressNote.getLinked());

@@ -236,11 +236,11 @@ public class UI3rdZone implements PanelInterface {
 	}
 
 	private void linkedNoteStateChanged() {
-		if (uiSpinnerNoteAltNote.getLinked()) {
+		if (uiSpinnerNoteAltNote.getLinked() || (!showAdvanced)) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
 		}
 		uiSpinnerNoteAltNote.setLinked(uiSpinnerNoteAltNote.getLinked());
-		if (uiSpinnerNotePressNote.getLinked()) {
+		if (uiSpinnerNotePressNote.getLinked() || (!showAdvanced)) {
 			uiSpinnerNotePressNote.uiCtlSetValue(uiSpinnerNoteMainNote.uiCtlGetValue(), false);
 		}
 		uiSpinnerNotePressNote.setLinked(uiSpinnerNotePressNote.getLinked());
@@ -249,13 +249,13 @@ public class UI3rdZone implements PanelInterface {
 	public void setControlsFromConfig3rd(Config3rd config, Boolean setFromSysex) {
 		uiCheckBoxDisabled.uiCtlSetValue(config.disabled, setFromSysex);
 		uiSpinnerNoteMainNote.uiCtlSetValue(config.note, setFromSysex);
-		if (config.altNote_linked) {
+		if (config.altNote_linked || (!showAdvanced)) {
 			uiSpinnerNoteAltNote.uiCtlSetValue(config.note, setFromSysex);
 		} else {
 			uiSpinnerNoteAltNote.uiCtlSetValue(config.altNote, setFromSysex);			
 		}
 		uiSpinnerNoteAltNote.setLinked(config.altNote_linked);		
-		if (config.pressrollNote_linked) {
+		if (config.pressrollNote_linked || (!showAdvanced)) {
 			uiSpinnerNotePressNote.uiCtlSetValue(config.note, setFromSysex);
 		} else {
 			uiSpinnerNotePressNote.uiCtlSetValue(config.pressrollNote, setFromSysex);			
