@@ -45,6 +45,7 @@ public class UIOptions {
 	private VBox 		layout;
 
 	private UICheckBox	uiCheckBoxSaveOnExit;
+	private UICheckBox	uiCheckBoxShowAdvanced;
 	
 	private ConfigOptions	configOptions;
 	private Boolean			closedWithOk;
@@ -170,6 +171,10 @@ public class UIOptions {
     	uiCheckBoxSaveOnExit.setIgnoreSyncState();
         allMiscControls.add(uiCheckBoxSaveOnExit);
 
+        uiCheckBoxShowAdvanced = new UICheckBox("Show Advanced Settings", false);
+        uiCheckBoxShowAdvanced.setIgnoreSyncState();
+        allMiscControls.add(uiCheckBoxShowAdvanced);
+
         for (int i = 0; i < allMiscControls.size(); i++) {
             miscLayout.getChildren().add(allMiscControls.get(i).getUI());        	
             //allMiscControls.get(i).setColumnsSizes(150.0, 300.0);
@@ -230,12 +235,12 @@ public class UIOptions {
 		configOptions.useSamePort = uiCheckBoxSamePort.uiCtlIsSelected();
 		configOptions.useThruPort = uiCheckBoxEnableMidiThru.uiCtlIsSelected();
 		configOptions.autoOpenPorts = uiCheckBoxInitPortsStartup.uiCtlIsSelected();
-		configOptions.saveOnExit = uiCheckBoxSaveOnExit.uiCtlIsSelected();
 		configOptions.sysexDelay = uiSpinnerSysexTimeout.uiCtlGetValue();
 		configOptions.MidiInName = uiComboBoxMidiIn.uiCtlGetSelected();
 		configOptions.MidiOutName = uiComboBoxMidiOut.uiCtlGetSelected();
 		configOptions.MidiThruName = uiComboBoxMidiThru.uiCtlGetSelected();
 		configOptions.chainId = Integer.valueOf(uiComboBoxChainId.uiCtlGetSelected());
+		configOptions.showAdvancedSettings = uiCheckBoxShowAdvanced.uiCtlIsSelected();
 		closedWithOk = true;
 		window.close();
 	}

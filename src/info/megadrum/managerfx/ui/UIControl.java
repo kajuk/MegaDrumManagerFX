@@ -57,6 +57,7 @@ public class UIControl extends Control implements UIControlInterface {
 	protected final static Boolean debugSizes = false;
 	private int valueId = -1;
 	private Boolean copyPressed = false;
+	private Boolean advancedSetting = false;
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -298,5 +299,13 @@ public class UIControl extends Control implements UIControlInterface {
 
 	public void setControlTooltip(Tooltip tooltip) {
 		Tooltip.install(uiControl, tooltip);
+	}
+	
+	public void setAdvancedSetting(Boolean advanced) {
+		advancedSetting = advanced;
+	}
+	
+	public Boolean isAdvancedSetting() {
+		return advancedSetting;
 	}
 }

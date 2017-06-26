@@ -39,6 +39,9 @@ public class UIPanel {
 	private Double lastY = -1.0;
 	private Double lastW = -1.0;
 	private Double lastH = -1.0;
+	protected Boolean		showAdvanced = false;
+	protected int verticalControlsCount = 0;
+	protected int verticalControlsCountWithoutAdvanced = 0;
 	
 	public UIPanel (String title) {
 		panelTitle = title;
@@ -190,6 +193,10 @@ public class UIPanel {
 
 	public RadioMenuItem getRadioMenuItemDetach() {
 		return rbDetach;
+	}
+
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
 	}
 
 }

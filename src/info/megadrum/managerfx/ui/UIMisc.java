@@ -82,30 +82,39 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		allControls.add(uiSpinnerNoteOffDelay);
 		
 		uiSpinnerPressrollTimeout = new UISpinner("Pressroll Timeout", 0, 2000, 10, 10, false);
+		uiSpinnerPressrollTimeout.setAdvancedSetting(true);
 		allControls.add(uiSpinnerPressrollTimeout);
 		
 		uiSpinnerLatency = new UISpinner("Latency", 10, 100, 15, 1, false);
+		uiSpinnerLatency.setAdvancedSetting(true);
 		allControls.add(uiSpinnerLatency);
 		
 		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, false);
+		uiSpinnerNotesOctaveShift.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNotesOctaveShift);
 
 		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", false);
+		uiCheckBoxBigVUmeter.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxBigVUmeter);
 
 		uiCheckBoxBigVUsplit = new UICheckBox("Big VU split", false);
+		uiCheckBoxBigVUsplit.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxBigVUsplit);
 
 		uiCheckBoxBigVUQuickAccess = new UICheckBox("Quick Access", false);
+		uiCheckBoxBigVUQuickAccess.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxBigVUQuickAccess);
 		
 		uiCheckBoxAltFalseTrSupp = new UICheckBox("AltFalseTrSupp", false);
+		//uiCheckBoxAltFalseTrSupp.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxAltFalseTrSupp);
 
 		uiCheckBoxInputsPriority = new UICheckBox("Inputs Priority", false);
+		uiCheckBoxInputsPriority.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxInputsPriority);
 
 		uiCheckBoxUnknownSetting = new UICheckBox("Unknown", false);
+		uiCheckBoxUnknownSetting.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxUnknownSetting);
 		tooltipUnused = new Tooltip("This setting is unused on this MegaDrum hardware version");
 		tooltipAllGainsLow = new Tooltip("When enabled, it will disable all individual input Gain levels\nand make Gain even lower than 'Gain Level' 0.\nIt could be used if all your pads are 'hot' and to get\na better dynamic range with such pads.");
@@ -113,18 +122,25 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		tooltipUnknown = new Tooltip("This setting function depends on the type of MegaDrum MCU");
 
 		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", false);
+		uiCheckBoxMIDIThru.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxMIDIThru);
 
 		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn", false);
+		uiCheckBoxSendTriggeredIn.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxSendTriggeredIn);
 
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Chokng", false);
+		uiCheckBoxAltNoteChoking.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxAltNoteChoking);
 	
 		vBoxAll.getChildren().add(paneAll);
 		for (int i = 0; i < allControls.size(); i++) {
+			verticalControlsCount++;
+			if (!allControls.get(i).isAdvancedSetting()) {
+				verticalControlsCountWithoutAdvanced++;
+			}
         	//vBoxAll.getChildren().add(allControls.get(i).getUI());
-			paneAll.getChildren().add(allControls.get(i).getUI());
+			//paneAll.getChildren().add(allControls.get(i).getUI());
         	allControls.get(i).setLabelWidthMultiplier(Constants.FX_MISC_LABEL_WIDTH_MUL);
         	allControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -135,10 +151,31 @@ public class UIMisc extends UIPanel implements PanelInterface{
 			});
         }
 
+		reAddAllControls();
 		setDetached(false);
 		setAllStateUnknown();
 	}
 
+	private void reAddAllControls() {
+		paneAll.getChildren().clear();
+		for (int i = 0; i < allControls.size(); i++) {
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneAll.getChildren().add(allControls.get(i).getUI());
+				}				
+			} else {
+				paneAll.getChildren().add(allControls.get(i).getUI());
+			}
+        }
+		
+	}
+	
+	@Override
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
+		reAddAllControls();
+	}
+	
 	public void setAllStateUnknown() {
 		for (int i = 0; i < allControls.size(); i++ ) {
 			allControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
@@ -184,11 +221,25 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		toolBar.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		//System.out.printf("Misc ControlW = %f\n", controlW);
 		paneAll.setMinWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
-		paneAll.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);		
+		paneAll.setMaxWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
+		int visibleControlsCount = -1;
+		boolean showControl;
 		for (int i = 0; i < allControls.size(); i++) {
-			allControls.get(i).respondToResize(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL, controlH);
-			allControls.get(i).getUI().setLayoutX(0);
-			allControls.get(i).getUI().setLayoutY(i*controlH);
+			showControl = false;
+			if (allControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				allControls.get(i).respondToResize(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL, controlH);
+				allControls.get(i).getUI().setLayoutX(0);
+				allControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);				
+			}
         }
 	}
 
@@ -226,7 +277,11 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	
 	@Override
 	public int getVerticalControlsCount() {
-		return allControls.size() + 2;
+		if (showAdvanced) {
+			return verticalControlsCount + 2;
+		} else {
+			return verticalControlsCountWithoutAdvanced + 2;
+		}
 	}
 	
 	public void setUnknownLabel(int mcuType) {

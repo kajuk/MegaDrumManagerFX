@@ -1825,6 +1825,10 @@ public class Controller implements MidiRescanEventListener {
 		if (optionsWindow.getClosedWithOk()) {
 			//System.out.println("Closed with ok");
 			openMidiPorts(true);
+			for (int i=0; i < allPanels.size(); i++) {
+				allPanels.get(i).setShowAdvanced(configOptions.showAdvancedSettings);
+			}
+			respondToResize(scene1);
 		}
 	}
 	
