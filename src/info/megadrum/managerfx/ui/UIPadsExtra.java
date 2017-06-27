@@ -75,7 +75,7 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w*0.01;
 		Double controlH = h*0.06;
-		respondToResize(w, h, h*1.6, controlW, controlH);
+		respondToResize(w, h + controlH, h*1.6, controlW, controlH);
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
@@ -104,8 +104,8 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 		tabCustomNames.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
 
-		vBoxAll.setMinHeight(h - controlH*2);
-		vBoxAll.setMaxHeight(h - controlH*2);
+		vBoxAll.setMinHeight(h - controlH*1.02);
+		vBoxAll.setMaxHeight(h - controlH*1.02);
 		//titledPane.setStyle("-fx-background-color: orange");
 		//vBoxAll.setStyle("-fx-background-color: lightgreen");
 		//titledPane.setMaxWidth(fullHeight*0.35);

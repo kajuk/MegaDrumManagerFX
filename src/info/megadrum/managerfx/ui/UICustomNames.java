@@ -214,6 +214,7 @@ public class UICustomNames {
 		//scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		//scrollPane.setMaxHeight(400);
 		vBox.getChildren().add(scrollPane);
+		//vBox.setMinHeight(1000.0);
 		comboBoxCustomNamesCount.getSelectionModel().select(0);
 
 	}
@@ -223,27 +224,10 @@ public class UICustomNames {
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		//Font buttonFont;
-		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		//Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
-		if (fullHeight > 600) {
-			//buttonFont = new Font(600*Constants.FX_TOOLBARS_FONT_SCALE);
-		} else if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
-			//buttonFont = new Font(toolBarFontHeight);
-		} else {
-			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
-		}
-/*
-		buttonGetAll.setFont(buttonFont);
-		buttonSendAll.setFont(buttonFont);
-		buttonLoadAll.setFont(buttonFont);
-		buttonSaveAll.setFont(buttonFont);
-		comboBoxCustomNamesCount.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-*/
+		Double customNamesFontHeight = controlH*0.28;
 		Double buttonFontSize = controlH*0.28;
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
-		vBox.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
+		vBox.setStyle("-fx-font-size: " + customNamesFontHeight.toString() + "pt");
 		//vBox.setMinHeight(h*2);
 		//vBox.setStyle("-fx-background-color: lightblue");
 
@@ -258,9 +242,6 @@ public class UICustomNames {
 		gridPane.getColumnConstraints().add(6, new ColumnConstraints(controlH*1.7));
 		toolBarTop.setMaxHeight(controlH);
 		toolBarTop.setMaxWidth(vBox.getWidth()*0.99);
-		//comboBoxCustomNamesCount.setMinWidth(controlH*4);
-		//comboBoxCustomNamesCount.setMaxWidth(controlH*4);
-		//labelCustomNamesCount.setFont(new Font(controlH*0.4));
 	}
 
 	public void setCustomName(ConfigCustomName config, int id, Boolean setFromSysex) {
