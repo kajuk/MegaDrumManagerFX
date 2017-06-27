@@ -115,14 +115,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		allMiscControls = new ArrayList<UIControl>();
 		allLevelsControls = new ArrayList<UIControl>();
 		allNotesControls = new ArrayList<UIControl>();
-/*
-		toolBar = new ToolBar();
-		toolBar.getItems().add(buttonGet);
-		toolBar.getItems().add(buttonSend);
-		toolBar.getItems().add(new Separator());
-		toolBar.getItems().add(buttonLoad);
-		toolBar.getItems().add(buttonSave);
-*/
+
 		toolBar = new HBox();
 		toolBar.setAlignment(Pos.CENTER_LEFT);
 		toolBar.getChildren().addAll(buttonGet, buttonSend, new Separator(Orientation.VERTICAL), buttonLoad, buttonSave);
@@ -426,12 +419,20 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		} else {
 			visibleControls = verticalControlsCountWithoutAdvanced + 2;
 		}
-		Double controlH = (h/((visibleControls + 1)))*1.00;
+		Double controlH = (h/((visibleControls + 1)))*1.09 - 0.7;
 		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
-	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+	public void respondToResize(Double w, Double h, Double fh, Double cW, Double cH) {
+		Double controlW, controlH, fullHeight;
+		if (cH > cW*0.137) {
+			controlH = cW*0.137;
+		} else {
+			controlH = cH;
+		}
+		controlW = cW;
 		lastControlH = controlH;
+		fullHeight = controlH*30;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
@@ -511,7 +512,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 				allNotesControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);
 			}
 		}
-		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
+		tabPane.setMaxHeight(controlH*allNotesControls.size()*1.0 + tabHeaderHeight + toolBar.getHeight());
 		tabPane.setMinHeight(0);
 		titledPane.setMinWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		titledPane.setMaxWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);

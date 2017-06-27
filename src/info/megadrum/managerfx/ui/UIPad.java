@@ -228,7 +228,14 @@ public class UIPad extends UIPanel implements PanelInterface {
 		respondToResize(w, h, h, controlW*1.01, controlH);
 	}
 
-	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+	public void respondToResize (Double w, Double h, Double fullHeight, Double cW, Double cH) {
+		Double controlW, controlH;
+		if (cH > cW*0.127) {
+			controlH = cW*0.127;
+		} else {
+			controlH = cH;
+		}
+		controlW = cW;
 		lastControlH = controlH;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;

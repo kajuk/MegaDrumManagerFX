@@ -199,7 +199,14 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
-	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+	public void respondToResize(Double w, Double h, Double fullHeight, Double cW, Double cH) {
+		Double controlW, controlH;
+		if (cH > cW*0.145) {
+			controlH = cW*0.145;
+		} else {
+			controlH = cH;
+		}
+		controlW = cW;
 		lastControlH = controlH;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
