@@ -316,7 +316,6 @@ public class UICustomNames {
 	public void setAllStateUnknown() {
 		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
 			setSyncState(Constants.SYNC_STATE_UNKNOWN, i);
-			allTextFields.get(i).setText("");
 		}
 	}
 	

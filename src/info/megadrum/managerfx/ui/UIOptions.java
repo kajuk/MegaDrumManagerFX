@@ -240,6 +240,7 @@ public class UIOptions {
 		configOptions.MidiOutName = uiComboBoxMidiOut.uiCtlGetSelected();
 		configOptions.MidiThruName = uiComboBoxMidiThru.uiCtlGetSelected();
 		configOptions.chainId = Integer.valueOf(uiComboBoxChainId.uiCtlGetSelected());
+		configOptions.saveOnExit = uiCheckBoxSaveOnExit.uiCtlIsSelected();
 		configOptions.showAdvancedSettings = uiCheckBoxShowAdvanced.uiCtlIsSelected();
 		closedWithOk = true;
 		window.close();
