@@ -44,7 +44,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public int version = 0;
 	public boolean autoResize = true;
 	public boolean changeNotified = false;
-	public boolean showAdvancedSettings = false;
+	public boolean showAdvancedSettings = true;
 
 	public ConfigOptions() {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
