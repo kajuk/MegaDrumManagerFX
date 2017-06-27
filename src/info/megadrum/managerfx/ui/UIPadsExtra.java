@@ -78,18 +78,15 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 		Double controlW = w*0.01;
 		Double controlH = h*0.06;
 		
-		respondToResize(w, h + controlH, h*1.6, controlW, controlH);
+		respondToResize(w, h + controlH, controlW, controlH);
 	}
 
-	public void respondToResize (Double w, Double h, Double fh, Double controlW, Double controlH) {
-		Double fullHeight;
+	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
 		lastControlH = controlH;
-		fullHeight = controlH*30;
-		//Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -fullHeight*0.0005;
-		Double tabHeaderHeight = fullHeight*0.013;
+		Double titledPaneFontHeight = controlH*30*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = controlH*30*Constants.FX_TABS_FONT_SCALE;
+		Double tabHeaderPadding = -controlH*30*0.0005;
+		Double tabHeaderHeight = controlH*30*0.013;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
@@ -111,13 +108,8 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 
 		vBoxAll.setMinHeight(h - controlH*1.02);
 		vBoxAll.setMaxHeight(h - controlH*1.02);
-		//titledPane.setStyle("-fx-background-color: orange");
-		//vBoxAll.setStyle("-fx-background-color: lightgreen");
-		//titledPane.setMaxWidth(fullHeight*0.35);
-		//uiCurves.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
-		//uiCustomNames.respondToResize(h, w, (fullHeight > 600.0)?600:fullHeight, controlH, controlW);
-		uiCurves.respondToResize(w, h, fullHeight, 340*0.4, controlH);
-		uiCustomNames.respondToResize(w, h, fullHeight, 340*0.4, controlH);
+		uiCurves.respondToResize(w, h, 340*0.4, controlH);
+		uiCustomNames.respondToResize(w, h, 340*0.4, controlH);
 	}
 	
 	public void setAllCustomNamesStatesUnknown() {

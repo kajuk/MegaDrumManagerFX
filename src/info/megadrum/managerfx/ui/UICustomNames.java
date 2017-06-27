@@ -223,7 +223,7 @@ public class UICustomNames {
 		return (Node) vBox;
 	}
 
-	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
 		Double customNamesFontHeight = controlH*0.28;
 		Double buttonFontSize = controlH*0.28;
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");

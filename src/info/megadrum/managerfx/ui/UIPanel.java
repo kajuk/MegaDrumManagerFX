@@ -116,7 +116,7 @@ public class UIPanel {
 		}
 	}
 	
-	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+	public void respondToResize(Double w, Double h, Double controlW, Double controlH) {
 	}
 	
 	public void respondToResizeDetached() {

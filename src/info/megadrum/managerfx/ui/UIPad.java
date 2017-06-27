@@ -225,11 +225,11 @@ public class UIPad extends UIPanel implements PanelInterface {
 		} else {
 			controlH = (h/(uiInputLeft.getVerticalControlsCount() + ui3rdZone.getVerticalControlsCount()))*0.91 - 0.5;			
 		}
-		respondToResize(w, h, h, controlW*1.01, controlH);
+		respondToResize(w, h, controlW*1.01, controlH);
 	}
 
-	public void respondToResize (Double w, Double h, Double fh, Double cW, Double cH) {
-		Double controlW, controlH, fullHeight;
+	public void respondToResize (Double w, Double h, Double cW, Double cH) {
+		Double controlW, controlH;
 		if (cH > cW*0.127) {
 			controlH = cW*0.127;
 		} else {
@@ -237,10 +237,9 @@ public class UIPad extends UIPanel implements PanelInterface {
 		}
 		controlW = cW;
 		lastControlH = controlH;
-		fullHeight = controlH*30;
-		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
+		Double toolBarFontHeight = controlH*30*Constants.FX_TOOLBARS_FONT_SCALE;
+		Double titledPaneFontHeight = controlH*30*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double comboBoxFontHeight = controlH*30*Constants.FX_COMBOBOX_FONT_SCALE;
 		if (toolBarFontHeight > Constants.FX_TOOLBARS_FONT_MIN_SIZE) {
 			//buttonFont = new Font(toolBarFontHeight);
 		} else {
@@ -267,9 +266,9 @@ public class UIPad extends UIPanel implements PanelInterface {
 		//vBoxAll.setStyle("-fx-background-color: lightgreen");
 		//titledPane.setStyle("-fx-background-color: lightblue");
 
-		uiInputLeft.respondToResize( w*0.5, h*0.6, fullHeight, controlW, controlH);
-		uiInputRight.respondToResize(w*0.5, h*0.6, fullHeight, controlW, controlH);
-		ui3rdZone.respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2, h*0.0915, fullHeight, controlW, controlH);
+		uiInputLeft.respondToResize( w*0.5, h*0.6, controlW, controlH);
+		uiInputRight.respondToResize(w*0.5, h*0.6, controlW, controlH);
+		ui3rdZone.respondToResize(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2, h*0.0915, controlW, controlH);
 		comboBoxInput.setMinWidth(controlH*6);
 		comboBoxInput.setMaxWidth(controlH*6);
 		labelInput.setFont(new Font(controlH*0.4));

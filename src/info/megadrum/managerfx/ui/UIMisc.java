@@ -196,10 +196,10 @@ public class UIMisc extends UIPanel implements PanelInterface{
 			visibleControls = verticalControlsCountWithoutAdvanced;
 		}
 		Double controlH = (h/((visibleControls + 1)))*1.00;
-		respondToResize(w, h, h*1.6, controlW, controlH);
+		respondToResize(w, h, controlW, controlH);
 	}
 	
-	public void respondToResize(Double w, Double h, Double fh, Double cW, Double cH) {
+	public void respondToResize(Double w, Double h, Double cW, Double cH) {
 		Double controlW, controlH, fullHeight;
 		if (cH > cW*0.145) {
 			controlH = cW*0.145;

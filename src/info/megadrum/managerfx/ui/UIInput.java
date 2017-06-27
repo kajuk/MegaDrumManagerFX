@@ -267,8 +267,8 @@ public class UIInput implements PanelInterface {
 		return titledPane;
 	}
 
-	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		Double titledPaneFontHeight = fullHeight*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
+	public void respondToResize(Double w, Double h, Double controlW, Double controlH) {
+		Double titledPaneFontHeight = controlH*30*Constants.FX_SUB_TITLEBARS_FONT_SCALE;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}

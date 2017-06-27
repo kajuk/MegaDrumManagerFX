@@ -558,19 +558,19 @@ public class Controller implements MidiRescanEventListener {
 						controlW = (controlW/controlWdivider)*1.0;
 						controlW = (controlW > 360.0)?360.0:controlW;
 						if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-							uiMisc.respondToResize(width, height, height, controlW, controlH);
+							uiMisc.respondToResize(width, height, controlW, controlH);
 							mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
 						}
 						if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-							uiPedal.respondToResize(width, height, height, controlW, controlH);
+							uiPedal.respondToResize(width, height, controlW, controlH);
 							mainWindowMaxWidth += controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
 						}
 						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							uiPad.respondToResize(width, height, height, controlW, controlH);
+							uiPad.respondToResize(width, height, controlW, controlH);
 							mainWindowMaxWidth += (controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2;
 						}
 						if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-							uiPadsExtra.respondToResize(width, height, height, controlW, controlH);							
+							uiPadsExtra.respondToResize(width, height, controlW, controlH);							
 							mainWindowMaxWidth += 340.0;
 						}
 						if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
