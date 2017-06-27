@@ -107,7 +107,7 @@ public class UIInput implements PanelInterface {
 		allControls.add(uiSpinnerNotePressNote);
 
 		uiSpinnerChannel = new UISpinner("Channel", 1, 16, 10, 1, true);
-		uiSpinnerChannel.setAdvancedSetting(true);
+		//uiSpinnerChannel.setAdvancedSetting(true);
 		allControls.add(uiSpinnerChannel);
 		
 		uiComboBoxFunction = new UIComboBox("Function", true);

@@ -227,7 +227,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		//Font buttonFont;
+		lastControlH = controlH;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double comboBoxFontHeight = fullHeight*Constants.FX_COMBOBOX_FONT_SCALE;
@@ -237,20 +237,6 @@ public class UIPad extends UIPanel implements PanelInterface {
 			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight = Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
-/*		
-		buttonGet.setFont(buttonFont);
-		buttonSend.setFont(buttonFont);
-		buttonGetAll.setFont(buttonFont);
-		buttonSendAll.setFont(buttonFont);
-		buttonLoad.setFont(buttonFont);
-		buttonSave.setFont(buttonFont);
-		buttonDisableOthers.setFont(buttonFont);
-		buttonCopy.setFont(buttonFont);
-		buttonFirst.setFont(buttonFont);
-		buttonPrev.setFont(buttonFont);
-		buttonNext.setFont(buttonFont);
-		buttonLast.setFont(buttonFont);
-*/
 		Double buttonFontSize = controlH*0.31;
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");

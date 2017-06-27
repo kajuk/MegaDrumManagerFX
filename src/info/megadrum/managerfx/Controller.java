@@ -1834,7 +1834,8 @@ public class Controller implements MidiRescanEventListener {
 		for (int i=0; i < allPanels.size(); i++) {
 			allPanels.get(i).setShowAdvanced(configOptions.showAdvancedSettings);
 			if (allPanels.get(i).isDetached()) {
-				respondToResizeDetached(allPanels.get(i).getWindow().getScene(), allPanels.get(i));
+				allPanels.get(i).getWindow().setHeight(allPanels.get(i).getLastControlH()*allPanels.get(i).getVerticalControlsCount());
+				//respondToResizeDetached(allPanels.get(i).getWindow().getScene(), allPanels.get(i));
 			} else {
 				respondToResize(scene1);
 			}

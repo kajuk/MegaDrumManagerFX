@@ -31,6 +31,9 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	private Tab 		tabMisc;
 	private Tab 		tabLevels;
 	private Tab 		tabNotes;
+	private Pane 		paneMisc;
+	private Pane 		paneLevels;
+	private Pane 		paneNotes;
 
 	private UIComboBox	uiComboBoxMiscType;
 	private UIComboBox	uiComboBoxMiscCurve;
@@ -140,9 +143,9 @@ public class UIPedal extends UIPanel implements PanelInterface {
         tabNotes = new Tab("Notes");
         tabNotes.setClosable(false);
         tabPane.getTabs().addAll(tabMisc,tabLevels,tabNotes);
-        Pane paneMisc = new Pane();
-        Pane paneLevels = new Pane();
-        Pane paneNotes = new Pane();
+        paneMisc = new Pane();
+        paneLevels = new Pane();
+        paneNotes = new Pane();
         
 
         tabMisc.setContent(paneMisc);
@@ -153,38 +156,53 @@ public class UIPedal extends UIPanel implements PanelInterface {
         uiComboBoxMiscType.uiCtlSetValuesArray(Arrays.asList(Constants.PEDAL_TYPES_LIST));
         uiComboBoxMiscType.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscType);
+
         uiComboBoxMiscCurve = new UIComboBox("Curve", false);
         uiComboBoxMiscCurve.uiCtlSetValuesArray(Arrays.asList(Constants.CURVES_LIST));
         uiComboBoxMiscCurve.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscCurve);
+
         uiComboBoxMiscChickCurve = new UIComboBox("Chick Curve", false);
+        uiComboBoxMiscChickCurve.setAdvancedSetting(true);
         uiComboBoxMiscChickCurve.uiCtlSetValuesArray(Arrays.asList(Constants.CURVES_LIST));
         uiComboBoxMiscChickCurve.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscChickCurve);
+        
         uiComboBoxMiscHiHatInput = new UIComboBox("HiHat Input", false);
+        uiComboBoxMiscHiHatInput.setAdvancedSetting(true);
         uiComboBoxMiscHiHatInput.uiCtlSetValuesArray(listHiHatInputs);
         uiComboBoxMiscHiHatInput.uiCtlSetValue(0, false);
         allMiscControls.add(uiComboBoxMiscHiHatInput);
+
         uiCheckBoxMiscAltInput = new UICheckBox("Alt Input", false);
+        uiComboBoxMiscChickCurve.setAdvancedSetting(true);
         allMiscControls.add(uiCheckBoxMiscAltInput);
+        
         uiCheckBoxMiscReversLevels = new UICheckBox("Reverse Levels", false);
+        uiCheckBoxMiscReversLevels.setAdvancedSetting(true);
         allMiscControls.add(uiCheckBoxMiscReversLevels);
+        
         uiCheckBoxMiscSoftChicks = new UICheckBox("Soft Chicks", false);
         allMiscControls.add(uiCheckBoxMiscSoftChicks);
+        
         uiCheckBoxMiscAutoLevels = new UICheckBox("Auto Levels", false);
         allMiscControls.add(uiCheckBoxMiscAutoLevels);
+        
         uiCheckBoxMiscAlgorithm = new UICheckBox("New Algorithm", false);
+        uiCheckBoxMiscAlgorithm.setAdvancedSetting(true);
         allMiscControls.add(uiCheckBoxMiscAlgorithm);
+        
         uiSpinnerMiscChickDelay = new UISpinner("Chick Delay", 0, 127, 0, 1, false);
         allMiscControls.add(uiSpinnerMiscChickDelay);
+        
         uiSpinnerMiscCCNumber = new UISpinner("CC Number", 0, 127, 4, 1, false);
         allMiscControls.add(uiSpinnerMiscCCNumber);
+        
         uiSpinnerMiscCCReduction = new UISpinner("CC Reduction Lvl", 0, 3, 1, 1, false);
         allMiscControls.add(uiSpinnerMiscCCReduction);
 			
 		for (int i = 0; i < allMiscControls.size(); i++) {
         	//vBoxMisc.getChildren().add(allMiscControls.get(i).getUI());
-        	paneMisc.getChildren().add(allMiscControls.get(i).getUI());
         	allMiscControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allMiscControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -197,36 +215,51 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		
 		uiSpinnerLevelsLow = new UISpinner("Low", 0, 1023, 16, 1, false);
         allLevelsControls.add(uiSpinnerLevelsLow);
+        
         uiSpinnerLevelsHigh = new UISpinner("High", 0, 1023, 600, 1, false);
         allLevelsControls.add(uiSpinnerLevelsHigh);
+        
         uiSpinnerLevelsOpen = new UISpinner("Open", 0, 127, 8, 1, false);
         allLevelsControls.add(uiSpinnerLevelsOpen);
+        
         uiSpinnerLevelsSemiOpen = new UISpinner("SemiOpen", 0, 127, 40, 1, false);
         allLevelsControls.add(uiSpinnerLevelsSemiOpen);
+        
         uiSpinnerLevelsSemiOpen2 = new UISpinner("SemiOpen2", 0, 127, 40, 1, false);
         allLevelsControls.add(uiSpinnerLevelsSemiOpen2);
+        
         uiSpinnerLevelsHalfOpen = new UISpinner("HalfOpen", 0, 127, 70, 1, false);
         allLevelsControls.add(uiSpinnerLevelsHalfOpen);
+        
         uiSpinnerLevelsHalfOpen2 = new UISpinner("HalfOpen2", 0, 127, 70, 1, false);
         allLevelsControls.add(uiSpinnerLevelsHalfOpen2);
+        
         uiSpinnerLevelsClosed = new UISpinner("Closed", 0, 127, 100, 1, false);
         allLevelsControls.add(uiSpinnerLevelsClosed);
+        
         uiSpinnerLevelsChickThresh = new UISpinner("ChickThresh", 0, 127, 120, 1, false);
         allLevelsControls.add(uiSpinnerLevelsChickThresh);
+        
         uiSpinnerLevelsShortChickThresh = new UISpinner("SoftChickThresh", 0, 127, 115, 1, false);
         allLevelsControls.add(uiSpinnerLevelsShortChickThresh);
+        
         uiSpinnerLevelsLongChickThresh = new UISpinner("LongChickThresh", 0, 127, 16, 1, false);
         allLevelsControls.add(uiSpinnerLevelsLongChickThresh);
+        
         uiSpinnerLevelsChickMinVel = new UISpinner("Chick Min Velocity", 0, 1023, 400, 1, false);
+        uiSpinnerLevelsChickMinVel.setAdvancedSetting(true);
         allLevelsControls.add(uiSpinnerLevelsChickMinVel);
+        
         uiSpinnerLevelsChickMaxVel = new UISpinner("Chick Max Velocity", 0, 1023, 90, 1, false);
+        uiSpinnerLevelsChickMaxVel.setAdvancedSetting(true);
         allLevelsControls.add(uiSpinnerLevelsChickMaxVel);
+        
         uiSpinnerLevelsChickDeadPeriod = new UISpinner("Chick Dead Period", 0, 1023, 90, 1, false);
+        uiSpinnerLevelsChickDeadPeriod.setAdvancedSetting(true);
         allLevelsControls.add(uiSpinnerLevelsChickDeadPeriod);
 				
 		for (int i = 0; i < allLevelsControls.size(); i++) {
         	//vBoxLevels.getChildren().add(allLevelsControls.get(i).getUI());
-        	paneLevels.getChildren().add(allLevelsControls.get(i).getUI());
         	allLevelsControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allLevelsControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -239,54 +272,82 @@ public class UIPedal extends UIPanel implements PanelInterface {
 
 		uiSpinnerNoteBowSemiOpen = new UISpinnerNote("Bow SemiOpen", false);
         allNotesControls.add(uiSpinnerNoteBowSemiOpen);
+        
         uiSpinnerNoteEdgeSemiOpen = new UISpinnerNote("Edge SemiOpen", false);
+        //uiSpinnerNoteEdgeSemiOpen.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeSemiOpen);
+        
         uiSpinnerNoteBellSemiOpen = new UISpinnerNote("Bell SemiOpen", false);
+        //uiSpinnerNoteBellSemiOpen.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellSemiOpen);
 
 		uiSpinnerNoteBowSemiOpen2 = new UISpinnerNote("Bow SemiOpen2", false);
         allNotesControls.add(uiSpinnerNoteBowSemiOpen2);
+        
         uiSpinnerNoteEdgeSemiOpen2 = new UISpinnerNote("Edge SemiOpen2", false);
+        //uiSpinnerNoteEdgeSemiOpen2.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeSemiOpen2);
+        
         uiSpinnerNoteBellSemiOpen2 = new UISpinnerNote("Bell SemiOpen2", false);
+        //uiSpinnerNoteBellSemiOpen2.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellSemiOpen2);
 
 		uiSpinnerNoteBowHalfOpen = new UISpinnerNote("Bow HalfOpen", false);
         allNotesControls.add(uiSpinnerNoteBowHalfOpen);
+        
         uiSpinnerNoteEdgeHalfOpen = new UISpinnerNote("Edge HalfOpen", false);
+        //uiSpinnerNoteEdgeHalfOpen.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeHalfOpen);
+        
         uiSpinnerNoteBellHalfOpen = new UISpinnerNote("Bell HalfOpen", false);
+        //uiSpinnerNoteBellHalfOpen.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellHalfOpen);
         
 		uiSpinnerNoteBowHalfOpen2 = new UISpinnerNote("Bow HalfOpen2", false);
         allNotesControls.add(uiSpinnerNoteBowHalfOpen2);
+        
         uiSpinnerNoteEdgeHalfOpen2 = new UISpinnerNote("Edge HalfOpen2", false);
+        //uiSpinnerNoteEdgeHalfOpen2.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeHalfOpen2);
+        
         uiSpinnerNoteBellHalfOpen2 = new UISpinnerNote("Bell HalfOpen2", false);
+        //uiSpinnerNoteBellHalfOpen2.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellHalfOpen2);
 		
         uiSpinnerNoteBowSemiClosed = new UISpinnerNote("Bow SemiClosed", false);
         allNotesControls.add(uiSpinnerNoteBowSemiClosed);
+        
         uiSpinnerNoteEdgeSemiClosed = new UISpinnerNote("Edge SemiClosed", false);
+        //uiSpinnerNoteEdgeSemiClosed.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeSemiClosed);
+        
         uiSpinnerNoteBellSemiClosed = new UISpinnerNote("Bell SemiClosed", false);
+        //uiSpinnerNoteBellSemiClosed.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellSemiClosed);
         
         uiSpinnerNoteBowClosed = new UISpinnerNote("Bow Closed", false);
         allNotesControls.add(uiSpinnerNoteBowClosed);
+        
         uiSpinnerNoteEdgeClosed = new UISpinnerNote("Edge Closed", false);
+        //uiSpinnerNoteEdgeClosed.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteEdgeClosed);
+        
         uiSpinnerNoteBellClosed = new UISpinnerNote("Bell Closed", false);
+        //uiSpinnerNoteBellClosed.setAdvancedSetting(true);
         allNotesControls.add(uiSpinnerNoteBellClosed);
 
         uiSpinnerNoteChick = new UISpinnerNote("Chick", false);
         allNotesControls.add(uiSpinnerNoteChick);
+        
         uiSpinnerNoteSplash = new UISpinnerNote("Splash", false);
         allNotesControls.add(uiSpinnerNoteSplash);
 		
 		for (int i = 0; i < allNotesControls.size(); i++) {
+			verticalControlsCount++;
+			if (!allNotesControls.get(i).isAdvancedSetting()) {
+				verticalControlsCountWithoutAdvanced++;
+			}
         	//vBoxNotes.getChildren().add(allNotesControls.get(i).getUI());
-        	paneNotes.getChildren().add(allNotesControls.get(i).getUI());
         	allNotesControls.get(i).setLabelWidthMultiplier(Constants.FX_PEDAL_LABEL_WIDTH_MUL);        	
         	allNotesControls.get(i).addControlChangeEventListener(new ControlChangeEventListener() {
 				
@@ -297,10 +358,52 @@ public class UIPedal extends UIPanel implements PanelInterface {
 			});
         }
 		
+		reAddAllControls();
 		setDetached(false);
 		setAllStateUnknown();
 	}
 
+	private void reAddAllControls() {
+		paneMisc.getChildren().clear();
+		for (int i = 0; i < allMiscControls.size(); i++) {
+			if (allMiscControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneMisc.getChildren().add(allMiscControls.get(i).getUI());
+				}				
+			} else {
+				paneMisc.getChildren().add(allMiscControls.get(i).getUI());
+			}
+        }
+		
+		paneLevels.getChildren().clear();
+		for (int i = 0; i < allLevelsControls.size(); i++) {
+			if (allLevelsControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneLevels.getChildren().add(allLevelsControls.get(i).getUI());
+				}				
+			} else {
+				paneLevels.getChildren().add(allLevelsControls.get(i).getUI());
+			}
+        }
+		
+		paneNotes.getChildren().clear();
+		for (int i = 0; i < allNotesControls.size(); i++) {
+			if (allNotesControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					paneNotes.getChildren().add(allNotesControls.get(i).getUI());
+				}				
+			} else {
+				paneNotes.getChildren().add(allNotesControls.get(i).getUI());
+			}
+        }
+	}
+	
+	@Override
+	public void setShowAdvanced(Boolean show) {
+		showAdvanced = show;
+		reAddAllControls();
+	}
+	
 	public void setAllStateUnknown() {
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
 			allMiscControls.get(i).setSyncState(Constants.SYNC_STATE_UNKNOWN);
@@ -315,21 +418,25 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	
 	public void respondToResizeDetached(Double w, Double h) {
 		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
-		Double controlH = (h/((allNotesControls.size() + 2)))*1.0;
+		int visibleControls;
+		if (showAdvanced) {
+			visibleControls = verticalControlsCount + 2;
+		} else {
+			visibleControls = verticalControlsCountWithoutAdvanced + 2;
+		}
+		Double controlH = (h/((visibleControls + 1)))*1.00;
 		respondToResize(w, h, h*1.6, controlW, controlH);
 	}
 	
 	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		//Font buttonFont;
+		lastControlH = controlH;
 		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -fullHeight*0.0005;
 		Double tabHeaderHeight = fullHeight*0.013;
 		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//buttonFont = new Font(toolBarFontHeight);
 		} else {
-			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
@@ -344,27 +451,63 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		tabLevels.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabNotes.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");
 		tabPane.setStyle("-fx-padding: " + tabHeaderPadding.toString() + "em 0.0em 0.0em 0.0em; -fx-tab-max-height:" + tabHeaderHeight.toString() + "pt;-fx-tab-min-height:" + tabHeaderHeight.toString() + "pt;");
-		//buttonGet.setFont(buttonFont);
-		//buttonSend.setFont(buttonFont);
-		//buttonLoad.setFont(buttonFont);
-		//buttonSave.setFont(buttonFont);
 		Double buttonFontSize = controlH*0.31;
 		toolBar.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
-	//System.out.println("Responding to scene resize in UIMisc");
+		//System.out.println("Responding to scene resize in UIMisc");
+		int visibleControlsCount = -1;
+		boolean showControl;
 		for (int i = 0; i < allMiscControls.size(); i++ ) {
-			allMiscControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
-			allMiscControls.get(i).getUI().setLayoutX(0);
-			allMiscControls.get(i).getUI().setLayoutY(i*controlH);
+			showControl = false;
+			if (allMiscControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				allMiscControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+				allMiscControls.get(i).getUI().setLayoutX(0);
+				allMiscControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);
+			}
 		}
+		visibleControlsCount = -1;
 		for (int i = 0; i < allLevelsControls.size(); i++ ) {
-			allLevelsControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
-			allLevelsControls.get(i).getUI().setLayoutX(0);
-			allLevelsControls.get(i).getUI().setLayoutY(i*controlH);
+			showControl = false;
+			if (allLevelsControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				allLevelsControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+				allLevelsControls.get(i).getUI().setLayoutX(0);
+				allLevelsControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);
+			}
 		}
+		visibleControlsCount = -1;
 		for (int i = 0; i < allNotesControls.size(); i++ ) {
-			allNotesControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
-			allNotesControls.get(i).getUI().setLayoutX(0);
-			allNotesControls.get(i).getUI().setLayoutY(i*controlH);
+			showControl = false;
+			if (allNotesControls.get(i).isAdvancedSetting()) {
+				if (showAdvanced) {
+					visibleControlsCount++;
+					showControl = true;
+				}				
+			} else {
+				visibleControlsCount++;
+				showControl = true;
+			}
+			if (showControl) {
+				allNotesControls.get(i).respondToResize(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL, controlH);
+				allNotesControls.get(i).getUI().setLayoutX(0);
+				allNotesControls.get(i).getUI().setLayoutY(visibleControlsCount*controlH);
+			}
 		}
 		tabPane.setMaxHeight(controlH*allNotesControls.size()+toolBar.getHeight());
 		tabPane.setMinHeight(0);
@@ -477,7 +620,12 @@ public class UIPedal extends UIPanel implements PanelInterface {
 
 	@Override
 	public int getVerticalControlsCount() {
-		return allNotesControls.size() + 3;
+		if (showAdvanced) {
+			return verticalControlsCount + 3;
+		} else {
+			return verticalControlsCountWithoutAdvanced + 3;
+		}
 	}
+	
 
 }

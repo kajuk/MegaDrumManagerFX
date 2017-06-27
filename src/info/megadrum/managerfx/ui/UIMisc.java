@@ -86,11 +86,11 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		allControls.add(uiSpinnerPressrollTimeout);
 		
 		uiSpinnerLatency = new UISpinner("Latency", 10, 100, 15, 1, false);
-		uiSpinnerLatency.setAdvancedSetting(true);
+		//uiSpinnerLatency.setAdvancedSetting(true);
 		allControls.add(uiSpinnerLatency);
 		
 		uiSpinnerNotesOctaveShift = new UISpinner("Notes Octave Shift", 0, 2, 2, 1, false);
-		uiSpinnerNotesOctaveShift.setAdvancedSetting(true);
+		//uiSpinnerNotesOctaveShift.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNotesOctaveShift);
 
 		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", false);
@@ -126,7 +126,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		allControls.add(uiCheckBoxMIDIThru);
 
 		uiCheckBoxSendTriggeredIn = new UICheckBox("Send TriggeredIn", false);
-		uiCheckBoxSendTriggeredIn.setAdvancedSetting(true);
+		//uiCheckBoxSendTriggeredIn.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxSendTriggeredIn);
 
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Chokng", false);
@@ -198,13 +198,10 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	}
 	
 	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
-		//Font buttonFont;
-		//Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
+		lastControlH = controlH;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			//buttonFont = new Font(toolBarFontHeight);
 		} else {
-			//buttonFont = new Font(Constants.FX_TOOLBARS_FONT_MIN_SIZE);
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}
 		titledPane.setFont(new Font(titledPaneFontHeight));
@@ -219,10 +216,6 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		//toolBar.setStyle("-fx-background-color: orange");
 		//vBoxAll.setStyle("-fx-background-color: lightgreen");
 		//System.out.printf("Button font height = %f\n", buttonFont.getSize());
-		//buttonGet.setFont(buttonFont);
-		//buttonSend.setFont(buttonFont);
-		//buttonLoad.setFont(buttonFont);
-		//buttonSave.setFont(buttonFont);
 		Double buttonFontSize = controlH*0.31;
 		toolBar.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		//System.out.printf("Misc ControlW = %f\n", controlW);

@@ -39,6 +39,7 @@ public class UIPanel {
 	private Double lastY = -1.0;
 	private Double lastW = -1.0;
 	private Double lastH = -1.0;
+	protected Double lastControlH = 0.0;
 	protected Boolean		showAdvanced = false;
 	protected int verticalControlsCount = 0;
 	protected int verticalControlsCountWithoutAdvanced = 0;
@@ -197,6 +198,18 @@ public class UIPanel {
 
 	public void setShowAdvanced(Boolean show) {
 		showAdvanced = show;
+	}
+	
+	public Double getLastControlH() {
+		return lastControlH;
+	}
+
+	public int getVerticalControlsCount() {
+		if (showAdvanced) {
+			return verticalControlsCount + 1;
+		} else {
+			return verticalControlsCountWithoutAdvanced + 1;
+		}
 	}
 
 }

@@ -79,6 +79,7 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 	}
 
 	public void respondToResize (Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
+		lastControlH = controlH;
 		//Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
 		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
 		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
