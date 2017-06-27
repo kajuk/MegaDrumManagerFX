@@ -416,7 +416,9 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		}
 	}
 	
-	public void respondToResizeDetached(Double w, Double h) {
+	public void respondToResizeDetached() {
+		Double w = windowDetached.getScene().getWidth();
+		Double h = windowDetached.getScene().getHeight();
 		Double controlW = w/Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
 		int visibleControls;
 		if (showAdvanced) {

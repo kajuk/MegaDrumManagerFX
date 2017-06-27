@@ -119,7 +119,7 @@ public class UIPanel {
 	public void respondToResize(Double w, Double h, Double fullHeight, Double controlW, Double controlH) {
 	}
 	
-	public void respondToResizeDetached(Double w, Double h) {
+	public void respondToResizeDetached() {
 	}
 
 	public final Parent getTopLayout() {

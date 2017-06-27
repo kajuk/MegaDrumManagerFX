@@ -30,7 +30,9 @@ public class UIMidiLog extends UIPanel implements PanelInterface {
 		vBoxAll.setMaxHeight(440);
 	}
 
-	public void respondToResizeDetached(Double w, Double h) {
+	public void respondToResizeDetached() {
+		Double w = windowDetached.getScene().getWidth();
+		Double h = windowDetached.getScene().getHeight();
 		respondToResize(w, h - 5, h*0.1);
 	}
 

@@ -587,10 +587,8 @@ public class Controller implements MidiRescanEventListener {
 */
 	}
 
-	public void respondToResizeDetached(Scene sc, UIPanel uiPanel) {
-		Double height = sc.getHeight();
-		Double width = sc.getWidth();
-		uiPanel.respondToResizeDetached(width, height);
+	public void respondToResizeDetached(UIPanel uiPanel) {
+		uiPanel.respondToResizeDetached();
 	}
 
 	public void setCustomNamesCountControl() {
@@ -865,10 +863,10 @@ public class Controller implements MidiRescanEventListener {
 						allPanels.get(iFinal).setDetached(false);
 					});
 					scene.heightProperty().addListener(e-> {
-						respondToResizeDetached(scene, allPanels.get(iFinal));
+						respondToResizeDetached(allPanels.get(iFinal));
 					});
 					scene.widthProperty().addListener(e-> {
-						respondToResizeDetached(scene, allPanels.get(iFinal));
+						respondToResizeDetached(allPanels.get(iFinal));
 					});
 					Timer timer = new Timer();
 					timer.schedule(new TimerTask() {

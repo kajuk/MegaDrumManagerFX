@@ -215,7 +215,9 @@ public class UIPad extends UIPanel implements PanelInterface {
 		}
 	}
 
-	public void respondToResizeDetached(Double w, Double h) {
+	public void respondToResizeDetached() {
+		Double w = windowDetached.getScene().getWidth();
+		Double h = windowDetached.getScene().getHeight();
 		Double controlW = w/(Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.05);
 		Double controlH;
 		if (showAdvanced) {

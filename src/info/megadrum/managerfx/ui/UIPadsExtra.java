@@ -72,9 +72,12 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 		//titledPane.setMaxSize(300, 500);
 	}
 
-	public void respondToResizeDetached(Double w, Double h) {
+	public void respondToResizeDetached() {
+		Double w = windowDetached.getScene().getWidth();
+		Double h = windowDetached.getScene().getHeight();
 		Double controlW = w*0.01;
 		Double controlH = h*0.06;
+		
 		respondToResize(w, h + controlH, h*1.6, controlW, controlH);
 	}
 

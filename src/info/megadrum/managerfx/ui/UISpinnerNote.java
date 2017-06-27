@@ -181,8 +181,8 @@ public class UISpinnerNote extends UIControl {
     	Double checkBoxFontSize = h*0.26;
 		spinnerFast.setMinHeight(h);
 		spinnerFast.setMaxHeight(h);
-		spinnerFast.setMaxWidth(h*2.8);
-		spinnerFast.setMinWidth(h*2.8);
+		spinnerFast.setMaxWidth(h*2.7);
+		spinnerFast.setMinWidth(h*2.7);
 		
 		layoutC.getColumnConstraints().clear();
 		//layoutC.getColumnConstraints().add(new ColumnConstraints((w - padding*2)*0.2 + 30));
