@@ -45,7 +45,8 @@ public class UIGlobal {
 		buttonSaveAll = new Button("SaveAll");
 		buttonSaveAll.setMinWidth(50);
 		comboBoxFile = new ComboBox<>();
-		labelFileStatus = new Label("Ok");
+		labelFileStatus = new Label("??");
+		setFileLoadStatus(false);
 		labelFileStatus.setMinWidth(30);
 		labelFileStatus.setAlignment(Pos.CENTER);
 		//labelFileStatus.setAlignment(Pos.BOTTOM_CENTER);
@@ -133,6 +134,17 @@ public class UIGlobal {
 
 	public void clearSysexStatusLabel() {
 		labelMidiStatus.setVisible(false);
+	}
+	
+	public void setFileLoadStatus(Boolean loaded) {
+		String backgroundColor = "lightgreen";
+		String text = "Ok";
+		if (!loaded) {
+			backgroundColor = "red";
+			text = "??";
+		}
+		labelFileStatus.setText(text);
+		labelFileStatus.setStyle("-fx-background-color: " + backgroundColor);
 	}
 	
 	public void setSysexStatusLabel(int status, int sysex_type) {

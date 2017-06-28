@@ -1,5 +1,6 @@
 package info.megadrum.managerfx;
 
+import java.awt.Color;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
@@ -1135,7 +1136,7 @@ public class Controller implements MidiRescanEventListener {
 			midiController.setChainId(configOptions.chainId);
 			if (midiController.sendSysex(sysexSendList, uiGlobal.getProgressBarSysex(), 10, 50) > 0) {
 				sysexThreadsStarted--;
-				System.out.println("Not Ok");				
+				//System.out.println("Not Ok");				
 				uiGlobal.getProgressBarSysex().progressProperty().unbind();
 				uiGlobal.getProgressBarSysex().setProgress(1.0);
 				uiGlobal.getProgressBarSysex().setVisible(false);
@@ -2471,6 +2472,8 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void loadAllFromConfigFull() {
+
+		uiGlobal.setFileLoadStatus(configOptions.configLoaded[configOptions.lastConfig]);
 
 		configFull.configGlobalMisc.setConfigFromSysex(
 				fullConfigs[configOptions.lastConfig].configGlobalMisc.getSysexFromConfig()
