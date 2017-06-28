@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -79,6 +80,7 @@ public class UIOptions {
         //Block events to other windows
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Options");
+		window.getIcons().add(new Image("/icon_256x256.png"));
 
         optionsTabs = new TabPane();
         optionsTabs.setTabMaxHeight(20);

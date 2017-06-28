@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -59,6 +60,7 @@ public class UIUpgrade {
 			e.consume();
 			closeWindow();
 		});
+		window.getIcons().add(new Image("/icon_256x256.png"));
 
 		textAreaInstruction = new Label();
 		textAreaInstruction.setFont(new Font(16));
