@@ -208,13 +208,11 @@ public interface Constants {
 	public static final int SYSEX_TIMEOUT_RETRIES = 15; // 8 at least needed to workaround Windows/Java/USB MIDI sysex corruption(bug?)
 
 	public static final Double FX_TITLEBARS_FONT_MIN_SIZE	= 4.4;
-	public static final Double FX_TOOLBARS_FONT_MIN_SIZE	= 4.0;
-	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.017;
-	public static final Double FX_SUB_TITLEBARS_FONT_SCALE	= 0.015;
-	public static final Double FX_TOOLBARS_FONT_SCALE		= 0.012;
-	public static final Double FX_TABS_FONT_SCALE			= 0.010;
-	public static final Double FX_COMBOBOX_FONT_SCALE		= 0.009;
-	public static final Double FX_CUSTOM_NAMES_FONT_SCALE	= 0.012;
+	public static final Double FX_TITLEBARS_FONT_SCALE		= 0.6;
+	public static final Double FX_SUB_TITLEBARS_FONT_SCALE	= 0.5;
+	public static final Double FX_TABS_FONT_SCALE			= 0.35;
+	public static final Double FX_COMBOBOX_FONT_SCALE		= 0.28;
+	public static final Double FX_CUSTOM_NAMES_FONT_SCALE	= 0.4;
 	public static final Double FX_MISC_CONTROL_WIDTH_MUL	= 1.2;
 	public static final Double FX_PEDAL_CONTROL_WIDTH_MUL	= 1.4;
 	public static final Double FX_INPUT_CONTROL_WIDTH_MUL	= 1.3;

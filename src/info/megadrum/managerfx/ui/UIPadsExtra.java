@@ -83,8 +83,8 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 
 	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
 		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*30*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = controlH*30*Constants.FX_TABS_FONT_SCALE;
+		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
 		Double tabHeaderPadding = -controlH*30*0.0005;
 		Double tabHeaderHeight = controlH*30*0.013;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {

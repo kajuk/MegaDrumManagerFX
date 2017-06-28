@@ -38,10 +38,10 @@ public class UIMidiLog extends UIPanel implements PanelInterface {
 
 	public void respondToResize (Double w, Double h, Double controlH) {
 		lastControlH = controlH;
-		Double titledPaneFontHeight = h*1.4*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = h*1.4*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -h*0.0005;
-		Double tabHeaderHeight = h*0.016;
+		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
+		Double tabHeaderPadding = -controlH*0.01;
+		Double tabHeaderHeight = controlH*0.5;
 		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
 		}

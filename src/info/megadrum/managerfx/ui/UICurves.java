@@ -188,7 +188,7 @@ public class UICurves {
 
 	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
 		//Font buttonFont;
-		Double comboBoxFontHeight = controlH*30*Constants.FX_COMBOBOX_FONT_SCALE;
+		Double comboBoxFontHeight = controlH*Constants.FX_COMBOBOX_FONT_SCALE;
 		Double buttonFontSize = controlH*0.28;
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");

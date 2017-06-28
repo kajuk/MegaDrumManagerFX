@@ -424,7 +424,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	}
 	
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
-		Double controlW, controlH, fullHeight;
+		Double controlW, controlH;
 		if (cH > cW*0.137) {
 			controlH = cW*0.137;
 		} else {
@@ -432,16 +432,10 @@ public class UIPedal extends UIPanel implements PanelInterface {
 		}
 		controlW = cW;
 		lastControlH = controlH;
-		fullHeight = controlH*30;
-		Double toolBarFontHeight = fullHeight*Constants.FX_TOOLBARS_FONT_SCALE;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = fullHeight*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -fullHeight*0.0005;
-		Double tabHeaderHeight = fullHeight*0.013;
-		if (toolBarFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-		} else {
-			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
-		}
+		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
+		Double tabHeaderPadding = -controlH*30*0.0005;
+		Double tabHeaderHeight = controlH*30*0.013;
 		titledPane.setFont(new Font(titledPaneFontHeight));
 		titledPane.setTitleHeight(controlH);
 		lastTitleHeight = controlH;

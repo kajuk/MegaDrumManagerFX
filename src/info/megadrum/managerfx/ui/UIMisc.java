@@ -200,7 +200,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	}
 	
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
-		Double controlW, controlH, fullHeight;
+		Double controlW, controlH;
 		if (cH > cW*0.145) {
 			controlH = cW*0.145;
 		} else {
@@ -208,8 +208,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		}
 		controlW = cW;
 		lastControlH = controlH;
-		fullHeight = controlH*30;
-		Double titledPaneFontHeight = fullHeight*Constants.FX_TITLEBARS_FONT_SCALE;
+		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
 		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
 		} else {
 			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
