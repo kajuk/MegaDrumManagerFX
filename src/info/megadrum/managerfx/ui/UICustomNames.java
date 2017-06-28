@@ -224,8 +224,11 @@ public class UICustomNames {
 	}
 
 	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
+		Double buttonFontSize = controlH*Constants.FX_BUTTONS_FONT_SCALE;
+		if (buttonFontSize > Constants.FX_BUTTONS_FONT_MAX_SIZE) {
+			buttonFontSize = Constants.FX_BUTTONS_FONT_MAX_SIZE;
+		}
 		Double customNamesFontHeight = controlH*0.28;
-		Double buttonFontSize = controlH*0.28;
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		vBox.setStyle("-fx-font-size: " + customNamesFontHeight.toString() + "pt");
 		//vBox.setMinHeight(h*2);

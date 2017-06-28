@@ -75,24 +75,14 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 	public void respondToResizeDetached() {
 		Double w = windowDetached.getScene().getWidth();
 		Double h = windowDetached.getScene().getHeight();
-		Double controlW = w*0.01;
-		Double controlH = h*0.06;
+		Double controlW = w*0.5;
+		Double controlH = h*0.05;
 		
 		respondToResize(w, h + controlH, controlW, controlH);
 	}
 
-	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
-		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -controlH*30*0.0005;
-		Double tabHeaderHeight = controlH*30*0.013;
-		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
-		}
-		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
+	public void respondToResize (Double w, Double h, Double cW, Double cH) {
+		super.respondToResize(w, h, cW, cH);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		if (detached) {
 			vBoxAll.setMaxWidth(w);

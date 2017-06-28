@@ -229,23 +229,11 @@ public class UIPad extends UIPanel implements PanelInterface {
 	}
 
 	public void respondToResize (Double w, Double h, Double cW, Double cH) {
-		Double controlW, controlH;
-		if (cH > cW*0.127) {
-			controlH = cW*0.127;
-		} else {
-			controlH = cH;
-		}
-		controlW = cW;
-		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double comboBoxFontHeight = controlH*Constants.FX_COMBOBOX_FONT_SCALE;
-		Double buttonFontSize = controlH*0.31;
+		super.respondToResize(w, h, cW, cH);
+
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		comboBoxInput.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
-		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
 		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setLayoutX(0);

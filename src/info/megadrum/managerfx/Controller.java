@@ -574,7 +574,7 @@ public class Controller implements MidiRescanEventListener {
 							mainWindowMaxWidth += 340.0;
 						}
 						if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
-							uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlH);							
+							uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlW, controlH);							
 							mainWindowMaxWidth += midiLogWidth;
 						}
 /*						

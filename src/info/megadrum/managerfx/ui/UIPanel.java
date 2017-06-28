@@ -39,6 +39,8 @@ public class UIPanel {
 	private Double lastY = -1.0;
 	private Double lastW = -1.0;
 	private Double lastH = -1.0;
+	protected Double controlW, controlH, tabsFontSize, tabHeaderPadding, tabHeaderHeight, titledPaneFontHeight;
+	protected Double comboBoxFontHeight, buttonFontSize;
 	protected Double lastControlH = 0.0;
 	protected Boolean		showAdvanced = false;
 	protected int verticalControlsCount = 0;
@@ -116,7 +118,27 @@ public class UIPanel {
 		}
 	}
 	
-	public void respondToResize(Double w, Double h, Double controlW, Double controlH) {
+	public void respondToResize(Double w, Double h, Double cW, Double cH) {
+		if (cH > cW*0.12) {
+			controlH = cW*0.12;
+		} else {
+			controlH = cH;
+		}
+		controlW = cW;
+		lastControlH = controlH;
+		titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
+		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
+		} else {
+			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
+		}
+		titledPane.setFont(new Font(titledPaneFontHeight));
+		titledPane.setTitleHeight(controlH);
+		lastTitleHeight = controlH;
+		tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
+		tabHeaderPadding = -controlH*0.015;
+		tabHeaderHeight = controlH*0.5;
+		comboBoxFontHeight = controlH*Constants.FX_COMBOBOX_FONT_SCALE;
+		buttonFontSize = controlH*0.31;
 	}
 	
 	public void respondToResizeDetached() {

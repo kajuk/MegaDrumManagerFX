@@ -424,21 +424,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	}
 	
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
-		Double controlW, controlH;
-		if (cH > cW*0.137) {
-			controlH = cW*0.137;
-		} else {
-			controlH = cH;
-		}
-		controlW = cW;
-		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -controlH*30*0.0005;
-		Double tabHeaderHeight = controlH*30*0.013;
-		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
+		super.respondToResize(w, h, cW, cH);
 		titledPane.setWidth(controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_PEDAL_CONTROL_WIDTH_MUL);

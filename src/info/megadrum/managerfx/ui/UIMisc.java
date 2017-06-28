@@ -200,22 +200,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	}
 	
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
-		Double controlW, controlH;
-		if (cH > cW*0.145) {
-			controlH = cW*0.145;
-		} else {
-			controlH = cH;
-		}
-		controlW = cW;
-		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
-		if (titledPaneFontHeight > Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-		} else {
-			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
-		}
-		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
+		super.respondToResize(w, h, cW, cH);
 		titledPane.setWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);

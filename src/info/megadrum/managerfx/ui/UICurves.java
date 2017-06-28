@@ -187,9 +187,14 @@ public class UICurves {
 	}
 
 	public void respondToResize (Double w, Double h, Double controlW, Double controlH) {
-		//Font buttonFont;
 		Double comboBoxFontHeight = controlH*Constants.FX_COMBOBOX_FONT_SCALE;
-		Double buttonFontSize = controlH*0.28;
+		if (comboBoxFontHeight > Constants.FX_COMBOBOX_FONT_MAX_SIZE) {
+			comboBoxFontHeight = Constants.FX_COMBOBOX_FONT_MAX_SIZE;
+		}
+		Double buttonFontSize = controlH*Constants.FX_BUTTONS_FONT_SCALE;
+		if (buttonFontSize > Constants.FX_BUTTONS_FONT_MAX_SIZE) {
+			buttonFontSize = Constants.FX_BUTTONS_FONT_MAX_SIZE;
+		}
 		toolBarTop.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		comboBoxCurve.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");

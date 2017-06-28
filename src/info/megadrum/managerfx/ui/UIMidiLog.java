@@ -33,21 +33,11 @@ public class UIMidiLog extends UIPanel implements PanelInterface {
 	public void respondToResizeDetached() {
 		Double w = windowDetached.getScene().getWidth();
 		Double h = windowDetached.getScene().getHeight();
-		respondToResize(w, h - 5, h*0.1);
+		respondToResize(w, h - 5, w, h*0.1);
 	}
 
-	public void respondToResize (Double w, Double h, Double controlH) {
-		lastControlH = controlH;
-		Double titledPaneFontHeight = controlH*Constants.FX_TITLEBARS_FONT_SCALE;
-		Double tabsFontSize = controlH*Constants.FX_TABS_FONT_SCALE;
-		Double tabHeaderPadding = -controlH*0.01;
-		Double tabHeaderHeight = controlH*0.5;
-		if (titledPaneFontHeight < Constants.FX_TITLEBARS_FONT_MIN_SIZE) {
-			titledPaneFontHeight =Constants.FX_TITLEBARS_FONT_MIN_SIZE;
-		}
-		titledPane.setFont(new Font(titledPaneFontHeight));
-		titledPane.setTitleHeight(controlH);
-		lastTitleHeight = controlH;
+	public void respondToResize (Double w, Double h, Double cW, Double cH) {
+		super.respondToResize(w, h, cW, cH);
 		titledPane.setWidth(w);
 		vBoxAll.setLayoutY(controlH);
 		vBoxAll.setMaxSize(w, h);
