@@ -39,7 +39,6 @@ public class UIMidiLog extends UIPanel implements PanelInterface {
 	public void respondToResize (Double w, Double h, Double cW, Double cH) {
 		super.respondToResize(w, h, cW, cH);
 		titledPane.setWidth(w);
-		vBoxAll.setLayoutY(controlH);
 		vBoxAll.setMaxSize(w, h);
 		vBoxAll.setMinSize(w, h);
 		tabVisual.setStyle("-fx-font-size: " + tabsFontSize.toString() + "pt");

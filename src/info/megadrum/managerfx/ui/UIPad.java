@@ -235,7 +235,6 @@ public class UIPad extends UIPanel implements PanelInterface {
 		toolBarNavigator.setStyle("-fx-font-size: " + buttonFontSize.toString() + "pt");
 		comboBoxInput.setStyle("-fx-font-size: " + comboBoxFontHeight.toString() + "pt");
 		titledPane.setWidth(controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap*2);
-		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setLayoutX(0);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2);
 		toolBarTop.setMaxWidth(controlW*1.0*Constants.FX_INPUT_CONTROL_WIDTH_MUL*2 + inputsGap);

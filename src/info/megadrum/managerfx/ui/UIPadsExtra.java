@@ -83,7 +83,6 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 
 	public void respondToResize (Double w, Double h, Double cW, Double cH) {
 		super.respondToResize(w, h, cW, cH);
-		vBoxAll.setLayoutY(lastTitleHeight);
 		if (detached) {
 			vBoxAll.setMaxWidth(w);
 			titledPane.setWidth(w);

@@ -75,8 +75,8 @@ public class Controller implements MidiRescanEventListener {
 	private Stage window;
 	private Scene scene1;
 	private MenuBar mainMenuBar;
-	private Menu mainMenu, viewMenu, helpMenu;
-	private MenuItem aboutMenuItem;
+	private Menu menuMain, menuView, menuWindows, menuHelp;
+	private MenuItem menuItemAbout, menuItemWindowsToFront;
 	private Menu menuAllSettings, menuGlobalMisc, menuMisc, menuHiHat, menuAllPads,
 				menuSelectedPad, menuCustomCurves, menuCustomNames;
 	private MenuItem menuItemAllSettingsGet, menuItemAllSettingsSend, menuItemAllSettingsLoad,
@@ -657,21 +657,32 @@ public class Controller implements MidiRescanEventListener {
 		menuItemsCopy3rd = new ArrayList<MenuItem>();
 	}
 	
+	private void allWindowsToFront() {
+		for (int i = 0; i < allPanels.size(); i++) {
+			if (allPanels.get(i).isDetached()) {
+				allPanels.get(i).getWindow().toFront();
+			}
+		}
+	}
 	private void createMainMenuBar() {
 		mainMenuBar = new MenuBar();
 		mainMenuBar.useSystemMenuBarProperty().set(true);
 		mainMenuBar.setStyle("-fx-font-size: 10 pt");
-		mainMenu = new Menu("Main");
-		viewMenu = new Menu("View");
-		helpMenu = new Menu("Help");
-		aboutMenuItem = new MenuItem("About");
-		aboutMenuItem.setOnAction(e-> {
+		menuMain = new Menu("Main");
+		menuView = new Menu("View");
+		menuHelp = new Menu("Help");
+		menuWindows = new Menu("Windows");
+		menuItemAbout = new MenuItem("About");
+		menuItemAbout.setOnAction(e-> {
 			showAbout();
 		});
-		helpMenu.getItems().add(aboutMenuItem);
+		menuHelp.getItems().add(menuItemAbout);
 		
-		mainMenuBar.getMenus().addAll(mainMenu,viewMenu,helpMenu);
-
+		mainMenuBar.getMenus().addAll(menuMain,menuView, menuWindows,menuHelp);
+		menuItemWindowsToFront = new MenuItem("All to Front");
+		menuItemWindowsToFront.setOnAction(e ->allWindowsToFront());
+		menuWindows.getItems().add(menuItemWindowsToFront);
+		
 		menuAllSettings = new Menu("All Settings");
 		menuItemAllSettingsGet = new MenuItem("Get from MD");
 		menuItemAllSettingsGet.setOnAction(e-> sendAllSysexRequests());
@@ -763,7 +774,7 @@ public class Controller implements MidiRescanEventListener {
 		exitMenuItem = new MenuItem("Exit");
 		exitMenuItem.setOnAction(e-> closeProgram());
 		
-		mainMenu.getItems().addAll(menuAllSettings, menuGlobalMisc, menuMisc,
+		menuMain.getItems().addAll(menuAllSettings, menuGlobalMisc, menuMisc,
 				menuHiHat,menuAllPads,menuSelectedPad,menuCustomCurves, menuCustomNames,
 				new SeparatorMenuItem(), firmwareUpgradeMenuItem, new SeparatorMenuItem(), optionsMenuItem,
 				new SeparatorMenuItem(),exitMenuItem
@@ -779,31 +790,31 @@ public class Controller implements MidiRescanEventListener {
 			showGlobalMisc();
 		});
 		menuViewGlobalMisc.getItems().addAll(uiGlobalMisc.getRadioMenuItemHide(), uiGlobalMisc.getRadioMenuItemShow());
-		viewMenu.getItems().add(menuViewGlobalMisc);
+		menuView.getItems().add(menuViewGlobalMisc);
 		
 		Menu menuViewMisc = new Menu("Misc");
 		
 		menuViewMisc.getItems().addAll(uiMisc.getRadioMenuItemHide(), uiMisc.getRadioMenuItemShow(), uiMisc.getRadioMenuItemDetach());
-		viewMenu.getItems().add(menuViewMisc);
+		menuView.getItems().add(menuViewMisc);
 		
 		Menu menuViewPedal = new Menu("Pedal");
 		
 		menuViewPedal.getItems().addAll(uiPedal.getRadioMenuItemHide(), uiPedal.getRadioMenuItemShow(), uiPedal.getRadioMenuItemDetach());
-		viewMenu.getItems().add(menuViewPedal);
+		menuView.getItems().add(menuViewPedal);
 
 		Menu menuViewPads = new Menu("Pads");
 		
 		menuViewPads.getItems().addAll(uiPad.getRadioMenuItemHide(), uiPad.getRadioMenuItemShow(), uiPad.getRadioMenuItemDetach());
-		viewMenu.getItems().add(menuViewPads);
+		menuView.getItems().add(menuViewPads);
 
 		Menu menuViewPadsExtra = new Menu("PadsExtra");
 		
 		menuViewPadsExtra.getItems().addAll(uiPadsExtra.getRadioMenuItemHide(), uiPadsExtra.getRadioMenuItemShow(), uiPadsExtra.getRadioMenuItemDetach());
-		viewMenu.getItems().add(menuViewPadsExtra);
+		menuView.getItems().add(menuViewPadsExtra);
 
 		Menu menuViewMidiLog = new Menu("MidiLog");
 		menuViewMidiLog.getItems().addAll(uiMidiLog.getRadioMenuItemHide(), uiMidiLog.getRadioMenuItemShow(), uiMidiLog.getRadioMenuItemDetach());
-		viewMenu.getItems().add(menuViewMidiLog);
+		menuView.getItems().add(menuViewMidiLog);
 		
 		for (int i = 0; i < allPanels.size(); i++) {
 			final int iFinal = i;

@@ -202,7 +202,6 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
 		super.respondToResize(w, h, cW, cH);
 		titledPane.setWidth(controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL);
-		vBoxAll.setLayoutY(lastTitleHeight);
 		vBoxAll.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		toolBar.setMaxWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);
 		toolBar.setMinWidth(controlW*1.0*Constants.FX_MISC_CONTROL_WIDTH_MUL);

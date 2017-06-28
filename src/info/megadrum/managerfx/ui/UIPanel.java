@@ -139,6 +139,7 @@ public class UIPanel {
 		tabHeaderHeight = controlH*0.5;
 		comboBoxFontHeight = controlH*Constants.FX_COMBOBOX_FONT_SCALE;
 		buttonFontSize = controlH*0.31;
+		vBoxAll.setLayoutY(lastTitleHeight);
 	}
 	
 	public void respondToResizeDetached() {
