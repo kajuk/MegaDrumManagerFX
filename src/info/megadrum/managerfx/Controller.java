@@ -993,7 +993,7 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	private void closeProgram() {
-		System.out.println("Exiting\n");
+		//System.out.println("Exiting\n");
 		midiController.closeAllPorts();
 		Point2D point2d = new Point2D(window.getX(), window.getY());
 		configOptions.mainWindowPosition = point2d;

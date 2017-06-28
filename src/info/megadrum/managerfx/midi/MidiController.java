@@ -200,12 +200,12 @@ public class MidiController {
 				sysexStatus[0] = Constants.MD_SYSEX_STATUS_MISMATCH;
 				for (int i= 0; i < buffer.length; i++) {
 					if (buffer[i] != sysexToCompare[i]) {
-						System.out.printf("Missmatch. Id = %d, sent=%d, got=%d\n", i, sysexToCompare[i], buffer[i]);
+						//System.out.printf("Missmatch. Id = %d, sent=%d, got=%d\n", i, sysexToCompare[i], buffer[i]);
 						break;
 					}
 				}
 				sysexMismatch = true;
-				System.out.println("Received sysex is NOT equal");
+				//System.out.println("Received sysex is NOT equal");
 			}
 			//compareSysex = false;
 		} else {
@@ -310,7 +310,7 @@ public class MidiController {
 		while (sendSysexConfigRetries > 0) {
 			//System.out.printf("Retries remaining  before = %d\n", sendSysexConfigRetries);
 			if (sendSysexConfigRetries != maxRetries) {
-				System.out.println("Retrying");
+				//System.out.println("Retrying");
 			}
 			if (sysex.length > 2) {
 				if (sysexMismatch) {
@@ -405,16 +405,16 @@ public class MidiController {
 				//System.out.println("Sysex received");
 				break;
 			} else {
-				System.out.println("Resetting ports");
+				//System.out.println("Resetting ports");
 				midi_reset_ports();
-				System.out.printf("Retries remaining after = %d\n", sendSysexConfigRetries);			
+				//System.out.printf("Retries remaining after = %d\n", sendSysexConfigRetries);			
 			}
 		}
 		if (!sysexReceived) {
 			//getTimedOut(Constants.SYSEX_TIMEOUT_PEDAL_TXT);
 			sendSysexConfigResult = "Sysex timed out";
 			sysexTimedOut = true;
-			System.out.println(sendSysexConfigResult);
+			//System.out.println(sendSysexConfigResult);
 		} 	
 	}
 	
