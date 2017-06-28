@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -58,6 +59,7 @@ public class UIPanel {
 		windowDetached = new Stage();
 		//windowDetached.setTitle(title);
 		windowDetached.setTitle(Constants.WINDOWS_TITLE_SHORT + title);
+		windowDetached.getIcons().add(new Image("/icon_256x256.png"));
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");
