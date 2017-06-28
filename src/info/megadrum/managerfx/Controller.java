@@ -64,6 +64,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -153,7 +154,8 @@ public class Controller implements MidiRescanEventListener {
 			e.consume();
 			closeProgram();
 		});
-
+		window.getIcons().add(new Image("/icon_256x256.png"));
+		
 		fileManager = new FileManager(window);
 		uiGlobal = new UIGlobal();
 		uiGlobalMisc = new UIGlobalMisc();

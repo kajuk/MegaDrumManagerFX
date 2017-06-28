@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>Z:\dmitri\Projects\MegaDrumManagerFX\Windows\MegaDrumManagerFX.iconset\icon_128x128.ico</icon>
+  <icon>Z:\dmitri\Projects\MegaDrumManagerFX\Windows\MegaDrumManagerFX.iconset\icon_256x256.ico</icon>
   <singleInstance>
     <mutexName>MegaDrumManagerFX</mutexName>
     <windowTitle></windowTitle>
