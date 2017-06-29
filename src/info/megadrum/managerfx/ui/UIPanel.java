@@ -46,6 +46,7 @@ public class UIPanel {
 	protected Boolean		showAdvanced = false;
 	protected int verticalControlsCount = 0;
 	protected int verticalControlsCountWithoutAdvanced = 0;
+	private Image imageWindowIcon;
 	
 	public UIPanel (String title) {
 		panelTitle = title;
@@ -59,7 +60,7 @@ public class UIPanel {
 		windowDetached = new Stage();
 		//windowDetached.setTitle(title);
 		windowDetached.setTitle(Constants.WINDOWS_TITLE_SHORT + title);
-		windowDetached.getIcons().add(new Image("/icon_256x256.png"));
+		imageWindowIcon = new Image("/icon_256x256.png");
 		buttonGet = new Button("Get");
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");
@@ -121,6 +122,11 @@ public class UIPanel {
 	}
 	
 	public void respondToResize(Double w, Double h, Double cW, Double cH) {
+		if (detached) {
+			//Have to re-add window icon, otherwise it gets corrupted on resize 
+			windowDetached.getIcons().clear();
+			windowDetached.getIcons().add(imageWindowIcon);
+		}
 		if (cH > cW*0.12) {
 			controlH = cW*0.12;
 		} else {

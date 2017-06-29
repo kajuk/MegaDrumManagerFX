@@ -75,6 +75,7 @@ import javafx.stage.Stage;
 
 public class Controller implements MidiRescanEventListener {
 	private Stage window;
+	private Image imageWindowIcon;
 	private Scene scene1;
 	private MenuBar mainMenuBar;
 	private Menu menuMain, menuView, menuWindows, menuHelp;
@@ -114,11 +115,6 @@ public class Controller implements MidiRescanEventListener {
 	private UIMidiLog uiMidiLog;
 	private ArrayList<UIPanel>	allPanels;
 	private Double mainWindowMinWidth = 1000.0;
-	//private ArrayList<Stage> allWindows;
-	//private ProgressBar tempProgressBar;
-	private Timer 		timerResize;
-	private TimerTask	timerTaskResize;
-	private int			timerResizeDelay = 200;
 	
 	private MidiController midiController;
 	private ConfigOptions configOptions;
@@ -127,11 +123,9 @@ public class Controller implements MidiRescanEventListener {
 	private ConfigFull [] fullConfigs;
 	private String [] configFileNames;
 	private FileManager fileManager;
-	private File file;
 	private int padPair = 0;
 	private int comboBoxInputChangedFromSet = 0;
 	private int comboBoxFileChangedFromSet = 0;
-	private int toggleButtonMidiChangedFromSet = 0;
 	private int oldInputsCounts = 0;
 	private Boolean sendNextAllSysexRequestsFlag = false;
 	private Boolean sendSysexReadOnlyRequestFlag = false;
@@ -154,7 +148,7 @@ public class Controller implements MidiRescanEventListener {
 			e.consume();
 			closeProgram();
 		});
-		window.getIcons().add(new Image("/icon_256x256.png"));
+		imageWindowIcon = new Image("/icon_256x256.png");
 		
 		fileManager = new FileManager(window);
 		uiGlobal = new UIGlobal();
@@ -484,110 +478,92 @@ public class Controller implements MidiRescanEventListener {
 	}
 
 	public void respondToResize(Scene sc) {
-/*
-		if (timerResize != null) {
-			timerResize.cancel();
+		//Have to re-add window icon, otherwise it gets corrupted on resize 
+		window.getIcons().clear();
+		window.getIcons().add(imageWindowIcon);
+		
+		uiGlobalMisc.respondToResize(sc.getHeight()*0.05);
+		Double mainMenuBarHeight = mainMenuBar.getHeight();
+		Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
+		Double globalMiscBarHeight;
+		if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
+			globalMiscBarHeight = sc.getHeight()*0.05;							
+		} else {
+			globalMiscBarHeight = 0.0;							
 		}
-		timerResize = new Timer();
-		timerTaskResize = new TimerTask() {
-			
-			@Override
-			public void run() {
-				Platform.runLater(new Runnable() {
-					
-					@Override
-					public void run() {
-*/
-						uiGlobalMisc.respondToResize(sc.getHeight()*0.05);
-						Double mainMenuBarHeight = mainMenuBar.getHeight();
-						Double globalBarHeight = uiGlobal.getUI().layoutBoundsProperty().getValue().getHeight();
-						Double globalMiscBarHeight;
-						if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
-							globalMiscBarHeight = sc.getHeight()*0.05;							
-						} else {
-							globalMiscBarHeight = 0.0;							
-						}
-						Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight;
-						if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
-							height -= globalMiscBarHeight;
-						}
-						//Double width = height*2;
-						Double width = sc.getWidth();
-						Double controlH, controlW;
-						Double mainWindowMaxWidth = 0.0;
-						Double midiLogHeight = height*0.7;
-						Double midiLogWidth = width*0.23;
-						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlH= (height/uiPad.getVerticalControlsCount())*1.00 - 0.4;
-							midiLogHeight = height*0.7;
-						} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-							controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
-							midiLogHeight = height*0.7;
-						} else if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-							controlH= height/uiPadsExtra.getVerticalControlsCount();
-							midiLogHeight = height*0.7;
-						} else if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-							controlH= height/uiMisc.getVerticalControlsCount()*1.045 - 0.95;
-							midiLogHeight = height*0.7;
-						} else {
-							controlH= height/uiMidiLog.getVerticalControlsCount();
-							midiLogHeight = height*0.95;
-							midiLogWidth = mainWindowMinWidth*0.99;
-						}
-						
-						controlW = width;
-						//controlW = width - hBoxUIviewsGap;
-						Double controlWdivider = 0.0;
-						if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_MISC_CONTROL_WIDTH_MUL*1.000;
-							controlW -= hBoxUIviewsGap;
-						} 
-						if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_PEDAL_CONTROL_WIDTH_MUL*1.000;
-							controlW -= hBoxUIviewsGap;
-						}
-						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							controlWdivider += Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.000;
-							controlW -= hBoxUIviewsGap*8;
-						}
-						if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-							controlW -= 340.0 + hBoxUIviewsGap;
-						}
-						if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
-							controlW -= midiLogWidth + hBoxUIviewsGap;
-						}
-						
-						controlWdivider = (controlWdivider == 0)?1:controlWdivider;
-						controlW = (controlW/controlWdivider)*1.0;
-						controlW = (controlW > 360.0)?360.0:controlW;
-						if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
-							uiMisc.respondToResize(width, height, controlW, controlH);
-							mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
-						}
-						if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
-							uiPedal.respondToResize(width, height, controlW, controlH);
-							mainWindowMaxWidth += controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
-						}
-						if (uiPad.getViewState() == Constants.PANEL_SHOW) {
-							uiPad.respondToResize(width, height, controlW, controlH);
-							mainWindowMaxWidth += (controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2;
-						}
-						if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
-							uiPadsExtra.respondToResize(width, height, controlW, controlH);							
-							mainWindowMaxWidth += 340.0;
-						}
-						if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
-							uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlW, controlH);							
-							mainWindowMaxWidth += midiLogWidth;
-						}
-/*						
-					}
-				});
-			}
-		};
-		timerResizeDelay = 10;
-		timerResize.schedule(timerTaskResize, timerResizeDelay);
-*/
+		Double height = sc.getHeight() - mainMenuBarHeight - globalBarHeight;
+		if (uiGlobalMisc.getViewState() == Constants.PANEL_SHOW) {
+			height -= globalMiscBarHeight;
+		}
+		//Double width = height*2;
+		Double width = sc.getWidth();
+		Double controlH, controlW;
+		Double mainWindowMaxWidth = 0.0;
+		Double midiLogHeight = height*0.7;
+		Double midiLogWidth = width*0.23;
+		if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+			controlH= (height/uiPad.getVerticalControlsCount())*1.00 - 0.4;
+			midiLogHeight = height*0.7;
+		} else if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+			controlH= height/uiPedal.getVerticalControlsCount()*1.045 - 0.95;
+			midiLogHeight = height*0.7;
+		} else if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+			controlH= height/uiPadsExtra.getVerticalControlsCount();
+			midiLogHeight = height*0.7;
+		} else if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+			controlH= height/uiMisc.getVerticalControlsCount()*1.045 - 0.95;
+			midiLogHeight = height*0.7;
+		} else {
+			controlH= height/uiMidiLog.getVerticalControlsCount();
+			midiLogHeight = height*0.95;
+			midiLogWidth = mainWindowMinWidth*0.99;
+		}
+		
+		controlW = width;
+		//controlW = width - hBoxUIviewsGap;
+		Double controlWdivider = 0.0;
+		if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+			controlWdivider += Constants.FX_MISC_CONTROL_WIDTH_MUL*1.000;
+			controlW -= hBoxUIviewsGap;
+		} 
+		if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+			controlWdivider += Constants.FX_PEDAL_CONTROL_WIDTH_MUL*1.000;
+			controlW -= hBoxUIviewsGap;
+		}
+		if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+			controlWdivider += Constants.FX_INPUT_CONTROL_WIDTH_MUL*2.000;
+			controlW -= hBoxUIviewsGap*8;
+		}
+		if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+			controlW -= 340.0 + hBoxUIviewsGap;
+		}
+		if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
+			controlW -= midiLogWidth + hBoxUIviewsGap;
+		}
+		
+		controlWdivider = (controlWdivider == 0)?1:controlWdivider;
+		controlW = (controlW/controlWdivider)*1.0;
+		controlW = (controlW > 360.0)?360.0:controlW;
+		if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
+			uiMisc.respondToResize(width, height, controlW, controlH);
+			mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
+		}
+		if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
+			uiPedal.respondToResize(width, height, controlW, controlH);
+			mainWindowMaxWidth += controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
+		}
+		if (uiPad.getViewState() == Constants.PANEL_SHOW) {
+			uiPad.respondToResize(width, height, controlW, controlH);
+			mainWindowMaxWidth += (controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2;
+		}
+		if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
+			uiPadsExtra.respondToResize(width, height, controlW, controlH);							
+			mainWindowMaxWidth += 340.0;
+		}
+		if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
+			uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlW, controlH);							
+			mainWindowMaxWidth += midiLogWidth;
+		}
 	}
 
 	public void respondToResizeDetached(UIPanel uiPanel) {
