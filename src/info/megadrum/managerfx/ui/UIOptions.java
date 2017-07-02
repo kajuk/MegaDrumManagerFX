@@ -47,6 +47,7 @@ public class UIOptions {
 
 	private UICheckBox	uiCheckBoxSaveOnExit;
 	private UICheckBox	uiCheckBoxShowAdvanced;
+	private UICheckBox	uiCheckBoxDoubleSize;
 	
 	private ConfigOptions	configOptions;
 	private Boolean			closedWithOk;
@@ -177,6 +178,10 @@ public class UIOptions {
         uiCheckBoxShowAdvanced.setIgnoreSyncState();
         allMiscControls.add(uiCheckBoxShowAdvanced);
 
+        uiCheckBoxDoubleSize = new UICheckBox("Large fonts with Scrolling", false);
+        uiCheckBoxDoubleSize.setIgnoreSyncState();
+        allMiscControls.add(uiCheckBoxDoubleSize);
+
         for (int i = 0; i < allMiscControls.size(); i++) {
             miscLayout.getChildren().add(allMiscControls.get(i).getUI());        	
             //allMiscControls.get(i).setColumnsSizes(150.0, 300.0);
@@ -244,6 +249,7 @@ public class UIOptions {
 		configOptions.chainId = Integer.valueOf(uiComboBoxChainId.uiCtlGetSelected());
 		configOptions.saveOnExit = uiCheckBoxSaveOnExit.uiCtlIsSelected();
 		configOptions.showAdvancedSettings = uiCheckBoxShowAdvanced.uiCtlIsSelected();
+		configOptions.doubleSize = uiCheckBoxDoubleSize.uiCtlIsSelected();
 		closedWithOk = true;
 		window.close();
 	}
@@ -280,6 +286,7 @@ public class UIOptions {
 		uiCheckBoxInitPortsStartup.uiCtlSetValue(configOptions.autoOpenPorts, true);
 		uiCheckBoxSaveOnExit.uiCtlSetValue(configOptions.saveOnExit, true);
 		uiCheckBoxShowAdvanced.uiCtlSetValue(configOptions.showAdvancedSettings, true);
+		uiCheckBoxDoubleSize.uiCtlSetValue(configOptions.doubleSize, true);
 		uiSpinnerSysexTimeout.uiCtlSetValue(configOptions.sysexDelay, true);
 		uiComboBoxMidiIn.uiCtlSetValue(configOptions.MidiInName);
 		setSameMidiInOut(configOptions.useSamePort);

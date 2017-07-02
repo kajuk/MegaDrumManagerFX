@@ -45,6 +45,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean autoResize = true;
 	public boolean changeNotified = false;
 	public boolean showAdvancedSettings = true;
+	public boolean doubleSize = false;
 
 	public ConfigOptions() {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
@@ -68,6 +69,7 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("autoOpenPorts", autoOpenPorts);
 		prop.setProperty("saveOnExit", saveOnExit);
 		prop.setProperty("showAdvancedSettings", showAdvancedSettings);
+		prop.setProperty("doubleSize", doubleSize);
 		prop.setProperty("interactive", liveUpdates);
 		//prop.setProperty("lastDir", lastDir);
 		prop.setProperty("lastConfig", lastConfig);
@@ -114,6 +116,7 @@ public class ConfigOptions implements java.io.Serializable {
 		autoOpenPorts = prop.getBoolean("autoOpenPorts", autoOpenPorts);
 		saveOnExit = prop.getBoolean("saveOnExit", saveOnExit);
 		showAdvancedSettings = prop.getBoolean("showAdvancedSettings", showAdvancedSettings);
+		doubleSize = prop.getBoolean("doubleSize", doubleSize);
 		liveUpdates = prop.getBoolean("interactive", liveUpdates);
 		//lastDir = prop.getString("lastDir", lastDir);
 		lastConfig = Utils.validateInt(prop.getInt("lastConfig",lastConfig),0,Constants.CONFIGS_COUNT-1,lastConfig);

@@ -205,8 +205,8 @@ public class UICurves {
 		comboBoxCurve.setMinWidth(controlW);
 		comboBoxCurve.setMaxWidth(controlW);
 		labelCurve.setFont(new Font(controlH*0.4));
-		labelCurve.setMinWidth(controlH*2);
-		labelCurve.setMaxWidth(controlH*2);
+		labelCurve.setMinWidth(controlH*1.3);
+		labelCurve.setMaxWidth(controlH*1.3);
 	}
 
 	private void setSpinnersFromCurve() {

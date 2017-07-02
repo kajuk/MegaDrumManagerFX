@@ -50,6 +50,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
@@ -60,6 +61,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TitledPane;
@@ -103,6 +105,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIUpgrade upgradeWindow;
 	private VBox topVBox;
 	private HBox hBoxUIviews;
+	private ScrollPane scrollPaneAllPanels;
 	private Double hBoxUIviewsHPadding = 2.0;
 	private Double hBoxUIviewsVPadding = 1.0;	
 	private Double hBoxUIviewsGap = 2.0;
@@ -448,11 +451,16 @@ public class Controller implements MidiRescanEventListener {
 		//hBoxUIviews.setStyle("-fx-padding: 1.0 0.0 0.0 1.0");
 		hBoxUIviews.setPadding(new Insets(hBoxUIviewsVPadding, hBoxUIviewsHPadding, 0.0, hBoxUIviewsHPadding));
 		
-		topVBox.getChildren().add(hBoxUIviews);
+		scrollPaneAllPanels = new ScrollPane();
+		scrollPaneAllPanels.setContent(hBoxUIviews);
+		scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.NEVER);
+
+		topVBox.getChildren().add(scrollPaneAllPanels);
 		//topVBox.setPadding(new Insets(5, 5, 5, 5));
 		//topVBox.setStyle("-fx-border-width: 2px; -fx-padding: 2.0 2.0 2.0 2.0; -fx-border-color: #2e8b57");
 		//scene1 = new Scene(layout1, 300,500);
 		scene1 = new Scene(topVBox);
+		//scene1 = new Scene(scrollPaneAllPanels);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		optionsWindow = new UIOptions(configOptions);		
@@ -520,6 +528,15 @@ public class Controller implements MidiRescanEventListener {
 		}
 		
 		controlW = width;
+		if (configOptions.doubleSize) {
+			controlH = controlH*2;
+			controlW = width*2;
+			scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+			scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		} else {
+			scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.NEVER);
+			scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.NEVER);
+		}
 		//controlW = width - hBoxUIviewsGap;
 		Double controlWdivider = 0.0;
 		if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
