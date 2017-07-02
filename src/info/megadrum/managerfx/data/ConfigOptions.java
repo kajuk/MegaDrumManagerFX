@@ -34,7 +34,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public int sysexDelay = 30;
 	public String LookAndFeelName = "";
 	public Point2D mainWindowPosition = new Point2D(10,10);
-	public Point2D mainWindowSize = new Point2D(1000,600);
+	public Point2D mainWindowSize = new Point2D(1400,900);
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 	public Point2D [] framesPositions = { new Point2D(10,10), new Point2D(210,10), new Point2D(410,10), new Point2D(610,10), new Point2D(810,10)};
 	public Point2D [] framesSizes = { new Point2D(200,300), new Point2D(200,300), new Point2D(400,500), new Point2D(400,500), new Point2D(500,300)};
