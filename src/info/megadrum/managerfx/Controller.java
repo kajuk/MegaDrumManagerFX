@@ -143,6 +143,9 @@ public class Controller implements MidiRescanEventListener {
 	private int sysexThreadsStarted = 0;
 	
 	private Boolean versionWarningAlreadyShown = false;
+	
+	private Boolean controlsSizeIsDouble = false;
+	private Boolean controlsSizeIsSingle = false;
 
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -531,11 +534,25 @@ public class Controller implements MidiRescanEventListener {
 		if (configOptions.doubleSize) {
 			controlH = controlH*2;
 			controlW = width*2;
-			scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-			scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+			if (!controlsSizeIsDouble) {
+				controlsSizeIsDouble = true;
+				controlsSizeIsSingle = false;
+				scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				topVBox.getChildren().remove(topVBox.getChildren().size() - 1);
+				scrollPaneAllPanels.setContent(hBoxUIviews);
+				topVBox.getChildren().add(scrollPaneAllPanels);
+			}
 		} else {
-			scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.NEVER);
-			scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.NEVER);
+			if (!controlsSizeIsSingle) {
+				controlsSizeIsSingle = true;
+				controlsSizeIsDouble = false;
+				scrollPaneAllPanels.setHbarPolicy(ScrollBarPolicy.NEVER);
+				scrollPaneAllPanels.setVbarPolicy(ScrollBarPolicy.NEVER);
+				scrollPaneAllPanels.setContent(null);
+				topVBox.getChildren().remove(topVBox.getChildren().size() - 1);
+				topVBox.getChildren().add(hBoxUIviews);
+			}
 		}
 		//controlW = width - hBoxUIviewsGap;
 		Double controlWdivider = 0.0;
