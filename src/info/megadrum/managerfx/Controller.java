@@ -536,7 +536,8 @@ public class Controller implements MidiRescanEventListener {
 		} else {
 			controlH= height/uiMidiLog.getVerticalControlsCount();
 			midiLogHeight = height*0.95;
-			midiLogWidth = mainWindowMinWidth*0.99;
+			//midiLogWidth = mainWindowMinWidth*0.99;
+			midiLogWidth = midiLogWidth*0.99;
 		}
 		
 		controlW = width;
@@ -600,27 +601,31 @@ public class Controller implements MidiRescanEventListener {
 		if (uiMisc.getViewState() == Constants.PANEL_SHOW) {
 			uiMisc.respondToResize(width, height, controlW, controlH);
 			mainWindowMaxWidth += controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL;
-			midiLogWidth -= (controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL + hBoxUIviewsGap*2);
+			midiLogWidth -= (controlW*Constants.FX_MISC_CONTROL_WIDTH_MUL + hBoxUIviewsGap*3);
 		}
 		if (uiPedal.getViewState() == Constants.PANEL_SHOW) {
 			uiPedal.respondToResize(width, height, controlW, controlH);
 			mainWindowMaxWidth += controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL;
-			midiLogWidth -= (controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL + hBoxUIviewsGap*2);
+			midiLogWidth -= (controlW*Constants.FX_PEDAL_CONTROL_WIDTH_MUL + hBoxUIviewsGap*3);
 		}
 		if (uiPad.getViewState() == Constants.PANEL_SHOW) {
 			uiPad.respondToResize(width, height, controlW, controlH);
 			mainWindowMaxWidth += (controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2;
-			midiLogWidth -= ((controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2 + hBoxUIviewsGap*8);
+			midiLogWidth -= ((controlW*Constants.FX_INPUT_CONTROL_WIDTH_MUL)*2 + hBoxUIviewsGap*7);
 		}
 		if (uiPadsExtra.getViewState() == Constants.PANEL_SHOW) {
 			uiPadsExtra.respondToResize(width, height, controlW, controlH);							
 			mainWindowMaxWidth += 340.0;
-			midiLogWidth -= (340.0 + hBoxUIviewsGap*2);
+			midiLogWidth -= (340.0 + hBoxUIviewsGap*1);
 		}
 		if (uiMidiLog.getViewState() == Constants.PANEL_SHOW) {
 			//uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlW, controlH);							
 			if (viewZoom > 0) {
-				midiLogWidth = controlW*3;				
+				if (midiLogWidth < controlW*3) {
+					midiLogWidth = controlW*3;				
+				} else {
+					midiLogWidth = midiLogWidth*1.0;
+				}
 			}
 			uiMidiLog.respondToResize(midiLogWidth, midiLogHeight, controlW, controlH);							
 			mainWindowMaxWidth += midiLogWidth;
@@ -1292,7 +1297,6 @@ public class Controller implements MidiRescanEventListener {
 
 	private void sendAllCustomNamesSysex() {
 		//sysexSendList.clear();
-		byte [] sysex;
 		byte i;
 		for (i = 0; i < configFull.customNamesCount; i++) {
 			sysexSendList.add(configFull.configCustomNames[i].getSysexFromConfig());
