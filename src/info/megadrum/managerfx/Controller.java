@@ -152,8 +152,9 @@ public class Controller implements MidiRescanEventListener {
 	private Boolean controlsSizeIsDouble = false;
 	private Boolean controlsSizeIsSingle = false;
 	
-	private Double viewZoom = 0.0;
+	private int viewZoom = 0;
 	private final int viewZoomCount = 11;
+	private ToggleGroup toggleGroupZoom;
 
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -803,7 +804,7 @@ public class Controller implements MidiRescanEventListener {
 		
 		Menu menuViewZoom = new Menu("Zoom");
 		menuView.getItems().add(menuViewZoom);
-		ToggleGroup toggleGroup = new ToggleGroup();
+		toggleGroupZoom = new ToggleGroup();
 		
 		Double zoom;
 		for (int i = 0; i < viewZoomCount; i++) {
@@ -815,14 +816,15 @@ public class Controller implements MidiRescanEventListener {
 			} else {
 				radioMenuItem = new RadioMenuItem(String.format("Zoom %1.1fx", zoom));
 			}
-			radioMenuItem.setToggleGroup(toggleGroup);
+			radioMenuItem.setToggleGroup(toggleGroupZoom);
 			radioMenuItem.setOnAction(e-> {
-				viewZoom = Double.valueOf(iFinal);
+				viewZoom = iFinal;
+				configOptions.viewZoom = viewZoom;
 				respondToResize(scene1);
 			});
 			menuViewZoom.getItems().add(radioMenuItem);
 		}
-		toggleGroup.getToggles().get(0).setSelected(true);
+		toggleGroupZoom.getToggles().get(0).setSelected(true);
 		
 		menuView.getItems().add(new SeparatorMenuItem());
 		Menu menuViewGlobalMisc = new Menu("Global Misc");
@@ -1010,6 +1012,8 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void loadConfig() {
 		configOptions  = fileManager.loadLastOptions(configOptions);
+		viewZoom = configOptions.viewZoom;
+		toggleGroupZoom.getToggles().get(viewZoom).setSelected(true);
 		uiGlobal.getComboBoxFile().getItems().clear();
 		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
 		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);

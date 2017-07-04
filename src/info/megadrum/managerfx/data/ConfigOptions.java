@@ -45,6 +45,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean autoResize = true;
 	public boolean changeNotified = false;
 	public boolean showAdvancedSettings = true;
+	public int viewZoom = 0;
 
 	public ConfigOptions() {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
@@ -99,6 +100,7 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("globalMiscViewState", globalMiscViewState);
 		prop.setProperty("autoResize", autoResize);
 		prop.setProperty("changeNotified", changeNotified);
+		prop.setProperty("viewZoom", viewZoom);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
@@ -153,5 +155,6 @@ public class ConfigOptions implements java.io.Serializable {
 		globalMiscViewState = Utils.validateInt(prop.getInt("globalMiscViewState", globalMiscViewState),0,1,globalMiscViewState);
 		autoResize = prop.getBoolean("autoResize", autoResize);
 		changeNotified = prop.getBoolean("changeNotified", false);
+		viewZoom = prop.getInt("viewZoom", 0);
 	}
 }
