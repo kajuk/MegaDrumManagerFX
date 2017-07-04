@@ -127,8 +127,8 @@ public class UIPanel {
 			windowDetached.getIcons().clear();
 			windowDetached.getIcons().add(imageWindowIcon);
 		}
-		if (cH > cW*0.12) {
-			controlH = cW*0.12;
+		if (cH > cW*Constants.FX_CONTROL_H_TO_W) {
+			controlH = cW*Constants.FX_CONTROL_H_TO_W;
 		} else {
 			controlH = cH;
 		}

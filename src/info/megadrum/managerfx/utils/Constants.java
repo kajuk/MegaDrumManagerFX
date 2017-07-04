@@ -219,6 +219,7 @@ public interface Constants {
 	public static final Double FX_MISC_CONTROL_WIDTH_MUL	= 1.2;
 	public static final Double FX_PEDAL_CONTROL_WIDTH_MUL	= 1.4;
 	public static final Double FX_INPUT_CONTROL_WIDTH_MUL	= 1.3;
+	public static final Double FX_CONTROL_H_TO_W			= 0.12;
 	public static final Double FX_MISC_LABEL_WIDTH_MUL	= 0.60;
 	public static final Double FX_PEDAL_LABEL_WIDTH_MUL	= 0.45;
 	public static final Double FX_INPUT_LABEL_WIDTH_MUL	= 0.36;
