@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.omg.CORBA.CustomMarshal;
+
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.data.FileManager;
@@ -54,6 +56,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -63,6 +66,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
@@ -118,6 +122,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIMidiLog uiMidiLog;
 	private ArrayList<UIPanel>	allPanels;
 	private Double mainWindowMinWidth = 1000.0;
+
 	
 	private MidiController midiController;
 	private ConfigOptions configOptions;
@@ -146,6 +151,9 @@ public class Controller implements MidiRescanEventListener {
 	
 	private Boolean controlsSizeIsDouble = false;
 	private Boolean controlsSizeIsSingle = false;
+	
+	private Double viewZoom = 0.0;
+	private final int viewZoomCount = 11;
 
 	public Controller(Stage primaryStage) {
 		window = primaryStage;
@@ -531,9 +539,9 @@ public class Controller implements MidiRescanEventListener {
 		}
 		
 		controlW = width;
-		if (configOptions.doubleSize) {
-			controlH = controlH*2;
-			controlW = width*2;
+		if (viewZoom > 0) {
+			controlH = controlH*(1 + (viewZoom*0.1));
+			controlW = width*(1 + (viewZoom*0.1));
 			if (!controlsSizeIsDouble) {
 				controlsSizeIsDouble = true;
 				controlsSizeIsSingle = false;
@@ -793,6 +801,30 @@ public class Controller implements MidiRescanEventListener {
 				new SeparatorMenuItem(),exitMenuItem
 				);
 		
+		Menu menuViewZoom = new Menu("Zoom");
+		menuView.getItems().add(menuViewZoom);
+		ToggleGroup toggleGroup = new ToggleGroup();
+		
+		Double zoom;
+		for (int i = 0; i < viewZoomCount; i++) {
+			final int iFinal = i;
+			zoom = (10.0 + i)*0.1;
+			RadioMenuItem radioMenuItem;
+			if (i == 0 ) {
+				radioMenuItem = new RadioMenuItem("Fit window");
+			} else {
+				radioMenuItem = new RadioMenuItem(String.format("Zoom %1.1fx", zoom));
+			}
+			radioMenuItem.setToggleGroup(toggleGroup);
+			radioMenuItem.setOnAction(e-> {
+				viewZoom = Double.valueOf(iFinal);
+				respondToResize(scene1);
+			});
+			menuViewZoom.getItems().add(radioMenuItem);
+		}
+		toggleGroup.getToggles().get(0).setSelected(true);
+		
+		menuView.getItems().add(new SeparatorMenuItem());
 		Menu menuViewGlobalMisc = new Menu("Global Misc");
 		uiGlobalMisc.getRadioMenuItemHide().setOnAction( e-> {
 			uiGlobalMisc.setViewState(Constants.PANEL_HIDE);
