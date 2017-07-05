@@ -153,7 +153,7 @@ public class Controller implements MidiRescanEventListener {
 	private Boolean controlsSizeIsSingle = false;
 	
 	private int viewZoom = 0;
-	private final int viewZoomCount = 11;
+	private final int viewZoomCount = 12;
 	private ToggleGroup toggleGroupZoom;
 
 	public Controller(Stage primaryStage) {
