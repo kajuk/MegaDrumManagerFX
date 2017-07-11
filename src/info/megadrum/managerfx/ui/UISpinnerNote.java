@@ -2,6 +2,7 @@ package info.megadrum.managerfx.ui;
 
 import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
@@ -75,6 +76,14 @@ public class UISpinnerNote extends UIControl {
 		spinnerFast = new SpinnerFast<Integer>();
 		spinnerFast.setValueFactory(valueFactory);
 		spinnerFast.setEditable(true);
+		spinnerFast.focusedProperty().addListener((ov, t, t1) -> Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (spinnerFast.isFocused()) {
+					spinnerFast.getEditor().selectAll();
+				}
+			}
+		}));
 		//uispinner.seton
 		//uispinner.getEditor().setStyle("-fx-text-fill: black; -fx-alignment: CENTER_RIGHT;"
 		//		);    
