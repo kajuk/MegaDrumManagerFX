@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -22,6 +24,10 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 import info.megadrum.managerfx.utils.Constants;
 import info.megadrum.managerfx.utils.Utils;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -132,45 +138,61 @@ public class FileManager {
 
 	public File selectFirmwareFile(ConfigOptions options) {
 		FileChooser.ExtensionFilter extensionFilter;
+		String stringNameMatch;
 		if (!options.lastFullPathFirmware.equals("")) {
 			fileChooser.setInitialDirectory(new File(options.lastFullPathFirmware).getParentFile());
 		}
 		extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
+		stringNameMatch = "";
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(extensionFilter);
 		if (options.mcuType == 4) {
-			//extensionFilter = new FileChooser.ExtensionFilter("STM32a firmware files (*.bin)", "megadrumstm32a_*");
-			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
-			fileChooser.getExtensionFilters().clear();
-			fileChooser.getExtensionFilters().add(extensionFilter);
+			stringNameMatch = "megadrumSTM32a_";
 		}
 		if (options.mcuType == 5) {
-			//extensionFilter = new FileChooser.ExtensionFilter("STM32b firmware files (*.bin)", "megadrumstm32b_*");
-			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
-			fileChooser.getExtensionFilters().clear();
-			fileChooser.getExtensionFilters().add(extensionFilter);
+			stringNameMatch = "megadrumSTM32b_";
 		}
 		if (options.mcuType == 6) {
-			//extensionFilter = new FileChooser.ExtensionFilter("STM32c firmware files (*.bin)", "megadrumstm32c_*");
-			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
-			fileChooser.getExtensionFilters().clear();
-			fileChooser.getExtensionFilters().add(extensionFilter);
+			stringNameMatch = "megadrumSTM32c_";
 		}
 		if (options.mcuType == 7) {
-			//extensionFilter = new FileChooser.ExtensionFilter("STM32d firmware files (*.bin)", "megadrumstm32d_*");
-			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
-			fileChooser.getExtensionFilters().clear();
-			fileChooser.getExtensionFilters().add(extensionFilter);
+			stringNameMatch = "megadrumSTM32d_";
 		}
 		if (options.mcuType == 8) {
-			//extensionFilter = new FileChooser.ExtensionFilter("STM32e firmware files (*.bin)", "megadrumstm32e_*");
-			extensionFilter = new FileChooser.ExtensionFilter("Firmware files (*.bin)", "*.bin");
-			fileChooser.getExtensionFilters().clear();
-			fileChooser.getExtensionFilters().add(extensionFilter);
+			stringNameMatch = "megadrumSTM32e_";
 		}
+		//fileChooser
 		file = fileChooser.showOpenDialog(parent);
 		if (file != null) {
 			options.lastFullPathFirmware = file.getAbsolutePath();
+			String stringNameSelected = file.getName().toLowerCase();
+			if (stringNameSelected.indexOf(stringNameMatch.toLowerCase()) != 0) {
+				file = null;
+				Alert alert = new Alert(AlertType.WARNING);
+	            alert.setHeaderText("Wrong firmware file selected!\n" + 
+	            		"File name must start with " + stringNameMatch + " !!!"
+				);
+	            alert.showAndWait();
+	            //WebView webView = new WebView();
+	            //webView.getEngine().loadContent("<html><font size=4>Wrong firmware file selected<br></font></html>\n" +
+	        	//		"<html><font size=4>File name must start with " + stringNameMatch +" !!!</font></html>");
+	            //webView.setPrefSize(300, 120);
+	            //alert.getDialogPane().setContent(webView);
+	            /*
+				Timer warning_timer = new Timer();
+				warning_timer.schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						Platform.runLater(new Runnable() {
+							public void run() {
+								alert.showAndWait();
+							}
+						});
+					}
+				}, 50);
+				*/
+			}
 		}
 		return file;
 	}

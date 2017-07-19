@@ -222,10 +222,13 @@ public class UIUpgrade {
 	}
 	
 	private void selectFile() {
+		setLabelResult("", 0);
 		file = fileManager.selectFirmwareFile(configOptions);
 		if (file != null) {
 			textFieldFileName.setText(file.getAbsolutePath());
 			buttonStart.setDisable(false);
+		} else {
+			textFieldFileName.setText("");
 		}
 		window.toFront();
 	}
