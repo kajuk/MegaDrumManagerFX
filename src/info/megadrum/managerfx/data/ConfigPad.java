@@ -79,7 +79,7 @@ public class ConfigPad {
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
 		id++;
 		prefix = prefix+"["+id.toString()+"].";
-		autoLevel = prop.getBoolean(prefix+"disabled", disabled);
+		disabled = prop.getBoolean(prefix+"disabled", disabled);
 		note = Utils.validateInt(prop.getInt(prefix+"note", note),0,127,note);
 		channel = Utils.validateInt(prop.getInt(prefix+"channel", channel),0,15,channel);
 		curve = Utils.validateInt(prop.getInt(prefix+"curve", curve),0,15,curve);
