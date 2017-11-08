@@ -206,8 +206,9 @@ public class UIInput implements PanelInterface {
 							if (parameter == Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN) {
 								linkedNoteStateChanged();
 							}
-							fireControlChangeEvent(new ControlChangeEvent(this), parameter);
+							//fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 						}
+						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 					}
 				}
 			});
