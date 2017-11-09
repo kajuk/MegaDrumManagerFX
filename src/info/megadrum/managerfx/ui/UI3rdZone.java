@@ -122,8 +122,8 @@ public class UI3rdZone implements PanelInterface {
 								linkedNoteStateChanged();
 							}
 							setMidPointAndThreshold();
-							fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 						}
+						fireControlChangeEvent(new ControlChangeEvent(this), parameter);
 					}
 				}
 			});
