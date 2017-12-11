@@ -2712,7 +2712,8 @@ public class Controller implements MidiRescanEventListener {
 			sysex = configFull.configPads[0].getSysexFromConfig();
 			System.arraycopy(sysex, 0, sysexPad, 0, sysex.length);
 			sysexPos = configFull.configPos[0].getSysexFromConfig();
-			System.arraycopy(sysex, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex.length);
+			//System.arraycopy(sysex, 0, sysexPad, Constants.MD_SYSEX_PAD_SIZE, sysex.length);
+			System.arraycopy(sysex, 0, sysexPad, 0, sysex.length);
 			fileManager.saveSysex(sysexPad, configOptions);
 		}
 	}
