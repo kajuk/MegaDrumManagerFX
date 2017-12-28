@@ -2607,11 +2607,12 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void load_all() {
 		configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
-		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
-		uiGlobal.getComboBoxFile().getItems().clear();
-		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
-		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
-		loadAllFromConfigFull();
+		if (fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions)) {
+			uiGlobal.getComboBoxFile().getItems().clear();
+			uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
+			uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
+			loadAllFromConfigFull();
+		}
 	}
 
 	private void loadSysexMisc() {
@@ -2753,10 +2754,11 @@ public class Controller implements MidiRescanEventListener {
 		
 	private void save_all() {
 		configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
-		fileManager.save_all(configFull, configOptions);
-		uiGlobal.getComboBoxFile().getItems().clear();
-		uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
-		uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
+		if (fileManager.save_all(configFull, configOptions)) {
+			uiGlobal.getComboBoxFile().getItems().clear();
+			uiGlobal.getComboBoxFile().getItems().addAll(configOptions.configFileNames);
+			uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig);
+		}
 	}	
 
 	private void addCustomNamesToPads() {

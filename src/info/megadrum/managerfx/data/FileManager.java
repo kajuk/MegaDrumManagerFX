@@ -16,6 +16,8 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConversionException;
@@ -69,7 +71,8 @@ public class FileManager {
 		
 	}
 	
-	public void save_all(ConfigFull config, ConfigOptions options) {
+	public boolean save_all(ConfigFull config, ConfigOptions options) {
+		boolean result = false;
 		FileChooser.ExtensionFilter configFileFilter = new FileChooser.ExtensionFilter("MegaDrum full config files (*.mds)", "*.mds");
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(configFileFilter);
@@ -81,6 +84,7 @@ public class FileManager {
 		//returnVal = fileChooser.showSaveDialog(parent);
 		file = fileChooser.showSaveDialog(parent);
 		if(file != null) {
+			result = true;
 			if (!(file.getName().toLowerCase().endsWith(".mds"))) {
 				file = new File(file.getAbsolutePath() + ".mds");
 			}
@@ -93,6 +97,7 @@ public class FileManager {
 			}
 			saveConfigFull(config, file);
 		}
+		return result;
 	}
 
 	public void loadConfigFull(ConfigFull config, File file, ConfigOptions options) {
@@ -115,7 +120,8 @@ public class FileManager {
 		}
 	}	
 
-	public void load_all(ConfigFull config, ConfigOptions options) {
+	public boolean load_all(ConfigFull config, ConfigOptions options) {
+		boolean result = false;
 		FileChooser.ExtensionFilter configFileFilter = new FileChooser.ExtensionFilter("MegaDrum full config files (*.mds)", "*.mds");
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(configFileFilter);
@@ -128,11 +134,13 @@ public class FileManager {
 		file = fileChooser.showOpenDialog(parent);
 		if (file != null) {
 			if (file.exists()) {
+				result = true;
 				loadConfigFull(config,file,options);
 				options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
 				options.configFileNames[options.lastConfig] = file.getName();
 			}
 		}
+		return result;
 	}
 
 
