@@ -2085,7 +2085,7 @@ public class Controller implements MidiRescanEventListener {
 					id = 0;
 				}
 				if (configFull.configMisc.send_triggered_in) {
-					//controlsPads.switchAndShowPad(id);
+					switchToSelectedPair(id);
 				}
 			}
 			break;
