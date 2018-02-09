@@ -247,8 +247,10 @@ public class UISpinnerNote extends UIControl {
     	} else {
         	updateSyncStateConditional();
     	}
-    	valueFactory.setValue(n);
-    	spinnerFast.getEditor().setText(intValue.toString());
+		int pos = spinnerFast.getEditor().getCaretPosition(); // remember caret position (gets lost after setValue and setText
+		valueFactory.setValue(n);
+		spinnerFast.getEditor().setText(intValue.toString());
+		spinnerFast.getEditor().positionCaret(pos); // restore caret position
 		resizeFont(spinnerFast.getHeight());
 		changeNoteName();
     }
