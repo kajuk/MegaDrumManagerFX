@@ -13,8 +13,11 @@ import java.util.TimerTask;
 
 import org.omg.CORBA.CustomMarshal;
 
+import info.megadrum.managerfx.data.Config3rd;
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.data.ConfigPad;
+import info.megadrum.managerfx.data.ConfigPedal;
 import info.megadrum.managerfx.data.FileManager;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.midi.MidiEvent;
@@ -198,17 +201,17 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobal.getComboBoxFile().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		    	if (comboBoxFileChangedFromSet > 0) {
-		    		comboBoxFileChangedFromSet--;
-		    	} else {
-		    		if (uiGlobal.getComboBoxFile().getItems().size() > 0) {
+				if (comboBoxFileChangedFromSet > 0) {
+					comboBoxFileChangedFromSet--;
+				} else {
+					if (uiGlobal.getComboBoxFile().getItems().size() > 0) {
 						configOptions.lastConfig = uiGlobal.getComboBoxFile().getSelectionModel().getSelectedIndex();
 						fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 						loadAllFromConfigFull();
-		    		}
-		    	}				
+					}
+				}
 			}
-        });
+		});
 		uiGlobal.getButtonPrevFile().setOnAction(e-> {
 			if (configOptions.lastConfig>0) {
 				uiGlobal.getComboBoxFile().getSelectionModel().select(configOptions.lastConfig - 1);
@@ -224,10 +227,10 @@ public class Controller implements MidiRescanEventListener {
 		uiGlobalMisc.getButtonGet().setOnAction(e-> sendSysexGlobalMiscRequest());
 		uiGlobalMisc.getButtonSend().setOnAction(e-> sendSysexGlobalMisc());
 		uiGlobalMisc.getCheckBoxLiveUpdates().selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	configOptions.liveUpdates = newValue;
-		    }
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				configOptions.liveUpdates = newValue;
+			}
 		});
 		uiGlobalMisc.addControlChangeEventListener(new ControlChangeEventListener() {
 			
@@ -362,18 +365,18 @@ public class Controller implements MidiRescanEventListener {
 		uiPad.getComboBoxInput().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		    	if (comboBoxInputChangedFromSet > 0) {
-		    		comboBoxInputChangedFromSet--;
-		        	//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
-		    	} else {
-		    		Integer newInValue = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
-		        	//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
-		    		if (newInValue > -1) {
-			    		switchToSelectedPair(newInValue);		    			
-		    		}
-		    	}				
+				if (comboBoxInputChangedFromSet > 0) {
+					comboBoxInputChangedFromSet--;
+					//System.out.printf("changedFromSet reduced to %d for %s\n", changedFromSet, label.getText());
+				} else {
+					Integer newInValue = uiPad.getComboBoxInput().getSelectionModel().getSelectedIndex();
+					//System.out.printf("Setting %s to %s\n", label.getText(), newValue);
+					if (newInValue > -1) {
+						switchToSelectedPair(newInValue);
+					}
+				}
 			}
-        });
+		});
 		updateComboBoxInput(true);
 		uiPad.setInputPair(0, configFull.configPads[0], configFull.configPos[0], null, null, null);
 		
@@ -1021,11 +1024,11 @@ public class Controller implements MidiRescanEventListener {
 	private void showMidiWarningIfNeeded() {
 		if (configOptions.MidiInName.equals("") || configOptions.MidiOutName.equals("")) {
 			Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setHeaderText("MIDI ports warning!");
-            WebView webView = new WebView();
-            webView.getEngine().loadContent(Constants.MIDI_PORTS_WARNING);
-            webView.setPrefSize(300, 120);
-            alert.getDialogPane().setContent(webView);
+			alert.setHeaderText("MIDI ports warning!");
+			WebView webView = new WebView();
+			webView.getEngine().loadContent(Constants.MIDI_PORTS_WARNING);
+			webView.setPrefSize(300, 120);
+			alert.getDialogPane().setContent(webView);
 			Timer warning_timer = new Timer();
 			warning_timer.schedule(new TimerTask() {
 				
@@ -2023,10 +2026,68 @@ public class Controller implements MidiRescanEventListener {
 			}
 		});		
 	}
-	
+
+	private int getNoteOnBarType(int note) {
+		for (int i = 0; i < configFull.configPads.length; i++) {
+			ConfigPad check = configFull.configPads[i];
+			if (check.disabled) {
+				continue;
+			}
+			if ((note == check.note) ||
+					(note == check.altNote) ||
+					(note == check.pressrollNote)) {
+				return ((i == 0) || ((i&1) == 1)) // pad 0 or even number
+						? MidiLevelBar.barTypeHead // head zone
+						: MidiLevelBar.barTypeRim; // else rim zone
+			}
+		}
+		for (int i = 0; i < configFull.config3rds.length; i++) { // check for 3rd zone
+			Config3rd check = configFull.config3rds[i];
+			ConfigPad checkPad = configFull.configPads[2*i+1]; // related pad settings
+			if ((!checkPad.dual && !checkPad.threeWay) || check.disabled) {
+				continue;
+			}
+			if ((note == check.note) ||
+					(note == check.altNote) ||
+					(note == check.pressrollNote) ||
+					(note == check.dampenedNote)) {
+				return MidiLevelBar.barType3rd;
+			}
+		}
+		// Hi-hat bow
+		ConfigPedal check = configFull.configPedal;
+		if ((note == check.bowClosedNote)||
+				(note == check.bowSemiClosedNote) ||
+				(note == check.bowHalfOpenNote) ||
+				(note == check.bowHalfOpen2Note) ||
+				(note == check.bowSemiOpenNote) ||
+				(note == check.bowSemiOpen2Note)) {
+			return MidiLevelBar.barTypeHead;
+		}
+		// Hi-hat edge
+		if ((note == check.edgeClosedNote)||
+				(note == check.edgeSemiClosedNote) ||
+				(note == check.edgeHalfOpenNote) ||
+				(note == check.edgeHalfOpen2Note) ||
+				(note == check.edgeSemiOpenNote) ||
+				(note == check.edgeSemiOpen2Note)) {
+			return MidiLevelBar.barTypeRim;
+		}
+		// Hi-hat bell
+		if ((note == check.bellClosedNote)||
+				(note == check.bellSemiClosedNote) ||
+				(note == check.bellHalfOpenNote) ||
+				(note == check.bellHalfOpen2Note) ||
+				(note == check.bellSemiOpenNote) ||
+				(note == check.bellSemiOpen2Note)) {
+			return MidiLevelBar.barType3rd;
+		}
+
+		return MidiLevelBar.barTypeUnknown; // default
+	}
+
 	private void processShortMidi(byte [] buffer) {
 		//panelMidiLog.addRawMidi(buffer);
-		int type = MidiLevelBar.barTypeUnknown;
 		switch (buffer.length) {
 		case 1:
 			//shortMessage.setMessage(buf[0]);
@@ -2038,41 +2099,25 @@ public class Controller implements MidiRescanEventListener {
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			//System.out.printf("MIDI Short = %02x %02x %02x\n", buffer[0], buffer[1], buffer[2]);
 			uiMidiLog.addRawMidi(buffer);
-			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
-				type = MidiLevelBar.barTypeUnknown;
-				for (int i = 0; i< configFull.configPads.length;i++) {
-					if ((buffer[1]==configFull.configPads[i].note) ||
-							(buffer[1]==configFull.configPads[i].altNote) ||
-							(buffer[1]==configFull.configPads[i].pressrollNote)) {
-						if (i==0) {
-							type = MidiLevelBar.barTypeHead;
-						} else {
-							type = ((i&0x01)==1)?MidiLevelBar.barTypeHead:MidiLevelBar.barTypeRim;
-						}
-					}
-					if ((i&0x01) == 1) {
-						if ((buffer[1]==configFull.config3rds[(i-1)/2].note) ||
-								(buffer[1]==configFull.config3rds[(i-1)/2].altNote) ||
-								(buffer[1]==configFull.config3rds[(i-1)/2].pressrollNote) ||
-								(buffer[1]==configFull.config3rds[(i-1)/2].dampenedNote)) {
-							type = MidiLevelBar.barType3rd;
-						}						
-					}
-				}
-				uiMidiLog.addNewMidiData(type, buffer[1], buffer[2]);
+			int type = (buffer[0]&0xf0);
+			if ((type == 0x90) && (buffer[2] > 0)) { // Note On
+				int note = buffer[1];
+				int velocity = buffer[2];
+				int barType = getNoteOnBarType(note);
+				uiMidiLog.addNewMidiData(barType, note, velocity);
 			}
-			if ((buffer[0]&0xf0) == 0xa0) {
+			if (type == 0xa0) {
 				uiMidiLog.addNewMidiData((buffer[2]>0)?MidiLevelBar.barTypeChokeOn:MidiLevelBar.barTypeChokeOff,
 						buffer[1], buffer[2]);
 			}
-			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
+			if ((type == 0xb0) && (buffer[1] == 0x04)) {
 				uiMidiLog.setHiHatLevel(127 - buffer[2]);
 			}
-			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
+			if ((type == 0xb0) && (buffer[1] == 0x10)) {
 				//uiMidiLog.addNewPositional(127 - buffer[2]);
 				uiMidiLog.addNewPositional((int)buffer[2]);
 			}
-			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
+			if ((type == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];
 				if (id > 0x3f) {
 					id = (id - 0x40)*2 + 1; 
@@ -2096,7 +2141,7 @@ public class Controller implements MidiRescanEventListener {
 		if (sysex.length >= 5) {
 			//System.out.printf("Sysex received type = %d\n", sysex[3]);			
 			byte pointer = sysex[4];
-	    	switch (sysex[3]) {
+			switch (sysex[3]) {
 			case Constants.MD_SYSEX_3RD:
 				//System.out.printf("Sysex 3rd pointer = %d\n", pointer);
 				if (pointer < configFull.config3rds.length) {
@@ -2132,7 +2177,7 @@ public class Controller implements MidiRescanEventListener {
 				configFull.configConfigNames[pointer].setConfigFromSysex(sysex);
 				moduleConfigFull.configConfigNames[pointer].setConfigFromSysex(sysex);
 				configFull.configConfigNames[pointer].sysexReceived = true;
-			    //System.out.printf("sysexReceived for ConfigName id %d set to true\n", buffer[4]);
+				//System.out.printf("sysexReceived for ConfigName id %d set to true\n", buffer[4]);
 				reCreateSlotsMenuItems();
 				if (configFull.configCurrent == pointer) {
 					//uiGlobalMisc.geTextFieldSlotName().setText(configFull.configConfigNames[pointer].name.trim());
@@ -2240,11 +2285,11 @@ public class Controller implements MidiRescanEventListener {
 						if (!versionWarningAlreadyShown) {
 							versionWarningAlreadyShown = true;
 							Alert alert = new Alert(AlertType.WARNING);
-				            alert.setHeaderText("Firmware version is too old!");
-				            WebView webView = new WebView();
-				            webView.getEngine().loadContent(Constants.WARNING_VERSION);
-				            webView.setPrefSize(300, 120);
-				            alert.getDialogPane().setContent(webView);
+							alert.setHeaderText("Firmware version is too old!");
+							WebView webView = new WebView();
+							webView.getEngine().loadContent(Constants.WARNING_VERSION);
+							webView.setPrefSize(300, 120);
+							alert.getDialogPane().setContent(webView);
 							
 							Timer warning_timer = new Timer();
 							warning_timer.schedule(new TimerTask() {
@@ -2781,14 +2826,14 @@ public class Controller implements MidiRescanEventListener {
 			aboutString = Constants.HELP_ABOUT;
 		}
 		Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText("About MegaDrum Manager FX");
-        WebView webView = new WebView();
-        webView.getEngine().loadContent(aboutString);
-        webView.setPrefSize(400, 220);
-        alert.getDialogPane().setContent(webView);
-        alert.showAndWait();
+		alert.setHeaderText("About MegaDrum Manager FX");
+		WebView webView = new WebView();
+		webView.getEngine().loadContent(aboutString);
+		webView.setPrefSize(400, 220);
+		alert.getDialogPane().setContent(webView);
+		alert.showAndWait();
 
-        Timer warning_timer = new Timer();
+		Timer warning_timer = new Timer();
 		warning_timer.schedule(new TimerTask() {
 			
 			@Override
