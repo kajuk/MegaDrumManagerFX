@@ -11,9 +11,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import info.megadrum.managerfx.data.*;
 import org.omg.CORBA.CustomMarshal;
 
+import info.megadrum.managerfx.data.Config3rd;
+import info.megadrum.managerfx.data.ConfigFull;
+import info.megadrum.managerfx.data.ConfigOptions;
+import info.megadrum.managerfx.data.ConfigPad;
+import info.megadrum.managerfx.data.FileManager;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.midi.MidiEvent;
 import info.megadrum.managerfx.midi.MidiEventListener;
