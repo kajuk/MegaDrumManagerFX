@@ -17,6 +17,7 @@ import info.megadrum.managerfx.data.Config3rd;
 import info.megadrum.managerfx.data.ConfigFull;
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.data.ConfigPad;
+import info.megadrum.managerfx.data.ConfigPedal;
 import info.megadrum.managerfx.data.FileManager;
 import info.megadrum.managerfx.midi.MidiController;
 import info.megadrum.managerfx.midi.MidiEvent;
