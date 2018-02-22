@@ -1,8 +1,12 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import info.megadrum.managerfx.data.ConfigOptions;
 import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
@@ -32,6 +36,8 @@ public class UISpinner extends UIControl {
 	private Integer step;
 	private HBox layout;
 	private SpinnerValueFactory<Integer> valueFactory;
+	private Boolean changedByEdit = false;
+	private Integer changedByEditTimers = 0;
 
 	public UISpinner(Boolean showCopyButton) {
 		super(showCopyButton);
@@ -76,6 +82,7 @@ public class UISpinner extends UIControl {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				//System.out.printf("%s: Entered value = %s\n",label.getText(),Integer.valueOf(newValue),newValue );
 				// Spinner number validation
 		    	if (changedFromSet > 0) {
 		    		changedFromSet--;
@@ -90,23 +97,55 @@ public class UISpinner extends UIControl {
 						} else {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
-								intValue = Integer.valueOf(newValue);
+								intValue = (Integer.valueOf(newValue)/step)*step;
 								if (spinnerType == Constants.FX_SPINNER_TYPE_STANDARD) {
-									fireControlChangeEvent(new ControlChangeEvent(this), 0);
-									//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),Integer.valueOf(oldValue) );
-									if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-										if (intValue.intValue() == mdIntValue.intValue()) {
-											setSyncState(Constants.SYNC_STATE_SYNCED);						
-										} else {
-											setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
-										}
+									if ((intValue >= minValue) & (intValue <= maxValue)) {
+										fireControlChangeEvent(new ControlChangeEvent(this), 0);
+										changedByEdit = true;
+										Timer changedByEditTimer = new Timer();
+										changedByEditTimers++;
+										changedByEditTimer.schedule(new TimerTask() {
+											
+											@Override
+											public void run() {
+												Platform.runLater(new Runnable() {
+													public void run() {
+														if (changedByEditTimers == 1) {
+															changedByEdit = false;
+															if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+																if (intValue.intValue() == mdIntValue.intValue()) {
+																	setSyncState(Constants.SYNC_STATE_SYNCED);						
+																} else {
+																	setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+																}
+															}
+												    		if (Integer.valueOf(spinnerFast.getEditor().getText()) != intValue) {
+												    			Integer cursor = spinnerFast.getEditor().getCaretPosition();
+												    			spinnerFast.getEditor().setText(intValue.toString());
+												    			spinnerFast.getEditor().positionCaret(cursor);
+												    		}
+															//System.out.printf("%s: text value = %d, int value = %d, MD value = %d\n",label.getText(),Integer.valueOf(newValue),intValue,Integer.valueOf(mdIntValue) );
+														}
+														changedByEditTimers--;
+													}
+												});
+											}
+										}, 1500);
 									}
+									//resizeFont();
 								}
-								//resizeFont();
+							
 							}
 						}
 		            }		    		
 		    	}
+				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+					if (intValue.intValue() == mdIntValue.intValue()) {
+						setSyncState(Constants.SYNC_STATE_SYNCED);						
+					} else {
+						setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+					}
+				}
 			}
 	    });
 		
@@ -171,7 +210,7 @@ public class UISpinner extends UIControl {
 	}
 */
     public void uiCtlSetValue(Integer n, Boolean setFromSysex) {
-    	if (intValue.intValue() != n.intValue()) {
+    	if ((intValue.intValue()/step) != (n.intValue()/step)) {
         	changedFromSet++;
     		intValue = n;
     	}
@@ -179,11 +218,15 @@ public class UISpinner extends UIControl {
     	if (setFromSysex) {
     		setSyncState(Constants.SYNC_STATE_SYNCED);
     		mdIntValue = n;
+        	//System.out.printf("Last MD value = %d for %s\n", n, label.getText());
     	} else {
         	updateSyncStateConditional();
     	}
-    	valueFactory.setValue(n);
-    	spinnerFast.getEditor().setText(intValue.toString());
+    	if (!changedByEdit) {
+        	valueFactory.setValue(n);
+        	spinnerFast.getEditor().setText(intValue.toString());
+    	}
+		changedByEdit = false;
 		resizeFont(spinnerFast.getHeight());
     }
     
