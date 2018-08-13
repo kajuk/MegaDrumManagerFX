@@ -1,7 +1,11 @@
 package info.megadrum.managerfx.ui;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import info.megadrum.managerfx.utils.Constants;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
@@ -42,6 +46,8 @@ public class UISpinnerNote extends UIControl {
 	private Integer		linkedChangedFromSet = 0;
 	private Boolean		mainNote = false;
 	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
+	private Boolean		changedByEdit = false;
+	private Integer 	changedByEditTimers = 0;
 
 
 	public UISpinnerNote(Boolean showCopyButton) {
@@ -98,26 +104,54 @@ public class UISpinnerNote extends UIControl {
 							if (intValue.intValue() != Integer.valueOf(newValue).intValue()) {
 								//System.out.printf("%s: new value = %d, old value = %d\n",label.getText(),Integer.valueOf(newValue),intValue );
 								intValue = Integer.valueOf(newValue);
-								changeNoteName();
-								if (mainNote) {
-									fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN);									
-								} else {
-									fireControlChangeEvent(new ControlChangeEvent(this), 0);
-								}
-								if (syncState != Constants.SYNC_STATE_UNKNOWN) {
-									if (intValue.intValue() == mdIntValue.intValue()) {
-										setSyncState(Constants.SYNC_STATE_SYNCED);						
+								if ((intValue >= minValue) & (intValue <= maxValue)) {
+									changeNoteName();
+									if (mainNote) {
+										fireControlChangeEvent(new ControlChangeEvent(this), Constants.CONTROL_CHANGE_EVENT_NOTE_MAIN);									
 									} else {
-										setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+										fireControlChangeEvent(new ControlChangeEvent(this), 0);
 									}
-									
+									changedByEdit = true;
+									Timer changedByEditTimer = new Timer();
+									changedByEditTimers++;
+									changedByEditTimer.schedule(new TimerTask() {
+										
+										@Override
+										public void run() {
+											Platform.runLater(new Runnable() {
+												public void run() {
+													if (changedByEditTimers == 1) {
+														changedByEdit = false;
+														if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+															if (intValue.intValue() == mdIntValue.intValue()) {
+																setSyncState(Constants.SYNC_STATE_SYNCED);						
+															} else {
+																setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+															}
+														}
+											    		if (Integer.valueOf(spinnerFast.getEditor().getText()) != intValue) {
+											    			Integer cursor = spinnerFast.getEditor().getCaretPosition();
+											    			spinnerFast.getEditor().setText(intValue.toString());
+											    			spinnerFast.getEditor().positionCaret(cursor);
+											    		}
+													}
+												}
+											});
+										}
+									}, 1500);
 								}
 								//resizeFont();
 							}
 						}
 		            }		    		
 		    	}
-				
+				if (syncState != Constants.SYNC_STATE_UNKNOWN) {
+					if (intValue.intValue() == mdIntValue.intValue()) {
+						setSyncState(Constants.SYNC_STATE_SYNCED);						
+					} else {
+						setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+					}					
+				}
 			}
 	    });
 		
@@ -247,10 +281,12 @@ public class UISpinnerNote extends UIControl {
     	} else {
         	updateSyncStateConditional();
     	}
-		int pos = spinnerFast.getEditor().getCaretPosition(); // remember caret position (gets lost after setValue and setText
-		valueFactory.setValue(n);
-		spinnerFast.getEditor().setText(intValue.toString());
-		spinnerFast.getEditor().positionCaret(pos); // restore caret position
+    	if (changedByEdit) {
+    		changedByEdit = false;
+    	} else {
+        	valueFactory.setValue(n);
+        	spinnerFast.getEditor().setText(intValue.toString());
+    	}
 		resizeFont(spinnerFast.getHeight());
 		changeNoteName();
     }
