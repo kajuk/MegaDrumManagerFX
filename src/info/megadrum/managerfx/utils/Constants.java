@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 public interface Constants {
 	public static final String WINDOWS_TITLE = "MegaDrumManager FX";
 	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
-	public static final String MD_VERSION = "20180222";
-	public static final int MD_MINIMUM_VERSION = 20170622;
+	public static final String MD_VERSION = "20181028";
+	public static final int MD_MINIMUM_VERSION = 20181028;
 	public static final String WARNING_VERSION = "<html><font size=4>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=4>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
 	public static final Double MD_CONFIG_VERSION = 0.5;
@@ -55,7 +55,7 @@ public interface Constants {
 	public static final byte SYSEX_END = (byte)0xf7;
 	public static final byte MD_SYSEX = (byte)0x70;
 	public static final byte MD_SYSEX_MISC = (byte)0x01;
-	public static final byte MD_SYSEX_MISC_SIZE = 17;
+	public static final byte MD_SYSEX_MISC_SIZE = 19;
 	public static final byte MD_SYSEX_PEDAL = (byte)0x02;
 	public static final byte MD_SYSEX_PEDAL_SIZE_OLD = 79;
 	public static final byte MD_SYSEX_PEDAL_SIZE = 95;

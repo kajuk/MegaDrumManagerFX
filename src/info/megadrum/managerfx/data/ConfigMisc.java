@@ -14,6 +14,7 @@ public class ConfigMisc {
 	public int latency = 40;
 	public int pressroll = 0;
 	public int octave_shift = 2;
+	public int noise_filter = 5;
 	public boolean all_gains_low = false;
 	public boolean big_vu_meter = false;
 	public boolean big_vu_split = false;
@@ -35,6 +36,7 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"latency", latency);
 		prop.setProperty(prefix+"pressroll", pressroll);
 		prop.setProperty(prefix+"octave_shift", octave_shift);
+		prop.setProperty(prefix+"noise_filter", noise_filter);
 		prop.setProperty(prefix+"all_gains_low", all_gains_low);
 		prop.setProperty(prefix+"big_vu_meter", big_vu_meter);
 		prop.setProperty(prefix+"big_vu_split", big_vu_split);
@@ -51,6 +53,7 @@ public class ConfigMisc {
 		latency = Utils.validateInt(prop.getInt(prefix+"latency", latency),10,100,latency);
 		pressroll = Utils.validateInt(prop.getInt(prefix+"pressroll", pressroll),0,note_off,pressroll);
 		octave_shift = Utils.validateInt(prop.getInt(prefix+"octave_shift", octave_shift),0,4,octave_shift);
+		noise_filter = Utils.validateInt(prop.getInt(prefix+"noise_filter", noise_filter),0,9,noise_filter);
 		all_gains_low = prop.getBoolean(prefix+"all_gains_low", all_gains_low);
 		big_vu_meter = prop.getBoolean(prefix+"big_vu_meter", big_vu_meter);
 		big_vu_split = prop.getBoolean(prefix+"big_vu_split", big_vu_split);
@@ -98,6 +101,9 @@ public class ConfigMisc {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			octave_shift = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			noise_filter = Utils.sysex2byte(sysex_byte)&0x0f;
 			
 			
 			all_gains_low = ((flags&1) != 0);
@@ -143,6 +149,9 @@ public class ConfigMisc {
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = Utils.byte2sysex((byte)octave_shift);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = Utils.byte2sysex((byte)noise_filter);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;

@@ -28,6 +28,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	private UISpinner uiSpinnerPressrollTimeout;
 	private UISpinner uiSpinnerLatency;
 	private UISpinner uiSpinnerNotesOctaveShift;
+	private UISpinner uiSpinnerNoiseFilter;
 	private UICheckBox uiCheckBoxBigVUmeter;
 	private UICheckBox uiCheckBoxBigVUsplit;
 	private UICheckBox uiCheckBoxBigVUQuickAccess;
@@ -42,6 +43,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	private Tooltip   tooltipAllGainsLow;
 	private Tooltip   tooltipAltSampling;
 	private Tooltip   tooltipUnknown;
+	private Tooltip   tooltipNoiseFilter;
 		
 	protected EventListenerList listenerList = new EventListenerList();
 	
@@ -93,6 +95,10 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		//uiSpinnerNotesOctaveShift.setAdvancedSetting(true);
 		allControls.add(uiSpinnerNotesOctaveShift);
 
+		uiSpinnerNoiseFilter = new UISpinner("Noise Filter Level", 0, 9, 5, 1, false);
+		uiSpinnerNoiseFilter.setAdvancedSetting(true);
+		allControls.add(uiSpinnerNoiseFilter);
+		
 		uiCheckBoxBigVUmeter = new UICheckBox("Big VU meter", false);
 		uiCheckBoxBigVUmeter.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxBigVUmeter);
@@ -120,6 +126,8 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		tooltipAllGainsLow = new Tooltip("When enabled, it will disable all individual input Gain levels\nand make Gain even lower than 'Gain Level' 0.\nIt could be used if all your pads are 'hot' and to get\na better dynamic range with such pads.");
 		tooltipAltSampling = new Tooltip("When enabled, MegaDrum uses a new sampling algorithm\nwhich can reduce signal noise\nand improve sensitivity.");
 		tooltipUnknown = new Tooltip("This setting function depends on the type of MegaDrum MCU");
+		tooltipNoiseFilter = new Tooltip("This setting allows to reduce inputs noise\nand improve sensibility.\nAvailable only on STM32F205 based Megadrum.");
+		uiSpinnerNoiseFilter.setControlTooltip(tooltipNoiseFilter);
 
 		uiCheckBoxMIDIThru = new UICheckBox("MIDI Thru", false);
 		uiCheckBoxMIDIThru.setAdvancedSetting(true);
@@ -132,7 +140,8 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		uiCheckBoxAltNoteChoking = new UICheckBox("AltNote Chokng", false);
 		uiCheckBoxAltNoteChoking.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxAltNoteChoking);
-	
+
+				
 		vBoxAll.getChildren().add(paneAll);
 		for (int i = 0; i < allControls.size(); i++) {
 			verticalControlsCount++;
@@ -182,7 +191,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		}
 		uiCheckBoxUnknownSetting.setLabelText("Unknown");
 		uiCheckBoxUnknownSetting.setControlTooltip(tooltipUnknown);
-
+		uiSpinnerNoiseFilter.uiCtlSetDisable(false);
 	}
 	
 	public void respondToResizeDetached() {
@@ -249,6 +258,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		uiCheckBoxMIDIThru.uiCtlSetValue(config.midi_thru, setFromSysex);
 		uiCheckBoxSendTriggeredIn.uiCtlSetValue(config.send_triggered_in, setFromSysex);
 		uiCheckBoxAltNoteChoking.uiCtlSetValue(config.alt_note_choking, setFromSysex);
+		uiSpinnerNoiseFilter.uiCtlSetValue(config.noise_filter, setFromSysex);
 	}
 		
 	public void setConfigFromControls(ConfigMisc config) {
@@ -265,6 +275,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 		config.midi_thru = uiCheckBoxMIDIThru.uiCtlIsSelected();
 		config.send_triggered_in = uiCheckBoxSendTriggeredIn.uiCtlIsSelected();
 		config.alt_note_choking = uiCheckBoxAltNoteChoking.uiCtlIsSelected();
+		config.noise_filter = uiSpinnerNoiseFilter.uiCtlGetValue();
 	}
 	
 	@Override
@@ -288,6 +299,11 @@ public class UIMisc extends UIPanel implements PanelInterface{
 				uiCheckBoxUnknownSetting.setLabelText("Alt Sampling Alg");
 				uiCheckBoxUnknownSetting.setControlTooltip(tooltipAltSampling);
 			}
+		}
+		if (mcuType < 6) {
+			uiSpinnerNoiseFilter.uiCtlSetDisable(true);
+		} else {
+			uiSpinnerNoiseFilter.uiCtlSetDisable(false);
 		}
 	}
 }
