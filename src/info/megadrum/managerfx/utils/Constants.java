@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public interface Constants {
 	public static final String WINDOWS_TITLE = "MegaDrumManager FX";
 	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
-	public static final String MD_VERSION = "20181028";
+	public static final String MD_VERSION = "20200222";
 	public static final int MD_MINIMUM_VERSION = 20181028;
 	public static final String WARNING_VERSION = "<html><font size=4>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=4>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -86,10 +86,12 @@ public interface Constants {
 	public static final byte MD_SYSEX_CONFIG_CURRENT_SIZE = 6;
 	public static final byte MD_SYSEX_CONFIG_LOAD = (byte)0x11;
 	public static final byte MD_SYSEX_CONFIG_LOAD_SIZE = 6;
+	public static final byte MD_SYSEX_PEDAL_LEVEL_RAW = (byte)0x12;
+	public static final byte MD_SYSEX_PEDAL_LEVEL_RAW_SIZE = 9;	
 	public static final String[] MD_SYSEX_NAMES = {
 			"Undefined", "Misc","Pedal","Input","3rd Zone","Version","Curve","Positional", 	//0-7
 			"Custom Name","Global Misc", "Undefined", "Bootloader","MCU Type","Config Name","Config Count","Config Save",	//8-f
-			"Config Current", "Config Load"							//10-
+			"Config Current", "Config Load"	, "Pedal Level Raw"						//10-
 	};
 	
 	public static final int MD_SYSEX_STATUS_OK = 0;

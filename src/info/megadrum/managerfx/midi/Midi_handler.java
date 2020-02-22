@@ -391,6 +391,12 @@ public class Midi_handler {
 		sendSysexRequest(sx);
 	}
 
+	public void requestPedalLevelRaw() {
+		byte [] sx = new byte[5];
+		sx[3] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
+		sendSysexRequest(sx);
+	}
+	
 	public void requestArmBootloader() {
 		byte [] sx = new byte[21];
 		sx[3] = Constants.MD_SYSEX_BOOTLOADER;

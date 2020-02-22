@@ -394,6 +394,9 @@ public class MidiController {
 				sysexReceived = true;
 				midiHandler.requestSaveToSlot(id);
 				break;
+			case Constants.MD_SYSEX_PEDAL_LEVEL_RAW:
+				midiHandler.requestPedalLevelRaw();
+				break;
 			default:
 				break;
 			}

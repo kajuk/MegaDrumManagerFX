@@ -1500,6 +1500,18 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_MISC;
 		sysexSendList.add(typeAndId);
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
+		sysexSendList.add(typeAndId);
+		sendSysex();
+	}
+
+	private void sendSysexPedalLevelRawRequest() {
+		//sysexSendList.clear();
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
+		sysexSendList.add(typeAndId);
 		sendSysex();
 	}
 
@@ -2308,6 +2320,18 @@ public class Controller implements MidiRescanEventListener {
 						uiGlobalMisc.setVersion(ver, "lightgreen");
 					}
 				}
+				break;
+			case Constants.MD_SYSEX_PEDAL_LEVEL_RAW:
+				int pedal_level_raw = 0;
+				byte [] sysex_short = new byte[4];
+				if (sysex.length >= Constants.MD_SYSEX_PEDAL_LEVEL_RAW_SIZE) {
+					sysex_short[0] = sysex[4];
+					sysex_short[1] = sysex[5];
+					sysex_short[2] = sysex[6];
+					sysex_short[3] = sysex[7];
+					pedal_level_raw = Utils.sysex2short(sysex_short);
+				}				
+				System.out.printf("Pedal Level Raw = %d\n", pedal_level_raw);
 				break;
 			default:
 				break;
