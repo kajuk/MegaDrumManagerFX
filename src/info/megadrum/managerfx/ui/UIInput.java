@@ -44,6 +44,8 @@ public class UIInput implements PanelInterface {
 	private UIComboBox 		uiComboBoxDynLevel;
 	private UIComboBox 		uiComboBoxDynTime;
 	private UISpinner 		uiSpinnerMinScan;
+	private UIComboBox 		uiComboBoxRollSmoothLevel;
+	private UICheckBox 		uiCheckBoxExtraFalse;
 	private UIComboBox 		uiComboBoxPosLevel;
 	private UISpinner 		uiSpinnerPosLow;
 	private UISpinner 		uiSpinnerPosHigh;
@@ -160,6 +162,15 @@ public class UIInput implements PanelInterface {
 		uiComboBoxDynTime = new UIComboBox("DynTime", true);
 		uiComboBoxDynTime.uiCtlSetValuesArray(Arrays.asList(Constants.PAD_DYN_TIME_LIST));
 		allControls.add(uiComboBoxDynTime);
+
+		uiCheckBoxExtraFalse = new UICheckBox("ExtraFalseSupp", false);
+		uiCheckBoxExtraFalse.setAdvancedSetting(true);
+		allControls.add(uiCheckBoxExtraFalse);
+		
+		uiComboBoxRollSmoothLevel = new UIComboBox("Roll Smooth", true);
+		uiComboBoxRollSmoothLevel.setAdvancedSetting(true);
+		uiComboBoxRollSmoothLevel.uiCtlSetValuesArray(Arrays.asList(Constants.ROLL_SMOOTH_LEVEL_LIST));
+		allControls.add(uiComboBoxRollSmoothLevel);
 
 		uiSpinnerMinScan = new UISpinner("MinScan", 10, 100, 20, 1, true);
 		allControls.add(uiSpinnerMinScan);
@@ -348,6 +359,8 @@ public class UIInput implements PanelInterface {
 		uiSpinnerRetrigger.uiCtlSetMdValue(configPad.retrigger);
 		uiComboBoxDynLevel.uiCtlSetMdValue(configPad.dynLevel);
 		uiComboBoxDynTime.uiCtlSetMdValue(configPad.dynTime);
+		uiComboBoxRollSmoothLevel.uiCtlSetMdValue(configPad.rollSmoothLevel);
+		uiCheckBoxExtraFalse.uiCtlSetMdValue(configPad.extraFalseSupp);
 		uiSpinnerMinScan.uiCtlSetMdValue(configPad.minScan);
 		uiComboBoxType.uiCtlSetMdValue(configPad.getTypeInt());
 	}
@@ -400,6 +413,8 @@ public class UIInput implements PanelInterface {
 		uiSpinnerRetrigger.uiCtlSetValue(configPad.retrigger, setFromSysex);
 		uiComboBoxDynLevel.uiCtlSetValue(configPad.dynLevel, setFromSysex);
 		uiComboBoxDynTime.uiCtlSetValue(configPad.dynTime, setFromSysex);
+		uiComboBoxRollSmoothLevel.uiCtlSetValue(configPad.rollSmoothLevel, setFromSysex);
+		uiCheckBoxExtraFalse.uiCtlSetValue(configPad.extraFalseSupp, setFromSysex);
 		uiSpinnerMinScan.uiCtlSetValue(configPad.minScan, setFromSysex);
 		uiComboBoxType.uiCtlSetValue(configPad.getTypeInt(), setFromSysex);
 	}
@@ -441,6 +456,8 @@ public class UIInput implements PanelInterface {
 		configPad.retrigger = uiSpinnerRetrigger.uiCtlGetValue();
 		configPad.dynLevel = uiComboBoxDynLevel.uiCtlGetValue();
 		configPad.dynTime = uiComboBoxDynTime.uiCtlGetValue();
+		configPad.rollSmoothLevel = uiComboBoxRollSmoothLevel.uiCtlGetValue();
+		configPad.extraFalseSupp = uiCheckBoxExtraFalse.uiCtlIsSelected();
 		configPad.minScan = uiSpinnerMinScan.uiCtlGetValue();
 		configPad.setTypeInt(uiComboBoxType.uiCtlGetValue());
 	}

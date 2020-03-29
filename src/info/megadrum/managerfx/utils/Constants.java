@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 public interface Constants {
 	public static final String WINDOWS_TITLE = "MegaDrumManager FX";
 	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
-	public static final String MD_VERSION = "20200222";
-	public static final int MD_MINIMUM_VERSION = 20181028;
+	public static final String MD_VERSION = "20200329";
+	public static final int MD_MINIMUM_VERSION = 20200329;
 	public static final String WARNING_VERSION = "<html><font size=4>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=4>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
 	public static final Double MD_CONFIG_VERSION = 0.5;
@@ -60,7 +60,7 @@ public interface Constants {
 	public static final byte MD_SYSEX_PEDAL_SIZE_OLD = 79;
 	public static final byte MD_SYSEX_PEDAL_SIZE = 95;
 	public static final byte MD_SYSEX_PAD = (byte)0x03;
-	public static final byte MD_SYSEX_PAD_SIZE = 34;
+	public static final byte MD_SYSEX_PAD_SIZE = 36;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;
 	public static final byte MD_SYSEX_3RD_SIZE = 16;
 	public static final byte MD_SYSEX_VERSION = (byte)0x05;
@@ -237,6 +237,7 @@ public interface Constants {
 	public static final String[] PAD_DYN_LEVEL_LIST	= { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
 	public static final String[] PAD_DYN_TIME_LIST	= { "0", "4", "8", "12", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60"};
 	public static final String[] PAD_POS_LEVEL_LIST	= { "Disabled", "1", "2", "3" };
+	public static final String[] ROLL_SMOOTH_LEVEL_LIST	= { "Disabled", "1", "2", "3" };
 	public static final String[] PAD_TYPE_HEAD_LIST	= { "Single Piezo", "Dual or 3way Yamaha", "3way Roland"};
 	public static final String[] PAD_TYPE_EDGE_LIST	= { "Piezo", "Switch"};
 	public static final int PAD_TYPE_HEAD = 0;
@@ -281,7 +282,9 @@ public interface Constants {
 	public static final int INPUT_VALUE_ID_POS_LOW			= INPUT_VALUE_ID_POS_LEVEL + 1;
 	public static final int INPUT_VALUE_ID_POS_HIGH			= INPUT_VALUE_ID_POS_LOW + 1;
 	public static final int INPUT_VALUE_ID_TYPE				= INPUT_VALUE_ID_POS_HIGH + 1;
-	public static final int INPUT_VALUE_ID_MAX				= INPUT_VALUE_ID_TYPE;
+	public static final int INPUT_VALUE_ID_ROLL_SMOOTH		= INPUT_VALUE_ID_TYPE + 1;
+	public static final int INPUT_VALUE_ID_EXTRA_FALSE		= INPUT_VALUE_ID_ROLL_SMOOTH + 1;
+	public static final int INPUT_VALUE_ID_MAX				= INPUT_VALUE_ID_EXTRA_FALSE;
 	
 	public static final int THIRD_ZONE_VALUE_ID_MIN				= INPUT_VALUE_ID_MAX + 1;
 	public static final int THIRD_ZONE_VALUE_ID_DISABLED		= THIRD_ZONE_VALUE_ID_MIN;

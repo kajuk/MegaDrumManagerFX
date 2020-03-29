@@ -34,6 +34,8 @@ public class ConfigPad {
 	public int name = 0;
 	public int altNote = 0;
 	public int pressrollNote = 0;
+	public int rollSmoothLevel = 0;
+	public boolean extraFalseSupp = false;
 	public boolean altNote_linked = false;
 	public boolean pressrollNote_linked = false;
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
@@ -72,6 +74,8 @@ public class ConfigPad {
 		prop.setProperty(prefix+"name", name);
 		prop.setProperty(prefix+"altNote", altNote);
 		prop.setProperty(prefix+"pressrollNote", pressrollNote);
+		prop.setProperty(prefix+"rollSmoothLevel", rollSmoothLevel);
+		prop.setProperty(prefix+"extraFalseSupp", extraFalseSupp);
 		prop.setProperty(prefix+"altNote_linked", altNote_linked);
 		prop.setProperty(prefix+"pressrollNote_linked", pressrollNote_linked);				
 	}
@@ -103,6 +107,8 @@ public class ConfigPad {
 		name = Utils.validateInt(prop.getInt(prefix+"name", name),0,127,name);
 		altNote = Utils.validateInt(prop.getInt(prefix+"altNote", altNote),0,127,altNote);
 		pressrollNote = Utils.validateInt(prop.getInt(prefix+"pressrollNote", pressrollNote),0,127,pressrollNote);
+		rollSmoothLevel = Utils.validateInt(prop.getInt(prefix+"rollSmoothLevel", rollSmoothLevel),0,3,rollSmoothLevel);
+		extraFalseSupp = prop.getBoolean(prefix+"extraFalseSupp", extraFalseSupp);		
 		altNote_linked = prop.getBoolean(prefix+"altNote_linked", altNote_linked);
 		pressrollNote_linked = prop.getBoolean(prefix+"pressrollNote_linked", pressrollNote_linked);				
 	}
@@ -229,6 +235,12 @@ public class ConfigPad {
 		case Constants.INPUT_VALUE_ID_TYPE:
 			setTypeInt(value);
 			break;
+		case Constants.INPUT_VALUE_ID_ROLL_SMOOTH:
+			rollSmoothLevel = value;
+			break;
+		case Constants.INPUT_VALUE_ID_EXTRA_FALSE:
+			extraFalseSupp = (value > 0);
+			break;
 		default:
 			break;
 		}
@@ -300,6 +312,12 @@ public class ConfigPad {
 		case Constants.INPUT_VALUE_ID_TYPE:
 			value = getTypeInt();
 			break;
+		case Constants.INPUT_VALUE_ID_ROLL_SMOOTH:
+			value = rollSmoothLevel;
+			break;
+		case Constants.INPUT_VALUE_ID_EXTRA_FALSE:
+			value = extraFalseSupp?1:0;
+			break;
 		default:
 			break;
 		}
@@ -354,6 +372,10 @@ public class ConfigPad {
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];		
 		sysex_byte = Utils.byte2sysex((byte)name);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		flags = (byte) (((extraFalseSupp)?1:0)|(rollSmoothLevel<<1));
+		sysex_byte = Utils.byte2sysex(flags);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = Utils.byte2sysex((byte)pressrollNote);
@@ -424,6 +446,11 @@ public class ConfigPad {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			name = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			flags = Utils.sysex2byte(sysex_byte);
+			extraFalseSupp = ((flags&0x01) != 0);
+			rollSmoothLevel = ((flags&0x06)>>1);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			pressrollNote = Utils.sysex2byte(sysex_byte);
