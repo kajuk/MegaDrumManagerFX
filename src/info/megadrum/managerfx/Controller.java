@@ -125,6 +125,7 @@ public class Controller implements MidiRescanEventListener {
 	private UIMidiLog uiMidiLog;
 	private ArrayList<UIPanel>	allPanels;
 	private Double mainWindowMinWidth = 1000.0;
+	private int setPedalLevel = 0;
 
 	
 	private MidiController midiController;
@@ -257,6 +258,8 @@ public class Controller implements MidiRescanEventListener {
 		uiPedal.getButtonGet().setOnAction(e-> sendSysexPedalRequest());
 		uiPedal.getButtonLoad().setOnAction(e-> loadSysexPedal());
 		uiPedal.getButtonSave().setOnAction(e-> saveSysexPedal());		
+		uiPedal.getButtonSetLow().setOnAction(e-> setPedalLow());
+		uiPedal.getButtonSetHigh().setOnAction(e-> setPedalHigh());		
 		uiPedal.addControlChangeEventListener(new ControlChangeEventListener() {
 			
 			@Override
@@ -1500,9 +1503,6 @@ public class Controller implements MidiRescanEventListener {
 		typeAndId = new byte[2];
 		typeAndId[0] = Constants.MD_SYSEX_MISC;
 		sysexSendList.add(typeAndId);
-		typeAndId = new byte[2];
-		typeAndId[0] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
-		sysexSendList.add(typeAndId);
 		sendSysex();
 	}
 
@@ -2330,8 +2330,19 @@ public class Controller implements MidiRescanEventListener {
 					sysex_short[2] = sysex[6];
 					sysex_short[3] = sysex[7];
 					pedal_level_raw = Utils.sysex2short(sysex_short);
+
+					if (setPedalLevel == 1) {
+						configFull.configPedal.lowLevel = pedal_level_raw;						
+					} else if (setPedalLevel == 2) {
+						configFull.configPedal.highLevel = pedal_level_raw;						
+					}
+//					moduleConfigFull.configPedal.setConfigFromSysex(sysex, configOptions.mcuType);
+//					moduleConfigFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
+//					moduleConfigFull.configPedal.sysexReceived = true;
+					uiPedal.setControlsFromConfig(configFull.configPedal, false);
 				}				
-				System.out.printf("Pedal Level Raw = %d\n", pedal_level_raw);
+				//System.out.printf("Pedal Level Raw = %d\n", pedal_level_raw);
+				setPedalLevel = 0;
 				break;
 			default:
 				break;
@@ -2706,6 +2717,24 @@ public class Controller implements MidiRescanEventListener {
 	
 	private void saveSysexPedal() {
 		fileManager.saveSysex(configFull.configPedal.getSysexFromConfig(configOptions.mcuType), configOptions);		
+	}
+	
+	private void setPedalLow() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
+		sysexSendList.add(typeAndId);
+		setPedalLevel = 1;
+		sendSysex();		
+	}
+	
+	private void setPedalHigh() {
+		byte [] typeAndId;
+		typeAndId = new byte[2];
+		typeAndId[0] = Constants.MD_SYSEX_PEDAL_LEVEL_RAW;
+		sysexSendList.add(typeAndId);
+		setPedalLevel = 2;
+		sendSysex();		
 	}
 	
 	private void loadSysexPad() {
