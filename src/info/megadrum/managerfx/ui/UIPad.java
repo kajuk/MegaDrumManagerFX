@@ -84,7 +84,7 @@ public class UIPad extends UIPanel implements PanelInterface {
 	}
 
 	public UIPad(String title) {
-		super(title);
+		super(title, false);
 		HBox hBox = new HBox(inputsGap);
 		uiInputLeft = new UIInput("Head/Bow");
 		uiInputLeft.setHeadEdgeType(Constants.PAD_TYPE_HEAD);

@@ -167,7 +167,7 @@ public class UIInput implements PanelInterface {
 		uiCheckBoxExtraFalse.setAdvancedSetting(true);
 		allControls.add(uiCheckBoxExtraFalse);
 		
-		uiComboBoxRollSmoothLevel = new UIComboBox("Roll Smooth", true);
+		uiComboBoxRollSmoothLevel = new UIComboBox("Roll Smoothing", true);
 		uiComboBoxRollSmoothLevel.setAdvancedSetting(true);
 		uiComboBoxRollSmoothLevel.uiCtlSetValuesArray(Arrays.asList(Constants.ROLL_SMOOTH_LEVEL_LIST));
 		allControls.add(uiComboBoxRollSmoothLevel);

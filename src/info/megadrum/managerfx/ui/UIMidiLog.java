@@ -14,7 +14,7 @@ public class UIMidiLog extends UIPanel implements PanelInterface {
 	private MidiRaw				panelRaw;
 
 	public UIMidiLog(String title) {
-		super(title);
+		super(title, false);
 		tabPane = new TabPane();
         tabVisual = new Tab("Visual MIDI");
         tabVisual.setClosable(false);

@@ -28,6 +28,9 @@ public class UIPanel {
 	protected Button 		buttonSend;
 	protected Button 		buttonLoad;
 	protected Button 		buttonSave;
+	protected Button 		buttonSetLow;
+	protected Button 		buttonSetHigh;
+	protected Boolean		showExtraPedalButtonsIsSet = false;
 	protected Boolean detached = false;
 	protected String	panelTitle;
 	protected ToggleGroup	toggleGroup;
@@ -48,8 +51,9 @@ public class UIPanel {
 	protected int verticalControlsCountWithoutAdvanced = 0;
 	private Image imageWindowIcon;
 	
-	public UIPanel (String title) {
+	public UIPanel (String title, Boolean showExtraPedalButtons) {
 		panelTitle = title;
+		showExtraPedalButtonsIsSet = showExtraPedalButtons;
 		ToggleGroup toggleGroup = new ToggleGroup();
 		rbHide = new RadioMenuItem("Hide");
 		rbHide.setToggleGroup(toggleGroup);
@@ -65,6 +69,10 @@ public class UIPanel {
 		buttonSend = new Button("Send");
 		buttonLoad = new Button("Load");
 		buttonSave = new Button("Save");
+		if (showExtraPedalButtonsIsSet) {
+			buttonSetLow = new Button("SetLow");
+			buttonSetHigh = new Button("SetHigh");
+		}
         vBoxAll = new VBox(1);
 		vBoxAll.setStyle("-fx-padding: 0.0em 0.0em 0.0em 0.0em");
 		vBoxAll.setAlignment(Pos.TOP_CENTER);
@@ -211,10 +219,18 @@ public class UIPanel {
 		return buttonLoad;
 	}
 	
+	public final Button getButtonSetLow() {
+		return buttonSetLow;
+	}
+
+	public final Button getButtonSetHigh() {
+		return buttonSetHigh;
+	}
+	
 	public final Button getButtonSave() {
 		return buttonSave;
 	}
-
+	
 	public RadioMenuItem getRadioMenuItemHide() {
 		return rbHide;
 	}

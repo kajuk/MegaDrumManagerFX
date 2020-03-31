@@ -110,7 +110,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 	}
 	
 	public UIPedal(String title) {
-		super(title);
+		super(title, true);
 		listHiHatInputs = new ArrayList<String>(Arrays.asList("2", "4", "6", "8",
 				"10", "12", "14", "16", "18",
 				"20", "22", "24", "26", "28",
@@ -123,7 +123,7 @@ public class UIPedal extends UIPanel implements PanelInterface {
 
 		toolBar = new HBox();
 		toolBar.setAlignment(Pos.CENTER_LEFT);
-		toolBar.getChildren().addAll(buttonGet, buttonSend, new Separator(Orientation.VERTICAL), buttonLoad, buttonSave);
+		toolBar.getChildren().addAll(buttonGet, buttonSend, new Separator(Orientation.VERTICAL), buttonLoad, buttonSave,new Separator(Orientation.VERTICAL), buttonSetLow, buttonSetHigh);
 		toolBar.setStyle("-fx-padding: 0.1em 0.0em 0.2em 0.01em");
 
 

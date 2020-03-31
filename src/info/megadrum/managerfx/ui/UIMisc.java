@@ -63,7 +63,7 @@ public class UIMisc extends UIPanel implements PanelInterface{
 	}
 	
 	public UIMisc(String title) {
-		super(title);
+		super(title, false);
 		allControls = new ArrayList<UIControl>();
 /*		toolBar = new ToolBar();
 		toolBar.getItems().add(buttonGet);

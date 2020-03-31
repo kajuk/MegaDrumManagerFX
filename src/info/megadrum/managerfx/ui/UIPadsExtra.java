@@ -39,7 +39,7 @@ public class UIPadsExtra extends UIPanel implements PanelInterface {
 	}
 	
 	public UIPadsExtra(String title) {
-		super(title);
+		super(title, false);
 		tabPane = new TabPane();
         tabCurves = new Tab("Custom Curves");
         tabCurves.setClosable(false);
