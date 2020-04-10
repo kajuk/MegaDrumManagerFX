@@ -1413,7 +1413,7 @@ public class Controller implements MidiRescanEventListener {
 					}
 				});
 			}
-		}, 3000);
+		}, 5000);
 	}
 	
 	private void sendSysexConfigName(int id) {
