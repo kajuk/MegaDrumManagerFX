@@ -2238,7 +2238,25 @@ public class Controller implements MidiRescanEventListener {
 				uiMisc.setControlsFromConfig(configFull.configMisc, true);
 				break;
 			case Constants.MD_SYSEX_PAD:
-				//System.out.printf("Sysex received wiht pad pointer = %d\n", pointer);
+/*
+ 				System.out.printf("Sysex received with pad pointer = %d\n", pointer);
+ 				if (pointer < 1) {
+					System.out.printf("Incorrect pad pointer, ignoring sysex\n");
+					System.out.printf("Bad sysex:\n");
+					for (int i = 0; i < sysex.length; i++) {
+						System.out.printf("%02x ", sysex[i]);						
+					}
+					System.out.printf("\nEnd of bad sysex.\n");
+					break;
+				} else {
+					System.out.printf("Good sysex:\n");
+					for (int i = 0; i < sysex.length; i++) {
+						System.out.printf("%02x ", sysex[i]);						
+					}
+					System.out.printf("\nEnd of good sysex.\n");
+					
+				}
+*/
 				configFull.configPads[pointer - 1].setConfigFromSysex(sysex);
 				moduleConfigFull.configPads[pointer - 1].setConfigFromSysex(sysex);
 				moduleConfigFull.configPads[pointer - 1].syncState = Constants.SYNC_STATE_RECEIVED;

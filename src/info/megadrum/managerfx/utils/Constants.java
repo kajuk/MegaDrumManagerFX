@@ -33,13 +33,13 @@ public interface Constants {
 	public static final int MCU_TYPE_STM32F205RCT6 = 7;
 	public static final int MCU_TYPE_STM32F205LITE = 8;
 	public static final int MCU_TYPE_STM32F205TEST1 = 9;
-	public static final int MCU_TYPE_STM32TEST2 = 10;
-	public static final int MCU_TYPE_STM32TEST3 = 11;
-	public static final int MCU_TYPE_STM32TEST4 = 12;
+	public static final int MCU_TYPE_STM32F446RCT6 = 10;
+	public static final int MCU_TYPE_STM32F446RET6 = 11;
+	public static final int MCU_TYPE_STM32F405RGT6 = 12;
 	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6",
 											"STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6",
-											"STM32F205LITE", "STM32F205TEST1", "STM32TEST2", "STM32TEST3",
-											"STM32TEST4"
+											"STM32F205LITE", "STM32F205TEST1", "STM32F446RCT6", "STM32F446RET6",
+											"STM32F405RGT6"
 											};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
