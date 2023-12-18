@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Drum\MegaDrum\MegaDrumManagerFX\MegaDrumManagerFX.jar</jar>
+  <outfile>C:\Drum\MegaDrum\MegaDrumManagerFX\Windows\MegaDrumManagerFX.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Drum\MegaDrum\MegaDrumManagerFX\Windows\MegaDrumManagerFX.iconset\icon_256x256.ico</icon>
+  <singleInstance>
+    <mutexName>MegaDrumManagerFX</mutexName>
+    <windowTitle></windowTitle>
+  </singleInstance>
+  <classPath>
+    <mainClass>info.megadrum.managerfx.Main</mainClass>
+    <cp>.</cp>
+  </classPath>
+  <jre>
+    <path>C:\Program Files (x86)\Java\jre8</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>1.8.0</minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>
