@@ -16,7 +16,7 @@
 	<classpathentry kind="lib" path="libraries/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX11"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX 11"/>
 	<classpathentry kind="lib" path="libraries/mmj.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
