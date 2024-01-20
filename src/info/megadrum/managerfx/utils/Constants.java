@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public interface Constants {
 	public static final String WINDOWS_TITLE = "MegaDrumManager FX";
 	public static final String WINDOWS_TITLE_SHORT = "MDM FX: ";
-	public static final String MD_VERSION = "20230129";
+	public static final String MD_VERSION = "20240120";
 	public static final int MD_MINIMUM_VERSION = 20200329;
 	public static final String WARNING_VERSION = "<html><font size=4>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=4>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -37,10 +37,11 @@ public interface Constants {
 	public static final int MCU_TYPE_STM32F446RET6 = 11;
 	public static final int MCU_TYPE_STM32F405RGT6 = 12;
 	public static final int MCU_TYPE_GD32F405RGT6 = 13;
+	public static final int MCU_TYPE_STM32TEST14 = 14;
 	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6",
 											"STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6",
 											"STM32F205LITE", "STM32F205TEST1", "STM32F446RCT6", "STM32F446RET6",
-											"STM32F405RGT6", "GD32F405RGT6"
+											"STM32F405RGT6", "GD32F405RGT6", "STM32TEST14"
 											};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
